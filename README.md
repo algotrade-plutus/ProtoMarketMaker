@@ -14,13 +14,10 @@ In this project, we utilize inventory quantities to simultaneously place both bi
 In market making, one common approach to liquidity provision involves simultaneously placing bid and ask orders based on the current inventory levels held by the market maker. This strategy dynamically adjusts order prices in response to changes in the matched market price, allowing the market maker to maintain balanced exposure while capturing the bid-ask spread. The expiration dates are considered by changing future contract type from F1 to F2.
 
 ## Hypothesis
-We place bid and ask price with our formula.
-$$
-bid\_price = current\_price - step * (quantity\_buy + 1)
-$$
-$$
-ask\_price = current\_price + step * (quantity\_sell + 1)
-$$
+We place bid and ask price with our formula:
+- $$bid\\_price = current\\_price - step * (quantity\\_buy + 1)$$
+- $$ask\\_price = current\\_price + step * (quantity\\_sell + 1)$$
+
 where step should greater than fee plus slipage
 
 ## Data
