@@ -1,3 +1,7 @@
+![Static Badge](https://img.shields.io/badge/PLUTUS-75%25-darkgreen)
+![Static Badge](https://img.shields.io/badge/PLUTUS-Sample-darkblue)
+![Static Badge](https://img.shields.io/badge/PLUTUS-PROTO-%23880A88) 
+
 # PROTO:Market Maker
 
 ## Place bid-ask base on inventory
