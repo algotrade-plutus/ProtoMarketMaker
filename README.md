@@ -1,4 +1,4 @@
-# PROTO:Market maker
+# PROTO:Market Maker
 
 ## Place bid-ask base on inventory
 > Place limit order in two sides base on current inventory quantity
@@ -152,4 +152,4 @@ python evaluation.py
 ![Drawdown chart](result/optimization/drawdown.png)
 
 ## Reference
-[1] ALGOTRADE, Algorithmic Trading Theory and Practice - A Practical Guide with Applications on the Vietnamese Stock Market, 1st ed. DIMI BOOK, 2023, pp. 64–67. Accessed: Apr. 30, 2025. [Online]. Available: [Link](https://hub.algotrade.vn/knowledge-hub/market-making-strategy/)
+[1] ALGOTRADE, Algorithmic Trading Theory and Practice - A Practical Guide with Applications on the Vietnamese Stock Market, 1st ed. DIMI BOOK, 2023, pp. 52–53. Accessed: May 12, 2025. [Online]. Available: [Link](https://hub.algotrade.vn/knowledge-hub/market-making-strategy/)
