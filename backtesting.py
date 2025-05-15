@@ -58,7 +58,6 @@ class Backtesting:
         self.bid_price = None
         self.ask_price = None
         self.ac_loss = Decimal("0.0")
-        self.total_matched = 0
         self.transactions = []
         self.order_logs = []
 
@@ -93,10 +92,6 @@ class Backtesting:
                 - self.ac_loss
             )
             new_asset = cur_asset + pnl
-            print(f"Total matched: {self.total_matched}")
-            print(
-                f"{round(-self.ac_loss * Decimal('1000'), 2)} - {round((sign * abs(self.inventory) * (close_price - self.inventory_price) * 100 * Decimal('1000')),2)} - {round(pnl * Decimal('1000'), 2)}"
-            )
             self.inventory_price = close_price
 
         self.daily_returns.append(new_asset / self.daily_assets[-1] - 1)
@@ -150,21 +145,12 @@ class Backtesting:
             ) / (abs(self.inventory) + 1)
             self.inventory += 1
             matched += 1
-            self.transactions.append([self.cur_date, self.ticker, price, "LONG"])
-            self.order_logs.append(
-                [self.cur_date, self.ticker, price, "LONG", "FILLED"]
-            )
         elif self.bid_price >= price and self.inventory < 0:
             self.ac_loss -= (self.inventory_price - price) * Decimal(
                 '100'
             ) - FEE_PER_CONTRACT
             self.inventory += 1
-            self.total_matched += 1
             matched -= 1
-            self.transactions.append([self.cur_date, self.ticker, price, "LONG"])
-            self.order_logs.append(
-                [self.cur_date, self.ticker, price, "LONG", "FILLED"]
-            )
 
         if self.ask_price <= price and self.inventory <= 0 and placeable > 0:
             self.inventory_price = (
@@ -172,21 +158,12 @@ class Backtesting:
             ) / (abs(self.inventory) + 1)
             self.inventory -= 1
             matched += 1
-            self.transactions.append([self.cur_date, self.ticker, price, "SHORT"])
-            self.order_logs.append(
-                [self.cur_date, self.ticker, price, "SHORT", "FILLED"]
-            )
         elif self.ask_price <= price and self.inventory > 0:
             self.ac_loss -= (price - self.inventory_price) * Decimal(
                 '100'
             ) - FEE_PER_CONTRACT
             self.inventory -= 1
-            self.total_matched += 1
             matched -= 1
-            self.transactions.append([self.cur_date, self.ticker, price, "SHORT"])
-            self.order_logs.append(
-                [self.cur_date, self.ticker, price, "SHORT", "FILLED"]
-            )
 
         return matched
 
@@ -205,21 +182,9 @@ class Backtesting:
             self.old_timestamp = timestamp
             self.bid_price = price - step * Decimal(max(self.inventory, 0) * 0.02 + 1)
             self.ask_price = price - step * Decimal(min(self.inventory, 0) * 0.02 - 1)
-            self.order_logs.append(
-                [self.cur_date, self.ticker, self.bid_price, "LONG", "PLACED"]
-            )
-            self.order_logs.append(
-                [self.cur_date, self.ticker, self.ask_price, "SHORT", "PLACED"]
-            )
         elif matched != 0:
             self.bid_price = price - step * Decimal(max(self.inventory, 0) * 0.02 + 1)
             self.ask_price = price - step * Decimal(min(self.inventory, 0) * 0.02 - 1)
-            self.order_logs.append(
-                [self.cur_date, self.ticker, self.bid_price, "LONG", "PLACED"]
-            )
-            self.order_logs.append(
-                [self.cur_date, self.ticker, self.ask_price, "SHORT", "PLACED"]
-            )
 
     def process_data(self, evaluation=False):
         prefix_path = "data/os/" if evaluation else "data/is/"
@@ -290,21 +255,16 @@ class Backtesting:
 
             if index == len(data) - 1 or row["date"] != data.iloc[index + 1]["date"]:
                 cur_index += 1
-                if self.printable:
-                    print("--------------------")
-                    print(
-                        f"Close: {round(row['close'], 2) if not moving_to_f2 else row['f2_close']} - Avg inv price: {round(self.inventory_price, 2)} - Inventory: {round(self.inventory, 2)}"
-                    )
                 self.update_pnl(row["f2_close"] if moving_to_f2 else row["close"])
-                print(
-                    f"Realized asset {row['date']}: {int(self.daily_assets[-1] * Decimal('1000'))} VND"
-                )
+                if self.printable:
+                    print(
+                        f"Realized asset {row['date']}: {int(self.daily_assets[-1] * Decimal('1000'))} VND"
+                    )
                 moving_to_f2 = False
                 self.ac_loss = Decimal("0.0")
                 self.bid_price = None
                 self.ask_price = None
                 self.old_timestamp = None
-                self.total_matched = 0
 
                 self.tracking_dates.append(row["date"])
                 self.daily_inventory.append(self.inventory)
@@ -389,13 +349,3 @@ if __name__ == "__main__":
     bt.plot_nav()
     bt.plot_drawdown()
     bt.plot_inventory()
-
-    tx_df = pd.DataFrame(
-        bt.transactions, columns=["datetime", "tickersymbol", "price", "side"]
-    )
-    tx_df.to_csv("result/backtest/txs.csv", index=False)
-
-    order_df = pd.DataFrame(
-        bt.order_logs, columns=["datetime", "tickersymbol", "price", "side", "status"]
-    )
-    order_df.to_csv("result/backtest/order_log.csv", index=False)

@@ -8,7 +8,7 @@ from backtesting import Backtesting
 
 
 if __name__ == "__main__":
-    bt = Backtesting(capital=Decimal('1e6'))
+    bt = Backtesting(capital=Decimal('5e5'))
 
     data = bt.process_data(evaluation=True)
     bt.run(data, Decimal(BEST_CONFIG["step"]))

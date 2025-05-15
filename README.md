@@ -118,7 +118,7 @@ python backtesting.py
 ![NAV chart with VNINDEX benchmark](result/backtest/nav.png)
 - Drawdown chart. The chart is located at `result/backtest/drawdown.png`
 ![Drawdown chart](result/backtest/drawdown.png)
-- Daily inventory. The chart is located at result/backtest/inventory.png`
+- Daily inventory. The chart is located at `result/backtest/inventory.png`
 ![Inventory chart](result/backtest/inventory.png)
 
 ## Optimization
@@ -130,7 +130,7 @@ python optimization.py
 The currently found optimized parameters with the seed `2025` are:
 ```json
 {
-    "step": 1.6748910572493783,
+    "step": 2.940955612440289
 }
 ```
 ## Out-of-sample Backtesting
@@ -145,9 +145,9 @@ python evaluation.py
 ```
 | Metric                 | Value                              |
 |------------------------|------------------------------------|
-| Sharpe Ratio           | -0.0169                            |
-| Sortino Ratio          | -0.010                             |
-| Maximum Drawdown (MDD) | -0.339                             |
+| Sharpe Ratio           | 0.2384                             |
+| Sortino Ratio          | 0.0669                             |
+| Maximum Drawdown (MDD) | -0.1171                            |
 ```
 - The NAV chart. The chart is located at `result/optimization/nav.png`.
 ![NAV chart with VNINDEX benchmark](result/optimization/nav.png)

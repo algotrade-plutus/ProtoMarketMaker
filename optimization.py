@@ -46,6 +46,8 @@ class OptunaCallBack:
 
 
 if __name__ == "__main__":
+    bt = Backtesting(capital=Decimal("5e5"), printable=False)
+    data = bt.process_data()
 
     def objective(trial):
         """
@@ -60,8 +62,7 @@ if __name__ == "__main__":
         step = trial.suggest_float(
             "step", OPTIMIZATION_CONFIG["step"][0], OPTIMIZATION_CONFIG["step"][1]
         )
-        bt = Backtesting(capital=Decimal("5e5"), printable=False)
-        data = bt.process_data()
+
         bt.run(data, Decimal(step))
 
         return bt.metric.sharpe_ratio(risk_free_return=Decimal('0.06'))
