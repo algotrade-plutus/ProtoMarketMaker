@@ -11,19 +11,19 @@
 In this project, we utilize inventory quantities to simultaneously place both bid and ask orders. The prices of these orders are adjusted dynamically in response to changes in the matched market price. Forced sale scenarios and asset expiration dates are accounted for by incorporating additional fees into the asset's valuation.
 
 ## Introductin
-In market making, one common approach to liquidity provision involves simultaneously placing bid and ask orders based on the current inventory levels held by the market maker. This strategy dynamically adjusts order prices in response to changes in the matched market price, allowing the market maker to maintain balanced exposure while capturing the bid-ask spread. The expiration dates are considered by changing future contract type from F1 to F2.
+In market making, one common approach to liquidity provision involves simultaneously placing bid and ask orders based on the current inventory levels held by the market maker. This strategy dynamically adjusts order prices in response to changes in the matched market price, allowing the market maker to maintain balanced exposure while capturing the bid-ask spread. The positions are held overnight.
 
 ## Hypothesis
 We place bid and ask price with our formula:
-- $$bid\\_price = current\\_price - step * (quantity\\_buy + 1)$$
-- $$ask\\_price = current\\_price + step * (quantity\\_sell + 1)$$
+- $$bid = price - step * (max(inventory, 0) * 0.02 + 1)$$
+- $$ask = price - step * (min(inventory, 0) * 0.02 - 1)$$
 
-where step should greater than fee plus slipage
+The step size should exceed the sum of the transaction fee and slippage. Bid and ask prices are updated either every 15 seconds or upon the execution of a position.
 
 ## Data
 - Data source: Algotrade database
-- Data period: from 2022-01-01 to 2024-01-01
-- Each sell or buy side will be charge 0.47 / 2 fee.
+- Data period: from 2022-01-01 to 2025-04-29
+- Each sell or buy side will be charge 0.4 / 2 fee.
 ### Data collection
 #### Daily closing price data
 - The daily close price, bid, ask and tick price are collected from Algotrade database using SQL queries. 
@@ -106,18 +106,20 @@ python backtesting.py
   - Maximum drawdown (MDD)
 ### Parameters
 ### In-sample Backtesting Result
-- The backtesting results with VNINDEX benchmark is constructuted from 2019-01-01 to 2022-01-01.
+- The backtesting results are constructuted from 2022-01-01 to 2023-01-01.
 ```
 | Metric                 | Value                              |
 |------------------------|------------------------------------|
-| Sharpe Ratio           | -0.5428                            |
-| Sortino Ratio          | -0.0361                            |
-| Maximum Drawdown (MDD) | -0.0418                            |
+| Sharpe Ratio           | 1.5603                             |
+| Sortino Ratio          | 0.4251                             |
+| Maximum Drawdown (MDD) | -0.1891                            |
 ```
 - The NAV chart. The chart is located at: `result/backtest/nav.png`
 ![NAV chart with VNINDEX benchmark](result/backtest/nav.png)
 - Drawdown chart. The chart is located at `result/backtest/drawdown.png`
 ![Drawdown chart](result/backtest/drawdown.png)
+- Daily inventory. The chart is located at result/backtest/inventory.png`
+![Inventory chart](result/backtest/inventory.png)
 
 ## Optimization
 The configuration of optimization is stored in `parameter/optimization_parameter.json` you can adjust the range of parameters. Random seed is used for reconstructing the optimization process. The optimized parameter is stored in `parameter/optimized_parameter.json`
@@ -128,7 +130,7 @@ python optimization.py
 The currently found optimized parameters with the seed `2025` are:
 ```json
 {
-    "step": 2.4
+    "step": 1.6748910572493783,
 }
 ```
 ## Out-of-sample Backtesting
@@ -139,18 +141,20 @@ The currently found optimized parameters with the seed `2025` are:
 python evaluation.py
 ```
 ### Out-of-sample Backtesting Result
-- The out-sample backtesting results with VNINDEX benchmark is constructuted from 2022-01-01 to 2024-01-01.
+- The out-sample backtesting results are constructuted from 2024-01-02 to 2025-04-29.
 ```
 | Metric                 | Value                              |
 |------------------------|------------------------------------|
-| Sharpe Ratio           | -0.1378                            |
-| Sortino Ratio          | -0.0104                            |
-| Maximum Drawdown (MDD) | -0.0230                            |
+| Sharpe Ratio           | -0.0169                            |
+| Sortino Ratio          | -0.010                             |
+| Maximum Drawdown (MDD) | -0.339                             |
 ```
 - The NAV chart. The chart is located at `result/optimization/nav.png`.
 ![NAV chart with VNINDEX benchmark](result/optimization/nav.png)
 - Drawdown chart. The chart is located at `result/optimization/drawdown.png`.
 ![Drawdown chart](result/optimization/drawdown.png)
+- Daily inventory. The chart is located at `result/optimization/inventory.png`
+![Inventory chart](result/optimization/inventory.png)
 
 ## Reference
 [1] ALGOTRADE, Algorithmic Trading Theory and Practice - A Practical Guide with Applications on the Vietnamese Stock Market, 1st ed. DIMI BOOK, 2023, pp. 52–53. Accessed: May 12, 2025. [Online]. Available: [Link](https://hub.algotrade.vn/knowledge-hub/market-making-strategy/)

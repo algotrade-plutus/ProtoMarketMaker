@@ -17,7 +17,7 @@ from utils import (
     from_cash_to_tradeable_contracts,
 )
 
-FEE_PER_POSITION = Decimal(BACKTESTING_CONFIG["fee"]) * Decimal('100') / Decimal('2')
+FEE_PER_CONTRACT = Decimal(BACKTESTING_CONFIG["fee"]) * Decimal('100')
 
 
 class Backtesting:
@@ -46,8 +46,8 @@ class Backtesting:
         self.data_service = DataService()
         self.metric = None
 
-        self.inventory = {"BUY": 0, "SELL": 0}
-        self.inventory_price = {"BUY": Decimal('0'), "SELL": Decimal('0')}
+        self.inventory = 0
+        self.inventory_price = Decimal('0')
 
         self.daily_assets: List[Decimal] = [capital]
         self.daily_returns: List[Decimal] = []
@@ -58,19 +58,22 @@ class Backtesting:
         self.bid_price = None
         self.ask_price = None
         self.ac_loss = Decimal("0.0")
+        self.total_matched = 0
+        self.transactions = []
+        self.order_logs = []
 
     def move_f1_to_f2(self, f1_price, f2_price):
         """
         TODO: move f1 to f2
         """
-        if self.inventory["BUY"] != 0:
-            self.ac_loss += (self.inventory_price["BUY"] - f1_price) * 100
-            self.inventory_price["BUY"] = f2_price
-            self.ac_loss += FEE_PER_POSITION * self.inventory["BUY"]
-        elif self.inventory["SELL"] != 0:
-            self.ac_loss += (f1_price - self.inventory_price["SELL"]) * 100
-            self.inventory_price["SELL"] = f2_price
-            self.ac_loss += FEE_PER_POSITION * self.inventory["SELL"]
+        if self.inventory > 0:
+            self.ac_loss += (self.inventory_price - f1_price) * 100
+            self.inventory_price = f2_price
+            self.ac_loss += FEE_PER_CONTRACT * abs(self.inventory)
+        elif self.inventory < 0:
+            self.ac_loss += (f1_price - self.inventory_price) * 100
+            self.inventory_price = f2_price
+            self.ac_loss += FEE_PER_CONTRACT * abs(self.inventory)
 
     def update_pnl(self, close_price: Decimal):
         """
@@ -81,26 +84,20 @@ class Backtesting:
         """
         cur_asset = self.daily_assets[-1]
         new_asset = None
-        if self.inventory["BUY"] == 0 and self.inventory["SELL"] == 0:
+        if self.inventory == 0:
             new_asset = cur_asset - self.ac_loss
-        elif self.inventory["BUY"] != 0:
-            new_asset = (
-                cur_asset
-                + self.inventory["BUY"]
-                * (close_price - self.inventory_price["BUY"])
-                * 100
+        else:
+            sign = 1 if self.inventory > 0 else -1
+            pnl = (
+                sign * abs(self.inventory) * (close_price - self.inventory_price) * 100
                 - self.ac_loss
             )
-            self.inventory_price["BUY"] = close_price
-        elif self.inventory["SELL"] != 0:
-            new_asset = (
-                cur_asset
-                + self.inventory["SELL"]
-                * (self.inventory_price["SELL"] - close_price)
-                * 100
-                - self.ac_loss
+            new_asset = cur_asset + pnl
+            print(f"Total matched: {self.total_matched}")
+            print(
+                f"{round(-self.ac_loss * Decimal('1000'), 2)} - {round((sign * abs(self.inventory) * (close_price - self.inventory_price) * 100 * Decimal('1000')),2)} - {round(pnl * Decimal('1000'), 2)}"
             )
-            self.inventory_price["SELL"] = close_price
+            self.inventory_price = close_price
 
         self.daily_returns.append(new_asset / self.daily_assets[-1] - 1)
         self.daily_assets.append(new_asset)
@@ -112,21 +109,10 @@ class Backtesting:
         Args:
             price (Decimal): _description_
         """
-        placeable_sell, placeable_buy = self.get_maximum_placeable(price)
-
-        while placeable_sell < 0:
-            placeable_sell, placeable_buy = self.get_maximum_placeable(price)
-            self.inventory["SELL"] -= 1
-            self.ac_loss += (
-                price - self.inventory_price["SELL"]
-            ) * 100 + FEE_PER_POSITION
-
-        while placeable_buy < 0:
-            placeable_sell, placeable_buy = self.get_maximum_placeable(price)
-            self.inventory["BUY"] -= 1
-            self.ac_loss += (self.inventory_price["BUY"] - price) * Decimal(
-                '100'
-            ) + FEE_PER_POSITION
+        while self.get_maximum_placeable(price) < 0:
+            sign = 1 if self.inventory < 0 else -1
+            self.inventory += sign
+            self.ac_loss += abs(price - self.inventory_price) * 100 + FEE_PER_CONTRACT
 
     def get_maximum_placeable(self, inst_price: Decimal):
         """
@@ -144,14 +130,7 @@ class Backtesting:
             ),
             0,
         )
-        placeable_sell = max(
-            total_placeable + self.inventory["BUY"] - self.inventory["SELL"], 0
-        )
-        placeable_buy = max(
-            total_placeable + self.inventory["SELL"] - self.inventory["BUY"], 0
-        )
-
-        return placeable_sell, placeable_buy
+        return total_placeable - abs(self.inventory)
 
     def handle_matched_order(self, price):
         """
@@ -160,38 +139,56 @@ class Backtesting:
         Args:
             price (_type_): _description_
         """
-        placeable_sell, placeable_buy = self.get_maximum_placeable(price)
+        matched = 0
+        placeable = self.get_maximum_placeable(price)
         if self.bid_price is None or self.ask_price is None:
-            return 0
+            return matched
 
-        matched_side = 0
-        if self.bid_price >= price and self.inventory["BUY"] < placeable_buy:
-            if self.inventory["SELL"] == 0:
-                self.inventory_price["BUY"] = (
-                    self.inventory_price["BUY"] * self.inventory["BUY"] + price
-                ) / (self.inventory["BUY"] + 1)
-                self.inventory["BUY"] += 1
-                matched_side += 1
-            else:
-                self.inventory["SELL"] -= 1
-                matched_side -= 1
-                self.ac_loss -= (self.inventory_price["SELL"] - price) * Decimal('100')
-            self.ac_loss += FEE_PER_POSITION
+        if self.bid_price >= price and self.inventory >= 0 and placeable > 0:
+            self.inventory_price = (
+                self.inventory_price * abs(self.inventory) + price
+            ) / (abs(self.inventory) + 1)
+            self.inventory += 1
+            matched += 1
+            self.transactions.append([self.cur_date, self.ticker, price, "LONG"])
+            self.order_logs.append(
+                [self.cur_date, self.ticker, price, "LONG", "FILLED"]
+            )
+        elif self.bid_price >= price and self.inventory < 0:
+            self.ac_loss -= (self.inventory_price - price) * Decimal(
+                '100'
+            ) - FEE_PER_CONTRACT
+            self.inventory += 1
+            self.total_matched += 1
+            matched -= 1
+            self.transactions.append([self.cur_date, self.ticker, price, "LONG"])
+            self.order_logs.append(
+                [self.cur_date, self.ticker, price, "LONG", "FILLED"]
+            )
 
-        if self.ask_price <= price and self.inventory["SELL"] < placeable_sell:
-            if self.inventory["BUY"] == 0:
-                self.inventory_price["SELL"] = (
-                    self.inventory_price["SELL"] * self.inventory["SELL"] + price
-                ) / (self.inventory["SELL"] + 1)
-                self.inventory["SELL"] += 1
-                matched_side -= 1
-            else:
-                self.inventory["BUY"] -= 1
-                matched_side += 1
-                self.ac_loss -= (price - self.inventory_price["BUY"]) * Decimal('100')
-            self.ac_loss += FEE_PER_POSITION
+        if self.ask_price <= price and self.inventory <= 0 and placeable > 0:
+            self.inventory_price = (
+                self.inventory_price * abs(self.inventory) + price
+            ) / (abs(self.inventory) + 1)
+            self.inventory -= 1
+            matched += 1
+            self.transactions.append([self.cur_date, self.ticker, price, "SHORT"])
+            self.order_logs.append(
+                [self.cur_date, self.ticker, price, "SHORT", "FILLED"]
+            )
+        elif self.ask_price <= price and self.inventory > 0:
+            self.ac_loss -= (price - self.inventory_price) * Decimal(
+                '100'
+            ) - FEE_PER_CONTRACT
+            self.inventory -= 1
+            self.total_matched += 1
+            matched -= 1
+            self.transactions.append([self.cur_date, self.ticker, price, "SHORT"])
+            self.order_logs.append(
+                [self.cur_date, self.ticker, price, "SHORT", "FILLED"]
+            )
 
-        return matched_side
+        return matched
 
     def update_bid_ask(self, price: Decimal, step, timestamp):
         """
@@ -200,18 +197,29 @@ class Backtesting:
         Args:
             price (Decimal)
         """
-        matched_side = self.handle_matched_order(price)
+        matched = self.handle_matched_order(price)
 
         if self.old_timestamp is None or timestamp > self.old_timestamp + timedelta(
             seconds=int(BACKTESTING_CONFIG["time"])
         ):
             self.old_timestamp = timestamp
-            self.bid_price = price - step * Decimal(self.inventory["BUY"] + 1)
-            self.ask_price = price + step * Decimal(self.inventory["SELL"] + 1)
-        elif matched_side > 0:
-            self.bid_price = price - step * Decimal(self.inventory["BUY"] + 1)
-        elif matched_side < 0:
-            self.ask_price = price + step * Decimal(self.inventory["SELL"] + 1)
+            self.bid_price = price - step * Decimal(max(self.inventory, 0) * 0.02 + 1)
+            self.ask_price = price - step * Decimal(min(self.inventory, 0) * 0.02 - 1)
+            self.order_logs.append(
+                [self.cur_date, self.ticker, self.bid_price, "LONG", "PLACED"]
+            )
+            self.order_logs.append(
+                [self.cur_date, self.ticker, self.ask_price, "SHORT", "PLACED"]
+            )
+        elif matched != 0:
+            self.bid_price = price - step * Decimal(max(self.inventory, 0) * 0.02 + 1)
+            self.ask_price = price - step * Decimal(min(self.inventory, 0) * 0.02 - 1)
+            self.order_logs.append(
+                [self.cur_date, self.ticker, self.bid_price, "LONG", "PLACED"]
+            )
+            self.order_logs.append(
+                [self.cur_date, self.ticker, self.ask_price, "SHORT", "PLACED"]
+            )
 
     def process_data(self, evaluation=False):
         prefix_path = "data/os/" if evaluation else "data/is/"
@@ -264,6 +272,8 @@ class Backtesting:
         cur_index = 0
         moving_to_f2 = False
         for index, row in data.iterrows():
+            self.cur_date = row["datetime"]
+            self.ticker = row["tickersymbol"]
             if (
                 cur_index != len(trading_dates) - 1
                 and not expiration_dates.empty()
@@ -280,21 +290,24 @@ class Backtesting:
 
             if index == len(data) - 1 or row["date"] != data.iloc[index + 1]["date"]:
                 cur_index += 1
-                self.update_pnl(row["f2_close"] if moving_to_f2 else row["close"])
                 if self.printable:
+                    print("--------------------")
                     print(
-                        f"Realized asset {row['date']}: {int(self.daily_assets[-1] * Decimal('100'))} VND"
+                        f"Close: {round(row['close'], 2) if not moving_to_f2 else row['f2_close']} - Avg inv price: {round(self.inventory_price, 2)} - Inventory: {round(self.inventory, 2)}"
                     )
+                self.update_pnl(row["f2_close"] if moving_to_f2 else row["close"])
+                print(
+                    f"Realized asset {row['date']}: {int(self.daily_assets[-1] * Decimal('1000'))} VND"
+                )
                 moving_to_f2 = False
                 self.ac_loss = Decimal("0.0")
                 self.bid_price = None
                 self.ask_price = None
                 self.old_timestamp = None
+                self.total_matched = 0
 
                 self.tracking_dates.append(row["date"])
-                self.daily_inventory.append(
-                    self.inventory["BUY"] - self.inventory["SELL"]
-                )
+                self.daily_inventory.append(self.inventory)
 
         self.metric = Metric(self.daily_returns, None)
 
@@ -362,17 +375,27 @@ class Backtesting:
 
 if __name__ == "__main__":
     bt = Backtesting(
-        capital=Decimal("1.5e7"),
+        capital=Decimal("5e5"),
     )
 
     data = bt.process_data()
-    bt.run(data, Decimal("0.8"))
+    bt.run(data, Decimal("1.8"))
 
-    print(f"Sharpe ratio: {bt.metric.sharpe_ratio(risk_free_return=Decimal('0.03'))}")
-    print(f"Sortino ratio: {bt.metric.sortino_ratio(risk_free_return=Decimal('0.03'))}")
+    print(f"Sharpe ratio: {bt.metric.sharpe_ratio(risk_free_return=Decimal('0.06'))}")
+    print(f"Sortino ratio: {bt.metric.sortino_ratio(risk_free_return=Decimal('0.06'))}")
     mdd, _ = bt.metric.maximum_drawdown()
     print(f"Maximum drawdown: {mdd}")
 
     bt.plot_nav()
     bt.plot_drawdown()
     bt.plot_inventory()
+
+    tx_df = pd.DataFrame(
+        bt.transactions, columns=["datetime", "tickersymbol", "price", "side"]
+    )
+    tx_df.to_csv("result/backtest/txs.csv", index=False)
+
+    order_df = pd.DataFrame(
+        bt.order_logs, columns=["datetime", "tickersymbol", "price", "side", "status"]
+    )
+    order_df.to_csv("result/backtest/order_log.csv", index=False)
