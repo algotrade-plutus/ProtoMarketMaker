@@ -104,6 +104,7 @@ python backtesting.py
   - Sharpe ratio (SR)
   - Sortino ratio (SoR)
   - Maximum drawdown (MDD)
+- We use a risk-free rate of 6% per annum, equivalent to approximately 0.023% per day, as a benchmark for evaluating the Sharpe Ratio (SR) and Sortino Ratio (SoR).
 ### Parameters
 ### In-sample Backtesting Result
 - The backtesting results are constructuted from 2022-01-01 to 2023-01-01.
