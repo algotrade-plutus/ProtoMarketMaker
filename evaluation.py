@@ -15,7 +15,11 @@ if __name__ == "__main__":
     bt.plot_nav(path="result/optimization/nav.png")
     bt.plot_drawdown(path="result/optimization/drawdown.png")
     bt.plot_inventory(path="result/optimization/inventory.png")
-    print(f"Sharpe ratio: {bt.metric.sharpe_ratio(risk_free_return=Decimal('0.03'))}")
-    print(f"Sortino ratio: {bt.metric.sortino_ratio(risk_free_return=Decimal('0.03'))}")
+    print(
+        f"Sharpe ratio: {bt.metric.sharpe_ratio(risk_free_return=Decimal('0.00023'))}"
+    )
+    print(
+        f"Sortino ratio: {bt.metric.sortino_ratio(risk_free_return=Decimal('0.00023'))}"
+    )
     mdd, _ = bt.metric.maximum_drawdown()
     print(f"Maximum drawdown: {mdd}")

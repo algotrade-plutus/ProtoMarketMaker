@@ -341,8 +341,12 @@ if __name__ == "__main__":
     data = bt.process_data()
     bt.run(data, Decimal("1.8"))
 
-    print(f"Sharpe ratio: {bt.metric.sharpe_ratio(risk_free_return=Decimal('0.06'))}")
-    print(f"Sortino ratio: {bt.metric.sortino_ratio(risk_free_return=Decimal('0.06'))}")
+    print(
+        f"Sharpe ratio: {bt.metric.sharpe_ratio(risk_free_return=Decimal('0.00023')) * Decimal(np.sqrt(250))}"
+    )
+    print(
+        f"Sortino ratio: {bt.metric.sortino_ratio(risk_free_return=Decimal('0.00023')) * Decimal(np.sqrt(250))}"
+    )
     mdd, _ = bt.metric.maximum_drawdown()
     print(f"Maximum drawdown: {mdd}")
 

@@ -39,15 +39,10 @@ class Metric:
 
         # Calculate excess returns
         excess_returns = [
-            period_return - risk_free_return / 252
-            for period_return in self.period_returns
+            period_return - risk_free_return for period_return in self.period_returns
         ]
 
-        return (
-            Decimal(np.sqrt(252))
-            * np.mean(excess_returns)
-            / np.std(self.period_returns, ddof=1)
-        )
+        return np.mean(excess_returns) / np.std(self.period_returns, ddof=1)
 
     def sortino_ratio(self, risk_free_return: Decimal) -> Decimal:
         """
@@ -71,11 +66,7 @@ class Metric:
         ]
         downside_risk = np.sqrt(np.mean([d_r**2 for d_r in downside_returns]))
 
-        return (
-            Decimal(np.sqrt(252))
-            * (np.mean(self.period_returns) - risk_free_return / 252)
-            / downside_risk
-        )
+        return (np.mean(self.period_returns) - risk_free_return) / downside_risk
 
     def maximum_drawdown(self) -> Decimal:
         """

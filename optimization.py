@@ -2,6 +2,7 @@
 Optimization module
 """
 
+import numpy as np
 from decimal import Decimal
 import logging
 import optuna
@@ -65,7 +66,9 @@ if __name__ == "__main__":
 
         bt.run(data, Decimal(step))
 
-        return bt.metric.sharpe_ratio(risk_free_return=Decimal('0.06'))
+        return bt.metric.sharpe_ratio(risk_free_return=Decimal('0.00023')) * Decimal(
+            np.sqrt(250)
+        )
 
     optunaCallBack = OptunaCallBack()
     study = optuna.create_study(

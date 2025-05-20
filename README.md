@@ -110,8 +110,8 @@ python backtesting.py
 ```
 | Metric                 | Value                              |
 |------------------------|------------------------------------|
-| Sharpe Ratio           | 1.5603                             |
-| Sortino Ratio          | 0.4251                             |
+| Sharpe Ratio           | 1.5619                             |
+| Sortino Ratio          | 2.3335                             |
 | Maximum Drawdown (MDD) | -0.1891                            |
 ```
 - The NAV chart. The chart is located at: `result/backtest/nav.png`
@@ -145,9 +145,9 @@ python evaluation.py
 ```
 | Metric                 | Value                              |
 |------------------------|------------------------------------|
-| Sharpe Ratio           | 0.2384                             |
-| Sortino Ratio          | 0.0669                             |
-| Maximum Drawdown (MDD) | -0.1171                            |
+| Sharpe Ratio           | -0.0536                            |
+| Sortino Ratio          | -0.0673                            |
+| Maximum Drawdown (MDD) | -0.2137                            |
 ```
 - The NAV chart. The chart is located at `result/optimization/nav.png`.
 ![NAV chart with VNINDEX benchmark](result/optimization/nav.png)
