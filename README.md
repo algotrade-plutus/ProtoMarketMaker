@@ -10,13 +10,13 @@
 ## Abstract
 In this project, we utilize inventory quantities to simultaneously place both bid and ask orders. The prices of these orders are adjusted dynamically in response to changes in the matched market price. Forced sale scenarios and asset expiration dates are accounted for by incorporating additional fees into the asset's valuation.
 
-## Introductin
+## Introduction
 In market making, one common approach to liquidity provision involves simultaneously placing bid and ask orders based on the current inventory levels held by the market maker. This strategy dynamically adjusts order prices in response to changes in the matched market price, allowing the market maker to maintain balanced exposure while capturing the bid-ask spread. The positions are held overnight.
 
 ## Hypothesis
 We place bid and ask price with our formula:
-- $$bid = price - step * (max(inventory, 0) * 0.02 + 1)$$
-- $$ask = price - step * (min(inventory, 0) * 0.02 - 1)$$
+- $$bid = (price - step) - step * max(inventory, 0) * 0.02$$
+- $$ask = (price + step) - step * min(inventory, 0) * 0.02$$
 
 The step size should exceed the sum of the transaction fee and slippage. Bid and ask prices are updated either every 15 seconds or upon the execution of a position.
 
