@@ -149,8 +149,8 @@ python evaluation.py
 ```
 | Metric                 | Value                              |
 |------------------------|------------------------------------|
-| Sharpe Ratio           | 0.0162                             |
-| Sortino Ratio          | 0.0276                             |
+| Sharpe Ratio           | 0.2564                             |
+| Sortino Ratio          | 0.4365                             |
 | Maximum Drawdown (MDD) | -0.0854                            |
 | HPR (%)                | 11.23                              |
 | Monthly return (%)     | 1.01                               |
