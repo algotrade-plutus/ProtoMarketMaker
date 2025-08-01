@@ -294,8 +294,6 @@ class Backtesting:
         assets = pd.Series(self.daily_assets)
         ac_return = assets.apply(lambda x: x / assets.iloc[0])
         ac_return = [(val - 1) * 100 for val in ac_return.to_numpy()[1:]]
-        print(f"hpr max {max(ac_return)}")
-        print(f"hpr min {min(ac_return)}")
         plt.plot(
             self.tracking_dates,
             ac_return,
@@ -327,9 +325,6 @@ class Backtesting:
             color='black',
         )
 
-        print(f"dd max 0")
-        print(f"dd min {min(drawdowns)}")
-
         plt.title('Draw down Value Over Time')
         plt.xlabel('Time Step')
         plt.ylabel('Percentage')
@@ -344,8 +339,6 @@ class Backtesting:
             label="Portfolio",
             color='black',
         )
-        print(f"inv max {max(self.daily_inventory)}")
-        print(f"inv min {min(self.daily_inventory)}")
 
         plt.title('Inventory Value Over Time')
         plt.xlabel('Time Step')
