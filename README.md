@@ -118,8 +118,8 @@ python backtesting.py
 | Monthly return (%)     | 3.80                               |
 | Annual return (%)      | 42.52                              |
 ```
-- The NAV chart. The chart is located at: `result/backtest/nav.png`
-![NAV chart with VNINDEX benchmark](result/backtest/nav.png)
+- The HPR chart. The chart is located at: `result/backtest/HPR.png`
+![HPR chart with VNINDEX benchmark](result/backtest/HPR.png)
 - Drawdown chart. The chart is located at `result/backtest/drawdown.png`
 ![Drawdown chart](result/backtest/drawdown.png)
 - Daily inventory. The chart is located at `result/backtest/inventory.png`
@@ -156,12 +156,12 @@ python evaluation.py
 | Monthly return (%)     | 1.01                               |
 | Annual return (%)      | 11.25                              |
 ```
-- The NAV chart. The chart is located at `result/optimization/hrp.svg`.
-![NAV chart with VNINDEX benchmark](result/optimization/nav.png)
+- The HPR chart. The chart is located at `result/optimization/hrp.svg`.
+![HPR chart with VNINDEX benchmark](result/optimization/hpr.png)
 - Drawdown chart. The chart is located at `result/optimization/drawdown.svg`.
-![Drawdown chart](result/optimization/drawdown.png)
+![Drawdown chart](result/optimization/drawdown.svg)
 - Daily inventory. The chart is located at `result/optimization/inventory.svg`
-![Inventory chart](result/optimization/inventory.png)
+![Inventory chart](result/optimization/inventory.svg)
 
 ## Reference
 [1] ALGOTRADE, Algorithmic Trading Theory and Practice - A Practical Guide with Applications on the Vietnamese Stock Market, 1st ed. DIMI BOOK, 2023, pp. 52–53. Accessed: May 12, 2025. [Online]. Available: [Link](https://hub.algotrade.vn/knowledge-hub/market-making-strategy/)
