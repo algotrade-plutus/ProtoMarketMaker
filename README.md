@@ -156,11 +156,11 @@ python evaluation.py
 | Monthly return (%)     | 1.01                               |
 | Annual return (%)      | 11.25                              |
 ```
-- The NAV chart. The chart is located at `result/optimization/nav.png`.
+- The NAV chart. The chart is located at `result/optimization/hrp.svg`.
 ![NAV chart with VNINDEX benchmark](result/optimization/nav.png)
-- Drawdown chart. The chart is located at `result/optimization/drawdown.png`.
+- Drawdown chart. The chart is located at `result/optimization/drawdown.svg`.
 ![Drawdown chart](result/optimization/drawdown.png)
-- Daily inventory. The chart is located at `result/optimization/inventory.png`
+- Daily inventory. The chart is located at `result/optimization/inventory.svg`
 ![Inventory chart](result/optimization/inventory.png)
 
 ## Reference
