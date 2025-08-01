@@ -118,12 +118,12 @@ python backtesting.py
 | Monthly return (%)     | 3.80                               |
 | Annual return (%)      | 42.52                              |
 ```
-- The HPR chart. The chart is located at: `result/backtest/HPR.png`
-![HPR chart with VNINDEX benchmark](result/backtest/HPR.png)
-- Drawdown chart. The chart is located at `result/backtest/drawdown.png`
-![Drawdown chart](result/backtest/drawdown.png)
-- Daily inventory. The chart is located at `result/backtest/inventory.png`
-![Inventory chart](result/backtest/inventory.png)
+- The HPR chart. The chart is located at: `result/backtest/hpr.svg`
+![HPR chart with VNINDEX benchmark](result/backtest/hpr.svg)
+- Drawdown chart. The chart is located at `result/backtest/drawdown.svg`
+![Drawdown chart](result/backtest/drawdown.svg)
+- Daily inventory. The chart is located at `result/backtest/inventory.svg`
+![Inventory chart](result/backtest/inventory.svg)
 
 ## Optimization
 The configuration of optimization is stored in `parameter/optimization_parameter.json` you can adjust the range of parameters. Random seed is used for reconstructing the optimization process. The optimized parameter is stored in `parameter/optimized_parameter.json`
