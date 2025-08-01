@@ -111,12 +111,12 @@ python backtesting.py
 ```
 | Metric                 | Value                              |
 |------------------------|------------------------------------|
-| Sharpe Ratio           | 1.5619                             |
-| Sortino Ratio          | 2.3335                             |
-| Maximum Drawdown (MDD) | -0.1891                            |
-| HPR (%)                | 53.41                              |
-| Monthly return (%)     | 3.80                               |
-| Annual return (%)      | 42.52                              |
+| Sharpe Ratio           | 1.4564                             |
+| Sortino Ratio          | 2.1903                             |
+| Maximum Drawdown (MDD) | -0.1638                            |
+| HPR (%)                | 49.98                              |
+| Monthly return (%)     | 3.26                               |
+| Annual return (%)      | 36.34                              |
 ```
 - The HPR chart. The chart is located at: `result/backtest/hpr.svg`
 ![HPR chart with VNINDEX benchmark](result/backtest/hpr.svg)
