@@ -156,7 +156,7 @@ python evaluation.py
 | Monthly return (%)     | 1.01                               |
 | Annual return (%)      | 11.25                              |
 ```
-- The HPR chart. The chart is located at `result/optimization/hrp.svg`.
+- The HPR chart. The chart is located at `result/optimization/hpr.svg`.
 ![HPR chart with VNINDEX benchmark](result/optimization/hpr.png)
 - Drawdown chart. The chart is located at `result/optimization/drawdown.svg`.
 ![Drawdown chart](result/optimization/drawdown.svg)
