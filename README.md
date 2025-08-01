@@ -157,7 +157,7 @@ python evaluation.py
 | Annual return (%)      | 11.25                              |
 ```
 - The HPR chart. The chart is located at `result/optimization/hpr.svg`.
-![HPR chart with VNINDEX benchmark](result/optimization/hpr.png)
+![HPR chart with VNINDEX benchmark](result/optimization/hpr.svg)
 - Drawdown chart. The chart is located at `result/optimization/drawdown.svg`.
 ![Drawdown chart](result/optimization/drawdown.svg)
 - Daily inventory. The chart is located at `result/optimization/inventory.svg`
