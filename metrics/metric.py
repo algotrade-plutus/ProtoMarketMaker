@@ -3,8 +3,36 @@ This module is used for calculating metric
 """
 
 from typing import List
+import pandas as pd
 from decimal import Decimal
 import numpy as np
+
+
+def get_returns(
+    monthly_df: pd.DataFrame,
+):
+    """
+    Get multiple period returns
+
+    Args:
+        monthly_df (pd.DataFrame): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    monthly_df["monthly_return"] = monthly_df["asset"].copy().pct_change()
+    monthly_df = monthly_df.astype({"monthly_return": float})
+
+    annual_return = (
+        np.prod(1 + monthly_df["monthly_return"])
+        ** (12 / len(monthly_df["monthly_return"]))
+        - 1
+    )
+
+    return {
+        "annual_return": annual_return,
+        "monthly_return": monthly_df['monthly_return'].mean(),
+    }
 
 
 class Metric:
@@ -20,6 +48,9 @@ class Metric:
         """
         self.period_returns = period_returns
         self.benchmark_returns = benchmark_returns
+
+    def hpr(self) -> Decimal:
+        return (np.cumprod(1 + np.array(self.period_returns)) - 1)[-1]
 
     def sharpe_ratio(self, risk_free_return: Decimal) -> Decimal:
         """

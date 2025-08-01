@@ -4,14 +4,13 @@ This is main module for strategy backtesting
 
 import numpy as np
 from datetime import timedelta
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 from typing import List
 import pandas as pd
 import matplotlib.pyplot as plt
 
 from config.config import BACKTESTING_CONFIG
-from database.data_service import DataService
-from metrics.metric import Metric
+from metrics.metric import get_returns, Metric
 from utils import (
     get_expired_dates,
     from_cash_to_tradeable_contracts,
@@ -43,7 +42,6 @@ class Backtesting:
             index_path (str, optional). Defaults to "data/is/vnindex.csv".
         """
         self.printable = printable
-        self.data_service = DataService()
         self.metric = None
 
         self.inventory = 0
@@ -53,6 +51,7 @@ class Backtesting:
         self.daily_returns: List[Decimal] = []
         self.tracking_dates = []
         self.daily_inventory = []
+        self.monthly_tracking = []
 
         self.old_timestamp = None
         self.bid_price = None
@@ -180,13 +179,22 @@ class Backtesting:
             seconds=int(BACKTESTING_CONFIG["time"])
         ):
             self.old_timestamp = timestamp
-            self.bid_price = price - step * Decimal(max(self.inventory, 0) * 0.02 + 1)
-            self.ask_price = price - step * Decimal(min(self.inventory, 0) * 0.02 - 1)
+            self.bid_price = (
+                price - step * Decimal(max(self.inventory, 0) * 0.02 + 1)
+            ).quantize(Decimal("0.0"), rounding=ROUND_HALF_UP)
+            self.ask_price = (
+                price - step * Decimal(min(self.inventory, 0) * 0.02 - 1)
+            ).quantize(Decimal("0.0"), rounding=ROUND_HALF_UP)
         elif matched != 0:
-            self.bid_price = price - step * Decimal(max(self.inventory, 0) * 0.02 + 1)
-            self.ask_price = price - step * Decimal(min(self.inventory, 0) * 0.02 - 1)
+            self.bid_price = (
+                price - step * Decimal(max(self.inventory, 0) * 0.02 + 1)
+            ).quantize(Decimal("0.0"), rounding=ROUND_HALF_UP)
+            self.ask_price = (
+                price - step * Decimal(min(self.inventory, 0) * 0.02 - 1)
+            ).quantize(Decimal("0.0"), rounding=ROUND_HALF_UP)
 
-    def process_data(self, evaluation=False):
+    @staticmethod
+    def process_data(evaluation=False):
         prefix_path = "data/os/" if evaluation else "data/is/"
         f1_data = pd.read_csv(f"{prefix_path}VN30F1M_data.csv")
         f1_data["datetime"] = pd.to_datetime(
@@ -260,6 +268,9 @@ class Backtesting:
                     print(
                         f"Realized asset {row['date']}: {int(self.daily_assets[-1] * Decimal('1000'))} VND"
                     )
+                if moving_to_f2:
+                    self.monthly_tracking.append([row["date"], self.daily_assets[-1]])
+
                 moving_to_f2 = False
                 self.ac_loss = Decimal("0.0")
                 self.bid_price = None
@@ -271,35 +282,39 @@ class Backtesting:
 
         self.metric = Metric(self.daily_returns, None)
 
-    def plot_nav(self, path="result/backtest/nav.png"):
+    def plot_hpr(self, path="result/backtest/hpr.svg"):
         """
         Plot and save NAV chart to path
 
         Args:
-            path (str, optional): _description_. Defaults to "result/backtest/nav.png".
+            path (str, optional): _description_. Defaults to "result/backtest/hpr.svg".
         """
         plt.figure(figsize=(10, 6))
 
+        assets = pd.Series(self.daily_assets)
+        ac_return = assets.apply(lambda x: x / assets.iloc[0])
+        ac_return = [val * 100 for val in ac_return.to_numpy()[1:]]
+
         plt.plot(
             self.tracking_dates,
-            self.daily_assets[1:],
+            ac_return,
             label="Portfolio",
             color='black',
         )
 
-        plt.title('Asset Value Over Time')
+        plt.title('Holding Period Return Over Time')
         plt.xlabel('Time Step')
-        plt.ylabel('Asset Value')
+        plt.ylabel('Holding Period Return (%)')
         plt.grid(True)
         plt.legend()
         plt.savefig(path, dpi=300, bbox_inches='tight')
 
-    def plot_drawdown(self, path="result/backtest/drawdown.png"):
+    def plot_drawdown(self, path="result/backtest/drawdown.svg"):
         """
         Plot and save drawdown chart to path
 
         Args:
-            path (str, optional): _description_. Defaults to "result/backtest/drawdown.png".
+            path (str, optional): _description_. Defaults to "result/backtest/drawdown.svg".
         """
         _, drawdowns = self.metric.maximum_drawdown()
 
@@ -317,7 +332,7 @@ class Backtesting:
         plt.grid(True)
         plt.savefig(path, dpi=300, bbox_inches='tight')
 
-    def plot_inventory(self, path="result/backtest/inventory.png"):
+    def plot_inventory(self, path="result/backtest/inventory.svg"):
         plt.figure(figsize=(10, 6))
         plt.plot(
             self.tracking_dates,
@@ -350,6 +365,13 @@ if __name__ == "__main__":
     mdd, _ = bt.metric.maximum_drawdown()
     print(f"Maximum drawdown: {mdd}")
 
-    bt.plot_nav()
+    monthly_df = pd.DataFrame(bt.monthly_tracking, columns=["date", "asset"])
+    returns = get_returns(monthly_df)
+
+    print(f"HPR {bt.metric.hpr()}")
+    print(f"Monthly return {returns['monthly_return']}")
+    print(f"Annual return {returns['annual_return']}")
+
+    bt.plot_hpr()
     bt.plot_drawdown()
     bt.plot_inventory()

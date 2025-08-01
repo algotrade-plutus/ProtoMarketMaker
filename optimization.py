@@ -47,8 +47,7 @@ class OptunaCallBack:
 
 
 if __name__ == "__main__":
-    bt = Backtesting(capital=Decimal("5e5"), printable=False)
-    data = bt.process_data()
+    data = Backtesting.process_data()
 
     def objective(trial):
         """
@@ -60,8 +59,12 @@ if __name__ == "__main__":
         Returns:
             _type_: _description_
         """
+        bt = Backtesting(capital=Decimal("5e5"), printable=False)
         step = trial.suggest_float(
-            "step", OPTIMIZATION_CONFIG["step"][0], OPTIMIZATION_CONFIG["step"][1]
+            "step",
+            OPTIMIZATION_CONFIG["step"][0],
+            OPTIMIZATION_CONFIG["step"][1],
+            step=0.1,
         )
 
         bt.run(data, Decimal(step))

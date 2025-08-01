@@ -114,6 +114,9 @@ python backtesting.py
 | Sharpe Ratio           | 1.5619                             |
 | Sortino Ratio          | 2.3335                             |
 | Maximum Drawdown (MDD) | -0.1891                            |
+| HPR (%)                | 53.41                              |
+| Monthly return (%)     | 3.80                               |
+| Annual return (%)      | 42.52                              |
 ```
 - The NAV chart. The chart is located at: `result/backtest/nav.png`
 ![NAV chart with VNINDEX benchmark](result/backtest/nav.png)
@@ -131,7 +134,7 @@ python optimization.py
 The currently found optimized parameters with the seed `2025` are:
 ```json
 {
-    "step": 2.940955612440289
+    "step": 2.9
 }
 ```
 ## Out-of-sample Backtesting
@@ -146,9 +149,12 @@ python evaluation.py
 ```
 | Metric                 | Value                              |
 |------------------------|------------------------------------|
-| Sharpe Ratio           | -0.0536                            |
-| Sortino Ratio          | -0.0673                            |
-| Maximum Drawdown (MDD) | -0.2137                            |
+| Sharpe Ratio           | 0.0162                             |
+| Sortino Ratio          | 0.0276                             |
+| Maximum Drawdown (MDD) | -0.0854                            |
+| HPR (%)                | 11.23                              |
+| Monthly return (%)     | 1.01                               |
+| Annual return (%)      | 11.25                              |
 ```
 - The NAV chart. The chart is located at `result/optimization/nav.png`.
 ![NAV chart with VNINDEX benchmark](result/optimization/nav.png)
