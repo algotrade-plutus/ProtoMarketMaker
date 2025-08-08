@@ -35,6 +35,7 @@ KAFKA_PASSWORD=
 Then install dependencies and run the strategy:
 
 ```bash
+pip install papertrade/paperbroker_client-0.1.4-py3-none-any.whl
 pip install -r requirements.txt
 python3 papertrade/paper.py
 ```
