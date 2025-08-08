@@ -165,3 +165,46 @@ python evaluation.py
 
 ## Reference
 [1] ALGOTRADE, Algorithmic Trading Theory and Practice - A Practical Guide with Applications on the Vietnamese Stock Market, 1st ed. DIMI BOOK, 2023, pp. 52–53. Accessed: May 12, 2025. [Online]. Available: [Link](https://hub.algotrade.vn/knowledge-hub/market-making-strategy/)
+
+---
+
+## Running the Market Maker Paper Trading
+
+```bash
+python3 papertrade/paper.py
+```
+
+Console output shows the latest matched price, placed orders, balances, and portfolio state in real time.
+
+---
+
+## ⚙️ Environment Setup
+
+All required credentials and configurations are stored in a `.env` file.
+Create a `.env` in the project root:
+
+```ini
+# Paper Broker account credentials
+PAPER_ACCOUNT=
+PAPER_USERNAME=
+PAPER_PASSWORD=
+PAPER_CFG=
+PAPER_REST_BASE_URL=
+
+# Kafka connection settings
+KAFKA_BOOTSTRAP_SERVERS=
+KAFKA_TOPIC=
+INSTRUMENT=
+KAFKA_USERNAME=
+KAFKA_PASSWORD=
+```
+
+Then install dependencies and run the strategy:
+
+```bash
+pip install papertrade/paperbroker_client-0.1.4-py3-none-any.whl
+pip install -r requirements.txt
+python3 papertrade/paper.py
+```
+
+---
