@@ -95,7 +95,7 @@ def place_order():
 
 
 def update_inventory(portfolio):
-    global inventory, bid, ask
+    global inventory, bid_cl_ord_id, ask_cl_ord_id
 
     new_quantity = next(
         (
@@ -106,9 +106,9 @@ def update_inventory(portfolio):
         0,
     )
     if new_quantity < inventory:
-        ask = None
+        ask_cl_ord_id = None
     elif new_quantity > inventory:
-        bid = None
+        bid_cl_ord_id = None
     inventory = new_quantity
 
 
@@ -121,18 +121,6 @@ try:
             logger.info("Market closed. Exiting...")
             break
 
-        price = get_latest_matched_price() or price
-        if price is None:
-            logger.warning("No price data. Retrying...")
-            time.sleep(1)
-            continue
-
-        logger.info(f"Latest matched price: {price}")
-
-        if bid is None or ask is None:
-            bid = round((price - step) - step * max(inventory, 0) * 0.02, 1)
-            ask = round((price + step) + step * min(inventory, 0) * 0.02, 1)
-
         update_inventory(client.get_portfolio())
 
         if (
@@ -140,6 +128,12 @@ try:
             or ask_cl_ord_id is None
             or (latest_place_time and time.time() - latest_place_time > 15)
         ):
+            price = get_latest_matched_price(timeout=5) or price
+            if price is None:
+                logger.warning("No price data. Retrying...")
+                continue
+            logger.info(f"Latest matched price: {price}")
+
             bid = round((price - step) - step * max(inventory, 0) * 0.02, 1)
             ask = round((price + step) + step * min(inventory, 0) * 0.02, 1)
             place_order()
