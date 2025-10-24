@@ -3,4 +3,8 @@ __init__.py
 .DS_Store
 .env
 *.csv
-venv/
+*venv/
+CLAUDE.md
+internal-docs
+.coverage*
+markdown-docs
