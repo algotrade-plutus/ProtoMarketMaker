@@ -9,3 +9,6 @@ internal-docs
 .coverage*
 markdown-docs
 .pytest*
+logs/*
+archive/
+htmlcov/

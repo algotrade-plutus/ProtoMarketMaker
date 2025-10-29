@@ -125,6 +125,25 @@ class TimeEvent(Event):
         super().__post_init__()
 
 
+@dataclass
+class RolloverEvent(Event):
+    """
+    Contract rollover event
+
+    Published when futures contract expires and needs to roll to next month
+    (e.g., VN30F2201 -> VN30F2202 on expiration)
+    """
+    old_contract: str = ""  # "VN30F2201"
+    new_contract: str = ""  # "VN30F2202"
+    old_price: Decimal = Decimal('0')  # Last price of expiring contract
+    new_price: Decimal = Decimal('0')  # First price of new contract
+
+    def __post_init__(self):
+        if not self.event_type or self.event_type != EventType.ROLLOVER:
+            object.__setattr__(self, 'event_type', EventType.ROLLOVER)
+        super().__post_init__()
+
+
 class EventBus:
     """
     Central event dispatcher using publish-subscribe pattern

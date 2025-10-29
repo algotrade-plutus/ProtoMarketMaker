@@ -2,11 +2,23 @@
 
 This folder contains interactive examples and tutorials for the Paper Trading System.
 
+## Quick Start
+
+| Notebook | Phase | Topics | Complexity |
+|----------|-------|--------|------------|
+| [core-engine-architecture-guide.ipynb](core-engine-architecture-guide.ipynb) | 1 | Event system, OMS, Portfolio, Risk | Beginner |
+| [phase-2-paper-trading-demo.ipynb](phase-2-paper-trading-demo.ipynb) | 2 | Strategy, Execution, Session | Intermediate |
+| [phase-3-redis-streaming-demo.ipynb](phase-3-redis-streaming-demo.ipynb) | 3 | Redis Pub/Sub, Streaming, Monitoring | Advanced |
+
+**Total**: 3 comprehensive notebooks with 110+ interactive code cells
+
+---
+
 ## Available Notebooks
 
 ### 📘 [core-engine-architecture-guide.ipynb](core-engine-architecture-guide.ipynb)
 
-**Comprehensive Phase 1 Tutorial**
+**Phase 1: Core Infrastructure Tutorial**
 
 A complete guide to the event-driven trading infrastructure covering:
 
@@ -46,18 +58,149 @@ source .venv/bin/activate
 jupyter notebook examples/core-engine-architecture-guide.ipynb
 ```
 
+---
+
+### 📗 [phase-2-paper-trading-demo.ipynb](phase-2-paper-trading-demo.ipynb)
+
+**Phase 2: Strategy & Execution Demo**
+
+A comprehensive demonstration of the paper trading system covering:
+
+- **Part 1: Strategy Engine**
+  - Inventory-based market making
+  - Time-based vs event-based signals
+  - Bid/ask calculation with inventory effects
+
+- **Part 2: Mock Execution Engine**
+  - Realistic order fill simulation
+  - Fee calculation (20 VND per contract)
+  - Complete trading cycle demonstration
+
+- **Part 3: Trading Session**
+  - Component orchestration
+  - CSV data replay
+  - Performance analysis
+
+- **Part 4: Event Flow Visualization**
+  - Complete event tracing
+  - Market data → Signal → Order → Fill → Portfolio
+
+- **Part 5: Event Recording**
+  - Recording events to JSONL
+  - Event replay for analysis
+  - Event statistics
+
+- **Part 6: Performance Comparison**
+  - Testing different step parameters
+  - Fill rate analysis
+  - Profitability comparison
+
+**Features**:
+- ✅ Live trading simulations
+- ✅ Event flow tracing
+- ✅ Performance comparisons
+- ✅ Complete backtest examples
+- ✅ Event recording & replay
+- ✅ Real-world scenarios
+
+**Usage**:
+
+```bash
+# Start Jupyter
+cd /Users/dan/algotrade-research/proto/ProtoMarketMaker
+source .venv/bin/activate
+jupyter notebook examples/phase-2-paper-trading-demo.ipynb
+```
+
+---
+
+### 📙 [phase-3-redis-streaming-demo.ipynb](phase-3-redis-streaming-demo.ipynb)
+
+**Phase 3: Redis Streaming & Performance Monitoring**
+
+A comprehensive demonstration of real-time streaming infrastructure covering:
+
+- **Part 1: Redis Connection Test**
+  - Verify Redis server availability
+  - Check Redis server info and version
+
+- **Part 2: Redis Market Data Handler**
+  - Subscribe to Redis Pub/Sub channels
+  - Receive and process market data messages
+  - EventBus integration
+
+- **Part 3-5: Redis Publisher Modes**
+  - Manual message publishing
+  - Random walk data generation
+  - Sine wave deterministic testing
+
+- **Part 6: Performance Monitor**
+  - Real-time trade tracking
+  - Fee calculation by contract
+  - Metrics calculation
+
+- **Part 7: Redis Trading Session**
+  - Complete real-time trading session
+  - Health monitoring
+  - Session summary and statistics
+
+- **Part 8: Terminal Dashboard**
+  - Live dashboard overview (conceptual)
+  - Usage examples and CLI commands
+
+- **Part 9: Latency Benchmarking**
+  - Measure Redis → EventBus latency
+  - Calculate throughput and statistics
+
+- **Part 10: Cleanup**
+  - Proper resource cleanup
+
+**Features**:
+- ✅ Ultra-low latency (<2ms)
+- ✅ High throughput (100+ msg/sec)
+- ✅ Real-time monitoring
+- ✅ Multiple data generation modes
+- ✅ Complete benchmarking
+- ✅ Production-ready patterns
+
+**Prerequisites**:
+```bash
+# Start Redis server
+docker run -d -p 6379:6379 redis:latest
+
+# Verify Redis is running
+redis-cli ping  # Should return "PONG"
+```
+
+**Usage**:
+```bash
+# Start Jupyter
+cd /Users/dan/algotrade-research/proto/ProtoMarketMaker
+source .venv/bin/activate
+jupyter notebook examples/phase-3-redis-streaming-demo.ipynb
+```
+
+---
+
 ## Prerequisites
 
 - Python 3.13+
 - Jupyter Notebook
 - All project dependencies installed
+- **Redis server** (for Phase 3 only)
 
 ```bash
+# Install Python dependencies
 pip install jupyter
 pip install -r requirements.txt
+
+# Start Redis (for Phase 3)
+docker run -d -p 6379:6379 redis:latest
 ```
 
 ## Topics Covered
+
+### Phase 1: Infrastructure
 
 1. **Event-Driven Architecture**
    - Publish-subscribe pattern
@@ -80,25 +223,113 @@ pip install -r requirements.txt
    - Margin requirement checks
    - Portfolio health monitoring
 
-5. **Complete Integration**
+### Phase 2: Strategy & Execution
+
+5. **Market-Making Strategy**
+   - Inventory-based pricing
+   - Time-based signals (every 15 seconds)
+   - Event-based signals (on fills)
+   - Bid/ask spread management
+
+6. **Order Execution**
+   - Realistic fill simulation
+   - Price crossing logic
+   - Fee calculation and application
+   - Order lifecycle completion
+
+7. **Trading Session**
+   - Component orchestration
+   - CSV data replay
+   - Event processing pipeline
+   - Results generation
+
+8. **Event Recording & Analysis**
+   - JSONL event logging
+   - Event replay capabilities
+   - Performance tracking
+   - Event statistics
+
+9. **Complete Integration**
    - Full system setup
-   - Market making workflow
+   - End-to-end backtesting
    - Multi-trade simulations
+   - Performance optimization
+
+### Phase 3: Streaming & Monitoring
+
+10. **Redis Pub/Sub Streaming**
+   - Ultra-low latency message streaming (<2ms)
+   - Subscribe to market data channels
+   - Background thread listener
+   - Auto-reconnect on disconnection
+
+11. **Test Data Publisher**
+   - CSV replay at configurable rate
+   - Random walk generation
+   - Sine wave deterministic testing
+   - Multiple contract support
+
+12. **Real-Time Trading Session**
+   - Redis-based market data feed
+   - Health monitoring and statistics
+   - Session lifecycle management
+   - Performance summary generation
+
+13. **Performance Monitoring**
+   - Live trade tracking
+   - Fee calculation by contract
+   - Metrics integration with Portfolio
+   - Event-driven updates
+
+14. **Terminal Dashboard**
+   - Rich-based live UI
+   - Session/portfolio/orders panels
+   - Redis statistics display
+   - Configurable refresh rate
+
+15. **Latency Benchmarking**
+   - End-to-end latency measurement
+   - Throughput testing (100+ msg/sec)
+   - Statistical analysis (mean, p95, p99)
+   - Production readiness validation
 
 ## Learning Path
 
-**Beginner** → Start with Part 1 (Core Components)
-- Understand events, orders, and positions
-- Run simple examples
+### Phase 1: Foundation
 
-**Intermediate** → Move to Part 2 (Engine Components)
-- Learn OMS, Portfolio, and Risk management
-- Integrate components
+**Beginner** → Start with [core-engine-architecture-guide.ipynb](core-engine-architecture-guide.ipynb)
+- Part 1: Understand events, orders, and positions
+- Part 2: Learn OMS, Portfolio, and Risk management
+- Part 3: Integrate components
+- Part 4: Apply best practices
 
-**Advanced** → Complete Part 3 & 4
-- Build complete trading system
-- Implement market making strategy
-- Apply best practices
+### Phase 2: Trading System
+
+**Intermediate** → Move to [phase-2-paper-trading-demo.ipynb](phase-2-paper-trading-demo.ipynb)
+- Part 1-2: Learn Strategy and Execution engines
+- Part 3: Understand Trading Session orchestration
+- Part 4: Trace complete event flows
+
+**Advanced** → Complete all demos
+- Part 5: Master event recording and replay
+- Part 6: Optimize strategy parameters
+- Build custom strategies
+- Run production-ready backtests
+
+### Phase 3: Real-Time Streaming
+
+**Advanced** → Continue with [phase-3-redis-streaming-demo.ipynb](phase-3-redis-streaming-demo.ipynb)
+- Part 1-2: Understand Redis Pub/Sub and market data streaming
+- Part 3-5: Learn different data generation modes
+- Part 6: Master performance monitoring
+- Part 7: Build real-time trading sessions
+
+**Expert** → Master production deployment
+- Part 8: Deploy terminal dashboard
+- Part 9: Optimize for low latency
+- Part 10: Production-ready cleanup
+- Integrate with live data feeds
+- Scale to multiple contracts
 
 ## Interactive Features
 
@@ -121,20 +352,62 @@ The notebook demonstrates:
 
 ## Related Documentation
 
+### Phase 1 Documentation
 - [Core Module Guide](../core/README.md)
 - [Engine Module Guide](../engine/README.md)
 - [Week 1 Report](../markdown-docs/week-1-completion-report.md)
 - [Week 2 Report](../markdown-docs/week-2-completion-report.md)
 - [Phase 1 Spec](../internal-docs/paper-trading-phase-1-spec.md)
 
+### Phase 2 Documentation
+- [Phase 2 Specification](../internal-docs/paper-trading-phase-2-spec.md)
+- [Phase 2 Completion Report](../markdown-docs/phase-2-completion-report.md)
+- [Paper Trading Session Guide](../paper_trading/)
+- [CLI Usage](../paper_trading/main.py)
+
+### Phase 3 Documentation
+- [Phase 3 Specification](../internal-docs/paper-trading-phase-3-spec.md)
+- [Phase 3 Completion Report](../markdown-docs/phase-3-completion-report.md)
+- [Redis Stream Handler](../data/redis_stream.py)
+- [Redis Publisher Tool](../tools/redis_publisher.py)
+- [Performance Monitor](../evaluation/monitor.py)
+- [Terminal Dashboard](../evaluation/dashboard.py)
+
+### Overall Project
+- [Master Specification](../internal-docs/paper-trading-spec.md)
+- [Project README](../README.md)
+- [CLAUDE.md](../CLAUDE.md)
+
 ## Extending the Examples
 
-You can extend the notebook with:
-- Custom strategy implementations
-- Different market scenarios
-- Performance analysis
-- Risk scenario testing
+### Phase 1 Extensions
+- Custom event types
+- Additional risk checks
+- Custom portfolio metrics
 - Multi-contract portfolios
+- Different position sizing
+
+### Phase 2 Extensions
+- Custom strategy implementations
+- Alternative execution models
+- Different market scenarios
+- Parameter optimization
+- Performance analysis
+- Real-time data streaming (Phase 3)
+- Multiple strategy comparison
+- Event-based backtesting
+
+### Phase 3 Extensions
+- Custom Redis message formats
+- Alternative streaming backends (Kafka, NATS)
+- Web-based dashboard (Flask/FastAPI)
+- Database persistence for trades
+- Email/Slack alerting
+- Multi-strategy monitoring
+- Advanced latency optimization
+- Production deployment patterns
+- Horizontal scaling
+- Circuit breaker patterns
 
 ## Support
 

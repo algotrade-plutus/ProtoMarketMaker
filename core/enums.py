@@ -12,6 +12,7 @@ class EventType(Enum):
     FILL = "FILL"
     TIME = "TIME"
     SYSTEM = "SYSTEM"
+    ROLLOVER = "ROLLOVER"
 
 
 class OrderSide(Enum):

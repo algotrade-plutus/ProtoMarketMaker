@@ -9,6 +9,12 @@ numpy
 # Testing dependencies
 pytest>=7.4.0
 pytest-cov>=4.1.0
+pytest-redis>=3.0.0
 
 # Performance evaluation
 -e /Users/dan/algotrade-research/plutus
+
+# Phase 3: Streaming & Monitoring
+redis>=5.0.0
+rich>=13.0.0
+tqdm>=4.65.0

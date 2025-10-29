@@ -47,31 +47,50 @@ class RiskManager:
         Returns:
             True if order passes all checks, False otherwise
         """
-        # Check 1: Margin availability
-        available_margin = self.portfolio.get_available_margin(
-            order.contract, order.price
-        )
+        from core.enums import OrderSide
 
-        if order.quantity > available_margin:
-            self.logger.warning(
-                f"Order rejected: insufficient margin "
-                f"(need {order.quantity}, have {available_margin})"
-            )
-            return False
-
-        # Check 2: Price reasonability
+        # Check 1: Price reasonability
         if order.price <= 0:
             self.logger.warning(
                 f"Order rejected: invalid price {order.price}"
             )
             return False
 
-        # Check 3: Quantity validation
+        # Check 2: Quantity validation
         if order.quantity <= 0:
             self.logger.warning(
                 f"Order rejected: invalid quantity {order.quantity}"
             )
             return False
+
+        # Check 3: Margin availability (only for orders that increase position)
+        position = self.portfolio.get_position(order.contract)
+        is_buy = order.side == OrderSide.BID
+        is_sell = order.side == OrderSide.ASK
+
+        # Determine if this order increases position (requires margin)
+        # or decreases position (no margin required)
+        requires_margin = False
+
+        if is_buy and position.quantity >= 0:
+            # Buying when flat or long = increasing long position
+            requires_margin = True
+        elif is_sell and position.quantity <= 0:
+            # Selling when flat or short = increasing short position
+            requires_margin = True
+        # else: closing an existing position, no margin required
+
+        if requires_margin:
+            available_margin = self.portfolio.get_available_margin(
+                order.contract, order.price
+            )
+
+            if order.quantity > available_margin:
+                self.logger.warning(
+                    f"Order rejected: insufficient margin "
+                    f"(need {order.quantity}, have {available_margin})"
+                )
+                return False
 
         return True
 

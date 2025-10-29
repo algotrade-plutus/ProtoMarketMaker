@@ -58,6 +58,10 @@ class PortfolioManager:
         # Market prices cache
         self.current_prices: Dict[str, Decimal] = {}
 
+        # Cumulative realized P&L tracking (like ac_loss in original)
+        # Negative value = cumulative gains (matches original's ac_loss convention)
+        self.cumulative_realized_pnl = Decimal('0')
+
         # PLUTUS evaluator
         self.evaluator: Optional[PerformanceEvaluator] = None
 
@@ -67,6 +71,7 @@ class PortfolioManager:
         self.event_bus.subscribe(EventType.FILL, self.on_fill_event)
         self.event_bus.subscribe(EventType.MARKET_DATA, self.on_market_data)
         self.event_bus.subscribe(EventType.TIME, self.on_time_event)
+        self.event_bus.subscribe(EventType.ROLLOVER, self.on_rollover_event)
 
     def get_position(self, contract: str) -> Position:
         """
@@ -102,6 +107,10 @@ class PortfolioManager:
         """
         Calculate maximum placeable contracts (17% margin)
 
+        IMPORTANT: Uses last settlement NAV, not current intraday NAV.
+        This matches original backtest behavior and prevents over-leveraging
+        based on unrealized intraday gains.
+
         Args:
             contract: Contract symbol
             price: Current price
@@ -109,15 +118,27 @@ class PortfolioManager:
         Returns:
             Number of contracts that can be placed
         """
-        nav = self.calculate_nav()
+        # Use last settlement NAV (like original's daily_assets[-1])
+        # NOT current intraday NAV (which includes unrealized PnL)
+        if len(self.daily_nav) > 0:
+            nav = self.daily_nav[-1]
+        else:
+            nav = self.initial_capital
+
         margin_per_contract = price * Decimal('100') * Decimal('0.17')
 
         if margin_per_contract == 0:
+            self.logger.warning(f"Margin per contract is 0! price={price}")
             return 0
 
         total_placeable = int(nav / margin_per_contract)
-        current_position = abs(self.get_position(contract).quantity)
-        return max(total_placeable - current_position, 0)
+
+        # Calculate TOTAL position across ALL contracts (not just this one)
+        total_position = sum(abs(p.quantity) for p in self.positions.values())
+
+        available = max(total_placeable - total_position, 0)
+
+        return available
 
     def on_fill_event(self, event: FillEvent):
         """
@@ -132,25 +153,43 @@ class PortfolioManager:
         is_buy = event.side == "BID"
         quantity_change = 1 if is_buy else -1
 
+        # Determine if this is opening or closing a position
+        is_closing = (position.quantity > 0 and not is_buy) or \
+                     (position.quantity < 0 and is_buy)
+
         # Calculate realized PnL if closing/reducing position
-        if (position.quantity > 0 and not is_buy) or \
-           (position.quantity < 0 and is_buy):
-            # Closing position
+        if is_closing:
+            # Closing position - realize P&L
+            # Fee model: 40 total per round trip (20 open + 20 close)
+            # We charge all 40 at close time to match original backtest
             if position.quantity > 0:  # Closing long
                 realized_pnl = (
                     (event.fill_price - position.average_price)
                     * Decimal('100')
+                    - event.fee
                 )
             else:  # Closing short
                 realized_pnl = (
                     (position.average_price - event.fill_price)
                     * Decimal('100')
+                    - event.fee
                 )
             position.realized_pnl += realized_pnl
 
+            # Track cumulative realized P&L (like ac_loss in original)
+            # Use -= to make negative values represent gains (matches original convention)
+            self.cumulative_realized_pnl -= realized_pnl
+
+            # Note: We do NOT update cash here. Cash only updates at settlement.
+            # This matches original's behavior where daily_assets only updates at settlement.
+        else:
+            # Opening position - NO fee charged yet (deferred until close)
+            # This matches original backtest behavior
+            # Futures contracts don't require paying the full contract value upfront
+            pass
+
         # Update position quantity and average price
-        if (position.quantity >= 0 and is_buy) or \
-           (position.quantity <= 0 and not is_buy):
+        if not is_closing:
             # Opening or adding to position
             old_quantity = abs(position.quantity)
             new_quantity = old_quantity + 1
@@ -163,13 +202,10 @@ class PortfolioManager:
         position.quantity += quantity_change
         position.total_fees += event.fee
 
-        # Update cash
-        cash_flow = event.fill_price * Decimal('100') + event.fee
-        self.cash -= cash_flow if is_buy else -cash_flow
-
         self.logger.info(
             f"Portfolio updated: {event.contract} position={position.quantity} "
-            f"avg_price={position.average_price:.2f} cash={self.cash:.2f}"
+            f"avg_price={position.average_price:.2f} cash={self.cash:.2f} "
+            f"NAV={self.calculate_nav():.2f}"
         )
 
     def on_market_data(self, event: MarketDataEvent):
@@ -193,6 +229,41 @@ class PortfolioManager:
             event: Time event (e.g., DAILY_SETTLEMENT)
         """
         if event.event_name == "DAILY_SETTLEMENT":
+            # Update positions with close prices for settlement (if provided)
+            # This ensures NAV is calculated using official close prices, not last tick
+            if hasattr(event, 'close_prices') and event.close_prices:
+                for contract, close_price in event.close_prices.items():
+                    if contract in self.positions:
+                        position = self.positions[contract]
+
+                        # Calculate and "lock in" unrealized PnL before reset
+                        # This matches original backtest's daily asset update
+                        if position.quantity != 0:
+                            # Calculate settlement PnL (close price vs current average)
+                            sign = 1 if position.quantity > 0 else -1
+                            settlement_pnl = (
+                                sign * abs(position.quantity) *
+                                (close_price - position.average_price) * Decimal('100')
+                            )
+                            # Add to cash (locks in the PnL)
+                            self.cash += settlement_pnl
+
+                            # Reset average_price to close_price for next day
+                            # This prevents double-counting when position is closed
+                            position.average_price = close_price
+
+                            # Reset unrealized PnL to zero since we just locked it in
+                            position.unrealized_pnl = Decimal('0')
+
+                    # Also update current prices cache
+                    self.current_prices[contract] = close_price
+
+            # Add cumulative realized P&L to cash (matches original's ac_loss handling)
+            # Original formula: new_asset = cur_asset + (unrealized_pnl - ac_loss)
+            # Since ac_loss is negative for gains, this becomes: cur_asset + unrealized + |ac_loss|
+            # cumulative_realized_pnl is negative for gains, so we negate it to add gains
+            self.cash += (-self.cumulative_realized_pnl)
+
             nav = self.calculate_nav()
 
             if len(self.daily_nav) > 0:
@@ -227,6 +298,69 @@ class PortfolioManager:
             for position in self.positions.values():
                 position.total_fees = Decimal('0')
 
+    def on_rollover_event(self, event):
+        """
+        Handle contract rollover (e.g., VN30F2201 -> VN30F2202)
+
+        Matches original backtest's move_f1_to_f2() logic:
+        1. Close position in old contract (realize P&L)
+        2. Reopen same position in new contract
+        3. Charge rollover fees
+
+        Args:
+            event: RolloverEvent with old/new contract and prices
+        """
+        from core.event import RolloverEvent
+        if not isinstance(event, RolloverEvent):
+            return
+
+        old_contract = event.old_contract
+        new_contract = event.new_contract
+        old_price = event.old_price
+        new_price = event.new_price
+
+        # Get position in old contract
+        if old_contract in self.positions:
+            old_position = self.positions[old_contract]
+
+            if old_position.quantity != 0:
+                # Calculate P&L from closing old contract position
+                # This matches original's logic in move_f1_to_f2()
+                # NOTE: Original calculates per-contract P&L, not total
+                if old_position.quantity > 0:
+                    # Long position: P&L = (close_price - entry_price) * 100 per contract
+                    rollover_pnl = (old_price - old_position.average_price) * Decimal('100')
+                else:
+                    # Short position: P&L = (entry_price - close_price) * 100 per contract
+                    rollover_pnl = (old_position.average_price - old_price) * Decimal('100')
+
+                # Charge rollover fees (FEE_PER_CONTRACT * quantity)
+                # Original charges 40 per contract (20 close + 20 reopen)
+                rollover_fees = Decimal('40') * abs(old_position.quantity)
+                net_rollover_pnl = rollover_pnl - rollover_fees
+
+                # Update cumulative realized P&L (like ac_loss in original)
+                # Note: We use -= because cumulative_realized_pnl is negative for gains
+                self.cumulative_realized_pnl -= net_rollover_pnl
+
+                # Create position in new contract with same quantity
+                new_position = self.get_position(new_contract)
+                new_position.quantity = old_position.quantity
+                new_position.average_price = new_price
+
+                # Close old position
+                old_position.quantity = 0
+                old_position.average_price = Decimal('0')
+                old_position.unrealized_pnl = Decimal('0')
+
+                self.logger.info(
+                    f"Contract rollover: {old_contract} -> {new_contract} | "
+                    f"quantity={new_position.quantity} | "
+                    f"old_price={old_price} | new_price={new_price} | "
+                    f"rollover_pnl={rollover_pnl:.2f} | fees={rollover_fees:.2f} | "
+                    f"net_pnl={net_rollover_pnl:.2f}"
+                )
+
     def get_performance_metrics(self) -> dict:
         """
         Get all performance metrics from PLUTUS evaluator
@@ -240,16 +374,48 @@ class PortfolioManager:
         if not self.evaluator:
             return {'error': 'No performance data yet'}
 
-        return {
-            'sharpe_ratio': float(self.evaluator.sharpe_ratio),
-            'sortino_ratio': float(self.evaluator.sortino_ratio),
-            'calmar_ratio': float(self.evaluator.calmar_ratio),
-            'maximum_drawdown': float(self.evaluator.maximum_drawdown),
-            'annual_return': float(self.evaluator.annual_return),
-            'volatility': float(self.evaluator.volatility),
-            'value_at_risk_95': float(self.evaluator.value_at_risk_95),
-            'conditional_var_95': float(self.evaluator.conditional_var_95),
-        }
+        try:
+            return {
+                'sharpe_ratio': float(self.evaluator.sharpe_ratio),
+                'sortino_ratio': float(self.evaluator.sortino_ratio),
+                'calmar_ratio': float(self.evaluator.calmar_ratio),
+                'maximum_drawdown': float(self.evaluator.maximum_drawdown),
+                'annual_return': float(self.evaluator.annual_return),
+                'volatility': float(self.evaluator.volatility),
+                'value_at_risk_95': float(self.evaluator.value_at_risk_95),
+                'conditional_var_95': float(self.evaluator.conditional_var_95),
+            }
+        except Exception as e:
+            self.logger.warning(f"PLUTUS evaluation error: {e}")
+            # Return basic metrics calculated from daily returns
+            if len(self.daily_returns) > 0:
+                import numpy as np
+                returns_array = [float(r) for r in self.daily_returns]
+                mean_return = np.mean(returns_array)
+                std_return = np.std(returns_array)
+                sharpe = mean_return / std_return * np.sqrt(252) if std_return > 0 else 0
+
+                return {
+                    'sharpe_ratio': sharpe,
+                    'sortino_ratio': 0.0,
+                    'calmar_ratio': 0.0,
+                    'maximum_drawdown': 0.0,
+                    'annual_return': mean_return * 252,
+                    'volatility': std_return * np.sqrt(252),
+                    'value_at_risk_95': 0.0,
+                    'conditional_var_95': 0.0,
+                }
+            else:
+                return {
+                    'sharpe_ratio': 0.0,
+                    'sortino_ratio': 0.0,
+                    'calmar_ratio': 0.0,
+                    'maximum_drawdown': 0.0,
+                    'annual_return': 0.0,
+                    'volatility': 0.0,
+                    'value_at_risk_95': 0.0,
+                    'conditional_var_95': 0.0,
+                }
 
     def get_summary(self) -> dict:
         """Get portfolio summary"""

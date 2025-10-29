@@ -26,6 +26,10 @@ def from_cash_to_tradeable_contracts(
     Returns:
         int: _description_
     """
+    # CRITICAL FIX: pandas iterrows() may convert Decimal back to float
+    # Defensive conversion to ensure type consistency
+    if not isinstance(inst_price, Decimal):
+        inst_price = Decimal(str(inst_price))
     return int(cash / (inst_price * multiplier * margin_rate))
 
 
