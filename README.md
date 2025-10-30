@@ -111,12 +111,12 @@ python backtesting.py
 ```
 | Metric                 | Value                              |
 |------------------------|------------------------------------|
-| Sharpe Ratio           | 1.4564                             |
-| Sortino Ratio          | 2.1903                             |
-| Maximum Drawdown (MDD) | -0.1638                            |
-| HPR (%)                | 49.98                              |
-| Monthly return (%)     | 3.26                               |
-| Annual return (%)      | 36.34                              |
+| Sharpe Ratio           | 0.9516                             |
+| Sortino Ratio          | 1.3490                             |
+| Maximum Drawdown (MDD) | -0.2010                            |
+| HPR (%)                | 29.92                              |
+| Monthly return (%)     | 1.81                               |
+| Annual return (%)      | 17.10                              |
 ```
 - The HPR chart. The chart is located at: `result/backtest/hpr.svg`
 ![HPR chart with VNINDEX benchmark](result/backtest/hpr.svg)
@@ -134,7 +134,7 @@ python optimization.py
 The currently found optimized parameters with the seed `2025` are:
 ```json
 {
-    "step": 2.9
+    "step": 3.1
 }
 ```
 ## Out-of-sample Backtesting
@@ -149,12 +149,12 @@ python evaluation.py
 ```
 | Metric                 | Value                              |
 |------------------------|------------------------------------|
-| Sharpe Ratio           | 0.2564                             |
-| Sortino Ratio          | 0.4365                             |
-| Maximum Drawdown (MDD) | -0.0854                            |
-| HPR (%)                | 11.23                              |
-| Monthly return (%)     | 1.01                               |
-| Annual return (%)      | 11.25                              |
+| Sharpe Ratio           | 0.1105                             |
+| Sortino Ratio          | 0.1605                             |
+| Maximum Drawdown (MDD) | -0.1028                            |
+| HPR (%)                | 8.48                               |
+| Monthly return (%)     | 0.56                               |
+| Annual return (%)      | 6.20                               |
 ```
 - The HPR chart. The chart is located at `result/optimization/hpr.svg`.
 ![HPR chart with VNINDEX benchmark](result/optimization/hpr.svg)
