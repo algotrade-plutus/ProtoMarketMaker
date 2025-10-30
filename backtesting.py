@@ -11,10 +11,7 @@ import matplotlib.pyplot as plt
 
 from config.config import BACKTESTING_CONFIG
 from metrics.metric import get_returns, Metric
-from utils import (
-    get_expired_dates,
-    from_cash_to_tradeable_contracts,
-)
+from utils import get_expired_dates, from_cash_to_tradeable_contracts, round_decimal
 
 FEE_PER_CONTRACT = Decimal(BACKTESTING_CONFIG["fee"]) * Decimal('100')
 
@@ -145,9 +142,7 @@ class Backtesting:
             self.inventory += 1
             matched += 1
         elif self.bid_price >= price and self.inventory < 0:
-            self.ac_loss -= (self.inventory_price - price) * Decimal(
-                '100'
-            ) - FEE_PER_CONTRACT
+            self.ac_loss += (FEE_PER_CONTRACT - (self.inventory_price - price) * Decimal('100'))
             self.inventory += 1
             matched -= 1
 
@@ -158,9 +153,7 @@ class Backtesting:
             self.inventory -= 1
             matched += 1
         elif self.ask_price <= price and self.inventory > 0:
-            self.ac_loss -= (price - self.inventory_price) * Decimal(
-                '100'
-            ) - FEE_PER_CONTRACT
+            self.ac_loss += (FEE_PER_CONTRACT - (price - self.inventory_price) * Decimal('100'))
             self.inventory -= 1
             matched -= 1
 
@@ -203,11 +196,9 @@ class Backtesting:
         f1_data["date"] = (
             pd.to_datetime(f1_data["date"], format="%Y-%m-%d").copy().dt.date
         )
-        f1_data["close"] = f1_data["close"].apply(Decimal)
-        f1_data["price"] = f1_data["price"].apply(Decimal)
-        f1_data["best-bid"] = f1_data["best-bid"].apply(Decimal)
-        f1_data["best-ask"] = f1_data["best-ask"].apply(Decimal)
-        f1_data["spread"] = f1_data["spread"].apply(Decimal)
+        rounding_columns = ["close", "price", "best-bid", "best-ask", "spread"]
+        for col in rounding_columns:
+            f1_data = round_decimal(f1_data, col)
 
         f2_data = pd.read_csv(f"{prefix_path}VN30F2M_data.csv")
         f2_data = f2_data[["date", "datetime", "tickersymbol", "price", "close"]].copy()
@@ -217,14 +208,22 @@ class Backtesting:
         f2_data["date"] = (
             pd.to_datetime(f2_data["date"], format="%Y-%m-%d").copy().dt.date
         )
-        f2_data.rename(columns={"price": "f2_price", "close": "f2_close"}, inplace=True)
-        f2_data["f2_close"] = f2_data["f2_close"].apply(Decimal)
-        f2_data["f2_price"] = f2_data["f2_price"].apply(Decimal)
+        f2_data.rename(
+            columns={
+                "price": "f2_price",
+                "close": "f2_close",
+                "tickersymbol": "f2-tickersymbol",
+            },
+            inplace=True,
+        )
+        rounding_columns = ["f2_close", "f2_price"]
+        for col in rounding_columns:
+            f2_data = round_decimal(f2_data, col)
 
         f1_data = pd.merge(
             f1_data,
             f2_data,
-            on=["datetime", "date", "tickersymbol"],
+            on=["datetime", "date"],
             how="outer",
             sort=True,
         )

@@ -6,6 +6,12 @@ from datetime import datetime
 from decimal import Decimal
 from queue import Queue
 from dateutil.rrule import rrule, MONTHLY, TH
+from pandas import DataFrame
+
+
+def round_decimal(df: DataFrame, column: str, digits=10):
+    df[column] = df[column].apply(lambda x: Decimal(str(round(x, digits))))
+    return df
 
 
 def from_cash_to_tradeable_contracts(
