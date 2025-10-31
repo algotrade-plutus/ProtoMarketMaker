@@ -24,7 +24,7 @@ class Backtesting:
     def __init__(
         self,
         capital: Decimal,
-        printable=True,
+        log_file=None,
     ):
         """
         Initiate required data
@@ -38,7 +38,8 @@ class Backtesting:
             path (str, optional). Defaults to "data/is/pe_dps.csv".
             index_path (str, optional). Defaults to "data/is/vnindex.csv".
         """
-        self.printable = printable
+        self.log_file = log_file
+        self.logger = None
         self.metric = None
 
         self.inventory = 0
@@ -54,21 +55,48 @@ class Backtesting:
         self.bid_price = None
         self.ask_price = None
         self.ac_loss = Decimal("0.0")
+        self.rollover_count = 0
         self.transactions = []
         self.order_logs = []
+        self.fill_count = 0
+
+    def log(self, message: str):
+        if self.logger is not None:
+            self.logger.write(message + "\n")
+            self.logger.flush()
 
     def move_f1_to_f2(self, f1_price, f2_price):
         """
         TODO: move f1 to f2
         """
+        inv_price_before = self.inventory_price
+        ac_loss_before = self.ac_loss
+        self.rollover_count += 1
         if self.inventory > 0:
             self.ac_loss += (self.inventory_price - f1_price) * 100
             self.inventory_price = f2_price
             self.ac_loss += FEE_PER_CONTRACT * abs(self.inventory)
+
+            self.log(
+                f"[ROLLOVER] #{self.rollover_count} | f1_price={f1_price} | f2_price={f2_price} | "
+                f"position=LONG | inv={self.inventory} | inv_price_before={inv_price_before:.2f} | "
+                f"inv_price_after={self.inventory_price:.2f} | ac_loss_before={ac_loss_before:.2f} | "
+            )
         elif self.inventory < 0:
             self.ac_loss += (f1_price - self.inventory_price) * 100
             self.inventory_price = f2_price
             self.ac_loss += FEE_PER_CONTRACT * abs(self.inventory)
+
+            self.log(
+                f"[ROLLOVER] #{self.rollover_count} | f1_price={f1_price} | f2_price={f2_price} | "
+                f"position=SHORT | inv={self.inventory} | inv_price_before={inv_price_before:.2f} | "
+                f"inv_price_after={self.inventory_price:.2f} | ac_loss_before={ac_loss_before:.2f} | "
+            )
+        else:
+            self.log(
+                f"[ROLLOVER] #{self.rollover_count} | f1_price={f1_price} | f2_price={f2_price} | "
+                f"position=FLAT | inv=0 | no_position_to_roll"
+            )
 
     def update_pnl(self, close_price: Decimal):
         """
@@ -79,6 +107,7 @@ class Backtesting:
         """
         cur_asset = self.daily_assets[-1]
         new_asset = None
+        pnl = 0
         if self.inventory == 0:
             new_asset = cur_asset - self.ac_loss
         else:
@@ -92,6 +121,7 @@ class Backtesting:
 
         self.daily_returns.append(new_asset / self.daily_assets[-1] - 1)
         self.daily_assets.append(new_asset)
+        return pnl
 
     def handle_force_sell(self, price: Decimal):
         """
@@ -101,9 +131,17 @@ class Backtesting:
             price (Decimal): _description_
         """
         while self.get_maximum_placeable(price) < 0:
+            inv_before = self.inventory
             sign = 1 if self.inventory < 0 else -1
             self.inventory += sign
-            self.ac_loss += abs(price - self.inventory_price) * 100 + FEE_PER_CONTRACT
+            loss_added = abs(price - self.inventory_price) * 100 + FEE_PER_CONTRACT
+            self.ac_loss += loss_added
+            self.log(
+                f"[FORCE_SELL] #{self.force_sell_count} | price={price} | "
+                f"inv_before={inv_before} | inv_after={self.inventory} | "
+                f"loss_added={loss_added:.2f} | ac_loss={self.ac_loss:.2f} | "
+                f"reason=MARGIN_CALL"
+            )
 
     def get_maximum_placeable(self, inst_price: Decimal):
         """
@@ -136,26 +174,79 @@ class Backtesting:
             return matched
 
         if self.bid_price >= price and self.inventory >= 0 and placeable > 0:
+            inv_before = self.inventory
+            inv_price_before = self.inventory_price
+            ac_loss_before = self.ac_loss
             self.inventory_price = (
                 self.inventory_price * abs(self.inventory) + price
             ) / (abs(self.inventory) + 1)
             self.inventory += 1
             matched += 1
+
+            self.fill_count += 1
+            self.log(
+                f"[FILL] #{self.fill_count} | side=BID | price={price} | qty=1 | "
+                f"inv_before={inv_before} | inv_after={self.inventory} | "
+                f"inv_price_before={inv_price_before:.2f} | inv_price_after={self.inventory_price:.2f} | "
+                f"ac_loss={self.ac_loss:.2f} | placeable={placeable} | type=OPEN_LONG"
+            )
+
         elif self.bid_price >= price and self.inventory < 0:
-            self.ac_loss += (FEE_PER_CONTRACT - (self.inventory_price - price) * Decimal('100'))
+            inv_before = self.inventory
+            inv_price_before = self.inventory_price
+            ac_loss_before = self.ac_loss
+            pnl_realized = (self.inventory_price - price) * Decimal(
+                '100'
+            ) - FEE_PER_CONTRACT
+            self.ac_loss -= pnl_realized
             self.inventory += 1
             matched -= 1
 
+            self.fill_count += 1
+            self.log(
+                f"[FILL] #{self.fill_count} | side=BID_COVER | price={price} | qty=1 | "
+                f"inv_before={inv_before} | inv_after={self.inventory} | "
+                f"inv_price_before={inv_price_before:.2f} | inv_price_after={self.inventory_price:.2f} | "
+                f"pnl_realized={pnl_realized:.2f} | ac_loss_before={ac_loss_before:.2f} | "
+                f"ac_loss_after={self.ac_loss:.2f} | type=COVER_SHORT"
+            )
+
         if self.ask_price <= price and self.inventory <= 0 and placeable > 0:
+            inv_before = self.inventory
+            inv_price_before = self.inventory_price
+            ac_loss_before = self.ac_loss
             self.inventory_price = (
                 self.inventory_price * abs(self.inventory) + price
             ) / (abs(self.inventory) + 1)
             self.inventory -= 1
             matched += 1
+
+            self.fill_count += 1
+            self.log(
+                f"[FILL] #{self.fill_count} | side=ASK | price={price} | qty=1 | "
+                f"inv_before={inv_before} | inv_after={self.inventory} | "
+                f"inv_price_before={inv_price_before:.2f} | inv_price_after={self.inventory_price:.2f} | "
+                f"ac_loss={self.ac_loss:.2f} | placeable={placeable} | type=OPEN_SHORT"
+            )
         elif self.ask_price <= price and self.inventory > 0:
-            self.ac_loss += (FEE_PER_CONTRACT - (price - self.inventory_price) * Decimal('100'))
+            inv_before = self.inventory
+            inv_price_before = self.inventory_price
+            ac_loss_before = self.ac_loss
+
+            pnl_realized = (price - self.inventory_price) * Decimal(
+                '100'
+            ) - FEE_PER_CONTRACT
+            self.ac_loss -= pnl_realized
             self.inventory -= 1
             matched -= 1
+            self.fill_count += 1
+            self.log(
+                f"[FILL] #{self.fill_count} | side=ASK_COVER | price={price} | qty=1 | "
+                f"inv_before={inv_before} | inv_after={self.inventory} | "
+                f"inv_price_before={inv_price_before:.2f} | inv_price_after={self.inventory_price:.2f} | "
+                f"pnl_realized={pnl_realized:.2f} | ac_loss_before={ac_loss_before:.2f} | "
+                f"ac_loss_after={self.ac_loss:.2f} | type=COVER_LONG"
+            )
 
         return matched
 
@@ -235,6 +326,19 @@ class Backtesting:
         Main backtesting function
         """
 
+        if self.log_file is not None:
+            self.logger = open(self.log_file, 'w')
+            self.log(f"# BACKTEST LOG")
+            self.log(f"# =====================================")
+            self.log(f"# Start: {data['datetime'].iloc[0]}")
+            self.log(f"# End: {data['datetime'].iloc[-1]}")
+            self.log(f"# Rows: {len(data):,}")
+            self.log(f"# Capital: {self.daily_assets[0]}")
+            self.log(f"# Step: {step}")
+            self.log(f"# Fee per contract: {FEE_PER_CONTRACT}")
+            self.log(f"# Update interval: {BACKTESTING_CONFIG['time']} seconds")
+            self.log(f"#")
+
         trading_dates = data["date"].unique().tolist()
 
         start_date = data["datetime"].iloc[0]
@@ -244,6 +348,13 @@ class Backtesting:
         cur_index = 0
         moving_to_f2 = False
         for index, row in data.iterrows():
+            if index % 100 == 0:
+                self.log(
+                    f"[TICK] #{index} | time={row['datetime']} | contract={row['tickersymbol']} | "
+                    f"price={row['price']} | bid={row['best-bid']} | ask={row['best-ask']} | "
+                    f"spread={row['spread']} | using_f2={moving_to_f2}"
+                )
+
             self.cur_date = row["datetime"]
             self.ticker = row["tickersymbol"]
             if (
@@ -251,6 +362,11 @@ class Backtesting:
                 and not expiration_dates.empty()
                 and trading_dates[cur_index + 1] >= expiration_dates.queue[0]
             ):
+                self.log(
+                    f"\n[ROLLOVER_DETECT] | date={row['date']} | time={row['datetime']} | "
+                    f"next_trading_date={trading_dates[cur_index + 1]} | "
+                    f"expiration={expiration_dates.queue[0]} | condition=TRUE"
+                )
                 self.move_f1_to_f2(row["price"], row["f2_price"])
                 expiration_dates.get()
                 moving_to_f2 = True
@@ -262,16 +378,22 @@ class Backtesting:
 
             if index == len(data) - 1 or row["date"] != data.iloc[index + 1]["date"]:
                 cur_index += 1
-                self.update_pnl(row["f2_close"] if moving_to_f2 else row["close"])
-                if self.printable:
-                    print(
-                        f"Realized asset {row['date']}: {int(self.daily_assets[-1] * Decimal('1000'))} VND"
-                    )
+                close_price = row["f2_close"] if moving_to_f2 else row["close"]
+
+                unrealized_pnl = self.update_pnl(close_price)
+                self.log(
+                    f"\n[DAILY] | date={row['date']} | close={close_price} | "
+                    f"using_f2={moving_to_f2} | nav={self.daily_assets[-1]:.2f} | "
+                    f"inventory={self.inventory} | inv_price={self.inventory_price:.2f} | "
+                    f"ac_loss={self.ac_loss:.2f} | unrealized_pnl={unrealized_pnl:.2f} | "
+                    f"daily_filled={self.fill_count} | daily_return={self.daily_returns[-1]*100:.4f}%\n"
+                )
                 if moving_to_f2:
                     self.monthly_tracking.append([row["date"], self.daily_assets[-1]])
 
                 moving_to_f2 = False
                 self.ac_loss = Decimal("0.0")
+                self.fill_count = 0
                 self.bid_price = None
                 self.ask_price = None
                 self.old_timestamp = None
@@ -347,9 +469,7 @@ class Backtesting:
 
 
 if __name__ == "__main__":
-    bt = Backtesting(
-        capital=Decimal("5e5"),
-    )
+    bt = Backtesting(capital=Decimal("5e5"), log_file="backtesting.log")
 
     data = bt.process_data()
     bt.run(data, Decimal("1.8"))
