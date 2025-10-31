@@ -12,7 +12,7 @@ from metrics.metric import get_returns
 
 if __name__ == "__main__":
     data = Backtesting.process_data(evaluation=True)
-    bt = Backtesting(capital=Decimal('5e5'))
+    bt = Backtesting(capital=Decimal('5e5'), log_file="evaluation.log")
 
     bt.run(data, Decimal(BEST_CONFIG["step"]))
     bt.plot_hpr(path="result/optimization/hpr.svg")

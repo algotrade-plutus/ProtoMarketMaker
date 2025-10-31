@@ -59,7 +59,7 @@ if __name__ == "__main__":
         Returns:
             _type_: _description_
         """
-        bt = Backtesting(capital=Decimal("5e5"), printable=False)
+        bt = Backtesting(capital=Decimal("5e5"))
         step = trial.suggest_float(
             "step",
             OPTIMIZATION_CONFIG["step"][0],
