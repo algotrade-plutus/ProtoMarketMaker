@@ -169,9 +169,9 @@ Order lifecycle follows state machine pattern:
 - Helper methods for state queries
 - Timestamp tracking for audit trail
 
-## Integration with Week 2 Components
+## Integration with Trading Components
 
-The core module provides interfaces for Week 2 components:
+The core module provides interfaces for trading components:
 
 ### OMS (Order Management System)
 - Uses `Order` class to track orders

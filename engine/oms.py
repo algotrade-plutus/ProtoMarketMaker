@@ -36,7 +36,7 @@ class OrderManager:
 
         Args:
             event_bus: Event bus for publishing events
-            risk_manager: Risk manager for pre-trade checks (optional for Phase 1)
+            risk_manager: Risk manager for pre-trade checks (optional)
         """
         self.event_bus = event_bus
         self.risk_manager = risk_manager

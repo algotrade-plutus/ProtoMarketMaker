@@ -4,13 +4,62 @@ This folder contains interactive examples and tutorials for the Paper Trading Sy
 
 ## Quick Start
 
-| Notebook | Phase | Topics | Complexity |
-|----------|-------|--------|------------|
-| [core-engine-architecture-guide.ipynb](core-engine-architecture-guide.ipynb) | 1 | Event system, OMS, Portfolio, Risk | Beginner |
-| [phase-2-paper-trading-demo.ipynb](phase-2-paper-trading-demo.ipynb) | 2 | Strategy, Execution, Session | Intermediate |
-| [phase-3-redis-streaming-demo.ipynb](phase-3-redis-streaming-demo.ipynb) | 3 | Redis Pub/Sub, Streaming, Monitoring | Advanced |
+| Notebook | Topics | Complexity |
+|----------|--------|------------|
+| [core-engine-architecture-guide.ipynb](core-engine-architecture-guide.ipynb) | Event system, OMS, Portfolio, Risk | Beginner |
+| [paper-trading-demo.ipynb](paper-trading-demo.ipynb) | Strategy, Execution, Session | Intermediate |
+| [redis-streaming-demo.ipynb](redis-streaming-demo.ipynb) | Redis Pub/Sub, Streaming, Monitoring | Advanced |
 
 **Total**: 3 comprehensive notebooks with 110+ interactive code cells
+
+## Python Example Files
+
+| File | Mode | Description | Usage |
+|------|------|-------------|-------|
+| [playback_mode_example.py](playback_mode_example.py) | Playback | Dual-file historical playback with conditional F2M | `python examples/playback_mode_example.py` |
+| [live_mode_example.py](live_mode_example.py) | Live | Real-time trading with contract auto-detection | `python examples/live_mode_example.py` |
+| [audit_redis_handler.py](audit_redis_handler.py) | Utility | Redis handler auditing and testing | `python examples/audit_redis_handler.py` |
+
+### Playback Mode Example
+**Features:**
+- Dual-file historical data playback (separate F1M/F2M)
+- Abstract contract symbols (VN30F1M, VN30F2M)
+- Conditional F2M subscription during rollover window
+- F2M activation/deactivation demonstration
+- Performance monitoring (throughput, latency)
+- Comprehensive error handling
+
+**Usage:**
+```bash
+# Basic usage (from project root)
+PYTHONPATH=. python examples/playback_mode_example.py
+
+# Prerequisites
+redis-server                                           # Start Redis
+# Data files required:
+#   - data/sample/VN30F1M_rollover.csv (F1M front month)
+#   - data/sample/VN30F2M_rollover.csv (F2M second month)
+```
+
+### Live Mode Example
+**Features:**
+- Real-time market data simulation
+- Actual contract codes (VN30F2510, VN30F2511, etc.)
+- Auto-detection of current front-month contract
+- Manual contract specification support
+- P&L tracking and performance insights
+
+**Usage:**
+```bash
+# With auto-detection (detects current F1M/F2M)
+PYTHONPATH=. python examples/live_mode_example.py
+
+# With specific contract
+PYTHONPATH=. python examples/live_mode_example.py --contract VN30F2511
+
+# Custom duration and capital
+PYTHONPATH=. python examples/live_mode_example.py --duration 120 --capital 1000000
+```
 
 ---
 
@@ -18,7 +67,7 @@ This folder contains interactive examples and tutorials for the Paper Trading Sy
 
 ### 📘 [core-engine-architecture-guide.ipynb](core-engine-architecture-guide.ipynb)
 
-**Phase 1: Core Infrastructure Tutorial**
+**Core Infrastructure Tutorial**
 
 A complete guide to the event-driven trading infrastructure covering:
 
@@ -60,9 +109,9 @@ jupyter notebook examples/core-engine-architecture-guide.ipynb
 
 ---
 
-### 📗 [phase-2-paper-trading-demo.ipynb](phase-2-paper-trading-demo.ipynb)
+### 📗 [paper-trading-demo.ipynb](paper-trading-demo.ipynb)
 
-**Phase 2: Strategy & Execution Demo**
+**Strategy & Execution Demo**
 
 A comprehensive demonstration of the paper trading system covering:
 
@@ -109,14 +158,14 @@ A comprehensive demonstration of the paper trading system covering:
 # Start Jupyter
 cd /Users/dan/algotrade-research/proto/ProtoMarketMaker
 source .venv/bin/activate
-jupyter notebook examples/phase-2-paper-trading-demo.ipynb
+jupyter notebook examples/paper-trading-demo.ipynb
 ```
 
 ---
 
-### 📙 [phase-3-redis-streaming-demo.ipynb](phase-3-redis-streaming-demo.ipynb)
+### 📙 [redis-streaming-demo.ipynb](redis-streaming-demo.ipynb)
 
-**Phase 3: Redis Streaming & Performance Monitoring**
+**Redis Streaming & Performance Monitoring**
 
 A comprehensive demonstration of real-time streaming infrastructure covering:
 
@@ -177,7 +226,7 @@ redis-cli ping  # Should return "PONG"
 # Start Jupyter
 cd /Users/dan/algotrade-research/proto/ProtoMarketMaker
 source .venv/bin/activate
-jupyter notebook examples/phase-3-redis-streaming-demo.ipynb
+jupyter notebook examples/redis-streaming-demo.ipynb
 ```
 
 ---
@@ -187,20 +236,20 @@ jupyter notebook examples/phase-3-redis-streaming-demo.ipynb
 - Python 3.13+
 - Jupyter Notebook
 - All project dependencies installed
-- **Redis server** (for Phase 3 only)
+- **Redis server** (for Redis streaming examples)
 
 ```bash
 # Install Python dependencies
 pip install jupyter
 pip install -r requirements.txt
 
-# Start Redis (for Phase 3)
+# Start Redis (for streaming examples)
 docker run -d -p 6379:6379 redis:latest
 ```
 
 ## Topics Covered
 
-### Phase 1: Infrastructure
+### Core Infrastructure
 
 1. **Event-Driven Architecture**
    - Publish-subscribe pattern
@@ -223,7 +272,7 @@ docker run -d -p 6379:6379 redis:latest
    - Margin requirement checks
    - Portfolio health monitoring
 
-### Phase 2: Strategy & Execution
+### Strategy & Execution
 
 5. **Market-Making Strategy**
    - Inventory-based pricing
@@ -255,7 +304,7 @@ docker run -d -p 6379:6379 redis:latest
    - Multi-trade simulations
    - Performance optimization
 
-### Phase 3: Streaming & Monitoring
+### Streaming & Monitoring
 
 10. **Redis Pub/Sub Streaming**
    - Ultra-low latency message streaming (<2ms)
@@ -295,7 +344,7 @@ docker run -d -p 6379:6379 redis:latest
 
 ## Learning Path
 
-### Phase 1: Foundation
+### Foundation
 
 **Beginner** → Start with [core-engine-architecture-guide.ipynb](core-engine-architecture-guide.ipynb)
 - Part 1: Understand events, orders, and positions
@@ -303,9 +352,9 @@ docker run -d -p 6379:6379 redis:latest
 - Part 3: Integrate components
 - Part 4: Apply best practices
 
-### Phase 2: Trading System
+### Trading System
 
-**Intermediate** → Move to [phase-2-paper-trading-demo.ipynb](phase-2-paper-trading-demo.ipynb)
+**Intermediate** → Move to [paper-trading-demo.ipynb](paper-trading-demo.ipynb)
 - Part 1-2: Learn Strategy and Execution engines
 - Part 3: Understand Trading Session orchestration
 - Part 4: Trace complete event flows
@@ -316,9 +365,9 @@ docker run -d -p 6379:6379 redis:latest
 - Build custom strategies
 - Run production-ready backtests
 
-### Phase 3: Real-Time Streaming
+### Real-Time Streaming
 
-**Advanced** → Continue with [phase-3-redis-streaming-demo.ipynb](phase-3-redis-streaming-demo.ipynb)
+**Advanced** → Continue with [redis-streaming-demo.ipynb](redis-streaming-demo.ipynb)
 - Part 1-2: Understand Redis Pub/Sub and market data streaming
 - Part 3-5: Learn different data generation modes
 - Part 6: Master performance monitoring
@@ -352,52 +401,43 @@ The notebook demonstrates:
 
 ## Related Documentation
 
-### Phase 1 Documentation
+### Core Infrastructure Documentation
 - [Core Module Guide](../core/README.md)
 - [Engine Module Guide](../engine/README.md)
-- [Week 1 Report](../markdown-docs/week-1-completion-report.md)
-- [Week 2 Report](../markdown-docs/week-2-completion-report.md)
-- [Phase 1 Spec](../internal-docs/paper-trading-phase-1-spec.md)
 
-### Phase 2 Documentation
-- [Phase 2 Specification](../internal-docs/paper-trading-phase-2-spec.md)
-- [Phase 2 Completion Report](../markdown-docs/phase-2-completion-report.md)
+### Strategy & Execution Documentation
 - [Paper Trading Session Guide](../paper_trading/)
 - [CLI Usage](../paper_trading/main.py)
 
-### Phase 3 Documentation
-- [Phase 3 Specification](../internal-docs/paper-trading-phase-3-spec.md)
-- [Phase 3 Completion Report](../markdown-docs/phase-3-completion-report.md)
+### Redis Streaming Documentation
 - [Redis Stream Handler](../data/redis_stream.py)
 - [Redis Publisher Tool](../tools/redis_publisher.py)
 - [Performance Monitor](../evaluation/monitor.py)
 - [Terminal Dashboard](../evaluation/dashboard.py)
 
 ### Overall Project
-- [Master Specification](../internal-docs/paper-trading-spec.md)
 - [Project README](../README.md)
-- [CLAUDE.md](../CLAUDE.md)
 
 ## Extending the Examples
 
-### Phase 1 Extensions
+### Core Infrastructure Extensions
 - Custom event types
 - Additional risk checks
 - Custom portfolio metrics
 - Multi-contract portfolios
 - Different position sizing
 
-### Phase 2 Extensions
+### Strategy & Execution Extensions
 - Custom strategy implementations
 - Alternative execution models
 - Different market scenarios
 - Parameter optimization
 - Performance analysis
-- Real-time data streaming (Phase 3)
+- Real-time data streaming
 - Multiple strategy comparison
 - Event-based backtesting
 
-### Phase 3 Extensions
+### Redis Streaming Extensions
 - Custom Redis message formats
 - Alternative streaming backends (Kafka, NATS)
 - Web-based dashboard (Flask/FastAPI)
@@ -416,6 +456,19 @@ For questions or issues:
 2. Review the completion reports
 3. Refer to the specification documents
 4. Run the test suite for reference
+
+---
+
+## Archived Files
+
+The `archive/` folder contains debug and testing scripts that were used during development:
+- `debug_engine_consumer.py` - Engine debugging script
+- `debug_redis_consumer.py` - Redis consumer debugging
+- `simple_redis_consumer.py` - Simple Redis test consumer
+- `simple_redis_publisher.py` - Simple Redis test publisher
+- `test_dual_file_publishing.py` - Dual-file publishing test
+
+These files are preserved for reference but are not part of the main examples. For production use, refer to the comprehensive example files and Jupyter notebooks listed above.
 
 ---
 

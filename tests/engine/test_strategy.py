@@ -102,7 +102,8 @@ class TestMarketMakerStrategy:
         should_update, reason = strategy.should_update_orders(datetime.now())
 
         assert should_update is True
-        assert reason == "INITIAL"
+        # Returns "TIME_ELAPSED" even for first call (matches original backtest)
+        assert reason == "TIME_ELAPSED"
 
     def test_should_update_orders_before_interval(self):
         """Test should_update_orders returns False before interval elapsed"""
@@ -203,9 +204,9 @@ class TestMarketMakerStrategy:
         strategy.on_market_data(market_data)
         bus.process_events()
 
-        # Should generate signal (initial)
+        # Should generate signal (returns TIME_ELAPSED even for first call)
         assert len(signals_received) == 1
-        assert signals_received[0].reason == "INITIAL"
+        assert signals_received[0].reason == "TIME_ELAPSED"
         assert signals_received[0].contract == "VN30F1M"
 
     def test_on_market_data_no_signal_before_interval(self):
@@ -396,7 +397,8 @@ class TestMarketMakerStrategy:
         strategy.current_contract = "VN30F1M"
 
         timestamp = datetime.now()
-        strategy.generate_signal(timestamp, "TEST")
+        # Only TIME_ELAPSED reason updates last_update_time
+        strategy.generate_signal(timestamp, "TIME_ELAPSED")
 
         assert strategy.last_update_time == timestamp
 

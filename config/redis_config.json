@@ -1,0 +1,17 @@
+{
+  "redis_host": "localhost",
+  "redis_port": 6379,
+  "channel_prefix": "market",
+  "contracts": ["VN30F1M", "VN30F2M"],
+  "auto_detect_contracts": false,
+  "contract_mappings": {
+    "VN30F1M": "VN30F1M",
+    "VN30F2M": "VN30F2M"
+  },
+  "confirm_symbols": true,
+  "initial_capital": 500000,
+  "step": 2.9,
+  "update_interval_seconds": 15,
+  "record_events": false,
+  "event_log_path": "logs/paper_trading/events.jsonl"
+}

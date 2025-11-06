@@ -7,8 +7,6 @@ Checks:
 3. Data types are correct after CSV round-trip
 4. Row counts are reasonable
 5. Date ranges match expected
-
-Reference: internal-docs/ground-truth-data-preparation.md
 """
 
 import sys

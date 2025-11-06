@@ -641,4 +641,4 @@ After mastering the engine module:
 3. **Integrate with Data Sources**: Connect to real market data
 4. **Deploy Paper Trading**: Run live paper trading system
 
-See [paper-trading-spec.md](../internal-docs/paper-trading-spec.md) for full roadmap.
+See [Paper Trading README](../paper_trading/README.md) for integration details.

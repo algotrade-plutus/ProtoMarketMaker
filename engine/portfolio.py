@@ -160,8 +160,8 @@ class PortfolioManager:
         # Calculate realized PnL if closing/reducing position
         if is_closing:
             # Closing position - realize P&L
-            # Fee model: 40 total per round trip (20 open + 20 close)
-            # We charge all 40 at close time to match original backtest
+            # Fee model: 20 per contract per trade leg
+            # Fee is deducted from realized PnL at close time
             if position.quantity > 0:  # Closing long
                 realized_pnl = (
                     (event.fill_price - position.average_price)
@@ -183,9 +183,9 @@ class PortfolioManager:
             # Note: We do NOT update cash here. Cash only updates at settlement.
             # This matches original's behavior where daily_assets only updates at settlement.
         else:
-            # Opening position - NO fee charged yet (deferred until close)
-            # This matches original backtest behavior
-            # Futures contracts don't require paying the full contract value upfront
+            # Opening position - fee tracked but not deducted from cash
+            # Futures contracts don't require paying contract value upfront
+            # Cash only updates at daily settlement
             pass
 
         # Update position quantity and average price
@@ -426,6 +426,8 @@ class PortfolioManager:
                 contract: {
                     'quantity': pos.quantity,
                     'average_price': float(pos.average_price),
+                    'current_price': float(self.current_prices.get(contract, pos.average_price)),
+                    'market_value': float(pos.get_market_value(self.current_prices.get(contract, pos.average_price))),
                     'unrealized_pnl': float(pos.unrealized_pnl),
                     'realized_pnl': float(pos.realized_pnl),
                     'total_fees': float(pos.total_fees),

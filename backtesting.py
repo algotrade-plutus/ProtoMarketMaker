@@ -62,7 +62,14 @@ class Backtesting:
 
     def move_f1_to_f2(self, f1_price, f2_price):
         """
-        TODO: move f1 to f2
+        Roll position from front month (F1M) to back month (F2M) contract.
+
+        Handles contract expiration by closing F1M position and opening
+        equivalent F2M position, locking in F1M PnL.
+
+        Args:
+            f1_price: Current F1M contract price
+            f2_price: Current F2M contract price
         """
         if self.inventory > 0:
             self.ac_loss += (self.inventory_price - f1_price) * 100

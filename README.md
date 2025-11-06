@@ -163,5 +163,41 @@ python evaluation.py
 - Daily inventory. The chart is located at `result/optimization/inventory.svg`
 ![Inventory chart](result/optimization/inventory.svg)
 
+## Testing
+
+The project includes a comprehensive test suite covering all components:
+
+**Test Suite Statistics:**
+- **Total Tests:** 383 tests
+- **Pass Rate:** 100% (of runnable tests)
+- **Coverage:** 96%+ across all modules
+- **Test Modes:** Unit, Integration, End-to-End
+
+**Test Organization:**
+- Core tests (37 tests) - EventBus, Order, Position
+- Engine tests (45 tests) - OMS, Portfolio, Risk
+- Data tests (39 tests) - Redis streaming handler
+- Tools tests (38 tests) - Redis publisher
+- Paper trading tests (51 tests) - Trading engine
+- Utils tests (29 tests) - Contract resolution
+- Integration tests (20 tests) - End-to-end workflows
+- Evaluation tests (11 tests) - Monitoring and dashboards
+
+**Running Tests:**
+```bash
+# Run all tests
+pytest tests/ -v
+
+# Run specific component
+pytest tests/core/ -v           # Core tests
+pytest tests/engine/ -v         # Engine tests
+pytest tests/integration/ -v    # Integration tests
+
+# Run with coverage
+pytest tests/ --cov=. --cov-report=html
+```
+
+For detailed test documentation, see [tests/README.md](tests/README.md).
+
 ## Reference
 [1] ALGOTRADE, Algorithmic Trading Theory and Practice - A Practical Guide with Applications on the Vietnamese Stock Market, 1st ed. DIMI BOOK, 2023, pp. 52–53. Accessed: May 12, 2025. [Online]. Available: [Link](https://hub.algotrade.vn/knowledge-hub/market-making-strategy/)

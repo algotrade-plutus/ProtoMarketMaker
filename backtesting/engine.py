@@ -1,7 +1,7 @@
 """
 Event-Driven Backtesting Engine
 
-Validates Phase 1-3 components by replaying historical data.
+Validates all trading components by replaying historical data.
 Similar to RedisTradingSession but uses CSV data feed.
 """
 from decimal import Decimal
@@ -29,7 +29,7 @@ class BacktestingEngine:
     Uses the same components as RedisTradingSession but replays
     historical CSV data instead of Redis stream.
 
-    This validates that all Phase 1-3 components work correctly
+    This validates that all core trading components work correctly
     by comparing results with original backtesting.py.
 
     Example:

@@ -21,7 +21,7 @@ class RedisTradingSession:
     """
     Trading session with Redis streaming data
 
-    Integrates all Phase 1-2 components with Redis market data streaming.
+    Integrates all core trading components with Redis market data streaming.
 
     Example:
         session = RedisTradingSession(
@@ -64,7 +64,7 @@ class RedisTradingSession:
         # Create event bus
         self.event_bus = EventBus()
 
-        # Initialize components (Phase 1-2)
+        # Initialize trading components
         self.portfolio = PortfolioManager(self.event_bus, initial_capital)
         self.risk = RiskManager(self.portfolio)
         self.oms = OrderManager(self.event_bus, self.risk)
@@ -76,7 +76,7 @@ class RedisTradingSession:
         )
         self.execution = MockExecutionEngine(self.event_bus)
 
-        # Initialize Redis handler (Phase 3)
+        # Initialize Redis handler
         self.redis_handler = RedisMarketDataHandler(
             event_bus=self.event_bus,
             redis_host=redis_host,

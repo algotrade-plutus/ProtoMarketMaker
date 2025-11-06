@@ -130,7 +130,7 @@ class TestRiskManager:
 
     def test_check_margin_requirement_insufficient(self):
         bus = EventBus()
-        portfolio = PortfolioManager(bus, Decimal("50000"))  # Low capital
+        portfolio = PortfolioManager(bus, Decimal("40000"))  # Low capital
         risk = RiskManager(portfolio)
 
         # Buy 2 contracts
@@ -167,10 +167,10 @@ class TestRiskManager:
         )
         portfolio.on_market_data(market_data)
 
-        # With 50000 capital and 2 contracts @ 1250, margin requirement should fail
+        # With 40000 capital and 2 contracts @ 1250, margin requirement should fail
         # Required margin = 2 * 1250 * 100 * 0.17 = 42500
-        # NAV after buying 2 contracts = 50000 - 2*(125000 + 20) = 50000 - 250040 = negative
-        # This would actually fail at purchase, but let's check margin requirement
+        # NAV = 40000 (futures don't deduct cash on fills)
+        # 40000 < 42500, so margin check fails
         assert risk.check_margin_requirement() is False
 
     def test_check_margin_requirement_no_positions(self):

@@ -48,8 +48,9 @@ class TestPortfolioManager:
         pos = portfolio.get_position("VN30F1M")
         assert pos.quantity == 1
         assert pos.average_price == Decimal("1250")
-        # cash = 500000 - (1250 * 100 + 20) = 374980
-        assert portfolio.cash == Decimal("374980")
+        # Cash doesn't change on fills (futures trading - updates at settlement)
+        assert portfolio.cash == Decimal("500000")
+        assert pos.total_fees == Decimal("20")
 
     def test_on_fill_sell(self):
         bus = EventBus()
@@ -81,8 +82,8 @@ class TestPortfolioManager:
 
         pos = portfolio.get_position("VN30F1M")
         assert pos.quantity == 0
-        # Realized PnL = (1260 - 1250) * 100 = 1000
-        assert pos.realized_pnl == Decimal("1000")
+        # Realized PnL = (1260 - 1250) * 100 - fee = 1000 - 20 = 980
+        assert pos.realized_pnl == Decimal("980")
 
     def test_on_fill_multiple_buys(self):
         bus = EventBus()
@@ -177,11 +178,11 @@ class TestPortfolioManager:
         portfolio.on_market_data(market_data)
 
         # NAV = cash + unrealized PnL
-        # cash = 500000 - 125000 - 20 = 374980
-        # unrealized = 1000
-        # NAV = 374980 + 1000 = 375980
+        # cash = 500000 (unchanged - futures don't deduct on fills)
+        # unrealized = (1260 - 1250) * 100 = 1000
+        # NAV = 500000 + 1000 = 501000
         nav = portfolio.calculate_nav()
-        assert nav == Decimal("375980")
+        assert nav == Decimal("501000")
 
     def test_calculate_nav_with_loss(self):
         bus = EventBus()
@@ -211,11 +212,11 @@ class TestPortfolioManager:
         portfolio.on_market_data(market_data)
 
         # NAV = cash + unrealized PnL
-        # cash = 500000 - 125000 - 20 = 374980
+        # cash = 500000 (unchanged - futures don't deduct on fills)
         # unrealized = (1240 - 1250) * 100 = -1000
-        # NAV = 374980 - 1000 = 373980
+        # NAV = 500000 - 1000 = 499000
         nav = portfolio.calculate_nav()
-        assert nav == Decimal("373980")
+        assert nav == Decimal("499000")
 
     def test_get_available_margin(self):
         bus = EventBus()
@@ -246,11 +247,12 @@ class TestPortfolioManager:
 
         available = portfolio.get_available_margin("VN30F1M", Decimal("1250"))
 
-        # NAV = 500000 - 125000 - 20 = 374980
+        # Uses initial_capital since no settlement yet (daily_nav is empty)
+        # NAV = 500000
         # Margin per contract = 1250 * 100 * 0.17 = 21250
-        # Total placeable = 374980 / 21250 = 17.6 = 17 contracts
-        # But we already have 1 position, so available = 17 - 1 = 16
-        assert available == 16
+        # Total placeable = 500000 / 21250 = 23.5 = 23 contracts
+        # But we already have 1 position, so available = 23 - 1 = 22
+        assert available == 22
 
     def test_on_time_event_daily_settlement(self):
         bus = EventBus()
@@ -325,7 +327,17 @@ class TestPortfolioManager:
         assert 'positions' in summary
         assert 'total_return' in summary
         assert 'VN30F1M' in summary['positions']
-        assert summary['positions']['VN30F1M']['quantity'] == 1
+
+        # Verify position details
+        pos_summary = summary['positions']['VN30F1M']
+        assert pos_summary['quantity'] == 1
+        assert pos_summary['average_price'] == 1250.0
+        assert pos_summary['current_price'] == 1260.0
+        assert pos_summary['market_value'] == 126000.0  # 1 * 1260 * 100
+        assert 'unrealized_pnl' in pos_summary
+        assert 'realized_pnl' in pos_summary
+        assert 'total_fees' in pos_summary
+        assert 'total_pnl' in pos_summary
 
     def test_short_position(self):
         bus = EventBus()

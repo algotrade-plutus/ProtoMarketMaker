@@ -216,7 +216,7 @@ class TestRedisEndToEnd:
             # Missing price, bid, ask
         }
         publisher.redis_client.publish(
-            'market_data:VN30F1M',
+            'market:VN30F1M',  # Use correct channel prefix
             json.dumps(invalid_message)
         )
 

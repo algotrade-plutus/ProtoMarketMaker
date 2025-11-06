@@ -27,8 +27,9 @@ class MockExecutionEngine:
         execution = MockExecutionEngine(event_bus)
     """
 
-    # Fee per contract (from backtesting.py: 0.4% * 100 multiplier)
-    FEE_PER_CONTRACT = Decimal('0.4') * Decimal('100')
+    # Fee per contract per trade leg (0.2% * 100 multiplier)
+    # Round trip (buy + sell) = 20 + 20 = 40 total per contract
+    FEE_PER_CONTRACT = Decimal('0.2') * Decimal('100')
 
     def __init__(self, event_bus: EventBus, risk_manager=None):
         """

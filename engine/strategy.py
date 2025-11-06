@@ -120,7 +120,7 @@ class MarketMakerStrategy:
         """
         # First update or time-based update (every 15 seconds)
         # Note: Using "TIME_ELAPSED" for first signal to match original backtest labeling
-        if self.last_update_time is None or current_time > self.last_update_time + self.update_interval:
+        if self.last_update_time is None or current_time >= self.last_update_time + self.update_interval:
             return True, "TIME_ELAPSED"
 
         return False, ""
