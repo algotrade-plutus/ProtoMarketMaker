@@ -29,6 +29,7 @@ class OrderStatus(Enum):
     CREATED = "CREATED"
     PENDING_SUBMIT = "PENDING_SUBMIT"
     SUBMITTED = "SUBMITTED"
+    ACCEPTED = "ACCEPTED"  # Order acknowledged by exchange
     PARTIALLY_FILLED = "PARTIALLY_FILLED"
     FILLED = "FILLED"
     CANCELLED = "CANCELLED"
@@ -42,6 +43,7 @@ class OrderStatus(Enum):
         return self in [
             OrderStatus.PENDING_SUBMIT,
             OrderStatus.SUBMITTED,
+            OrderStatus.ACCEPTED,
             OrderStatus.PARTIALLY_FILLED
         ]
 

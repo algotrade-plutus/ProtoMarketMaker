@@ -271,6 +271,52 @@ class OrderManager:
             f"(fee={event.fee}) [{order.status.value}]"
         )
 
+    def on_order_event(self, event):
+        """
+        Handle order status updates from execution engine
+
+        Args:
+            event: OrderEvent with status updates (ACCEPTED, REJECTED, CANCELLED)
+        """
+        if not hasattr(event, 'order_id') or not hasattr(event, 'status'):
+            return
+
+        if event.order_id not in self.orders:
+            self.logger.warning(f"Order event for unknown order: {event.order_id[:8]}")
+            return
+
+        order = self.orders[event.order_id]
+        old_status = order.status
+
+        # Update order status based on event
+        if event.status == "ACCEPTED":
+            # Order acknowledged by exchange
+            order.status = OrderStatus.ACCEPTED
+            self.logger.info(f"Order accepted by exchange: {event.order_id[:8]}")
+
+        elif event.status == "REJECTED":
+            # Order rejected by exchange
+            order.status = OrderStatus.REJECTED
+            order.rejection_reason = getattr(event, 'rejection_reason', 'Unknown')
+
+            # Remove from active orders
+            if event.order_id in self.active_orders:
+                del self.active_orders[event.order_id]
+
+            self.logger.warning(
+                f"Order rejected: {event.order_id[:8]} - {order.rejection_reason}"
+            )
+
+        elif event.status == "CANCELLED":
+            # Order cancelled
+            order.status = OrderStatus.CANCELLED
+
+            # Remove from active orders
+            if event.order_id in self.active_orders:
+                del self.active_orders[event.order_id]
+
+            self.logger.info(f"Order cancelled: {event.order_id[:8]}")
+
     def get_statistics(self) -> dict:
         """Get OMS statistics"""
         total_orders = len(self.orders)

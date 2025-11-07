@@ -70,6 +70,63 @@ def load_config():
         }
 
 
+def load_paperbroker_config(env_file_path):
+    """Load PaperBroker configuration from environment file
+
+    Args:
+        env_file_path: Path to .env.paperbroker file
+
+    Returns:
+        Dict with PaperBroker configuration or None if file doesn't exist
+    """
+    env_path = Path(env_file_path)
+
+    if not env_path.exists():
+        print(f"⚠️  PaperBroker env file not found: {env_file_path}")
+        print("   Create it from .env.paperbroker.example and fill in credentials")
+        return None
+
+    # Parse environment file
+    import os
+    config = {}
+
+    with open(env_path, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#') and '=' in line:
+                key, value = line.split('=', 1)
+                config[key.strip()] = value.strip()
+
+    # Build PaperBroker config dict
+    try:
+        pb_config = {
+            'fix_host': config.get('PAPERBROKER_FIX_HOST'),
+            'fix_port': int(config.get('PAPERBROKER_FIX_PORT', 5001)),
+            'sender_comp_id': config.get('PAPERBROKER_SENDER_COMP_ID'),
+            'target_comp_id': config.get('PAPERBROKER_TARGET_COMP_ID'),
+            'username': config.get('PAPERBROKER_FIX_USERNAME'),
+            'password': config.get('PAPERBROKER_FIX_PASSWORD'),
+            'rest_base_url': config.get('PAPERBROKER_REST_BASE_URL'),
+            'default_sub_account': config.get('PAPERBROKER_SUB_ACCOUNT', 'D1'),
+            'order_timeout_seconds': int(config.get('PAPERBROKER_ORDER_TIMEOUT', 60)),
+            'max_pending_orders': int(config.get('PAPERBROKER_MAX_PENDING', 10))
+        }
+
+        # Validate required fields
+        required = ['fix_host', 'sender_comp_id', 'target_comp_id',
+                   'username', 'password', 'rest_base_url']
+        for field in required:
+            if not pb_config.get(field):
+                print(f"❌ Missing required field in {env_file_path}: {field.upper()}")
+                return None
+
+        return pb_config
+
+    except (KeyError, ValueError) as e:
+        print(f"❌ Error parsing PaperBroker config: {e}")
+        return None
+
+
 def main():
     """Main CLI entry point"""
     parser = argparse.ArgumentParser(
@@ -202,6 +259,22 @@ Examples:
         help='Path to audit log file (default: logs/audit/session_<timestamp>.log)'
     )
 
+    # Execution mode
+    execution_group = parser.add_argument_group('Execution Mode')
+    execution_group.add_argument(
+        '--execution-mode',
+        type=str,
+        choices=['mock', 'paperbroker'],
+        default='mock',
+        help='Execution mode: "mock" (simulated) or "paperbroker" (FIX protocol)'
+    )
+    execution_group.add_argument(
+        '--paperbroker-env',
+        type=str,
+        default='.env.paperbroker',
+        help='Path to PaperBroker environment file (default: .env.paperbroker)'
+    )
+
     # Logging configuration
     logging_group = parser.add_argument_group('Logging')
     logging_group.add_argument(
@@ -250,6 +323,19 @@ Examples:
     else:
         audit_log_path = args.audit_log_path or config.get('audit_log_path', None)
 
+    # Execution mode settings
+    execution_mode = args.execution_mode
+    paperbroker_config = None
+
+    if execution_mode == 'paperbroker':
+        # Load PaperBroker configuration
+        paperbroker_config = load_paperbroker_config(args.paperbroker_env)
+        if not paperbroker_config:
+            print("\n❌ Failed to load PaperBroker configuration")
+            print("   Please check your .env.paperbroker file")
+            return 1
+        print("\n✅ PaperBroker configuration loaded successfully")
+
     # Contract resolution settings
     auto_detect = config.get('auto_detect_contracts', True)
     confirm_symbols = config.get('confirm_symbols', True) and not args.no_confirm
@@ -276,6 +362,7 @@ Examples:
     print("REDIS PAPER TRADING SESSION")
     print("=" * 60)
     print(f"Mode:      {mode}")
+    print(f"Execution: {execution_mode}")
     print(f"Redis:     {redis_host}:{redis_port}")
     print(f"Contracts: {', '.join(contracts)}")
     print(f"Capital:   {capital:,.2f} VND")
@@ -286,6 +373,9 @@ Examples:
         print(f"Recording: {event_log_path}")
     if audit_log_enabled:
         print(f"Audit Log: {audit_log_path}")
+    if execution_mode == 'paperbroker':
+        print(f"FIX Host:  {paperbroker_config['fix_host']}:{paperbroker_config['fix_port']}")
+        print(f"Account:   {paperbroker_config['default_sub_account']}")
     print("=" * 60)
 
     # Contract symbol resolution and confirmation (live mode only)
@@ -325,7 +415,9 @@ Examples:
             mode=mode,
             f2m_window_days=f2m_window_days,
             audit_log_enabled=audit_log_enabled,
-            audit_log_path=audit_log_path
+            audit_log_path=audit_log_path,
+            execution_mode=execution_mode,
+            paperbroker_config=paperbroker_config
         )
     except Exception as e:
         print(f"Error initializing engine: {e}", file=sys.stderr)

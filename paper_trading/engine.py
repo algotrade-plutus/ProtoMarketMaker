@@ -17,6 +17,8 @@ from engine.oms import OrderManager
 from engine.risk import RiskManager
 from engine.strategy import MarketMakerStrategy
 from engine.execution import MockExecutionEngine
+from engine.paperbroker_execution import PaperBrokerExecutionEngine
+from connectors.paperbroker_connector import PaperBrokerConnector
 from evaluation.monitor import PerformanceMonitor
 from data.redis_stream import RedisMarketDataHandler
 from paper_trading.recorder import EventRecorder
@@ -62,7 +64,9 @@ class RedisPaperTradingEngine:
         mode: str = 'playback',
         f2m_window_days: int = 3,
         audit_log_enabled: bool = False,
-        audit_log_path: str = None
+        audit_log_path: str = None,
+        execution_mode: str = 'mock',
+        paperbroker_config: dict = None
     ):
         """
         Initialize paper trading engine with Redis data source
@@ -83,6 +87,10 @@ class RedisPaperTradingEngine:
             f2m_window_days: Days before expiration to subscribe to F2M (default: 3)
             audit_log_enabled: Whether to enable audit logging (signals, fills, rollovers)
             audit_log_path: Path to audit log file (if audit_log_enabled=True)
+            execution_mode: Execution mode - 'mock' or 'paperbroker' (default: 'mock')
+            paperbroker_config: Configuration dict for PaperBroker connection (if execution_mode='paperbroker')
+                               Should contain: fix_host, fix_port, sender_comp_id, target_comp_id,
+                               username, password, rest_base_url, default_sub_account
         """
         self.initial_capital = initial_capital
         self.step = step
@@ -92,6 +100,8 @@ class RedisPaperTradingEngine:
         self.start_time = None
         self.end_time = None
         self._running = False
+        self.execution_mode = execution_mode
+        self.paperbroker_config = paperbroker_config
 
         # Core event bus
         self.event_bus = EventBus()
@@ -116,10 +126,40 @@ class RedisPaperTradingEngine:
             update_interval_seconds=update_interval_seconds
         )
 
-        self.execution = MockExecutionEngine(
-            event_bus=self.event_bus,
-            risk_manager=self.risk
-        )
+        # Initialize execution engine based on mode
+        if execution_mode == 'paperbroker':
+            if not paperbroker_config:
+                raise ValueError("paperbroker_config required when execution_mode='paperbroker'")
+
+            # Create PaperBroker connector
+            self.connector = PaperBrokerConnector(
+                event_bus=self.event_bus,
+                fix_host=paperbroker_config['fix_host'],
+                fix_port=paperbroker_config['fix_port'],
+                sender_comp_id=paperbroker_config['sender_comp_id'],
+                target_comp_id=paperbroker_config['target_comp_id'],
+                username=paperbroker_config['username'],
+                password=paperbroker_config['password'],
+                rest_base_url=paperbroker_config['rest_base_url'],
+                default_sub_account=paperbroker_config.get('default_sub_account', 'D1'),
+                fee_rate=paperbroker_config.get('fee_rate', 0.002)
+            )
+
+            # Create PaperBroker execution engine
+            self.execution = PaperBrokerExecutionEngine(
+                event_bus=self.event_bus,
+                connector=self.connector,
+                risk_manager=self.risk,
+                order_timeout_seconds=paperbroker_config.get('order_timeout_seconds', 60),
+                max_pending_orders=paperbroker_config.get('max_pending_orders', 10)
+            )
+        else:
+            # Default to mock execution
+            self.connector = None
+            self.execution = MockExecutionEngine(
+                event_bus=self.event_bus,
+                risk_manager=self.risk
+            )
 
         self.monitor = PerformanceMonitor(
             event_bus=self.event_bus
@@ -176,6 +216,14 @@ class RedisPaperTradingEngine:
             if self.recorder:
                 self.recorder.__enter__()
 
+            # Connect to PaperBroker if using real execution
+            if self.execution_mode == 'paperbroker' and self.connector:
+                print(f"Connecting to PaperBroker FIX server...")
+                if not self.connector.connect(timeout=10):
+                    print("Failed to connect to PaperBroker FIX server")
+                    return False
+                print(f"Connected to PaperBroker successfully")
+
             # Connect to Redis
             if not self.redis_handler.connect():
                 print("Failed to connect to Redis")
@@ -191,6 +239,7 @@ class RedisPaperTradingEngine:
             self._running = True
 
             print(f"Paper trading started at {self.start_time}")
+            print(f"Execution mode: {self.execution_mode}")
             print(f"Contracts: {self.contracts}")
             print(f"Redis: {self.redis_handler.redis_host}:{self.redis_handler.redis_port}")
 
@@ -293,6 +342,15 @@ class RedisPaperTradingEngine:
 
         # Stop Redis handler
         self.redis_handler.stop()
+
+        # Disconnect from PaperBroker if connected
+        if self.execution_mode == 'paperbroker' and self.connector:
+            print("Disconnecting from PaperBroker...")
+            self.connector.disconnect()
+
+        # Shutdown execution engine
+        if hasattr(self.execution, 'shutdown'):
+            self.execution.shutdown()
 
         # Close event recorder
         if self.recorder:
