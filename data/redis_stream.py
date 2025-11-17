@@ -44,6 +44,8 @@ class RedisMarketDataHandler:
         redis_host: str = 'localhost',
         redis_port: int = 6379,
         redis_db: int = 0,
+        redis_password: Optional[str] = None,
+        redis_decode_responses: bool = True,
         channel_prefix: str = 'market',
         mode: Literal['playback', 'live'] = 'playback',
         f2m_window_days: int = 3
@@ -56,6 +58,8 @@ class RedisMarketDataHandler:
             redis_host: Redis server hostname
             redis_port: Redis server port
             redis_db: Redis database number
+            redis_password: Redis password for authentication (None if no auth required)
+            redis_decode_responses: Whether to decode responses to strings (True) or keep as bytes (False)
             channel_prefix: Channel name prefix (e.g., 'market:VN30F1M')
             mode: Operating mode - 'playback' (abstract symbols) or 'live' (actual contracts)
             f2m_window_days: Days before expiration to subscribe to F2M (default: 3)
@@ -64,6 +68,8 @@ class RedisMarketDataHandler:
         self.redis_host = redis_host
         self.redis_port = redis_port
         self.redis_db = redis_db
+        self.redis_password = redis_password
+        self.redis_decode_responses = redis_decode_responses
         self.channel_prefix = channel_prefix
         self.mode = mode
         self.f2m_window_days = f2m_window_days
@@ -104,7 +110,8 @@ class RedisMarketDataHandler:
                 host=self.redis_host,
                 port=self.redis_port,
                 db=self.redis_db,
-                decode_responses=True,
+                password=self.redis_password,
+                decode_responses=self.redis_decode_responses,
                 socket_connect_timeout=5,
                 socket_keepalive=True,
                 health_check_interval=30
@@ -436,26 +443,37 @@ class RedisMarketDataHandler:
         try:
             # Deserialize JSON
             data = json.loads(message['data'])
+            self.logger.debug(f"📥 Received message fields: {list(data.keys())}")
+            self.logger.debug(f"📥 Full message data: {data}")
 
             # Validate required fields
-            required_fields = ['timestamp', 'contract', 'price', 'bid', 'ask']
+            required_fields = ['timestamp', 'instrument', 'latest_matched_price', 'bid_price_1', 'ask_price_1']
             for field in required_fields:
                 if field not in data:
                     raise KeyError(f"Missing required field: {field}")
 
+            # Preprocess the data
+            contract = data['instrument'].split(':')[1]
+            price = data['latest_matched_price']
+            if not price:
+                return
+            else:
+                price=Decimal(str(price))
+
             # Create MarketDataEvent
             event = MarketDataEvent(
-                timestamp=datetime.fromisoformat(data['timestamp']),
-                contract=data['contract'],
-                price=Decimal(str(data['price'])),
-                bid=Decimal(str(data['bid'])),
-                ask=Decimal(str(data['ask'])),
-                spread=Decimal(str(data.get('spread', float(data['ask']) - float(data['bid']))))
+                timestamp=datetime.fromtimestamp(data['timestamp']),
+                # contract=data['contract'],
+                contract=contract,
+                price=Decimal(str(data['latest_matched_price'])),
+                bid=Decimal(str(data['bid_price_1'])),
+                ask=Decimal(str(data['ask_price_1'])),
+                spread=Decimal(str(data.get('spread', float(data['ask_price_1']) - float(data['bid_price_1']))))
             )
 
             # Check and manage F2M subscription on F1M messages
             # This enables automatic F2M subscription during rollover period
-            if 'F1M' in data['contract'] or (self.f1m_contract and data['contract'] == self.f1m_contract):
+            if 'F1M' in contract or (self.f1m_contract and contract == self.f1m_contract):
                 # Extract actual contract symbol from message (e.g., VN30F2201 from tickersymbol field if available)
                 # In playback mode, contract is abstract (VN30F1M), but we need actual contract for rollover detection
                 # The actual contract symbol should be passed in a separate field or extracted from context
@@ -464,7 +482,7 @@ class RedisMarketDataHandler:
                 current_date = event.timestamp.date()
 
                 # Try to get actual contract from message data (if available)
-                actual_contract = data.get('tickersymbol', data['contract'])
+                actual_contract = data.get('tickersymbol', contract)
 
                 # Only manage F2M subscription if we have an actual contract code (not abstract VN30F1M)
                 if len(actual_contract) > 8:  # VN30F2201 has more characters than VN30F1M

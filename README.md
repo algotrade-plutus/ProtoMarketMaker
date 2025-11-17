@@ -43,7 +43,10 @@ source venv/bin/activate # for Linux/MacOS
 ```bash
 pip install -r requirements.txt
 ```
-3. (OPTIONAL) Create `.env` file in the root directory of the project and fill in the required information. The `.env` file is used to store environment variables that are used in the project. The following is an example of a `.env` file:
+3. Configure the system - see [CONFIG_GUIDE.md](CONFIG_GUIDE.md) for detailed configuration instructions.
+   - Copy `.env.redis.example` to `.env.redis` and configure Redis settings
+   - (Optional) Copy `.env.paperbroker.example` to `.env.paperbroker` for FIX execution
+   - (Optional) Create `.env` for database credentials:
 ```env
 DB_NAME=<database name>
 DB_USER=<database user name>

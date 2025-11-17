@@ -45,7 +45,10 @@ class RedisTradingSession:
         step: Decimal,
         update_interval_seconds: int = 15,
         redis_host: str = 'localhost',
-        redis_port: int = 6379
+        redis_port: int = 6379,
+        redis_db: int = 0,
+        redis_password: Optional[str] = None,
+        redis_decode_responses: bool = True
     ):
         """
         Initialize Redis trading session
@@ -56,6 +59,9 @@ class RedisTradingSession:
             update_interval_seconds: Order update frequency
             redis_host: Redis server hostname
             redis_port: Redis server port
+            redis_db: Redis database number
+            redis_password: Redis password for authentication (None if no auth required)
+            redis_decode_responses: Whether to decode responses to strings (default True)
         """
         self.logger = logging.getLogger(__name__)
         self.initial_capital = initial_capital
@@ -80,7 +86,10 @@ class RedisTradingSession:
         self.redis_handler = RedisMarketDataHandler(
             event_bus=self.event_bus,
             redis_host=redis_host,
-            redis_port=redis_port
+            redis_port=redis_port,
+            redis_db=redis_db,
+            redis_password=redis_password,
+            redis_decode_responses=redis_decode_responses
         )
 
         self.running = False

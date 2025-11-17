@@ -56,6 +56,9 @@ class RedisPaperTradingEngine:
         step: Decimal,
         redis_host: str = 'localhost',
         redis_port: int = 6379,
+        redis_db: int = 0,
+        redis_password: Optional[str] = None,
+        redis_decode_responses: bool = True,
         channel_prefix: str = 'market',
         contracts: list = None,
         update_interval_seconds: int = 15,
@@ -76,6 +79,9 @@ class RedisPaperTradingEngine:
             step: Strategy step parameter (e.g., 2.9)
             redis_host: Redis server hostname (localhost for playback, prod IP for live)
             redis_port: Redis server port (default 6379)
+            redis_db: Redis database number (default 0)
+            redis_password: Redis password for authentication (None if no auth required)
+            redis_decode_responses: Whether to decode responses to strings (default True)
             channel_prefix: Channel prefix (e.g., 'market' for 'market:VN30F2510')
             contracts: List of contracts to trade
                        - playback mode: abstract symbols (VN30F1M)
@@ -170,6 +176,9 @@ class RedisPaperTradingEngine:
             event_bus=self.event_bus,
             redis_host=redis_host,
             redis_port=redis_port,
+            redis_db=redis_db,
+            redis_password=redis_password,
+            redis_decode_responses=redis_decode_responses,
             channel_prefix=channel_prefix,
             mode=mode,
             f2m_window_days=f2m_window_days

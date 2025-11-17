@@ -2,13 +2,23 @@ __pycache__
 __init__.py
 .DS_Store
 .env
+.env.redis
+.env.paperbroker
 *.csv
-*venv/
+*.venv*/
 CLAUDE.md
 internal-docs
 .coverage*
-markdown-docs
+report-docs
 .pytest*
 logs/*
 archive/
 htmlcov/
+# Test scripts (one-off testing)
+test_*.py
+
+# QuickFIX configuration files (auto-generated)
+*.cfg
+
+# Python version files (development environment specific)
+.python-version

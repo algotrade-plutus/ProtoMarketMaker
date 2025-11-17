@@ -40,11 +40,7 @@
 
   "market_data": {
     "source": "redis",
-    "redis": {
-      "host": "${MARKET_REDIS_HOST}",
-      "port": "${MARKET_REDIS_PORT}",
-      "channel_prefix": "market"
-    }
+    "comment": "Redis configuration is loaded from config/redis_config.json or .env.redis"
   },
 
   "strategy": {

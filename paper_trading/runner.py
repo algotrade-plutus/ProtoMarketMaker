@@ -70,6 +70,73 @@ def load_config():
         }
 
 
+def load_redis_config(env_file_path):
+    """Load Redis configuration from environment file
+
+    Args:
+        env_file_path: Path to .env.redis file
+
+    Returns:
+        Dict with Redis configuration or empty dict if file doesn't exist
+    """
+    env_path = Path(env_file_path)
+
+    if not env_path.exists():
+        # Return defaults if no env file
+        return {}
+
+    # Parse environment file
+    config = {}
+
+    with open(env_path, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#') and '=' in line:
+                key, value = line.split('=', 1)
+                config[key.strip()] = value.strip()
+
+    # Build Redis config dict
+    redis_config = {}
+
+    # Connection settings
+    if 'REDIS_HOST' in config:
+        redis_config['redis_host'] = config['REDIS_HOST']
+    if 'REDIS_PORT' in config:
+        redis_config['redis_port'] = int(config['REDIS_PORT'])
+    if 'REDIS_DB' in config:
+        redis_config['redis_db'] = int(config['REDIS_DB'])
+
+    # Authentication
+    if 'REDIS_PASSWORD' in config and config['REDIS_PASSWORD']:
+        redis_config['redis_password'] = config['REDIS_PASSWORD']
+
+    # Decoding
+    if 'REDIS_DECODE_RESPONSES' in config:
+        redis_config['redis_decode_responses'] = config['REDIS_DECODE_RESPONSES'].lower() in ['true', '1', 'yes']
+
+    # Channel prefix
+    if 'REDIS_CHANNEL_PREFIX' in config:
+        redis_config['channel_prefix'] = config['REDIS_CHANNEL_PREFIX']
+
+    # Contracts (comma-separated list)
+    if 'REDIS_CONTRACTS' in config:
+        redis_config['contracts'] = [c.strip() for c in config['REDIS_CONTRACTS'].split(',')]
+
+    # Contract auto-detection
+    if 'AUTO_DETECT_CONTRACTS' in config:
+        redis_config['auto_detect_contracts'] = config['AUTO_DETECT_CONTRACTS'].lower() in ['true', '1', 'yes']
+
+    # Contract mappings (JSON string)
+    if 'CONTRACT_MAPPINGS' in config and config['CONTRACT_MAPPINGS']:
+        try:
+            import json
+            redis_config['contract_mappings'] = json.loads(config['CONTRACT_MAPPINGS'])
+        except json.JSONDecodeError as e:
+            print(f"⚠️  Warning: Failed to parse CONTRACT_MAPPINGS: {e}")
+
+    return redis_config
+
+
 def load_paperbroker_config(env_file_path):
     """Load PaperBroker configuration from environment file
 
@@ -179,6 +246,27 @@ Examples:
         '--channel-prefix',
         type=str,
         help='Redis channel prefix (overrides config)'
+    )
+    redis_group.add_argument(
+        '--redis-db',
+        type=int,
+        help='Redis database number (overrides config)'
+    )
+    redis_group.add_argument(
+        '--redis-password',
+        type=str,
+        help='Redis password for authentication (overrides config)'
+    )
+    redis_group.add_argument(
+        '--redis-decode-responses',
+        type=lambda x: x.lower() in ['true', '1', 'yes'],
+        help='Whether to decode Redis responses to strings (true/false, overrides config)'
+    )
+    redis_group.add_argument(
+        '--redis-env',
+        type=str,
+        default='.env.redis',
+        help='Path to Redis environment file (default: .env.redis)'
     )
 
     # Trading parameters
@@ -298,10 +386,16 @@ Examples:
     # Load config from file
     config = load_config()
 
-    # Override with command-line arguments
-    redis_host = args.redis_host or config.get('redis_host', 'localhost')
-    redis_port = args.redis_port or config.get('redis_port', 6379)
-    channel_prefix = args.channel_prefix or config.get('channel_prefix', 'market')
+    # Load Redis config from environment file
+    redis_env_config = load_redis_config(args.redis_env)
+
+    # Merge Redis configuration (priority: CLI args > env file > config file > defaults)
+    redis_host = args.redis_host or redis_env_config.get('redis_host') or config.get('redis_host', 'localhost')
+    redis_port = args.redis_port or redis_env_config.get('redis_port') or config.get('redis_port', 6379)
+    redis_db = args.redis_db if args.redis_db is not None else redis_env_config.get('redis_db', config.get('redis_db', 0))
+    redis_password = args.redis_password or redis_env_config.get('redis_password') or config.get('redis_password', None)
+    redis_decode_responses = args.redis_decode_responses if args.redis_decode_responses is not None else redis_env_config.get('redis_decode_responses', config.get('redis_decode_responses', True))
+    channel_prefix = args.channel_prefix or redis_env_config.get('channel_prefix') or config.get('channel_prefix', 'market')
     mode = args.mode or config.get('mode', 'playback')
     contracts = args.contracts or config.get('contracts', ['VN30F1M'] if mode == 'playback' else ['VN30F2510'])
     capital = Decimal(str(args.capital)) if args.capital else Decimal(str(config.get('initial_capital', 500000)))
@@ -407,6 +501,9 @@ Examples:
             step=step,
             redis_host=redis_host,
             redis_port=redis_port,
+            redis_db=redis_db,
+            redis_password=redis_password,
+            redis_decode_responses=redis_decode_responses,
             channel_prefix=channel_prefix,
             contracts=resolved_contracts,  # Use resolved contract codes, not informal symbols
             update_interval_seconds=update_interval,

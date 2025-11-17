@@ -61,20 +61,24 @@ pip install -r requirements.txt
 #### 1. CLI Runner (Recommended)
 
 ```bash
+# Setup Redis configuration first
+cp .env.redis.example .env.redis
+# Edit .env.redis with your Redis settings
+
 # Run with default configuration
-python -m paper_trading.runner
+python -m paper_trading.runner --redis-env .env.redis
 
 # Run for specific duration
-python -m paper_trading.runner --duration 300  # 5 minutes
+python -m paper_trading.runner --redis-env .env.redis --duration 300  # 5 minutes
 
 # Export results to JSON
-python -m paper_trading.runner --output results/session_$(date +%Y%m%d_%H%M%S).json
+python -m paper_trading.runner --redis-env .env.redis --output results/session_$(date +%Y%m%d_%H%M%S).json
 
 # Disable confirmation prompt (for automation)
-python -m paper_trading.runner --no-confirm
+python -m paper_trading.runner --redis-env .env.redis --no-confirm
 
 # Override contracts
-python -m paper_trading.runner --contracts VN30F2510 VN30F2511
+python -m paper_trading.runner --redis-env .env.redis --contracts VN30F2510 VN30F2511
 ```
 
 #### 2. Programmatic Usage
@@ -117,12 +121,36 @@ results = engine.stop()
 
 ## Configuration
 
-### Config File: `config/redis_config.json`
+### Redis Configuration
 
+Redis settings are managed in a **single location** to avoid confusion. See [CONFIG_GUIDE.md](../CONFIG_GUIDE.md) for complete details.
+
+**Option 1: Environment File** (Recommended for production)
+```bash
+# Copy template and configure
+cp .env.redis.example .env.redis
+vim .env.redis
+```
+
+`.env.redis`:
+```bash
+# Redis Connection Settings
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_DB=0
+REDIS_PASSWORD=your_password_here  # Leave empty for no auth
+REDIS_DECODE_RESPONSES=true
+REDIS_CHANNEL_PREFIX=market
+```
+
+**Option 2: Config File** (`config/redis_config.json`)
 ```json
 {
   "redis_host": "localhost",
   "redis_port": 6379,
+  "redis_db": 0,
+  "redis_password": "",
+  "redis_decode_responses": true,
   "channel_prefix": "market",
   "contracts": ["VN30F1M", "VN30F2M"],
   "auto_detect_contracts": true,
@@ -142,6 +170,9 @@ results = engine.stop()
 |-----------|------|---------|-------------|
 | `redis_host` | string | `"localhost"` | Redis server hostname |
 | `redis_port` | integer | `6379` | Redis server port |
+| `redis_db` | integer | `0` | Redis database number (0-15) |
+| `redis_password` | string | `""` | Redis authentication password (empty = no auth) |
+| `redis_decode_responses` | boolean | `true` | Decode responses to strings (false = keep as bytes) |
 | `channel_prefix` | string | `"market"` | Redis channel prefix (format: `{prefix}:{contract}`) |
 | `contracts` | array | `["VN30F1M"]` | List of contracts (informal or actual codes) |
 | `auto_detect_contracts` | boolean | `true` | Auto-detect F1/F2 actual codes based on expiration |
@@ -153,14 +184,203 @@ results = engine.stop()
 | `record_events` | boolean | `false` | Enable JSONL event logging |
 | `event_log_path` | string | `"logs/..."` | Path to event log file |
 
-### Environment Variable Overrides
+---
+
+## Important Use Cases
+
+### Case 1: Local Development (No Authentication)
 
 ```bash
-# Override Redis connection
-export REDIS_HOST="192.168.1.100"
-export REDIS_PORT="6380"
+# 1. Start local Redis (no password)
+redis-server
 
-python -m paper_trading.runner
+# 2. Create minimal .env.redis
+cat > .env.redis << EOF
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_DB=0
+REDIS_PASSWORD=
+REDIS_DECODE_RESPONSES=true
+EOF
+
+# 3. Start data publisher (Terminal 1)
+python -m tools.redis_publisher \
+    --host localhost \
+    --port 6379 \
+    --csv data/sample/merged_is_data_1day.csv \
+    --rate 10
+
+# 4. Run paper trading (Terminal 2)
+python -m paper_trading.runner \
+    --redis-env .env.redis \
+    --mode playback \
+    --duration 300 \
+    --output results/local_test.json
+```
+
+### Case 2: Production Redis with Authentication
+
+```bash
+# 1. Create production .env.redis
+cat > .env.redis << EOF
+REDIS_HOST=redis.prod.server.com
+REDIS_PORT=6379
+REDIS_DB=1
+REDIS_PASSWORD=your_secure_password_here
+REDIS_DECODE_RESPONSES=true
+REDIS_CHANNEL_PREFIX=market
+EOF
+
+# 2. Test connection
+python -c "
+import redis
+r = redis.Redis(
+    host='redis.prod.server.com',
+    port=6379,
+    db=1,
+    password='your_secure_password_here',
+    decode_responses=True
+)
+print('Connected:', r.ping())
+"
+
+# 3. Run paper trading
+python -m paper_trading.runner \
+    --redis-env .env.redis \
+    --mode live \
+    --contracts VN30F2511 VN30F2512 \
+    --duration 3600 \
+    --output results/prod_session.json
+```
+
+### Case 3: Mock Execution Mode (Default)
+
+```bash
+# Uses simulated order execution (instant fills)
+python -m paper_trading.runner \
+    --redis-env .env.redis \
+    --execution-mode mock \
+    --mode playback \
+    --duration 300
+```
+
+### Case 4: PaperBroker FIX Execution Mode
+
+```bash
+# 1. Setup PaperBroker credentials
+cp .env.paperbroker.example .env.paperbroker
+vim .env.paperbroker  # Add FIX credentials
+
+# 2. Run with real FIX execution
+python -m paper_trading.runner \
+    --redis-env .env.redis \
+    --execution-mode paperbroker \
+    --paperbroker-env .env.paperbroker \
+    --mode live \
+    --contracts VN30F2511 \
+    --duration 3600 \
+    --output results/fix_session.json
+```
+
+### Case 5: Historical Data Replay
+
+```bash
+# 1. Configure for historical contracts (Feb 2022)
+cat > config/redis_config.json << EOF
+{
+  "redis_host": "localhost",
+  "redis_port": 6379,
+  "redis_db": 0,
+  "redis_password": "",
+  "redis_decode_responses": true,
+  "channel_prefix": "market",
+  "contracts": ["VN30F2202", "VN30F2203"],
+  "auto_detect_contracts": false,
+  "contract_mappings": {
+    "VN30F1M": "VN30F2202",
+    "VN30F2M": "VN30F2203"
+  },
+  "initial_capital": 500000,
+  "step": 2.9
+}
+EOF
+
+# 2. Start historical data publisher
+python -m tools.redis_publisher \
+    --csv data/sample/merged_is_data_1month.csv \
+    --rate 50 \
+    --loop
+
+# 3. Run paper trading
+python -m paper_trading.runner \
+    --redis-env .env.redis \
+    --mode playback \
+    --no-confirm \
+    --duration 600 \
+    --output results/historical_1month.json
+```
+
+### Case 6: 24-Hour Production Run with Monitoring
+
+```bash
+# Run paper trading for 24 hours with audit logging
+python -m paper_trading.runner \
+    --redis-env .env.redis \
+    --mode live \
+    --contracts VN30F1M VN30F2M \
+    --duration 86400 \
+    --audit-log \
+    --audit-log-path logs/audit/prod_$(date +%Y%m%d).log \
+    --record-events \
+    --event-log logs/events/prod_$(date +%Y%m%d).jsonl \
+    --output results/daily/prod_$(date +%Y%m%d).json \
+    --no-confirm
+```
+
+### Case 7: Docker Redis Connection
+
+```bash
+# 1. Start Redis in Docker
+docker run -d \
+    --name redis-paper-trading \
+    -p 6379:6379 \
+    -e REDIS_PASSWORD=docker_redis_pwd \
+    redis:latest redis-server --requirepass docker_redis_pwd
+
+# 2. Configure .env.redis
+cat > .env.redis << EOF
+REDIS_HOST=host.docker.internal  # For Mac/Windows
+# REDIS_HOST=172.17.0.1          # For Linux
+REDIS_PORT=6379
+REDIS_DB=0
+REDIS_PASSWORD=docker_redis_pwd
+REDIS_DECODE_RESPONSES=true
+EOF
+
+# 3. Run paper trading
+python -m paper_trading.runner \
+    --redis-env .env.redis \
+    --mode playback \
+    --duration 300
+```
+
+### Case 8: Override Settings via CLI (No Config Files)
+
+```bash
+# All settings via command line arguments
+python -m paper_trading.runner \
+    --redis-host redis.server.com \
+    --redis-port 6379 \
+    --redis-db 1 \
+    --redis-password my_password \
+    --redis-decode-responses true \
+    --contracts VN30F2511 VN30F2512 \
+    --capital 1000000 \
+    --step 3.5 \
+    --update-interval 10 \
+    --mode live \
+    --duration 1800 \
+    --output results/cli_only.json
 ```
 
 ---
@@ -242,14 +462,30 @@ Proceed with trading? [Y/n]:
 
 ## Testing with Historical Data
 
-### Step 1: Start Redis Publisher
+### Step 1: Configure Redis (if using authentication)
+
+```bash
+# Create .env.redis with your settings
+cp .env.redis.example .env.redis
+vim .env.redis
+```
+
+### Step 2: Start Redis Publisher
 
 ```bash
 # Terminal 1: Publish historical CSV data
+# With authentication:
+python -m tools.redis_publisher \
+  --host localhost \
+  --port 6379 \
+  --password your_password \
+  --csv data/sample/merged_is_data_1day.csv \
+  --rate 10
+
+# Without authentication:
 python -m tools.redis_publisher \
   --csv data/sample/merged_is_data_1day.csv \
-  --rate 10 \
-  --channel-prefix market
+  --rate 10
 ```
 
 ### Step 2: Configure for Historical Contracts

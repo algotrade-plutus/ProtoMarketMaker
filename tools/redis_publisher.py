@@ -39,6 +39,9 @@ class RedisMarketDataPublisher:
         self,
         redis_host: str = 'localhost',
         redis_port: int = 6379,
+        redis_db: int = 0,
+        redis_password: Optional[str] = None,
+        redis_decode_responses: bool = True,
         channel_prefix: str = 'market'
     ):
         """
@@ -47,10 +50,16 @@ class RedisMarketDataPublisher:
         Args:
             redis_host: Redis server hostname
             redis_port: Redis server port
+            redis_db: Redis database number
+            redis_password: Redis password for authentication (None if no auth required)
+            redis_decode_responses: Whether to decode responses to strings (True) or keep as bytes (False)
             channel_prefix: Channel prefix
         """
         self.redis_host = redis_host
         self.redis_port = redis_port
+        self.redis_db = redis_db
+        self.redis_password = redis_password
+        self.redis_decode_responses = redis_decode_responses
         self.channel_prefix = channel_prefix
 
         self.redis_client: Optional[redis.Redis] = None
@@ -68,7 +77,9 @@ class RedisMarketDataPublisher:
             self.redis_client = redis.Redis(
                 host=self.redis_host,
                 port=self.redis_port,
-                decode_responses=True,
+                db=self.redis_db,
+                password=self.redis_password,
+                decode_responses=self.redis_decode_responses,
                 socket_connect_timeout=5
             )
 
@@ -812,6 +823,10 @@ Examples:
 
     parser.add_argument('--host', default='localhost', help='Redis host')
     parser.add_argument('--port', type=int, default=6379, help='Redis port')
+    parser.add_argument('--db', type=int, default=0, help='Redis database number')
+    parser.add_argument('--password', help='Redis password for authentication')
+    parser.add_argument('--decode-responses', type=lambda x: x.lower() in ['true', '1', 'yes'],
+                       default=True, help='Decode Redis responses to strings (default: true)')
     parser.add_argument('--csv', help='CSV file to publish (merged mode)')
     parser.add_argument('--f1m-csv', help='F1M CSV file (dual-file mode)')
     parser.add_argument('--f2m-csv', help='F2M CSV file (dual-file mode)')
@@ -840,7 +855,10 @@ Examples:
     # Create publisher
     publisher = RedisMarketDataPublisher(
         redis_host=args.host,
-        redis_port=args.port
+        redis_port=args.port,
+        redis_db=args.db,
+        redis_password=args.password,
+        redis_decode_responses=args.decode_responses
     )
 
     # Connect to Redis

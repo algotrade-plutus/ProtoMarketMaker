@@ -1,12 +1,15 @@
 {
   "redis_host": "localhost",
   "redis_port": 6379,
+  "redis_db": 0,
+  "redis_password": "",
+  "redis_decode_responses": true,
   "channel_prefix": "market",
   "contracts": ["VN30F1M", "VN30F2M"],
   "auto_detect_contracts": false,
   "contract_mappings": {
-    "VN30F1M": "VN30F1M",
-    "VN30F2M": "VN30F2M"
+    "VN30F1M": "VN30F2511",
+    "VN30F2M": "VN30F2512"
   },
   "confirm_symbols": true,
   "initial_capital": 500000,
