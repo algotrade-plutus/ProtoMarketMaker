@@ -144,9 +144,8 @@ class PaperBrokerConnector:
             self.logger.info("Connecting to PaperBroker FIX server...")
             self.client.connect()
 
-            # Wait for logon
+            # Wait for logon (is_connected will be set by _on_logon event handler)
             if self.client.wait_until_logged_on(timeout=timeout):
-                self.is_connected = True
                 self.logger.info("Successfully connected to PaperBroker")
                 return True
             else:

@@ -229,12 +229,19 @@ class TestRedisEndToEnd:
         # Get statistics
         redis_stats = trading_session.redis_handler.get_statistics()
 
-        # Should have processed messages and recorded errors
+        # Should have processed valid messages
         assert redis_stats['messages_processed'] >= 2
-        # Invalid message should cause an error
-        assert redis_stats.get('processing_errors', 0) > 0
+        # Incomplete message (missing price/bid/ask) should be handled gracefully:
+        # - Either skipped (if no cache available)
+        # - Or forward-filled from cache (if cache exists)
+        # This is expected behavior with incomplete tick handling
+        assert redis_stats.get('messages_skipped_incomplete', 0) >= 0
+        assert redis_stats.get('messages_forward_filled', 0) >= 0
+        # At least one incomplete tick should be handled
+        assert (redis_stats.get('messages_skipped_incomplete', 0) +
+                redis_stats.get('messages_forward_filled', 0)) > 0
 
-        # Session should still be healthy
+        # Session should still be healthy (incomplete ticks are not errors)
         assert trading_session.is_healthy() is True
 
         # Stop session

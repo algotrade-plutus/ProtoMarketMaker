@@ -135,7 +135,19 @@ class PaperBrokerExecutionEngine:
 
         # Pre-submission risk check
         if self.risk_manager:
-            if not self.risk_manager.validate_order_submission(event):
+            # Create Order from OrderEvent for validation
+            from core.order import Order
+            from core.enums import OrderSide
+
+            order = Order(
+                order_id=event.order_id,
+                contract=event.contract,
+                side=OrderSide.BID if event.side == "BUY" else OrderSide.ASK,
+                price=event.price,
+                quantity=event.quantity
+            )
+
+            if not self.risk_manager.validate_order(order):
                 self.logger.warning(
                     f"Order {event.order_id[:8]} rejected by risk manager"
                 )
@@ -152,10 +164,13 @@ class PaperBrokerExecutionEngine:
 
         # Submit order via FIX
         try:
+            # Translate BID/ASK to BUY/SELL for FIX protocol
+            fix_side = "BUY" if event.side == "BID" else "SELL"
+
             pb_order_id = self.connector.place_order(
                 order_id=event.order_id,
                 symbol=event.contract,
-                side=event.side,
+                side=fix_side,
                 price=float(event.price),
                 quantity=event.quantity
             )

@@ -137,11 +137,11 @@ class TestHandlerCore:
         assert handler.messages_processed == 0
 
     def test_process_missing_fields(self):
-        """Test processing message with missing required fields"""
+        """Test processing message with missing required fields (incomplete tick handling)"""
         bus = EventBus()
         handler = RedisMarketDataHandler(bus)
 
-        # Missing 'price' field
+        # Missing 'price' field - with forward-fill logic, this is now treated as an incomplete tick
         message = {
             'type': 'message',
             'data': json.dumps({
@@ -154,8 +154,10 @@ class TestHandlerCore:
 
         handler._process_message(message)
 
-        assert handler.messages_failed == 1
+        # With forward-fill logic, missing price is skipped (not failed)
+        assert handler.messages_skipped_incomplete == 1
         assert handler.messages_processed == 0
+        assert handler.messages_failed == 0
 
     def test_statistics(self):
         """Test getting statistics"""
@@ -764,3 +766,360 @@ class TestConditionalF2Subscription:
         # Should have unsubscribed from F2M
         assert handler.f2m_subscribed is False
         mock_pubsub.unsubscribe.assert_called_once_with('market:VN30F2M')
+
+class TestIncompleteTickHandling:
+    """Test incomplete tick handling with forward-fill cache"""
+
+    def test_forward_fill_missing_bid(self):
+        """When bid is None, use cached bid from previous tick"""
+        bus = EventBus()
+        handler = RedisMarketDataHandler(bus, redis_host='localhost', redis_port=6379, mode='live')
+        
+        # Tick 1: Complete data (price, bid, ask)
+        msg1 = {
+            'type': 'message',
+            'data': json.dumps({
+                'timestamp': 1700000001,
+                'instrument': 'HNXDS:VN30F2511',
+                'latest_matched_price': 1250.0,
+                'bid_price_1': 1249.0,
+                'ask_price_1': 1251.0
+            })
+        }
+        
+        # Tick 2: Missing bid (should use cached 1249.0)
+        msg2 = {
+            'type': 'message',
+            'data': json.dumps({
+                'timestamp': 1700000002,
+                'instrument': 'HNXDS:VN30F2511',
+                'latest_matched_price': 1250.5,
+                'bid_price_1': None,
+                'ask_price_1': 1251.5
+            })
+        }
+        
+        # Process messages
+        handler._process_message(msg1)
+        handler._process_message(msg2)
+        
+        # Verify statistics
+        stats = handler.get_statistics()
+        assert stats['messages_processed'] == 2
+        assert stats['messages_forward_filled'] == 1  # Second tick forward-filled
+        assert stats['messages_skipped_incomplete'] == 0
+        assert stats['cache_size'] == 1
+        assert 'VN30F2511' in stats['cached_contracts']
+
+    def test_forward_fill_missing_ask(self):
+        """When ask is None, use cached ask from previous tick"""
+        bus = EventBus()
+        handler = RedisMarketDataHandler(bus, redis_host='localhost', redis_port=6379, mode='live')
+        
+        # Tick 1: Complete data
+        msg1 = {
+            'type': 'message',
+            'data': json.dumps({
+                'timestamp': 1700000001,
+                'instrument': 'HNXDS:VN30F2511',
+                'latest_matched_price': 1250.0,
+                'bid_price_1': 1249.0,
+                'ask_price_1': 1251.0
+            })
+        }
+        
+        # Tick 2: Missing ask (should use cached 1251.0)
+        msg2 = {
+            'type': 'message',
+            'data': json.dumps({
+                'timestamp': 1700000002,
+                'instrument': 'HNXDS:VN30F2511',
+                'latest_matched_price': 1250.5,
+                'bid_price_1': 1249.5,
+                'ask_price_1': None
+            })
+        }
+        
+        # Process messages
+        handler._process_message(msg1)
+        handler._process_message(msg2)
+        
+        # Verify statistics
+        stats = handler.get_statistics()
+        assert stats['messages_processed'] == 2
+        assert stats['messages_forward_filled'] == 1
+        assert stats['messages_skipped_incomplete'] == 0
+
+    def test_forward_fill_missing_price(self):
+        """When price is None, use cached price from previous tick"""
+        bus = EventBus()
+        handler = RedisMarketDataHandler(bus, redis_host='localhost', redis_port=6379, mode='live')
+        
+        # Tick 1: Complete data
+        msg1 = {
+            'type': 'message',
+            'data': json.dumps({
+                'timestamp': 1700000001,
+                'instrument': 'HNXDS:VN30F2511',
+                'latest_matched_price': 1250.0,
+                'bid_price_1': 1249.0,
+                'ask_price_1': 1251.0
+            })
+        }
+        
+        # Tick 2: Missing price (should use cached 1250.0)
+        msg2 = {
+            'type': 'message',
+            'data': json.dumps({
+                'timestamp': 1700000002,
+                'instrument': 'HNXDS:VN30F2511',
+                'latest_matched_price': None,
+                'bid_price_1': 1249.5,
+                'ask_price_1': 1251.5
+            })
+        }
+        
+        # Process messages
+        handler._process_message(msg1)
+        handler._process_message(msg2)
+        
+        # Verify statistics
+        stats = handler.get_statistics()
+        assert stats['messages_processed'] == 2
+        assert stats['messages_forward_filled'] == 1
+        assert stats['messages_skipped_incomplete'] == 0
+
+    def test_skip_tick_no_price_no_cache(self):
+        """First tick with no price is skipped (no cache yet)"""
+        bus = EventBus()
+        handler = RedisMarketDataHandler(bus, redis_host='localhost', redis_port=6379, mode='live')
+        
+        # First tick with no price
+        msg = {
+            'type': 'message',
+            'data': json.dumps({
+                'timestamp': 1700000001,
+                'instrument': 'HNXDS:VN30F2511',
+                'latest_matched_price': None,
+                'bid_price_1': 1249.0,
+                'ask_price_1': 1251.0
+            })
+        }
+        
+        handler._process_message(msg)
+        
+        # No events should be processed
+        stats = handler.get_statistics()
+        assert stats['messages_processed'] == 0
+        assert stats['messages_skipped_incomplete'] == 1
+
+    def test_skip_tick_no_bid_ask_no_cache(self):
+        """First tick with price but no bid/ask is skipped"""
+        bus = EventBus()
+        handler = RedisMarketDataHandler(bus, redis_host='localhost', redis_port=6379, mode='live')
+        
+        # First tick with price but no bid/ask
+        msg = {
+            'type': 'message',
+            'data': json.dumps({
+                'timestamp': 1700000001,
+                'instrument': 'HNXDS:VN30F2511',
+                'latest_matched_price': 1250.0,
+                'bid_price_1': None,
+                'ask_price_1': None
+            })
+        }
+        
+        handler._process_message(msg)
+        
+        # No events should be processed
+        stats = handler.get_statistics()
+        assert stats['messages_processed'] == 0
+        assert stats['messages_skipped_incomplete'] == 1
+        # Price should still be cached
+        assert handler.last_known_state['VN30F2511']['price'] == Decimal('1250.0')
+
+    def test_complete_tick_after_incomplete(self):
+        """Complete tick after incomplete tick emits event normally"""
+        bus = EventBus()
+        handler = RedisMarketDataHandler(bus, redis_host='localhost', redis_port=6379, mode='live')
+        
+        # Tick 1: Incomplete (no bid/ask)
+        msg1 = {
+            'type': 'message',
+            'data': json.dumps({
+                'timestamp': 1700000001,
+                'instrument': 'HNXDS:VN30F2511',
+                'latest_matched_price': 1250.0,
+                'bid_price_1': None,
+                'ask_price_1': None
+            })
+        }
+        
+        # Tick 2: Complete
+        msg2 = {
+            'type': 'message',
+            'data': json.dumps({
+                'timestamp': 1700000002,
+                'instrument': 'HNXDS:VN30F2511',
+                'latest_matched_price': 1250.5,
+                'bid_price_1': 1249.5,
+                'ask_price_1': 1251.5
+            })
+        }
+        
+        handler._process_message(msg1)
+        handler._process_message(msg2)
+        
+        # Only second tick should be processed
+        stats = handler.get_statistics()
+        assert stats['messages_processed'] == 1
+        assert stats['messages_skipped_incomplete'] == 1
+
+    def test_cache_updates_only_new_values(self):
+        """Cache only updates fields that are non-None in new tick"""
+        bus = EventBus()
+        handler = RedisMarketDataHandler(bus, redis_host='localhost', redis_port=6379, mode='live')
+        
+        # Tick 1: Complete
+        msg1 = {
+            'type': 'message',
+            'data': json.dumps({
+                'timestamp': 1700000001,
+                'instrument': 'HNXDS:VN30F2511',
+                'latest_matched_price': 1250.0,
+                'bid_price_1': 1249.0,
+                'ask_price_1': 1251.0
+            })
+        }
+        
+        handler._process_message(msg1)
+        
+        # Verify initial cache
+        cache = handler.last_known_state['VN30F2511']
+        assert cache['price'] == Decimal('1250.0')
+        assert cache['bid'] == Decimal('1249.0')
+        assert cache['ask'] == Decimal('1251.0')
+        
+        # Tick 2: Only price updates
+        msg2 = {
+            'type': 'message',
+            'data': json.dumps({
+                'timestamp': 1700000002,
+                'instrument': 'HNXDS:VN30F2511',
+                'latest_matched_price': 1250.5,
+                'bid_price_1': None,
+                'ask_price_1': None
+            })
+        }
+        
+        handler._process_message(msg2)
+        
+        # Verify cache updated only price
+        cache = handler.last_known_state['VN30F2511']
+        assert cache['price'] == Decimal('1250.5')  # Updated
+        assert cache['bid'] == Decimal('1249.0')    # Unchanged
+        assert cache['ask'] == Decimal('1251.0')    # Unchanged
+
+    def test_multiple_contracts_independent_caches(self):
+        """Each contract has independent cache"""
+        bus = EventBus()
+        handler = RedisMarketDataHandler(bus, redis_host='localhost', redis_port=6379, mode='live')
+        
+        # Tick for VN30F2511
+        msg1 = {
+            'type': 'message',
+            'data': json.dumps({
+                'timestamp': 1700000001,
+                'instrument': 'HNXDS:VN30F2511',
+                'latest_matched_price': 1250.0,
+                'bid_price_1': 1249.0,
+                'ask_price_1': 1251.0
+            })
+        }
+        
+        # Tick for VN30F2512
+        msg2 = {
+            'type': 'message',
+            'data': json.dumps({
+                'timestamp': 1700000002,
+                'instrument': 'HNXDS:VN30F2512',
+                'latest_matched_price': 1260.0,
+                'bid_price_1': 1259.0,
+                'ask_price_1': 1261.0
+            })
+        }
+        
+        handler._process_message(msg1)
+        handler._process_message(msg2)
+        
+        # Verify independent caches
+        assert 'VN30F2511' in handler.last_known_state
+        assert 'VN30F2512' in handler.last_known_state
+        assert handler.last_known_state['VN30F2511']['price'] == Decimal('1250.0')
+        assert handler.last_known_state['VN30F2512']['price'] == Decimal('1260.0')
+        
+        stats = handler.get_statistics()
+        assert stats['cache_size'] == 2
+        assert 'VN30F2511' in stats['cached_contracts']
+        assert 'VN30F2512' in stats['cached_contracts']
+
+    def test_statistics_count_skipped_ticks(self):
+        """Verify messages_skipped_incomplete counter"""
+        bus = EventBus()
+        handler = RedisMarketDataHandler(bus, redis_host='localhost', redis_port=6379, mode='live')
+        
+        # Send 3 incomplete ticks (all skipped)
+        for i in range(3):
+            msg = {
+                'type': 'message',
+                'data': json.dumps({
+                    'timestamp': 1700000000 + i,
+                    'instrument': 'HNXDS:VN30F2511',
+                    'latest_matched_price': None,
+                    'bid_price_1': 1249.0,
+                    'ask_price_1': 1251.0
+                })
+            }
+            handler._process_message(msg)
+        
+        stats = handler.get_statistics()
+        assert stats['messages_skipped_incomplete'] == 3
+        assert stats['messages_processed'] == 0
+
+    def test_statistics_count_forward_filled(self):
+        """Verify messages_forward_filled counter"""
+        bus = EventBus()
+        handler = RedisMarketDataHandler(bus, redis_host='localhost', redis_port=6379, mode='live')
+        
+        # Tick 1: Complete (establishes cache)
+        msg1 = {
+            'type': 'message',
+            'data': json.dumps({
+                'timestamp': 1700000001,
+                'instrument': 'HNXDS:VN30F2511',
+                'latest_matched_price': 1250.0,
+                'bid_price_1': 1249.0,
+                'ask_price_1': 1251.0
+            })
+        }
+        
+        handler._process_message(msg1)
+        
+        # Tick 2-4: Partially complete (forward-filled)
+        for i in range(2, 5):
+            msg = {
+                'type': 'message',
+                'data': json.dumps({
+                    'timestamp': 1700000000 + i,
+                    'instrument': 'HNXDS:VN30F2511',
+                    'latest_matched_price': 1250.0 + i,
+                    'bid_price_1': None,  # Will be forward-filled
+                    'ask_price_1': 1251.0 + i
+                })
+            }
+            handler._process_message(msg)
+        
+        stats = handler.get_statistics()
+        assert stats['messages_forward_filled'] == 3  # Ticks 2-4
+        assert stats['messages_processed'] == 4       # All 4 processed
