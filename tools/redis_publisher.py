@@ -813,6 +813,9 @@ Examples:
   # Publish from CSV at 10 Hz
   python -m tools.redis_publisher --csv data/historical.csv --rate 10
 
+  # Publish with custom channel prefix
+  python -m tools.redis_publisher --csv data/historical.csv --rate 10 --channel-prefix HNXDS
+
   # Generate random data for testing
   python -m tools.redis_publisher --random --contracts VN30F1M VN30F2M --rate 5
 
@@ -827,6 +830,7 @@ Examples:
     parser.add_argument('--password', help='Redis password for authentication')
     parser.add_argument('--decode-responses', type=lambda x: x.lower() in ['true', '1', 'yes'],
                        default=True, help='Decode Redis responses to strings (default: true)')
+    parser.add_argument('--channel-prefix', default='market', help='Channel prefix (default: market)')
     parser.add_argument('--csv', help='CSV file to publish (merged mode)')
     parser.add_argument('--f1m-csv', help='F1M CSV file (dual-file mode)')
     parser.add_argument('--f2m-csv', help='F2M CSV file (dual-file mode)')
@@ -858,7 +862,8 @@ Examples:
         redis_port=args.port,
         redis_db=args.db,
         redis_password=args.password,
-        redis_decode_responses=args.decode_responses
+        redis_decode_responses=args.decode_responses,
+        channel_prefix=args.channel_prefix
     )
 
     # Connect to Redis

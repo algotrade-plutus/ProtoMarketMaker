@@ -108,6 +108,7 @@ class RedisPaperTradingEngine:
         self._running = False
         self.execution_mode = execution_mode
         self.paperbroker_config = paperbroker_config
+        self.event_count = 0  # Counter for periodic status logging
 
         # Core event bus
         self.event_bus = EventBus()
@@ -419,12 +420,22 @@ class RedisPaperTradingEngine:
                     # Process queued events to dispatch to handlers
                     self.event_bus.process_events()
                     time.sleep(0.01)  # 10ms processing interval
+
+                    # Periodic status logging every 30 seconds (~3000 iterations at 10ms)
+                    self.event_count += 1
+                    if self.event_count % 3000 == 0:
+                        self._log_status()
             else:
                 print("Running indefinitely (Ctrl+C to stop)...")
                 while self._running:
                     # Process queued events to dispatch to handlers
                     self.event_bus.process_events()
                     time.sleep(0.01)  # 10ms processing interval
+
+                    # Periodic status logging every 30 seconds (~3000 iterations at 10ms)
+                    self.event_count += 1
+                    if self.event_count % 3000 == 0:
+                        self._log_status()
         except KeyboardInterrupt:
             pass
 
@@ -433,6 +444,36 @@ class RedisPaperTradingEngine:
             return self.stop()
         else:
             return None
+
+    def _log_status(self):
+        """Log periodic status update with key metrics"""
+        try:
+            active_orders = len(self.oms.get_active_orders())
+            pending_count = 0
+
+            # Get pending count from execution engine if available
+            if hasattr(self.execution, 'get_pending_count'):
+                pending_count = self.execution.get_pending_count()
+            elif hasattr(self.execution, 'pending_orders'):
+                pending_count = len(self.execution.pending_orders)
+
+            position_count = len(self.portfolio.positions)
+            current_nav = float(self.portfolio.calculate_nav())
+
+            import logging
+            logger = logging.getLogger('paper_trading.engine')
+            logger.info(
+                f"📊 Status: events={self.event_count} | "
+                f"active_orders={active_orders} | "
+                f"pending={pending_count} | "
+                f"positions={position_count} | "
+                f"nav={current_nav:,.2f}"
+            )
+        except Exception as e:
+            # Don't let logging errors crash the main loop
+            import logging
+            logger = logging.getLogger('paper_trading.engine')
+            logger.debug(f"Error logging status: {e}")
 
     def get_summary(self) -> dict:
         """

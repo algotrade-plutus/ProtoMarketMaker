@@ -210,8 +210,8 @@ class PaperBrokerConnector:
                 self.partial_fills[pb_order_id] = 0
 
             self.logger.info(
-                f"Order placed: {order_id[:8]} → {pb_order_id[:8]} "
-                f"({side} {quantity}x{symbol}@{price})"
+                f"✅ Order submitted to PaperBroker: {order_id[:8]} → PB:{pb_order_id[:8]} | "
+                f"{side} {quantity} {symbol} @ {price}"
             )
 
             return pb_order_id
@@ -307,9 +307,9 @@ class PaperBrokerConnector:
         # Extract contract symbol (remove exchange prefix)
         contract = symbol.split(":")[-1] if ":" in symbol else symbol
 
-        self.logger.debug(
-            f"Execution report: {cl_ord_id[:8]} status={status} "
-            f"filled={qty_filled}/{qty} price={avg_price}"
+        self.logger.info(
+            f"📥 Execution Report received: order={pmm_order_id[:8]} | "
+            f"status={status} | filled={qty_filled}/{qty} | price={avg_price}"
         )
 
         if status == "NEW":
@@ -348,9 +348,9 @@ class PaperBrokerConnector:
                     self.partial_fills[cl_ord_id] = qty_filled
 
                 self.logger.info(
-                    f"Order {'filled' if status == 'FILLED' else 'partially filled'}: "
-                    f"{pmm_order_id[:8]} {incremental_qty}@{avg_price} "
-                    f"(total: {qty_filled}/{qty})"
+                    f"✅ Publishing FILL event: {pmm_order_id[:8]} | "
+                    f"{incremental_qty} {contract} @ {avg_price} | "
+                    f"status={'COMPLETE' if status == 'FILLED' else 'PARTIAL'} (total: {qty_filled}/{qty})"
                 )
 
                 # Clean up if fully filled

@@ -111,7 +111,10 @@ class PaperBrokerExecutionEngine:
                 del self.pending_orders[event.order_id]
 
             if event.status == "ACCEPTED":
-                self.logger.debug(f"Order acknowledged: {event.order_id[:8]}")
+                self.logger.info(
+                    f"✅ Order ACCEPTED and removed from pending: {event.order_id[:8]} | "
+                    f"Remaining pending: {len(self.pending_orders)}"
+                )
             elif event.status == "REJECTED":
                 self.logger.warning(f"Order rejected: {event.order_id[:8]}")
             elif event.status == "CANCELLED":
@@ -189,8 +192,8 @@ class PaperBrokerExecutionEngine:
                 self.timeout_timers[event.order_id] = timer
 
                 self.logger.info(
-                    f"Order submitted: {event.order_id[:8]} "
-                    f"({event.side} {event.quantity}x{event.contract}@{event.price})"
+                    f"📋 Tracking pending order: {event.order_id[:8]} | "
+                    f"Total pending: {len(self.pending_orders)}"
                 )
             else:
                 # Submission failed
@@ -235,9 +238,9 @@ class PaperBrokerExecutionEngine:
             order_id: Order that timed out
         """
         if order_id in self.pending_orders:
-            self.logger.error(
-                f"Order timeout: {order_id[:8]} - no acknowledgment after "
-                f"{self.order_timeout_seconds}s"
+            self.logger.warning(
+                f"⏱️ Order timeout: {order_id[:8]} | "
+                f"No response in {self.order_timeout_seconds}s, cancelling order"
             )
 
             # Remove from pending
