@@ -144,6 +144,8 @@ class PortfolioManager:
         """
         Update portfolio on order fill
 
+        Uses FIFO (First In First Out) for position tracking with individual contract entry prices.
+
         Args:
             event: Fill event with execution details
         """
@@ -159,47 +161,52 @@ class PortfolioManager:
 
         # Calculate realized PnL if closing/reducing position
         if is_closing:
-            # Closing position - realize P&L
-            # Fee model: 20 per contract per trade leg
-            # Fee is deducted from realized PnL at close time
-            if position.quantity > 0:  # Closing long
-                realized_pnl = (
-                    (event.fill_price - position.average_price)
-                    * Decimal('100')
-                    - event.fee
-                )
-            else:  # Closing short
-                realized_pnl = (
-                    (position.average_price - event.fill_price)
-                    * Decimal('100')
-                    - event.fee
-                )
-            position.realized_pnl += realized_pnl
+            # Closing position - realize P&L using FIFO entry prices
+            closed_entries = position.remove_contracts(1)
 
-            # Track cumulative realized P&L (like ac_loss in original)
-            # Use -= to make negative values represent gains (matches original convention)
-            self.cumulative_realized_pnl -= realized_pnl
+            if closed_entries:
+                entry_price = closed_entries[0]  # FIFO: oldest entry
+
+                # Fee model: 20 per contract per trade leg
+                # Fee is deducted from realized PnL at close time
+                if position.quantity > 0:  # Closing long
+                    realized_pnl = (
+                        (event.fill_price - entry_price)
+                        * Decimal('100')
+                        - event.fee
+                    )
+                else:  # Closing short
+                    realized_pnl = (
+                        (entry_price - event.fill_price)
+                        * Decimal('100')
+                        - event.fee
+                    )
+                position.realized_pnl += realized_pnl
+
+                # Track cumulative realized P&L (like ac_loss in original)
+                # Use -= to make negative values represent gains (matches original convention)
+                self.cumulative_realized_pnl -= realized_pnl
 
             # Note: We do NOT update cash here. Cash only updates at settlement.
             # This matches original's behavior where daily_assets only updates at settlement.
         else:
+            # Opening or adding to position - use FIFO tracking
+            position.add_contracts(event.fill_price, 1)
+
             # Opening position - fee tracked but not deducted from cash
             # Futures contracts don't require paying contract value upfront
             # Cash only updates at daily settlement
             pass
 
-        # Update position quantity and average price
-        if not is_closing:
-            # Opening or adding to position
-            old_quantity = abs(position.quantity)
-            new_quantity = old_quantity + 1
-
-            if new_quantity > 0:
-                position.average_price = (
-                    position.average_price * old_quantity + event.fill_price
-                ) / new_quantity
-
+        # Update position quantity
         position.quantity += quantity_change
+
+        # Update average_price for backward compatibility (calculated from entry_prices)
+        if position.entry_prices:
+            position.average_price = sum(position.entry_prices) / len(position.entry_prices)
+        elif position.quantity == 0:
+            position.average_price = Decimal('0')
+
         position.total_fees += event.fee
 
         self.logger.info(

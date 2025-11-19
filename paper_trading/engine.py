@@ -114,6 +114,10 @@ class RedisPaperTradingEngine:
         self.closed_positions = []  # List of dicts with {contract, pnl_points, pnl_pct, timestamp}
         self.total_realized_pnl_points = Decimal('0')  # Cumulative PnL in points
 
+        # Cache position state for accurate "before" logging
+        # Maps contract -> list of entry prices (snapshot taken before fills)
+        self.position_state_cache = {}
+
         # Core event bus
         self.event_bus = EventBus()
 
@@ -265,10 +269,20 @@ class RedisPaperTradingEngine:
 
     def _log_signal(self, event):
         """Log signal event to audit log and position status"""
+        contract = event.contract
+
+        # Cache current position state BEFORE any fills can occur
+        # This snapshot will be used for accurate "before" logging in fills
+        position = self.portfolio.get_position(contract)
+        self.position_state_cache[contract] = {
+            'entry_prices': list(position.entry_prices),  # Copy the list
+            'quantity': position.quantity,
+            'average_price': position.average_price
+        }
+
         if self.audit_logger:
             # Extract signal data from event
             timestamp = event.timestamp
-            contract = event.contract
             reason = getattr(event, 'reason', 'TIME_ELAPSED')
 
             # Get current market price from portfolio's price cache
@@ -276,7 +290,6 @@ class RedisPaperTradingEngine:
             market_price = self.portfolio.current_prices.get(contract, Decimal('0'))
 
             # Get current inventory (get_position always returns a Position object)
-            position = self.portfolio.get_position(contract)
             inventory = position.quantity
 
             # Get bid/ask from signal event (strategy already calculated these)
@@ -302,7 +315,7 @@ class RedisPaperTradingEngine:
         """Log fill event to audit log"""
         # IMPORTANT: Portfolio has ALREADY updated the position by the time we get here
         # (both portfolio and this method subscribe to FILL events)
-        # So we need to reverse-calculate the BEFORE state from the AFTER state
+        # But we cached the position state at signal time, so we can reconstruct accurate "before" state
 
         position_after = self.portfolio.get_position(event.contract)
         inv_after = position_after.quantity  # This is AFTER the fill
@@ -321,14 +334,36 @@ class RedisPaperTradingEngine:
         else:  # ASK
             inv_before = inv_after + qty  # Undo the decrease
 
-        # Calculate entry price before (for closed positions)
+        # Calculate entry price before using cached position state
+        # This gives us the actual entry price(s) BEFORE the fill was processed
         if inv_before != 0:
-            # Had a position before - use the entry price
-            # (simplified: assume avg price doesn't change much for non-closing fills)
-            entry_price_before = entry_price_after
+            # Had a position before - get actual entry price from cache
+            cached_state = self.position_state_cache.get(contract, {})
+            cached_entry_prices = cached_state.get('entry_prices', [])
+
+            if cached_entry_prices:
+                # For closing positions, the FIFO entry price is the first one (oldest)
+                # For opening/adding positions, use the average
+                is_closing = abs(inv_after) < abs(inv_before)
+                if is_closing:
+                    # Get the entry price that was just closed (FIFO - first in list)
+                    entry_price_before = cached_entry_prices[0]
+                else:
+                    # Adding to position - use average from cache
+                    entry_price_before = cached_state.get('average_price', entry_price_after)
+            else:
+                # Fallback: use average price from cache or after state
+                entry_price_before = cached_state.get('average_price', entry_price_after)
         else:
             # Was flat before, just opened a position
             entry_price_before = price  # The fill price is the entry
+
+        # Update cache with new state after fill
+        self.position_state_cache[contract] = {
+            'entry_prices': list(position_after.entry_prices),
+            'quantity': position_after.quantity,
+            'average_price': position_after.average_price
+        }
 
         if self.audit_logger:
             # Get inventory price after (if position closed, it's 0)
@@ -395,21 +430,21 @@ class RedisPaperTradingEngine:
         if position.quantity != 0:
             side = "LONG" if position.quantity > 0 else "SHORT"
 
-            # Calculate PnL from the authoritative unrealized_pnl (VND) to ensure consistency
-            unrealized_pnl_vnd = position.unrealized_pnl
-            # Convert VND to points: divide by CONTRACT_MULTIPLIER (100)
-            total_pnl_points = unrealized_pnl_vnd / position.CONTRACT_MULTIPLIER
-            # Per-contract average in points
-            pnl_points_per_contract = total_pnl_points / abs(position.quantity)
+            # Get individual PnLs for each contract (using actual entry prices)
+            individual_pnls = position.get_individual_pnls(market_price)
 
-            # Build detailed inventory breakdown showing each contract
+            # Build detailed inventory breakdown showing each contract with its actual entry price
             contracts_detail = []
-            for _ in range(abs(position.quantity)):
+            total_pnl_points = Decimal('0')
+
+            for entry_price, pnl_pts in individual_pnls:
                 contracts_detail.append(
-                    f"({float(position.average_price):.1f}, {side}, {float(pnl_points_per_contract):+.2f}pts)"
+                    f"({float(entry_price):.1f}, {side}, {float(pnl_pts):+.2f}pts)"
                 )
+                total_pnl_points += pnl_pts
 
             inventory_detail = f"[{', '.join(contracts_detail)}]"
+            unrealized_pnl_vnd = position.unrealized_pnl
 
             logger.info(f"   Inventory ({position.quantity:+d}): {inventory_detail}")
             logger.info(f"   Market Price:         {float(market_price):.1f}")
@@ -504,8 +539,10 @@ class RedisPaperTradingEngine:
             total_fees = self.monitor.total_fees
 
             # Format position before (was holding a position)
+            # Note: Can't show individual contracts for closure since position already updated
+            # Show simplified format with average entry price
             side_before = "LONG" if inv_quantity_before > 0 else "SHORT"
-            position_before_detail = f"[({float(entry_price_before):.1f}, {side_before}, {float(closed_pnl_points):+.1f}pts)]"
+            position_before_detail = f"[({float(entry_price_before):.2f}, {side_before}, {float(closed_pnl_points):+.2f}pts)]"
 
             # Log detailed PnL status
             logger.info("=" * 80)
@@ -528,45 +565,51 @@ class RedisPaperTradingEngine:
             # Position opened or modified (not closed) - log basic fill info
             # Get current market price for unrealized PnL calculation
             market_price = self.portfolio.current_prices.get(contract, fill_price)
+            position_after = self.portfolio.get_position(contract)
 
-            # Format position before
+            # Format position before (reconstruct from after state)
             if inv_quantity_before != 0:
                 side_before = "LONG" if inv_quantity_before > 0 else "SHORT"
-                # Calculate unrealized PnL in points
-                if inv_quantity_before > 0:
-                    unrealized_before = market_price - entry_price_before
-                else:
-                    unrealized_before = entry_price_before - market_price
 
-                # Build details for each contract
-                contracts_before = []
-                for _ in range(abs(inv_quantity_before)):
-                    contracts_before.append(f"({float(entry_price_before):.1f}, {side_before}, {float(unrealized_before):+.1f}pts)")
-                position_before_detail = f"[{', '.join(contracts_before)}]"
+                # Reconstruct BEFORE state from AFTER state
+                # If closing: The closed contract was at the beginning (FIFO), add it back
+                # If adding: The new contract is at the end, remove it
+                if abs(inv_after) < abs(inv_quantity_before):
+                    # Closing position: add back the closed contract (which was FIFO - at beginning)
+                    # We need to figure out what was closed
+                    # For now, use entry_price_before as approximation
+                    contracts_before = []
+                    # First contract is the one that was just closed
+                    if inv_quantity_before > 0:
+                        pnl_pts = market_price - entry_price_before
+                    else:
+                        pnl_pts = entry_price_before - market_price
+                    contracts_before.append(f"({float(entry_price_before):.1f}, {side_before}, {float(pnl_pts):+.2f}pts)")
+
+                    # Add remaining contracts (now in position_after)
+                    for entry, pnl in position_after.get_individual_pnls(market_price):
+                        contracts_before.append(f"({float(entry):.1f}, {side_before}, {float(pnl):+.2f}pts)")
+                else:
+                    # Adding to position: all contracts except the last one
+                    individual_after = position_after.get_individual_pnls(market_price)
+                    contracts_before = []
+                    for entry, pnl in individual_after[:-1]:  # All except last (just added)
+                        contracts_before.append(f"({float(entry):.1f}, {side_before}, {float(pnl):+.2f}pts)")
+
+                position_before_detail = f"[{', '.join(contracts_before)}]" if contracts_before else f"[({float(entry_price_before):.1f}, {side_before}, +0.00pts)]"
             else:
                 position_before_detail = "FLAT"
 
-            # Format position after
+            # Format position after (use actual entry prices from position)
             if inv_after != 0:
                 side_after = "LONG" if inv_after > 0 else "SHORT"
-                # Entry price after
-                if inv_quantity_before == 0:
-                    # Just opened, entry is fill price
-                    entry_after = fill_price
-                else:
-                    # Modified existing position
-                    entry_after = entry_price_after
 
-                # Calculate unrealized PnL in points
-                if inv_after > 0:
-                    unrealized_after = market_price - entry_after
-                else:
-                    unrealized_after = entry_after - market_price
-
-                # Build details for each contract
+                # Get individual contracts with actual entry prices
+                individual_after = position_after.get_individual_pnls(market_price)
                 contracts_after = []
-                for _ in range(abs(inv_after)):
-                    contracts_after.append(f"({float(entry_after):.1f}, {side_after}, {float(unrealized_after):+.1f}pts)")
+                for entry, pnl in individual_after:
+                    contracts_after.append(f"({float(entry):.1f}, {side_after}, {float(pnl):+.2f}pts)")
+
                 position_after_detail = f"[{', '.join(contracts_after)}]"
             else:
                 position_after_detail = "FLAT"
