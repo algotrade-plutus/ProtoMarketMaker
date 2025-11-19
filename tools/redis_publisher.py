@@ -105,6 +105,49 @@ class RedisMarketDataPublisher:
             finally:
                 self.redis_client = None
 
+    def parse_rate(self, rate_str: str) -> tuple:
+        """
+        Parse rate string to determine playback mode and speed multiplier
+
+        Args:
+            rate_str: Rate specification - "natural", "xN" (e.g., "x2"), or number (Hz)
+
+        Returns:
+            tuple: (mode, value) where:
+                - mode='natural': value is speed multiplier (1.0 = real-time, 2.0 = 2x speed)
+                - mode='hz': value is messages per second
+
+        Examples:
+            "natural" → ("natural", 1.0)  # Real-time playback
+            "x2" → ("natural", 2.0)  # 2x speed (half the delays)
+            "x0.5" → ("natural", 0.5)  # 0.5x speed (double the delays)
+            "10" → ("hz", 10.0)  # 10 Hz fixed rate
+        """
+        rate_str = str(rate_str).strip().lower()
+
+        if rate_str == "natural":
+            return ("natural", 1.0)
+        elif rate_str.startswith("x"):
+            try:
+                multiplier = float(rate_str[1:])
+                if multiplier <= 0:
+                    self.logger.warning(f"Invalid speed multiplier {multiplier}, using 1.0")
+                    multiplier = 1.0
+                return ("natural", multiplier)
+            except ValueError:
+                self.logger.warning(f"Invalid rate format '{rate_str}', using 1.0 Hz")
+                return ("hz", 1.0)
+        else:
+            try:
+                hz = float(rate_str)
+                if hz <= 0:
+                    self.logger.warning(f"Invalid rate {hz}, using 1.0 Hz")
+                    hz = 1.0
+                return ("hz", hz)
+            except ValueError:
+                self.logger.warning(f"Invalid rate format '{rate_str}', using 1.0 Hz")
+                return ("hz", 1.0)
+
     def load_csv(self, csv_path: str):
         """
         Load CSV file into memory for later publishing
@@ -281,7 +324,7 @@ class RedisMarketDataPublisher:
 
         self.publish_message(contract_symbol, message_data)
 
-    def _publish_dual_files(self, rate_hz: float = 1.0, max_messages: Optional[int] = None):
+    def _publish_dual_files(self, rate_spec: str = "1.0", max_messages: Optional[int] = None):
         """
         Publish from F1M and F2M files with synchronized reading and conditional F2M publishing
 
@@ -293,7 +336,7 @@ class RedisMarketDataPublisher:
         5. Only publish F2M during rollover period
 
         Args:
-            rate_hz: Publishing rate (messages per second)
+            rate_spec: Publishing rate - "natural", "xN", or number (Hz)
             max_messages: Maximum messages to publish (None = unlimited)
         """
         if not hasattr(self, 'f1m_data') or self.f1m_data is None:
@@ -302,16 +345,23 @@ class RedisMarketDataPublisher:
         f1m_data = self.f1m_data
         f2m_data = self.f2m_data
 
+        # Parse rate specification
+        mode, value = self.parse_rate(rate_spec)
+
         self.logger.info(f"Starting dual-file publishing")
         self.logger.info(f"F1M rows: {len(f1m_data)}, F2M rows: {len(f2m_data)}")
-        self.logger.info(f"Publishing rate: {rate_hz} Hz")
+        if mode == "natural":
+            self.logger.info(f"Publishing rate: NATURAL ({value}x speed)")
+        else:
+            self.logger.info(f"Publishing rate: {value} Hz")
         self.logger.info(f"F2M rollover window: {self.f2m_window_days} days before expiration")
 
-        sleep_time = 1.0 / rate_hz
+        sleep_time = 1.0 / value if mode == "hz" else None
         messages_sent = 0
         f1_idx = 0
         f2_idx = 0
         previous_f1_contract = None
+        previous_f1_timestamp = None  # For natural rate calculation
 
         try:
             while f1_idx < len(f1m_data):
@@ -320,6 +370,14 @@ class RedisMarketDataPublisher:
                 f1_timestamp = f1_row['datetime']
                 f1_contract = f1_row['tickersymbol']
                 f1_date = f1_timestamp.date()
+
+                # Calculate natural sleep time if in natural mode
+                if mode == "natural" and previous_f1_timestamp is not None:
+                    time_diff = (f1_timestamp - previous_f1_timestamp).total_seconds()
+                    natural_sleep = time_diff / value  # Apply speed multiplier
+                    natural_sleep = max(0, natural_sleep)  # Ensure non-negative
+                else:
+                    natural_sleep = 0
 
                 # 2. Detect rollover period dynamically
                 should_publish_f2 = self._should_publish_f2m(
@@ -350,8 +408,9 @@ class RedisMarketDataPublisher:
                                 self.logger.info(f"Reached max messages: {max_messages}")
                                 return
 
-                            # Rate limiting
-                            time.sleep(sleep_time)
+                            # Rate limiting (only in Hz mode, natural mode sleeps after F1)
+                            if mode == "hz":
+                                time.sleep(sleep_time)
 
                         # Move to next F2 row
                         f2_idx += 1
@@ -375,10 +434,14 @@ class RedisMarketDataPublisher:
 
                 # 5. Update tracking and move to next F1 row
                 previous_f1_contract = f1_contract
+                previous_f1_timestamp = f1_timestamp  # Track for next iteration
                 f1_idx += 1
 
                 # Rate limiting
-                time.sleep(sleep_time)
+                if mode == "natural":
+                    time.sleep(natural_sleep)
+                else:
+                    time.sleep(sleep_time)
 
         except KeyboardInterrupt:
             self.logger.info("Publishing stopped by user")
@@ -389,26 +452,42 @@ class RedisMarketDataPublisher:
             self.logger.info(f"F1M index: {f1_idx}/{len(f1m_data)}")
             self.logger.info(f"F2M index: {f2_idx}/{len(f2m_data)}")
 
-    def start_publishing(self, rate_hz: float = 1.0, loop: bool = False, max_messages: Optional[int] = None):
+    def start_publishing(self, rate_spec: str = "1.0", loop: bool = False, max_messages: Optional[int] = None):
         """
         Start publishing from pre-loaded data
 
         Args:
-            rate_hz: Publishing rate (messages per second)
+            rate_spec: Publishing rate - "natural", "xN", or number (Hz)
             loop: Whether to loop continuously
             max_messages: Maximum number of messages to publish (None = unlimited)
         """
         if not hasattr(self, 'data') or self.data is None:
             raise RuntimeError("No data loaded. Call load_csv() first.")
 
-        self.logger.info(f"Starting to publish {len(self.data)} rows at {rate_hz} Hz")
+        # Parse rate specification
+        mode, value = self.parse_rate(rate_spec)
 
-        sleep_time = 1.0 / rate_hz
+        if mode == "natural":
+            self.logger.info(f"Starting to publish {len(self.data)} rows at NATURAL rate ({value}x speed)")
+        else:
+            self.logger.info(f"Starting to publish {len(self.data)} rows at {value} Hz")
+
+        sleep_time = 1.0 / value if mode == "hz" else None
         messages_sent = 0
+        previous_timestamp = None
 
         try:
             while True:
                 for index, row in self.data.iterrows():
+                    current_timestamp = row['datetime']
+
+                    # Calculate natural sleep time if in natural mode
+                    if mode == "natural" and previous_timestamp is not None:
+                        time_diff = (current_timestamp - previous_timestamp).total_seconds()
+                        natural_sleep = time_diff / value  # Apply speed multiplier
+                        natural_sleep = max(0, natural_sleep)
+                    else:
+                        natural_sleep = 0
                     # Create message
                     message_data = {
                         'timestamp': row['datetime'].isoformat(),
@@ -432,8 +511,14 @@ class RedisMarketDataPublisher:
                         self.logger.info(f"Reached max messages: {max_messages}")
                         return
 
+                    # Update previous timestamp for next iteration
+                    previous_timestamp = current_timestamp
+
                     # Rate limiting
-                    time.sleep(sleep_time)
+                    if mode == "natural":
+                        time.sleep(natural_sleep)
+                    else:
+                        time.sleep(sleep_time)
 
                 if not loop:
                     break
@@ -448,7 +533,7 @@ class RedisMarketDataPublisher:
 
     def start_publishing_dual(
         self,
-        rate_hz: float = 1.0,
+        rate_spec: str = "1.0",
         loop: bool = False,
         max_messages: Optional[int] = None
     ):
@@ -460,17 +545,25 @@ class RedisMarketDataPublisher:
         proximity to expiration).
 
         Args:
-            rate_hz: Publishing rate (messages per second)
+            rate_spec: Publishing rate - "natural", "xN", or number (Hz)
             loop: Whether to loop continuously
             max_messages: Maximum messages to publish (None = unlimited)
         """
         if not hasattr(self, 'f1m_data') or self.f1m_data is None:
             raise RuntimeError("No dual data loaded. Call load_separate_files() first.")
 
-        self.logger.info(f"Starting dual-file publishing at {rate_hz} Hz")
+        # Parse rate specification
+        mode, value = self.parse_rate(rate_spec)
+
+        if mode == "natural":
+            self.logger.info(f"Starting dual-file publishing at NATURAL rate ({value}x speed)")
+        else:
+            self.logger.info(f"Starting dual-file publishing at {value} Hz")
+
         self.logger.info(f"F1M rows: {len(self.f1m_data)}, F2M rows: {len(self.f2m_data)}")
 
-        sleep_time = 1.0 / rate_hz
+        sleep_time = 1.0 / value if mode == "hz" else None
+        previous_timestamp = None
         messages_sent = 0
         f2m_active = False
         last_f1_contract = None
@@ -491,7 +584,16 @@ class RedisMarketDataPublisher:
             for index, row in combined.iterrows():
                 source = row['source']
                 current_date = row['datetime'].date()
+                current_timestamp = row['datetime']
                 contract = row['tickersymbol']
+
+                # Calculate natural sleep time if in natural mode
+                if mode == "natural" and previous_timestamp is not None:
+                    time_diff = (current_timestamp - previous_timestamp).total_seconds()
+                    natural_sleep = time_diff / value  # Apply speed multiplier
+                    natural_sleep = max(0, natural_sleep)
+                else:
+                    natural_sleep = 0
 
                 # Process F1M messages
                 if source == 'F1M':
@@ -550,13 +652,19 @@ class RedisMarketDataPublisher:
                     self.logger.info(f"Reached max messages: {max_messages}")
                     return
 
+                # Update previous timestamp for natural mode
+                previous_timestamp = current_timestamp
+
                 # Rate limiting
-                time.sleep(sleep_time)
+                if mode == "natural":
+                    time.sleep(natural_sleep)
+                else:
+                    time.sleep(sleep_time)
 
             if loop:
                 self.logger.info("Looping back to start...")
                 # Recursively call for looping
-                self.start_publishing_dual(rate_hz=rate_hz, loop=loop, max_messages=max_messages)
+                self.start_publishing_dual(rate_spec=rate_spec, loop=loop, max_messages=max_messages)
 
         except KeyboardInterrupt:
             self.logger.info("Publishing stopped by user")
@@ -584,7 +692,7 @@ class RedisMarketDataPublisher:
     def publish_from_csv(
         self,
         csv_path: Optional[str] = None,
-        rate_hz: float = 1.0,
+        rate_spec: str = "1.0",
         loop: bool = False,
         max_messages: Optional[int] = None,
         f1m_csv: Optional[str] = None,
@@ -600,7 +708,7 @@ class RedisMarketDataPublisher:
 
         Args:
             csv_path: Path to merged CSV file (for backward compatibility)
-            rate_hz: Publishing rate (messages per second)
+            rate_spec: Publishing rate - "natural", "xN", or number (Hz)
             loop: Whether to loop continuously (merged mode only)
             max_messages: Maximum number of messages to publish (None = unlimited)
             f1m_csv: Path to F1M CSV file (dual-file mode)
@@ -611,7 +719,7 @@ class RedisMarketDataPublisher:
         if f1m_csv and f2m_csv:
             self.logger.info("Using dual-file mode (separate F1M/F2M files)")
             self.load_separate_files(f1m_csv, f2m_csv, f2m_window_days)
-            self._publish_dual_files(rate_hz, max_messages)
+            self._publish_dual_files(rate_spec, max_messages)
             return
 
         # Mode 2: Merged file mode (backward compatible)
@@ -625,17 +733,35 @@ class RedisMarketDataPublisher:
         data['datetime'] = pd.to_datetime(data['datetime'])
 
         self.logger.info(f"Loaded {len(data)} rows from {csv_path}")
-        self.logger.info(f"Publishing at {rate_hz} Hz")
 
-        sleep_time = 1.0 / rate_hz
+        # Parse rate specification
+        mode, value = self.parse_rate(rate_spec)
+
+        if mode == "natural":
+            self.logger.info(f"Publishing at NATURAL rate ({value}x speed)")
+        else:
+            self.logger.info(f"Publishing at {value} Hz")
+
+        sleep_time = 1.0 / value if mode == "hz" else None
+        previous_timestamp = None
         messages_sent = 0
 
         try:
             while True:
                 for index, row in data.iterrows():
+                    current_timestamp = row['datetime']
+
+                    # Calculate natural sleep time if in natural mode
+                    if mode == "natural" and previous_timestamp is not None:
+                        time_diff = (current_timestamp - previous_timestamp).total_seconds()
+                        natural_sleep = time_diff / value  # Apply speed multiplier
+                        natural_sleep = max(0, natural_sleep)
+                    else:
+                        natural_sleep = 0
+
                     # Create message
                     message_data = {
-                        'timestamp': row['datetime'].isoformat(),
+                        'timestamp': current_timestamp.isoformat(),
                         'contract': row['tickersymbol'],
                         'price': float(row['price']),
                         'bid': float(row['best-bid']),
@@ -656,8 +782,14 @@ class RedisMarketDataPublisher:
                         self.logger.info(f"Reached max messages: {max_messages}")
                         return
 
+                    # Update previous timestamp for natural mode
+                    previous_timestamp = current_timestamp
+
                     # Rate limiting
-                    time.sleep(sleep_time)
+                    if mode == "natural":
+                        time.sleep(natural_sleep)
+                    else:
+                        time.sleep(sleep_time)
 
                 if not loop:
                     break
@@ -813,6 +945,18 @@ Examples:
   # Publish from CSV at 10 Hz
   python -m tools.redis_publisher --csv data/historical.csv --rate 10
 
+  # Publish at natural rate (real-time based on timestamps)
+  python -m tools.redis_publisher --csv data/historical.csv --rate natural
+
+  # Publish at 2x speed (twice as fast as natural)
+  python -m tools.redis_publisher --csv data/historical.csv --rate x2
+
+  # Publish at 0.5x speed (half as fast as natural)
+  python -m tools.redis_publisher --csv data/historical.csv --rate x0.5
+
+  # Publish dual files with natural rate
+  python -m tools.redis_publisher --f1m-csv data/F1M.csv --f2m-csv data/F2M.csv --rate natural
+
   # Publish with custom channel prefix
   python -m tools.redis_publisher --csv data/historical.csv --rate 10 --channel-prefix HNXDS
 
@@ -835,7 +979,8 @@ Examples:
     parser.add_argument('--f1m-csv', help='F1M CSV file (dual-file mode)')
     parser.add_argument('--f2m-csv', help='F2M CSV file (dual-file mode)')
     parser.add_argument('--f2m-window-days', type=int, default=3, help='Days before expiration to publish F2M')
-    parser.add_argument('--rate', type=float, default=1.0, help='Messages per second')
+    parser.add_argument('--rate', default='1.0',
+                       help='Publishing rate: number (Hz), "natural" (real-time), or "xN" (N times speed, e.g., x2, x0.5)')
     parser.add_argument('--loop', action='store_true', help='Loop continuously')
     parser.add_argument('--max-messages', type=int, help='Maximum messages to publish')
     parser.add_argument('--random', action='store_true', help='Generate random data')
@@ -876,36 +1021,46 @@ Examples:
     # Publish data
     try:
         if args.sine:
+            # For sine wave, convert rate to float (natural mode doesn't apply to generated data)
+            try:
+                rate_hz = float(args.rate.lower().replace('x', '').replace('natural', '1'))
+            except (ValueError, AttributeError):
+                rate_hz = 1.0
             publisher.publish_sine_wave(
                 contracts=args.contracts,
                 base_price=args.base_price,
                 amplitude=args.amplitude,
                 period_seconds=args.period,
-                rate_hz=args.rate,
+                rate_hz=rate_hz,
                 duration_seconds=args.duration
             )
         elif args.random:
+            # For random data, convert rate to float (natural mode doesn't apply to generated data)
+            try:
+                rate_hz = float(args.rate.lower().replace('x', '').replace('natural', '1'))
+            except (ValueError, AttributeError):
+                rate_hz = 1.0
             publisher.publish_random_data(
                 contracts=args.contracts,
                 base_price=args.base_price,
-                rate_hz=args.rate,
+                rate_hz=rate_hz,
                 duration_seconds=args.duration,
                 volatility=args.volatility
             )
         elif args.f1m_csv and args.f2m_csv:
-            # Dual-file mode
+            # Dual-file mode (supports natural rate)
             publisher.publish_from_csv(
                 f1m_csv=args.f1m_csv,
                 f2m_csv=args.f2m_csv,
                 f2m_window_days=args.f2m_window_days,
-                rate_hz=args.rate,
+                rate_spec=args.rate,
                 max_messages=args.max_messages
             )
         elif args.csv:
-            # Merged file mode
+            # Merged file mode (supports natural rate)
             publisher.publish_from_csv(
                 csv_path=args.csv,
-                rate_hz=args.rate,
+                rate_spec=args.rate,
                 loop=args.loop,
                 max_messages=args.max_messages
             )

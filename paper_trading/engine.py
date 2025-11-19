@@ -110,6 +110,10 @@ class RedisPaperTradingEngine:
         self.paperbroker_config = paperbroker_config
         self.event_count = 0  # Counter for periodic status logging
 
+        # Track closed positions for PnL statistics
+        self.closed_positions = []  # List of dicts with {contract, pnl_points, pnl_pct, timestamp}
+        self.total_realized_pnl_points = Decimal('0')  # Cumulative PnL in points
+
         # Core event bus
         self.event_bus = EventBus()
 
@@ -260,7 +264,7 @@ class RedisPaperTradingEngine:
             return False
 
     def _log_signal(self, event):
-        """Log signal event to audit log"""
+        """Log signal event to audit log and position status"""
         if self.audit_logger:
             # Extract signal data from event
             timestamp = event.timestamp
@@ -291,30 +295,49 @@ class RedisPaperTradingEngine:
                 contract=contract
             )
 
+        # Log position and order status at INFO level (after signal processing)
+        self._log_position_status_after_signal(event)
+
     def _log_fill(self, event):
         """Log fill event to audit log"""
+        # IMPORTANT: Portfolio has ALREADY updated the position by the time we get here
+        # (both portfolio and this method subscribe to FILL events)
+        # So we need to reverse-calculate the BEFORE state from the AFTER state
+
+        position_after = self.portfolio.get_position(event.contract)
+        inv_after = position_after.quantity  # This is AFTER the fill
+        entry_price_after = position_after.average_price
+
+        # Extract fill data
+        contract = event.contract
+        side = event.side  # "BID" or "ASK"
+        price = event.fill_price
+        qty = event.fill_quantity
+
+        # Reverse-calculate BEFORE state from AFTER state
+        # BID = buy (inventory increased), ASK = sell (inventory decreased)
+        if side == "BID":
+            inv_before = inv_after - qty  # Undo the increase
+        else:  # ASK
+            inv_before = inv_after + qty  # Undo the decrease
+
+        # Calculate entry price before (for closed positions)
+        if inv_before != 0:
+            # Had a position before - use the entry price
+            # (simplified: assume avg price doesn't change much for non-closing fills)
+            entry_price_before = entry_price_after
+        else:
+            # Was flat before, just opened a position
+            entry_price_before = price  # The fill price is the entry
+
         if self.audit_logger:
-            # Extract fill data from event (FillEvent has these fields directly)
-            timestamp = event.timestamp
-            contract = event.contract
-            side = event.side  # Already a string: "BID" or "ASK"
-            price = event.fill_price
-            qty = event.fill_quantity
+            # Get inventory price after (if position closed, it's 0)
+            if inv_after == 0:
+                inv_price_after = Decimal('0')
+            else:
+                inv_price_after = entry_price_after
 
-            # Get inventory after the fill
-            position = self.portfolio.get_position(contract)
-            inv_after = position.quantity
-            inv_price_after = position.average_price
-
-            # Calculate inv_before (reverse the fill)
-            # Map "BID" -> BUY, "ASK" -> SELL
-            if side == "BID":
-                inv_before = inv_after - qty
-            else:  # "ASK"
-                inv_before = inv_after + qty
-
-            # Get inventory price before (simplified)
-            inv_price_before = inv_price_after  # Approximation
+            inv_price_before = entry_price_before if inv_before != 0 else Decimal('0')
 
             # Determine fill type
             if inv_before == 0:
@@ -325,7 +348,7 @@ class RedisPaperTradingEngine:
                 fill_type = "MODIFY"
 
             self.audit_logger.log_fill(
-                timestamp=timestamp,
+                timestamp=event.timestamp,
                 side=side,
                 price=price,
                 qty=qty,
@@ -336,6 +359,235 @@ class RedisPaperTradingEngine:
                 fill_type=fill_type,
                 contract=contract
             )
+
+        # Log PnL status at INFO level (pass all needed state)
+        self._log_pnl_status_after_fill(event, entry_price_before, inv_before, entry_price_after, inv_after)
+
+    def _log_position_status_after_signal(self, event):
+        """
+        Log current positions and pending orders after signal (INFO level)
+
+        Shows:
+        - Current inventory with detailed breakdown
+        - Position details: entry price, side, unrealized PnL in points per contract
+        - Pending orders
+        """
+        import logging
+        logger = logging.getLogger(__name__)
+
+        contract = event.contract
+
+        # Get current position
+        position = self.portfolio.get_position(contract)
+        market_price = self.portfolio.current_prices.get(contract, Decimal('0'))
+
+        # Update unrealized PnL
+        if market_price > 0:
+            position.update_unrealized_pnl(market_price)
+
+        # Get pending orders
+        active_orders = self.oms.get_active_orders_by_contract(contract)
+
+        # Format position info
+        logger.info("=" * 80)
+        logger.info(f"📊 POSITION STATUS | {contract}")
+
+        if position.quantity != 0:
+            side = "LONG" if position.quantity > 0 else "SHORT"
+
+            # Calculate PnL from the authoritative unrealized_pnl (VND) to ensure consistency
+            unrealized_pnl_vnd = position.unrealized_pnl
+            # Convert VND to points: divide by CONTRACT_MULTIPLIER (100)
+            total_pnl_points = unrealized_pnl_vnd / position.CONTRACT_MULTIPLIER
+            # Per-contract average in points
+            pnl_points_per_contract = total_pnl_points / abs(position.quantity)
+
+            # Build detailed inventory breakdown showing each contract
+            contracts_detail = []
+            for _ in range(abs(position.quantity)):
+                contracts_detail.append(
+                    f"({float(position.average_price):.1f}, {side}, {float(pnl_points_per_contract):+.2f}pts)"
+                )
+
+            inventory_detail = f"[{', '.join(contracts_detail)}]"
+
+            logger.info(f"   Inventory ({position.quantity:+d}): {inventory_detail}")
+            logger.info(f"   Market Price:         {float(market_price):.1f}")
+            logger.info(f"   Total Unrealized PnL: {float(total_pnl_points):+.2f} pts | {float(unrealized_pnl_vnd):+,.0f} (k) VND")
+        else:
+            logger.info(f"   Inventory:            FLAT (0 contracts)")
+            logger.info(f"   Market Price:         {float(market_price):.1f}")
+
+        # Format pending orders info
+        if active_orders:
+            logger.info(f"📋 PENDING ORDERS ({len(active_orders)}):")
+            for order in active_orders:
+                logger.info(f"      {order.side.value:4s} {order.quantity} @ {float(order.price):.1f} | {order.status.value}")
+        else:
+            logger.info(f"📋 PENDING ORDERS:    None")
+
+        logger.info("=" * 80 + "\n")
+
+    def _log_pnl_status_after_fill(self, event, entry_price_before: Decimal, inv_quantity_before: int,
+                                     entry_price_after: Decimal, inv_after: int):
+        """
+        Log PnL statistics after fill (INFO level)
+
+        Args:
+            event: Fill event
+            entry_price_before: Entry price before this fill
+            inv_quantity_before: Inventory quantity before this fill
+            entry_price_after: Entry price after this fill (from portfolio)
+            inv_after: Inventory quantity after this fill
+
+        Shows:
+        - Fill details
+        - Accumulated PnL in points
+        - PnL of recent closed position (if closed)
+        - Average PnL in points and %
+        - Current NAV and portfolio PnL %
+        """
+        import logging
+        logger = logging.getLogger(__name__)
+
+        contract = event.contract
+        fill_price = event.fill_price
+        fill_qty = event.fill_quantity
+        side = event.side
+
+        # Check if position was closed
+        position_closed = False
+        closed_pnl_points = Decimal('0')
+        closed_pnl_pct = Decimal('0')
+
+        # Determine if this fill closed a position
+        # BID = buy, ASK = sell
+        if side == "BID":
+            # Buying - closes short position
+            # If we had a short position and now flat
+            if inv_quantity_before < 0 and inv_after == 0:
+                position_closed = True
+                # Calculate PnL: (entry_price - fill_price)
+                # For short: profit when sell high, buy low
+                closed_pnl_points = entry_price_before - fill_price
+                if entry_price_before > 0:
+                    closed_pnl_pct = (closed_pnl_points / entry_price_before) * 100
+        else:  # ASK = sell
+            # Selling - closes long position
+            # If we had a long position and now flat
+            if inv_quantity_before > 0 and inv_after == 0:
+                position_closed = True
+                # Calculate PnL: (fill_price - entry_price)
+                # For long: profit when buy low, sell high
+                closed_pnl_points = fill_price - entry_price_before
+                if entry_price_before > 0:
+                    closed_pnl_pct = (closed_pnl_points / entry_price_before) * 100
+
+        # Track closed position
+        if position_closed:
+            self.closed_positions.append({
+                'contract': contract,
+                'pnl_points': float(closed_pnl_points),
+                'pnl_pct': float(closed_pnl_pct),
+                'timestamp': event.timestamp
+            })
+            self.total_realized_pnl_points += closed_pnl_points
+
+            # Calculate averages
+            avg_pnl_points = self.total_realized_pnl_points / len(self.closed_positions)
+            avg_pnl_pct = sum(p['pnl_pct'] for p in self.closed_positions) / len(self.closed_positions)
+
+            # Get current portfolio metrics
+            current_nav = self.portfolio.calculate_nav()
+            portfolio_pnl = current_nav - self.initial_capital
+            portfolio_pnl_pct = (portfolio_pnl / self.initial_capital) * 100
+            total_fees = self.monitor.total_fees
+
+            # Format position before (was holding a position)
+            side_before = "LONG" if inv_quantity_before > 0 else "SHORT"
+            position_before_detail = f"[({float(entry_price_before):.1f}, {side_before}, {float(closed_pnl_points):+.1f}pts)]"
+
+            # Log detailed PnL status
+            logger.info("=" * 80)
+            logger.info(f"💰 POSITION CLOSED | {contract}")
+            logger.info(f"   Fill:                {side} {fill_qty} @ {float(fill_price):.1f}")
+            logger.info(f"   Position Before ({inv_quantity_before:+d}): {position_before_detail}")
+            logger.info(f"   Position After (0):      FLAT")
+            logger.info(f"   Closed PnL:          {float(closed_pnl_points):+.2f} pts | {float(closed_pnl_pct):+.2f}%")
+            logger.info(f"")
+            logger.info(f"📈 CUMULATIVE PERFORMANCE:")
+            logger.info(f"   Total Realized:      {float(self.total_realized_pnl_points):+.2f} pts")
+            logger.info(f"   Closed Trades:       {len(self.closed_positions)}")
+            logger.info(f"   Avg PnL/Trade:       {float(avg_pnl_points):+.2f} pts | {float(avg_pnl_pct):+.2f}%")
+            logger.info(f"")
+            logger.info(f"💼 PORTFOLIO STATUS:")
+            logger.info(f"   Current NAV:         {float(current_nav):,.0f} (k) VND")
+            logger.info(f"   Portfolio PnL:       {float(portfolio_pnl):+,.0f} (k) VND ({float(portfolio_pnl_pct):+.2f}%) | Total Fee: {float(total_fees):,.0f} (k) VND")
+            logger.info("=" * 80 + "\n")
+        else:
+            # Position opened or modified (not closed) - log basic fill info
+            # Get current market price for unrealized PnL calculation
+            market_price = self.portfolio.current_prices.get(contract, fill_price)
+
+            # Format position before
+            if inv_quantity_before != 0:
+                side_before = "LONG" if inv_quantity_before > 0 else "SHORT"
+                # Calculate unrealized PnL in points
+                if inv_quantity_before > 0:
+                    unrealized_before = market_price - entry_price_before
+                else:
+                    unrealized_before = entry_price_before - market_price
+
+                # Build details for each contract
+                contracts_before = []
+                for _ in range(abs(inv_quantity_before)):
+                    contracts_before.append(f"({float(entry_price_before):.1f}, {side_before}, {float(unrealized_before):+.1f}pts)")
+                position_before_detail = f"[{', '.join(contracts_before)}]"
+            else:
+                position_before_detail = "FLAT"
+
+            # Format position after
+            if inv_after != 0:
+                side_after = "LONG" if inv_after > 0 else "SHORT"
+                # Entry price after
+                if inv_quantity_before == 0:
+                    # Just opened, entry is fill price
+                    entry_after = fill_price
+                else:
+                    # Modified existing position
+                    entry_after = entry_price_after
+
+                # Calculate unrealized PnL in points
+                if inv_after > 0:
+                    unrealized_after = market_price - entry_after
+                else:
+                    unrealized_after = entry_after - market_price
+
+                # Build details for each contract
+                contracts_after = []
+                for _ in range(abs(inv_after)):
+                    contracts_after.append(f"({float(entry_after):.1f}, {side_after}, {float(unrealized_after):+.1f}pts)")
+                position_after_detail = f"[{', '.join(contracts_after)}]"
+            else:
+                position_after_detail = "FLAT"
+
+            # Get current portfolio metrics
+            current_nav = self.portfolio.calculate_nav()
+            portfolio_pnl = current_nav - self.initial_capital
+            portfolio_pnl_pct = (portfolio_pnl / self.initial_capital) * 100
+            total_fees = self.monitor.total_fees
+
+            logger.info("=" * 80)
+            logger.info(f"📝 FILL EXECUTED | {contract}")
+            logger.info(f"   Fill:                {side} {fill_qty} @ {float(fill_price):.1f}")
+            logger.info(f"   Position Before ({inv_quantity_before:+d}): {position_before_detail}")
+            logger.info(f"   Position After ({inv_after:+d}):  {position_after_detail}")
+
+            logger.info(f"")
+            logger.info(f"💼 PORTFOLIO STATUS:")
+            logger.info(f"   Current NAV:         {float(current_nav):,.0f} (k) VND")
+            logger.info(f"   Portfolio PnL:       {float(portfolio_pnl):+,.0f} (k) VND ({float(portfolio_pnl_pct):+.2f}%) | Total Fee: {float(total_fees):,.0f} (k) VND")
+            logger.info("=" * 80 + "\n")
 
     def stop(self) -> PaperTradingResults:
         """
@@ -528,6 +780,14 @@ class RedisPaperTradingEngine:
         # Get Redis statistics
         redis_stats = self.redis_handler.get_statistics()
 
+        # Calculate HPR manually if not provided by PLUTUS
+        final_nav = self.portfolio.calculate_nav()
+        if 'hpr' not in plutus_metrics or plutus_metrics.get('hpr') == 0.0:
+            # HPR = (final_nav - initial_capital) / initial_capital
+            hpr = float((final_nav - self.initial_capital) / self.initial_capital)
+        else:
+            hpr = plutus_metrics.get('hpr', 0.0)
+
         return PaperTradingResults(
             # Session metadata
             start_time=self.start_time,
@@ -539,7 +799,7 @@ class RedisPaperTradingEngine:
             sharpe_ratio=plutus_metrics.get('sharpe_ratio', 0.0),
             sortino_ratio=plutus_metrics.get('sortino_ratio', 0.0),
             max_drawdown=plutus_metrics.get('max_drawdown', 0.0),
-            hpr=plutus_metrics.get('hpr', 0.0),
+            hpr=hpr,
 
             # Trading statistics (from Monitor)
             total_trades=self.monitor.total_trades,
@@ -549,7 +809,7 @@ class RedisPaperTradingEngine:
 
             # Portfolio timeline (from Portfolio)
             initial_capital=self.initial_capital,
-            final_nav=self.portfolio.calculate_nav(),
+            final_nav=final_nav,
             daily_nav=self.portfolio.daily_nav if hasattr(self.portfolio, 'daily_nav') else [],
             daily_returns=self.portfolio.daily_returns if hasattr(self.portfolio, 'daily_returns') else [],
             tracking_dates=self.portfolio.tracking_dates if hasattr(self.portfolio, 'tracking_dates') else [],
