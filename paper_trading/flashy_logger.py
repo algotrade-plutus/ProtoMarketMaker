@@ -14,7 +14,7 @@ from rich.text import Text
 from rich.box import ROUNDED, HEAVY
 from decimal import Decimal
 from typing import Optional, List
-from datetime import datetimegit
+from datetime import datetime
 
 
 class FlashyLogger:
