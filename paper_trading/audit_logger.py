@@ -263,10 +263,15 @@ class AuditLogger:
         total_rollovers: int,
         initial_capital: Decimal,
         final_nav: Decimal,
-        hpr: Decimal
+        hpr: Decimal,
+        total_trades: int = 0,
+        buy_trades: int = 0,
+        sell_trades: int = 0,
+        total_fees: Decimal = Decimal('0'),
+        total_orders: int = 0
     ):
         """
-        Log session summary
+        Log session summary with enhanced metrics
 
         Args:
             total_signals: Total signals generated
@@ -275,22 +280,51 @@ class AuditLogger:
             initial_capital: Initial capital
             final_nav: Final NAV
             hpr: Holding period return
+            total_trades: Total completed trades (open + close)
+            buy_trades: Number of buy fills
+            sell_trades: Number of sell fills
+            total_fees: Total fees paid
+            total_orders: Total orders submitted
         """
         if not self.enabled:
             return
 
+        # Calculate PnL metrics
+        pnl_vnd = final_nav - initial_capital
+        pnl_pts = pnl_vnd / Decimal('100')  # Convert VND to points
+
         self.logger.info("")
         self.logger.info("=" * 80)
-        self.logger.info("SESSION SUMMARY")
+        self.logger.info("                           SESSION SUMMARY")
         self.logger.info("=" * 80)
-        self.logger.info(f"Total Signals:     {total_signals}")
-        self.logger.info(f"Total Fills:       {total_fills}")
-        self.logger.info(f"Total Rollovers:   {total_rollovers}")
-        self.logger.info(f"Initial Capital:   {float(initial_capital):,.2f} VND")
-        self.logger.info(f"Final NAV:         {float(final_nav):,.2f} VND")
-        self.logger.info(f"HPR:               {float(hpr):.4f} ({float(hpr)*100:.2f}%)")
+        self.logger.info("")
+
+        # Trading Activity
+        self.logger.info("📊 TRADING ACTIVITY:")
+        self.logger.info(f"   Total Signals:              {total_signals}")
+        self.logger.info(f"   Total Orders:               {total_orders}")
+        self.logger.info(f"   Total Fills:                {total_fills}")
+        self.logger.info(f"     ├─ Buy Fills:             {buy_trades}")
+        self.logger.info(f"     └─ Sell Fills:            {sell_trades}")
+        self.logger.info(f"   Completed Trades:           {total_trades}")
+        self.logger.info(f"   Rollovers:                  {total_rollovers}")
+        self.logger.info("")
+
+        # Performance
+        self.logger.info("💰 PERFORMANCE:")
+        self.logger.info(f"   Initial Capital:            {float(initial_capital):>15,.2f} VND")
+        self.logger.info(f"   Final NAV:                  {float(final_nav):>15,.2f} VND")
+        self.logger.info(f"   Total Fees:                 {float(total_fees):>15,.2f} VND")
+        self.logger.info("")
+        pnl_sign = "+" if pnl_vnd >= 0 else ""
+        self.logger.info(f"   P&L (VND):                  {pnl_sign}{float(pnl_vnd):>15,.2f} VND")
+        self.logger.info(f"   P&L (pts):                  {pnl_sign}{float(pnl_pts):>15,.2f} pts")
+        self.logger.info(f"   HPR:                        {pnl_sign}{float(hpr)*100:>15.2f}%")
+        self.logger.info("")
+
         self.logger.info("=" * 80)
         self.logger.info(f"Session ended: {datetime.now()}")
+        self.logger.info("=" * 80)
 
     def close(self):
         """Close the logger"""

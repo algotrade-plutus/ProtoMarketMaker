@@ -93,7 +93,11 @@ class PortfolioManager:
 
     def calculate_nav(self) -> Decimal:
         """
-        Calculate Net Asset Value = cash + unrealized PnL
+        Calculate Net Asset Value = cash + unrealized PnL + intraday realized PnL
+
+        Includes intraday realized PnL for accurate real-time NAV display.
+        Note: cumulative_realized_pnl uses reversed sign convention (negative for gains),
+        so we negate it when adding to NAV.
 
         Returns:
             Total portfolio value
@@ -101,7 +105,9 @@ class PortfolioManager:
         total_unrealized_pnl = sum(
             pos.unrealized_pnl for pos in self.positions.values()
         )
-        return self.cash + total_unrealized_pnl
+        # Include intraday realized PnL (negate because cumulative_realized_pnl is negative for gains)
+        intraday_realized_pnl = -self.cumulative_realized_pnl
+        return self.cash + total_unrealized_pnl + intraday_realized_pnl
 
     def get_available_margin(self, contract: str, price: Decimal) -> int:
         """
@@ -161,25 +167,29 @@ class PortfolioManager:
 
         # Calculate realized PnL if closing/reducing position
         if is_closing:
-            # Closing position - realize P&L using FIFO entry prices
+            # Closing position - realize P&L using FIFO entry prices and opening fees
             closed_entries = position.remove_contracts(1)
 
             if closed_entries:
-                entry_price = closed_entries[0]  # FIFO: oldest entry
+                entry_price, opening_fee = closed_entries[0]  # FIFO: oldest entry with its opening fee
 
-                # Fee model: 20 per contract per trade leg
-                # Fee is deducted from realized PnL at close time
+                # Fee model: Deduct BOTH opening fee (paid at entry) and closing fee (paid now)
+                # Opening fee: 20 VND per contract (tracked when position opened)
+                # Closing fee: 20 VND per contract (event.fee)
+                # Total deduction: 40 VND per contract
                 if position.quantity > 0:  # Closing long
                     realized_pnl = (
                         (event.fill_price - entry_price)
                         * Decimal('100')
-                        - event.fee
+                        - opening_fee  # Deduct opening fee
+                        - event.fee    # Deduct closing fee
                     )
                 else:  # Closing short
                     realized_pnl = (
                         (entry_price - event.fill_price)
                         * Decimal('100')
-                        - event.fee
+                        - opening_fee  # Deduct opening fee
+                        - event.fee    # Deduct closing fee
                     )
                 position.realized_pnl += realized_pnl
 
@@ -190,8 +200,8 @@ class PortfolioManager:
             # Note: We do NOT update cash here. Cash only updates at settlement.
             # This matches original's behavior where daily_assets only updates at settlement.
         else:
-            # Opening or adding to position - use FIFO tracking
-            position.add_contracts(event.fill_price, 1)
+            # Opening or adding to position - use FIFO tracking with opening fee
+            position.add_contracts(event.fill_price, 1, opening_fee=event.fee)
 
             # Opening position - fee tracked but not deducted from cash
             # Futures contracts don't require paying contract value upfront
@@ -206,6 +216,12 @@ class PortfolioManager:
             position.average_price = sum(position.entry_prices) / len(position.entry_prices)
         elif position.quantity == 0:
             position.average_price = Decimal('0')
+
+        # Update unrealized PnL based on current market price
+        # Use the fill price as the current market price (most up-to-date)
+        # This ensures unrealized_pnl is recalculated and set to 0 if position is flat
+        current_price = self.current_prices.get(event.contract, event.fill_price)
+        position.update_unrealized_pnl(current_price)
 
         position.total_fees += event.fee
 
@@ -270,6 +286,10 @@ class PortfolioManager:
             # Since ac_loss is negative for gains, this becomes: cur_asset + unrealized + |ac_loss|
             # cumulative_realized_pnl is negative for gains, so we negate it to add gains
             self.cash += (-self.cumulative_realized_pnl)
+
+            # Reset cumulative realized PnL after settling to cash
+            # This prevents double-counting in NAV calculation (which now includes intraday realized PnL)
+            self.cumulative_realized_pnl = Decimal('0')
 
             nav = self.calculate_nav()
 

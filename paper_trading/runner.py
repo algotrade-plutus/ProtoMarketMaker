@@ -372,6 +372,11 @@ Examples:
         default='WARNING',
         help='Set logging level (default: WARNING)'
     )
+    logging_group.add_argument(
+        '--flashy',
+        action='store_true',
+        help='Enable flashy terminal output for demos (uses Rich library with colors, panels, tables)'
+    )
 
     args = parser.parse_args()
 
@@ -514,7 +519,8 @@ Examples:
             audit_log_enabled=audit_log_enabled,
             audit_log_path=audit_log_path,
             execution_mode=execution_mode,
-            paperbroker_config=paperbroker_config
+            paperbroker_config=paperbroker_config,
+            flashy_mode=args.flashy  # Enable flashy Rich output for demos
         )
     except Exception as e:
         print(f"Error initializing engine: {e}", file=sys.stderr)

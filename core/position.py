@@ -27,6 +27,7 @@ class Position:
     quantity: int  # Positive = long, Negative = short
     average_price: Decimal  # TODO: Will become @property after Portfolio update
     entry_prices: List[Decimal] = field(default_factory=list)  # FIFO queue of individual entry prices
+    entry_fees: List[Decimal] = field(default_factory=list)  # FIFO queue of opening fees (parallel to entry_prices)
     realized_pnl: Decimal = Decimal('0')
     unrealized_pnl: Decimal = Decimal('0')
     total_fees: Decimal = Decimal('0')
@@ -34,19 +35,21 @@ class Position:
     # Contract multiplier (each contract = 100 units)
     CONTRACT_MULTIPLIER: int = 100
 
-    def add_contracts(self, price: Decimal, qty: int):
+    def add_contracts(self, price: Decimal, qty: int, opening_fee: Decimal = Decimal('20')):
         """
         Add contracts to position (FIFO queue)
 
         Args:
             price: Entry price for the contracts
             qty: Number of contracts to add
+            opening_fee: Opening fee per contract (default 20 VND)
         """
         for _ in range(qty):
             self.entry_prices.append(price)
+            self.entry_fees.append(opening_fee)
         # Note: quantity sign is managed by Portfolio (positive for LONG, negative for SHORT)
 
-    def remove_contracts(self, qty: int) -> List[Decimal]:
+    def remove_contracts(self, qty: int) -> List[Tuple[Decimal, Decimal]]:
         """
         Remove contracts from position (FIFO - First In First Out)
 
@@ -54,12 +57,14 @@ class Position:
             qty: Number of contracts to remove
 
         Returns:
-            List of entry prices for removed contracts (in FIFO order)
+            List of (entry_price, opening_fee) tuples for removed contracts (in FIFO order)
         """
         removed = []
         for _ in range(min(qty, len(self.entry_prices))):
             if self.entry_prices:
-                removed.append(self.entry_prices.pop(0))  # FIFO: remove from front
+                price = self.entry_prices.pop(0)  # FIFO: remove from front
+                fee = self.entry_fees.pop(0) if self.entry_fees else Decimal('20')  # FIFO: remove opening fee
+                removed.append((price, fee))
         return removed
 
     def get_individual_pnls(self, current_price: Decimal) -> List[Tuple[Decimal, Decimal]]:
@@ -125,12 +130,15 @@ class Position:
 
     def total_pnl(self) -> Decimal:
         """
-        Total PnL = realized + unrealized - fees
+        Total PnL = realized + unrealized
+
+        Note: Fees are already deducted in realized_pnl (both opening and closing fees).
+        total_fees is tracked for reporting purposes only.
 
         Returns:
             Total profit/loss
         """
-        return self.realized_pnl + self.unrealized_pnl - self.total_fees
+        return self.realized_pnl + self.unrealized_pnl
 
     def is_flat(self) -> bool:
         """Check if position is flat (no holdings)"""

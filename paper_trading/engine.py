@@ -69,7 +69,8 @@ class RedisPaperTradingEngine:
         audit_log_enabled: bool = False,
         audit_log_path: str = None,
         execution_mode: str = 'mock',
-        paperbroker_config: dict = None
+        paperbroker_config: dict = None,
+        flashy_mode: bool = False
     ):
         """
         Initialize paper trading engine with Redis data source
@@ -97,6 +98,7 @@ class RedisPaperTradingEngine:
             paperbroker_config: Configuration dict for PaperBroker connection (if execution_mode='paperbroker')
                                Should contain: fix_host, fix_port, sender_comp_id, target_comp_id,
                                username, password, rest_base_url, default_sub_account
+            flashy_mode: Enable flashy terminal output for demos (uses Rich library) (default: False)
         """
         self.initial_capital = initial_capital
         self.step = step
@@ -109,6 +111,7 @@ class RedisPaperTradingEngine:
         self.execution_mode = execution_mode
         self.paperbroker_config = paperbroker_config
         self.event_count = 0  # Counter for periodic status logging
+        self.flashy_mode = flashy_mode
 
         # Track closed positions for PnL statistics
         self.closed_positions = []  # List of dicts with {contract, pnl_points, pnl_pct, timestamp}
@@ -212,6 +215,17 @@ class RedisPaperTradingEngine:
             # Subscribe to signal and fill events
             self.event_bus.subscribe(EventType.SIGNAL, self._log_signal)
             self.event_bus.subscribe(EventType.FILL, self._log_fill)
+
+        # Optional flashy logging for demos (uses Rich library)
+        self.flashy_logger = None
+        if self.flashy_mode:
+            from paper_trading.flashy_logger import FlashyLogger
+            self.flashy_logger = FlashyLogger()
+            # Subscribe to signal and fill events for flashy output
+            if not audit_log_enabled:
+                # Only subscribe if not already subscribed via audit logging
+                self.event_bus.subscribe(EventType.SIGNAL, self._log_signal)
+                self.event_bus.subscribe(EventType.FILL, self._log_fill)
 
     @property
     def running(self) -> bool:
@@ -423,45 +437,81 @@ class RedisPaperTradingEngine:
         # Get pending orders
         active_orders = self.oms.get_active_orders_by_contract(contract)
 
-        # Format position info
-        logger.info("=" * 80)
-        logger.info(f"📊 POSITION STATUS | {contract}")
-
+        # Calculate total unrealized PnL in points (needed for both plain and flashy)
+        total_pnl_points = Decimal('0')
         if position.quantity != 0:
-            side = "LONG" if position.quantity > 0 else "SHORT"
-
-            # Get individual PnLs for each contract (using actual entry prices)
             individual_pnls = position.get_individual_pnls(market_price)
-
-            # Build detailed inventory breakdown showing each contract with its actual entry price
-            contracts_detail = []
-            total_pnl_points = Decimal('0')
-
             for entry_price, pnl_pts in individual_pnls:
-                contracts_detail.append(
-                    f"({float(entry_price):.1f}, {side}, {float(pnl_pts):+.2f}pts)"
-                )
                 total_pnl_points += pnl_pts
 
-            inventory_detail = f"[{', '.join(contracts_detail)}]"
-            unrealized_pnl_vnd = position.unrealized_pnl
+        # Use flashy logger if enabled
+        if self.flashy_mode and self.flashy_logger:
+            # Log signal change details first
+            timestamp = event.timestamp
+            reason = getattr(event, 'reason', 'TIME_ELAPSED')
+            bid_price = event.bid_price
+            ask_price = event.ask_price
+            spread = ask_price - bid_price
 
-            logger.info(f"   Inventory ({position.quantity:+d}): {inventory_detail}")
-            logger.info(f"   Market Price:         {float(market_price):.1f}")
-            logger.info(f"   Total Unrealized PnL: {float(total_pnl_points):+.2f} pts | {float(unrealized_pnl_vnd):+,.0f} (k) VND")
+            self.flashy_logger.log_signal_change(
+                contract=contract,
+                timestamp=timestamp,
+                reason=reason,
+                market_price=market_price,
+                bid_price=bid_price,
+                ask_price=ask_price,
+                spread=spread,
+                inventory=position.quantity
+            )
+
+            # Then show position status and pending orders
+            self.flashy_logger.log_position_status(
+                contract=contract,
+                inventory=position.quantity,
+                entry_prices=position.entry_prices,
+                market_price=market_price,
+                unrealized_pnl_pts=total_pnl_points,
+                unrealized_pnl_vnd=position.unrealized_pnl,
+                active_orders=active_orders
+            )
         else:
-            logger.info(f"   Inventory:            FLAT (0 contracts)")
-            logger.info(f"   Market Price:         {float(market_price):.1f}")
+            # Use plain text logging
+            logger.info("=" * 80)
+            logger.info(f"📊 POSITION STATUS | {contract}")
 
-        # Format pending orders info
-        if active_orders:
-            logger.info(f"📋 PENDING ORDERS ({len(active_orders)}):")
-            for order in active_orders:
-                logger.info(f"      {order.side.value:4s} {order.quantity} @ {float(order.price):.1f} | {order.status.value}")
-        else:
-            logger.info(f"📋 PENDING ORDERS:    None")
+            if position.quantity != 0:
+                side = "LONG" if position.quantity > 0 else "SHORT"
 
-        logger.info("=" * 80 + "\n")
+                # Get individual PnLs for each contract (using actual entry prices)
+                individual_pnls = position.get_individual_pnls(market_price)
+
+                # Build detailed inventory breakdown showing each contract with its actual entry price
+                contracts_detail = []
+
+                for entry_price, pnl_pts in individual_pnls:
+                    contracts_detail.append(
+                        f"({float(entry_price):.1f}, {side}, {float(pnl_pts):+.2f}pts)"
+                    )
+
+                inventory_detail = f"[{', '.join(contracts_detail)}]"
+                unrealized_pnl_vnd = position.unrealized_pnl
+
+                logger.info(f"   Inventory ({position.quantity:+d}): {inventory_detail}")
+                logger.info(f"   Market Price:         {float(market_price):.1f}")
+                logger.info(f"   Total Unrealized PnL: {float(total_pnl_points):+.2f} pts | {float(unrealized_pnl_vnd):+,.0f} (k) VND")
+            else:
+                logger.info(f"   Inventory:            FLAT (0 contracts)")
+                logger.info(f"   Market Price:         {float(market_price):.1f}")
+
+            # Format pending orders info
+            if active_orders:
+                logger.info(f"📋 PENDING ORDERS ({len(active_orders)}):")
+                for order in active_orders:
+                    logger.info(f"      {order.side.value:4s} {order.quantity} @ {float(order.price):.1f} | {order.status.value}")
+            else:
+                logger.info(f"📋 PENDING ORDERS:    None")
+
+            logger.info("=" * 80 + "\n")
 
     def _log_pnl_status_after_fill(self, event, entry_price_before: Decimal, inv_quantity_before: int,
                                      entry_price_after: Decimal, inv_after: int):
@@ -497,26 +547,39 @@ class RedisPaperTradingEngine:
 
         # Determine if this fill closed a position
         # BID = buy, ASK = sell
+        # Closing = reducing absolute position size (not just going to flat)
         if side == "BID":
-            # Buying - closes short position
-            # If we had a short position and now flat
-            if inv_quantity_before < 0 and inv_after == 0:
+            # Buying - closes short position if we were short
+            # Example: -3 → -2 (reducing short), -3 → 0 (closing to flat), -3 → +1 (reversing)
+            if inv_quantity_before < 0 and inv_after > inv_quantity_before:
                 position_closed = True
-                # Calculate PnL: (entry_price - fill_price)
-                # For short: profit when sell high, buy low
-                closed_pnl_points = entry_price_before - fill_price
-                if entry_price_before > 0:
-                    closed_pnl_pct = (closed_pnl_points / entry_price_before) * 100
         else:  # ASK = sell
-            # Selling - closes long position
-            # If we had a long position and now flat
-            if inv_quantity_before > 0 and inv_after == 0:
+            # Selling - closes long position if we were long
+            # Example: +3 → +2 (reducing long), +3 → 0 (closing to flat), +3 → -1 (reversing)
+            if inv_quantity_before > 0 and inv_after < inv_quantity_before:
                 position_closed = True
-                # Calculate PnL: (fill_price - entry_price)
-                # For long: profit when buy low, sell high
-                closed_pnl_points = fill_price - entry_price_before
-                if entry_price_before > 0:
-                    closed_pnl_pct = (closed_pnl_points / entry_price_before) * 100
+
+        # Get actual realized PnL from portfolio (already includes both opening and closing fees)
+        if position_closed:
+            # Portfolio.cumulative_realized_pnl tracks total realized across all positions
+            # Use delta to get THIS trade's PnL (with both opening and closing fees deducted)
+            cumulative_before = getattr(self, '_last_cumulative_realized_pnl', Decimal('0'))
+            cumulative_after = -self.portfolio.cumulative_realized_pnl  # Negate because it uses reversed sign
+            closed_pnl_vnd = cumulative_after - cumulative_before
+            closed_pnl_points = closed_pnl_vnd / Decimal('100')
+
+            # Calculate percentage (use gross profit for percentage calculation)
+            if entry_price_before > 0:
+                if side == "BID":  # Closing short
+                    gross_profit = entry_price_before - fill_price
+                else:  # Closing long
+                    gross_profit = fill_price - entry_price_before
+                closed_pnl_pct = (gross_profit / entry_price_before) * 100
+            else:
+                closed_pnl_pct = Decimal('0')
+
+            # Store for next comparison
+            self._last_cumulative_realized_pnl = cumulative_after
 
         # Track closed position
         if position_closed:
@@ -538,34 +601,111 @@ class RedisPaperTradingEngine:
             portfolio_pnl_pct = (portfolio_pnl / self.initial_capital) * 100
             total_fees = self.monitor.total_fees
 
-            # Format position before (was holding a position)
-            # Note: Can't show individual contracts for closure since position already updated
-            # Show simplified format with average entry price
-            side_before = "LONG" if inv_quantity_before > 0 else "SHORT"
-            position_before_detail = f"[({float(entry_price_before):.2f}, {side_before}, {float(closed_pnl_points):+.2f}pts)]"
+            # Calculate realized and unrealized PnL breakdown (needed for both plain and flashy)
+            # Realized PnL: cumulative_realized_pnl uses reversed sign convention (inherited from original backtest's ac_loss)
+            # In original backtest.py: ac_loss accumulated losses as positive values (loss = +, gain = -)
+            # Portfolio.py uses -= realized_pnl to match this: profit +100 → cumulative_realized_pnl = -100
+            # Therefore, negate to display with normal convention: negative cumulative → positive displayed profit
+            realized_pnl_vnd = -self.portfolio.cumulative_realized_pnl
+            realized_pnl_pts = realized_pnl_vnd / Decimal('100')  # Convert VND to points
 
-            # Log detailed PnL status
-            logger.info("=" * 80)
-            logger.info(f"💰 POSITION CLOSED | {contract}")
-            logger.info(f"   Fill:                {side} {fill_qty} @ {float(fill_price):.1f}")
-            logger.info(f"   Position Before ({inv_quantity_before:+d}): {position_before_detail}")
-            logger.info(f"   Position After (0):      FLAT")
-            logger.info(f"   Closed PnL:          {float(closed_pnl_points):+.2f} pts | {float(closed_pnl_pct):+.2f}%")
-            logger.info(f"")
-            logger.info(f"📈 CUMULATIVE PERFORMANCE:")
-            logger.info(f"   Total Realized:      {float(self.total_realized_pnl_points):+.2f} pts")
-            logger.info(f"   Closed Trades:       {len(self.closed_positions)}")
-            logger.info(f"   Avg PnL/Trade:       {float(avg_pnl_points):+.2f} pts | {float(avg_pnl_pct):+.2f}%")
-            logger.info(f"")
-            logger.info(f"💼 PORTFOLIO STATUS:")
-            logger.info(f"   Current NAV:         {float(current_nav):,.0f} (k) VND")
-            logger.info(f"   Portfolio PnL:       {float(portfolio_pnl):+,.0f} (k) VND ({float(portfolio_pnl_pct):+.2f}%) | Total Fee: {float(total_fees):,.0f} (k) VND")
-            logger.info("=" * 80 + "\n")
+            # Unrealized PnL (sum of all positions' unrealized PnL)
+            total_unrealized_pnl_vnd = sum(pos.unrealized_pnl for pos in self.portfolio.positions.values())
+            total_unrealized_pnl_pts = total_unrealized_pnl_vnd / Decimal('100')
+
+            # Calculate gross realized PnL (before fees)
+            # Each closed trade has 40 VND (0.4 pts) in fees (20 opening + 20 closing)
+            # Gross = Net + total fees paid on closed trades
+            closed_trades_count = len(self.closed_positions)
+            total_realized_gross_pts = self.total_realized_pnl_points + (closed_trades_count * Decimal('0.4'))
+
+            # Use flashy logger if enabled, otherwise use plain text
+            if self.flashy_mode and self.flashy_logger:
+                # Use Rich Panel for position closure
+                self.flashy_logger.log_position_closure(
+                    contract=contract,
+                    side=side,
+                    qty=fill_qty,
+                    price=fill_price,
+                    inv_before=inv_quantity_before,
+                    inv_after=inv_after,
+                    closed_pnl_pts=closed_pnl_points,
+                    closed_pnl_pct=closed_pnl_pct,
+                    total_realized_gross_pts=total_realized_gross_pts,
+                    total_realized_pts=self.total_realized_pnl_points,
+                    closed_trades=len(self.closed_positions),
+                    avg_pnl_pts=avg_pnl_points,
+                    avg_pnl_pct=avg_pnl_pct,
+                    current_nav=current_nav,
+                    portfolio_pnl=portfolio_pnl,
+                    portfolio_pnl_pct=portfolio_pnl_pct,
+                    total_fees=total_fees,
+                    realized_pnl_vnd=realized_pnl_vnd,
+                    realized_pnl_pts=realized_pnl_pts,
+                    unrealized_pnl_vnd=total_unrealized_pnl_vnd,
+                    unrealized_pnl_pts=total_unrealized_pnl_pts
+                )
+            else:
+                # Use plain text logging
+                # Format position before (was holding a position)
+                # Note: Can't show individual contracts for closure since position already updated
+                # Show simplified format with average entry price
+                side_before = "LONG" if inv_quantity_before > 0 else "SHORT"
+                position_before_detail = f"[({float(entry_price_before):.2f}, {side_before}, {float(closed_pnl_points):+.2f}pts)]"
+
+                # Format position after
+                if inv_after == 0:
+                    position_after_detail = "FLAT"
+                else:
+                    # Still have remaining position
+                    side_after = "LONG" if inv_after > 0 else "SHORT"
+                    position = self.portfolio.get_position(contract)
+                    # Get market price for remaining contracts
+                    market_price = self.portfolio.current_prices.get(contract, fill_price)
+                    remaining_contracts = []
+                    for entry, pnl in position.get_individual_pnls(market_price):
+                        remaining_contracts.append(f"({float(entry):.1f}, {side_after}, {float(pnl):+.2f}pts)")
+                    position_after_detail = f"[{', '.join(remaining_contracts)}]"
+
+                # Log detailed PnL status
+                logger.info("=" * 80)
+                logger.info(f"💰 POSITION CLOSED | {contract}")
+                logger.info(f"   Fill:                {side} {fill_qty} @ {float(fill_price):.1f}")
+                logger.info(f"   Position Before ({inv_quantity_before:+d}): {position_before_detail}")
+                logger.info(f"   Position After ({inv_after:+d}):  {position_after_detail}")
+                logger.info(f"   Closed PnL:          {float(closed_pnl_points):+.2f} pts | {float(closed_pnl_pct):+.2f}%")
+                logger.info(f"")
+                logger.info(f"📈 CUMULATIVE PERFORMANCE:")
+                logger.info(f"   Total Realized:      {float(self.total_realized_pnl_points):+.2f} pts")
+                logger.info(f"   Closed Trades:       {len(self.closed_positions)}")
+                logger.info(f"   Avg PnL/Trade:       {float(avg_pnl_points):+.2f} pts | {float(avg_pnl_pct):+.2f}%")
+                logger.info(f"")
+                logger.info(f"💼 PORTFOLIO STATUS:")
+                logger.info(f"   Realized PnL:        {float(realized_pnl_pts):+.2f} pts | {float(realized_pnl_vnd):+,.0f} (k) VND")
+                logger.info(f"   Unrealized PnL:      {float(total_unrealized_pnl_pts):+.2f} pts | {float(total_unrealized_pnl_vnd):+,.0f} (k) VND")
+                logger.info(f"   Current NAV:         {float(current_nav):,.0f} (k) VND")
+                logger.info(f"   Portfolio PnL:       {float(portfolio_pnl):+,.0f} (k) VND ({float(portfolio_pnl_pct):+.2f}%) | Total Fee: {float(total_fees):,.0f} (k) VND")
+                logger.info("=" * 80 + "\n")
         else:
             # Position opened or modified (not closed) - log basic fill info
             # Get current market price for unrealized PnL calculation
             market_price = self.portfolio.current_prices.get(contract, fill_price)
             position_after = self.portfolio.get_position(contract)
+
+            # Calculate realized PnL for this specific fill if it closed a position
+            fill_realized_pnl_pts = None
+            fill_realized_pnl_vnd = None
+            is_closing = abs(inv_after) < abs(inv_quantity_before)
+
+            if is_closing:
+                # This fill closed a position - calculate its realized PnL
+                # Use the same logic as position closure
+                if side == "BID":  # Closing short
+                    fill_realized_pnl_pts = entry_price_before - fill_price
+                else:  # Closing long (ASK)
+                    fill_realized_pnl_pts = fill_price - entry_price_before
+
+                fill_realized_pnl_vnd = fill_realized_pnl_pts * Decimal('100') - event.fee
 
             # Format position before (reconstruct from after state)
             if inv_quantity_before != 0:
@@ -620,17 +760,71 @@ class RedisPaperTradingEngine:
             portfolio_pnl_pct = (portfolio_pnl / self.initial_capital) * 100
             total_fees = self.monitor.total_fees
 
-            logger.info("=" * 80)
-            logger.info(f"📝 FILL EXECUTED | {contract}")
-            logger.info(f"   Fill:                {side} {fill_qty} @ {float(fill_price):.1f}")
-            logger.info(f"   Position Before ({inv_quantity_before:+d}): {position_before_detail}")
-            logger.info(f"   Position After ({inv_after:+d}):  {position_after_detail}")
+            # Calculate realized and unrealized PnL breakdown (needed for both plain and flashy)
+            # Realized PnL: cumulative_realized_pnl uses reversed sign convention (inherited from original backtest's ac_loss)
+            # In original backtest.py: ac_loss accumulated losses as positive values (loss = +, gain = -)
+            # Portfolio.py uses -= realized_pnl to match this: profit +100 → cumulative_realized_pnl = -100
+            # Therefore, negate to display with normal convention: negative cumulative → positive displayed profit
+            realized_pnl_vnd = -self.portfolio.cumulative_realized_pnl
+            realized_pnl_pts = realized_pnl_vnd / Decimal('100')  # Convert VND to points
 
-            logger.info(f"")
-            logger.info(f"💼 PORTFOLIO STATUS:")
-            logger.info(f"   Current NAV:         {float(current_nav):,.0f} (k) VND")
-            logger.info(f"   Portfolio PnL:       {float(portfolio_pnl):+,.0f} (k) VND ({float(portfolio_pnl_pct):+.2f}%) | Total Fee: {float(total_fees):,.0f} (k) VND")
-            logger.info("=" * 80 + "\n")
+            # Unrealized PnL (sum of all positions' unrealized PnL)
+            total_unrealized_pnl_vnd = sum(pos.unrealized_pnl for pos in self.portfolio.positions.values())
+            total_unrealized_pnl_pts = total_unrealized_pnl_vnd / Decimal('100')
+
+            # Use flashy logger if enabled
+            if self.flashy_mode and self.flashy_logger:
+                # Use flashy fill logging with color
+                self.flashy_logger.print_separator()
+                self.flashy_logger.console.print(f"[{self.flashy_logger.SECTION_COLOR}]FILL EXECUTED | {contract}[/{self.flashy_logger.SECTION_COLOR}]")
+                self.flashy_logger.log_fill(
+                    side=side,
+                    qty=fill_qty,
+                    price=fill_price,
+                    realized_pnl_pts=fill_realized_pnl_pts,
+                    realized_pnl_vnd=fill_realized_pnl_vnd
+                )
+
+                # Position Before/After with colored entries
+                self.flashy_logger.log_position_before_after(
+                    inv_before=inv_quantity_before,
+                    inv_after=inv_after,
+                    position_before_detail=position_before_detail,
+                    position_after_detail=position_after_detail
+                )
+
+                # Use flashy portfolio status
+                self.flashy_logger.log_portfolio_status(
+                    realized_pnl_pts=realized_pnl_pts,
+                    realized_pnl_vnd=realized_pnl_vnd,
+                    unrealized_pnl_pts=total_unrealized_pnl_pts,
+                    unrealized_pnl_vnd=total_unrealized_pnl_vnd,
+                    current_nav=current_nav,
+                    portfolio_pnl=portfolio_pnl,
+                    portfolio_pnl_pct=portfolio_pnl_pct,
+                    total_fees=total_fees
+                )
+            else:
+                # Use plain text logging
+                logger.info("=" * 80)
+                logger.info(f"📝 FILL EXECUTED | {contract}")
+
+                # Show fill with realized PnL if closing a position
+                if fill_realized_pnl_pts is not None and fill_realized_pnl_vnd is not None:
+                    logger.info(f"   Fill:                {side} {fill_qty} @ {float(fill_price):.1f} | Realized PnL: {float(fill_realized_pnl_pts):+.2f} pts | {float(fill_realized_pnl_vnd):+,.0f} (k) VND")
+                else:
+                    logger.info(f"   Fill:                {side} {fill_qty} @ {float(fill_price):.1f}")
+
+                logger.info(f"   Position Before ({inv_quantity_before:+d}): {position_before_detail}")
+                logger.info(f"   Position After ({inv_after:+d}):  {position_after_detail}")
+
+                logger.info(f"")
+                logger.info(f"💼 PORTFOLIO STATUS:")
+                logger.info(f"   Realized PnL:        {float(realized_pnl_pts):+.2f} pts | {float(realized_pnl_vnd):+,.0f} (k) VND")
+                logger.info(f"   Unrealized PnL:      {float(total_unrealized_pnl_pts):+.2f} pts | {float(total_unrealized_pnl_vnd):+,.0f} (k) VND")
+                logger.info(f"   Current NAV:         {float(current_nav):,.0f} (k) VND")
+                logger.info(f"   Portfolio PnL:       {float(portfolio_pnl):+,.0f} (k) VND ({float(portfolio_pnl_pct):+.2f}%) | Total Fee: {float(total_fees):,.0f} (k) VND")
+                logger.info("=" * 80 + "\n")
 
     def stop(self) -> PaperTradingResults:
         """
@@ -666,13 +860,21 @@ class RedisPaperTradingEngine:
 
         # Log audit summary and close
         if self.audit_logger:
+            # Calculate total orders (each signal generates 2 orders: BID + ASK)
+            total_orders = self.audit_logger.signal_count * 2
+
             self.audit_logger.log_summary(
                 total_signals=self.audit_logger.signal_count,
                 total_fills=self.audit_logger.fill_count,
                 total_rollovers=self.audit_logger.rollover_count,
                 initial_capital=self.initial_capital,
                 final_nav=results.final_nav if results else self.initial_capital,
-                hpr=results.hpr if results else Decimal('0')
+                hpr=results.hpr if results else Decimal('0'),
+                total_trades=results.total_trades if results else 0,
+                buy_trades=results.buy_trades if results else 0,
+                sell_trades=results.sell_trades if results else 0,
+                total_fees=results.total_fees if results else Decimal('0'),
+                total_orders=total_orders
             )
             self.audit_logger.close()
 
