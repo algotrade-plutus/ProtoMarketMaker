@@ -320,16 +320,19 @@ class PaperBrokerConnector:
         # TODO: Implement reconnection logic here
         # Could publish a system event to pause strategy
 
-    def _on_order_submit(self, order_id, **kwargs):
+    def _on_order_submit(self, **kwargs):
         """Handle order submit event (informational - earliest stage)"""
+        order_id = kwargs.get('cl_ord_id', kwargs.get('order_id', 'unknown'))
         self.logger.debug(f"📤 Order submit: {order_id} | kwargs: {kwargs}")
 
-    def _on_order_pending_new(self, order_id, **kwargs):
+    def _on_order_pending_new(self, **kwargs):
         """Handle order pending new event (informational - received by server)"""
+        order_id = kwargs.get('cl_ord_id', kwargs.get('order_id', 'unknown'))
         self.logger.debug(f"⏳ Order pending new: {order_id} | kwargs: {kwargs}")
 
-    def _on_order_update(self, order_id, **kwargs):
+    def _on_order_update(self, **kwargs):
         """Handle generic order update event (informational)"""
+        order_id = kwargs.get('cl_ord_id', kwargs.get('order_id', 'unknown'))
         self.logger.debug(f"🔄 Order update: {order_id} | kwargs: {kwargs}")
 
     def _on_order_accepted(self, order_id, **kwargs):

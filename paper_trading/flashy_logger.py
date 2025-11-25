@@ -232,13 +232,14 @@ class FlashyLogger:
         # Position Before
         text = Text()
         text.append("   Position Before (", style="bold")
-        # Color inventory based on position direction
-        if inv_before > 0:
-            text.append(f"{inv_before:+d}", style=self.ASK_COLOR)  # LONG = green
-        elif inv_before < 0:
-            text.append(f"{inv_before:+d}", style=self.BID_COLOR)  # SHORT = red
+        # Color inventory based on position direction (convert to int for format)
+        inv_before_int = int(inv_before)
+        if inv_before_int > 0:
+            text.append(f"{inv_before_int:+d}", style=self.ASK_COLOR)  # LONG = green
+        elif inv_before_int < 0:
+            text.append(f"{inv_before_int:+d}", style=self.BID_COLOR)  # SHORT = red
         else:
-            text.append(f"{inv_before:+d}", style="dim")  # FLAT
+            text.append(f"{inv_before_int:+d}", style="dim")  # FLAT
         text.append("):    ", style="bold")
         text.append_text(colorize_position_detail(position_before_detail, inv_before))
         self.console.print(text)
@@ -246,13 +247,14 @@ class FlashyLogger:
         # Position After
         text = Text()
         text.append("   Position After (", style="bold")
-        # Color inventory based on position direction
-        if inv_after > 0:
-            text.append(f"{inv_after:+d}", style=self.ASK_COLOR)  # LONG = green
-        elif inv_after < 0:
-            text.append(f"{inv_after:+d}", style=self.BID_COLOR)  # SHORT = red
+        # Color inventory based on position direction (convert to int for format)
+        inv_after_int = int(inv_after)
+        if inv_after_int > 0:
+            text.append(f"{inv_after_int:+d}", style=self.ASK_COLOR)  # LONG = green
+        elif inv_after_int < 0:
+            text.append(f"{inv_after_int:+d}", style=self.BID_COLOR)  # SHORT = red
         else:
-            text.append(f"{inv_after:+d}", style="dim")  # FLAT
+            text.append(f"{inv_after_int:+d}", style="dim")  # FLAT
         text.append("):     ", style="bold")
         text.append_text(colorize_position_detail(position_after_detail, inv_after))
         self.console.print(text)
