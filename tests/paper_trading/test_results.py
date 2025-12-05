@@ -11,7 +11,7 @@ from datetime import datetime, date
 from decimal import Decimal
 from pathlib import Path
 
-from paper_trading.results import PaperTradingResults
+from protomarketmaker.paper_trading.results import PaperTradingResults
 
 
 @pytest.fixture

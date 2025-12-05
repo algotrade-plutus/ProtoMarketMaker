@@ -10,14 +10,14 @@ from decimal import Decimal
 from datetime import datetime
 import uuid
 
-from core.event import EventBus, SignalEvent, OrderEvent, FillEvent
-from core.enums import EventType, OrderStatus
-from engine.oms import OrderManager
-from engine.portfolio import PortfolioManager
-from engine.risk import RiskManager
-from engine.strategy import MarketMakerStrategy
-from engine.paperbroker_execution import PaperBrokerExecutionEngine
-from connectors.paperbroker_connector import PaperBrokerConnector
+from protomarketmaker.core.event import EventBus, SignalEvent, OrderEvent, FillEvent
+from protomarketmaker.core.enums import EventType, OrderStatus
+from protomarketmaker.engine.oms import OrderManager
+from protomarketmaker.engine.portfolio import PortfolioManager
+from protomarketmaker.engine.risk import RiskManager
+from protomarketmaker.engine.strategy import MarketMakerStrategy
+from protomarketmaker.engine.paperbroker_execution import PaperBrokerExecutionEngine
+from protomarketmaker.connectors.paperbroker_connector import PaperBrokerConnector
 
 
 class TestPaperBrokerIntegration:

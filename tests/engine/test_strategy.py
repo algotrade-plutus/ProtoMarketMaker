@@ -4,10 +4,10 @@ Unit tests for Strategy Engine
 import pytest
 from decimal import Decimal
 from datetime import datetime, timedelta
-from core.event import EventBus, MarketDataEvent, FillEvent, SignalEvent
-from core.enums import EventType
-from engine.portfolio import PortfolioManager
-from engine.strategy import MarketMakerStrategy
+from protomarketmaker.core.event import EventBus, MarketDataEvent, FillEvent, SignalEvent
+from protomarketmaker.core.enums import EventType
+from protomarketmaker.engine.portfolio import PortfolioManager
+from protomarketmaker.engine.strategy import MarketMakerStrategy
 
 
 class TestMarketMakerStrategy:

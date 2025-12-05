@@ -6,7 +6,7 @@ from decimal import Decimal
 from datetime import date
 from pathlib import Path
 
-from core.event import EventBus, EventType
+from protomarketmaker.core.event import EventBus, EventType
 from backtesting.data_feed import HistoricalDataFeed
 
 

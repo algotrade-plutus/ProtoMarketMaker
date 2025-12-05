@@ -15,9 +15,9 @@ from decimal import Decimal
 from datetime import datetime, date
 from pathlib import Path
 
-from paper_trading.engine import RedisPaperTradingEngine
-from paper_trading.results import PaperTradingResults
-from tools.redis_publisher import RedisMarketDataPublisher
+from protomarketmaker.paper_trading.engine import RedisPaperTradingEngine
+from protomarketmaker.paper_trading.results import PaperTradingResults
+from protomarketmaker.tools.redis_publisher import RedisMarketDataPublisher
 
 
 # Mark all tests in this file as integration tests

@@ -14,9 +14,9 @@ import json
 from unittest.mock import Mock, patch, MagicMock
 import redis
 
-from core.event import EventBus, MarketDataEvent
-from core.enums import EventType
-from data.redis_stream import RedisMarketDataHandler
+from protomarketmaker.core.event import EventBus, MarketDataEvent
+from protomarketmaker.core.enums import EventType
+from protomarketmaker.data.redis_stream import RedisMarketDataHandler
 
 
 class TestHandlerCore:

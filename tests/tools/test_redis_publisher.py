@@ -16,7 +16,7 @@ from datetime import datetime, date
 from unittest.mock import Mock, MagicMock, patch, call
 import pandas as pd
 
-from tools.redis_publisher import RedisMarketDataPublisher
+from protomarketmaker.tools.redis_publisher import RedisMarketDataPublisher
 
 
 class TestMergedFileMode:
@@ -39,7 +39,7 @@ class TestMergedFileMode:
         assert publisher.redis_client is None
         assert publisher.messages_published == 0
 
-    @patch('tools.redis_publisher.redis.Redis')
+    @patch('protomarketmaker.tools.redis_publisher.redis.Redis')
     def test_connect_success(self, mock_redis_class):
         """Test successful Redis connection"""
         mock_client = MagicMock()
@@ -52,7 +52,7 @@ class TestMergedFileMode:
         assert publisher.redis_client == mock_client
         mock_client.ping.assert_called_once()
 
-    @patch('tools.redis_publisher.redis.Redis')
+    @patch('protomarketmaker.tools.redis_publisher.redis.Redis')
     def test_connect_failure(self, mock_redis_class):
         """Test failed Redis connection"""
         mock_client = MagicMock()
@@ -102,7 +102,7 @@ class TestMergedFileMode:
         with pytest.raises(RuntimeError, match="Not connected to Redis"):
             publisher.publish_message('VN30F1M', message_data)
 
-    @patch('tools.redis_publisher.pd.read_csv')
+    @patch('protomarketmaker.tools.redis_publisher.pd.read_csv')
     def test_publish_from_csv_merged_mode(self, mock_read_csv):
         """Test publishing from single merged CSV file (backward compatibility)"""
         publisher = RedisMarketDataPublisher()
@@ -131,7 +131,7 @@ class TestMergedFileMode:
         # Should have published using merged mode
         assert publisher.messages_published == 1
 
-    @patch('tools.redis_publisher.pd.read_csv')
+    @patch('protomarketmaker.tools.redis_publisher.pd.read_csv')
     def test_publish_from_csv_basic(self, mock_read_csv):
         """Test publishing from CSV file"""
         publisher = RedisMarketDataPublisher()
@@ -155,7 +155,7 @@ class TestMergedFileMode:
         assert publisher.messages_published == 2
         assert mock_client.publish.call_count == 2
 
-    @patch('tools.redis_publisher.pd.read_csv')
+    @patch('protomarketmaker.tools.redis_publisher.pd.read_csv')
     def test_publish_from_csv_with_max_messages(self, mock_read_csv):
         """Test publishing from CSV with max messages"""
         publisher = RedisMarketDataPublisher()
@@ -238,7 +238,7 @@ class TestMergedFileMode:
         assert stats['messages_published'] == 0
         assert stats['connected'] is False
 
-    @patch('tools.redis_publisher.pd.read_csv')
+    @patch('protomarketmaker.tools.redis_publisher.pd.read_csv')
     def test_publish_from_csv_file_not_found(self, mock_read_csv):
         """Test handling file not found error"""
         publisher = RedisMarketDataPublisher()
@@ -322,7 +322,7 @@ class TestDualFileMode:
     with synchronized timestamps and conditional F2M publishing.
     """
 
-    @patch('tools.redis_publisher.pd.read_csv')
+    @patch('protomarketmaker.tools.redis_publisher.pd.read_csv')
     def test_load_separate_files(self, mock_read_csv):
         """Test loading separate F1M and F2M files"""
         publisher = RedisMarketDataPublisher()
@@ -394,7 +394,7 @@ class TestDualFileMode:
         assert decoded['contract'] == 'VN30F1M'
         assert decoded['price'] == 1250.0
 
-    @patch('tools.redis_publisher.pd.read_csv')
+    @patch('protomarketmaker.tools.redis_publisher.pd.read_csv')
     def test_publish_dual_files_basic(self, mock_read_csv):
         """Test basic dual-file publishing algorithm (no rollover)"""
         publisher = RedisMarketDataPublisher()
@@ -433,7 +433,7 @@ class TestDualFileMode:
         # Should have published 2 F1M messages (no F2M since not in rollover)
         assert publisher.messages_published == 2
 
-    @patch('tools.redis_publisher.pd.read_csv')
+    @patch('protomarketmaker.tools.redis_publisher.pd.read_csv')
     def test_synchronized_reading(self, mock_read_csv):
         """Test F1M and F2M timestamps stay synchronized"""
         publisher = RedisMarketDataPublisher()
@@ -481,7 +481,7 @@ class TestDualFileMode:
         # Expected: 3 F1M + 3 F2M = 6 total
         assert publisher.messages_published == 6
 
-    @patch('tools.redis_publisher.pd.read_csv')
+    @patch('protomarketmaker.tools.redis_publisher.pd.read_csv')
     def test_f1m_always_published(self, mock_read_csv):
         """Test F1M is always published regardless of rollover status"""
         publisher = RedisMarketDataPublisher()
@@ -527,7 +527,7 @@ class TestDualFileMode:
         # F1M should always be published
         assert any('VN30F1M' in ch for ch in published_channels)
 
-    @patch('tools.redis_publisher.pd.read_csv')
+    @patch('protomarketmaker.tools.redis_publisher.pd.read_csv')
     def test_publish_from_csv_dual_mode(self, mock_read_csv):
         """Test publish_from_csv with dual-file parameters"""
         publisher = RedisMarketDataPublisher()
@@ -723,7 +723,7 @@ class TestConditionalF2Publishing:
         )
         assert result is False
 
-    @patch('tools.redis_publisher.pd.read_csv')
+    @patch('protomarketmaker.tools.redis_publisher.pd.read_csv')
     def test_f2m_only_during_rollover_window(self, mock_read_csv):
         """Test F2M is only published during rollover window"""
         publisher = RedisMarketDataPublisher()
@@ -773,7 +773,7 @@ class TestConditionalF2Publishing:
         assert f1m_count == 2  # Always published
         assert f2m_count == 2  # Published during rollover
 
-    @patch('tools.redis_publisher.pd.read_csv')
+    @patch('protomarketmaker.tools.redis_publisher.pd.read_csv')
     def test_f2m_count_vs_f1m_count(self, mock_read_csv):
         """Test F2M message count is less than F1M when not always in rollover"""
         publisher = RedisMarketDataPublisher()

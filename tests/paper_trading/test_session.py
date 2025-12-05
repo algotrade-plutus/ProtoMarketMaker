@@ -6,7 +6,7 @@ from decimal import Decimal
 import pandas as pd
 from datetime import datetime
 
-from paper_trading.session import TradingSession
+from protomarketmaker.paper_trading.session import TradingSession
 
 
 class TestTradingSession:

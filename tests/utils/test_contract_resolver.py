@@ -7,7 +7,7 @@ correct contract symbol resolution to prevent trading bugs.
 
 import pytest
 from datetime import date
-from utils.contract_resolver import ContractSymbolResolver
+from protomarketmaker.utils.contract_resolver import ContractSymbolResolver
 
 
 class TestContractSymbolResolverAutoDetection:

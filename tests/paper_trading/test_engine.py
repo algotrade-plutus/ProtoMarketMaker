@@ -13,8 +13,8 @@ from decimal import Decimal
 from datetime import datetime
 from unittest.mock import Mock, MagicMock, patch
 
-from paper_trading.engine import RedisPaperTradingEngine
-from paper_trading.results import PaperTradingResults
+from protomarketmaker.paper_trading.engine import RedisPaperTradingEngine
+from protomarketmaker.paper_trading.results import PaperTradingResults
 
 
 @pytest.fixture
@@ -79,14 +79,14 @@ class TestEngineCore:
     - Component wiring
     """
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_initialization_default(
         self, mock_event_bus, mock_portfolio, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor, mock_redis_handler
@@ -105,14 +105,14 @@ class TestEngineCore:
         assert engine.start_time is None
         assert engine.end_time is None
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_initialization_with_contracts(
         self, mock_event_bus, mock_portfolio, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor, mock_redis_handler
@@ -127,14 +127,14 @@ class TestEngineCore:
 
         assert engine.contracts == contracts
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_initialization_with_redis_settings(
         self, mock_event_bus, mock_portfolio, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor, mock_redis_handler
@@ -155,15 +155,15 @@ class TestEngineCore:
         assert call_kwargs['redis_port'] == 6380
         assert call_kwargs['channel_prefix'] == 'data'
 
-    @patch('paper_trading.engine.EventRecorder')
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.EventRecorder')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_initialization_with_event_recording(
         self, mock_event_bus, mock_portfolio, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor, mock_redis_handler, mock_recorder
@@ -179,14 +179,14 @@ class TestEngineCore:
         mock_recorder.assert_called_once_with('logs/test.jsonl')
         assert engine.recorder is not None
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_start_success(
         self, mock_event_bus, mock_portfolio, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor, mock_redis_handler
@@ -215,14 +215,14 @@ class TestEngineCore:
         redis_instance.subscribe.assert_called_once_with(['VN30F2510'])
         redis_instance.start.assert_called_once()
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_start_already_running(
         self, mock_event_bus, mock_portfolio, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor, mock_redis_handler
@@ -246,14 +246,14 @@ class TestEngineCore:
 
         assert success is False
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_start_subscribe_failure(
         self, mock_event_bus, mock_portfolio, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor, mock_redis_handler
@@ -276,14 +276,14 @@ class TestEngineCore:
         assert success is False
         assert engine._running is False
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_stop_success(
         self, mock_event_bus, mock_portfolio_class, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor_class, mock_redis_handler
@@ -333,14 +333,14 @@ class TestEngineCore:
         assert isinstance(results, PaperTradingResults)
         redis_instance.stop.assert_called_once()
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_stop_not_running(
         self, mock_event_bus, mock_portfolio, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor, mock_redis_handler
@@ -357,14 +357,14 @@ class TestEngineCore:
 
     @patch('time.sleep')
     @patch('signal.signal')
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_run_with_duration(
         self, mock_event_bus, mock_portfolio_class, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor_class, mock_redis_handler,
@@ -414,14 +414,14 @@ class TestEngineCore:
         # With event processing loop, sleep is called with 0.01s many times
         mock_sleep.assert_called_with(0.01)
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_run_start_failure(
         self, mock_event_bus, mock_portfolio, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor, mock_redis_handler
@@ -453,14 +453,14 @@ class TestEnginePlaybackMode:
     - Processes historical data
     """
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_playback_mode_initialization(
         self, mock_event_bus, mock_portfolio, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor, mock_redis_handler
@@ -475,14 +475,14 @@ class TestEnginePlaybackMode:
         assert engine.mode == 'playback'
         assert engine.contracts == ['VN30F1M']  # Default abstract symbol
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_playback_abstract_symbols(
         self, mock_event_bus, mock_portfolio, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor, mock_redis_handler
@@ -509,14 +509,14 @@ class TestEnginePlaybackMode:
         # Verify abstract symbols were used for subscription
         redis_instance.subscribe.assert_called_once_with(['VN30F1M'])
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_playback_with_f2m_window(
         self, mock_event_bus, mock_portfolio, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor, mock_redis_handler
@@ -550,14 +550,14 @@ class TestEngineLiveMode:
     - Processes live market data
     """
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_live_mode_initialization(
         self, mock_event_bus, mock_portfolio, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor, mock_redis_handler
@@ -573,14 +573,14 @@ class TestEngineLiveMode:
         assert engine.mode == 'live'
         assert engine.contracts == ['VN30F2510']  # Actual contract code
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_live_actual_contract_codes(
         self, mock_event_bus, mock_portfolio, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor, mock_redis_handler
@@ -607,14 +607,14 @@ class TestEngineLiveMode:
         # Verify actual contract codes were used for subscription
         redis_instance.subscribe.assert_called_once_with(['VN30F2510'])
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_live_mode_multiple_contracts(
         self, mock_event_bus, mock_portfolio, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor, mock_redis_handler
@@ -649,14 +649,14 @@ class TestEngineResults:
     Tests real-time summary and results generation
     """
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_get_summary_not_running(
         self, mock_event_bus, mock_portfolio, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor, mock_redis_handler
@@ -671,14 +671,14 @@ class TestEngineResults:
 
         assert summary['status'] == 'stopped'
 
-    @patch('paper_trading.engine.RedisMarketDataHandler')
-    @patch('paper_trading.engine.PerformanceMonitor')
-    @patch('paper_trading.engine.MockExecutionEngine')
-    @patch('paper_trading.engine.MarketMakerStrategy')
-    @patch('paper_trading.engine.OrderManager')
-    @patch('paper_trading.engine.RiskManager')
-    @patch('paper_trading.engine.PortfolioManager')
-    @patch('paper_trading.engine.EventBus')
+    @patch('protomarketmaker.paper_trading.engine.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.engine.PerformanceMonitor')
+    @patch('protomarketmaker.paper_trading.engine.MockExecutionEngine')
+    @patch('protomarketmaker.paper_trading.engine.MarketMakerStrategy')
+    @patch('protomarketmaker.paper_trading.engine.OrderManager')
+    @patch('protomarketmaker.paper_trading.engine.RiskManager')
+    @patch('protomarketmaker.paper_trading.engine.PortfolioManager')
+    @patch('protomarketmaker.paper_trading.engine.EventBus')
     def test_get_summary_running(
         self, mock_event_bus, mock_portfolio_class, mock_risk, mock_oms,
         mock_strategy, mock_execution, mock_monitor_class, mock_redis_handler

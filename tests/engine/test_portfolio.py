@@ -4,8 +4,8 @@ Unit tests for Portfolio Manager
 import pytest
 from decimal import Decimal
 from datetime import datetime
-from core.event import EventBus, FillEvent, MarketDataEvent, TimeEvent
-from engine.portfolio import PortfolioManager
+from protomarketmaker.core.event import EventBus, FillEvent, MarketDataEvent, TimeEvent
+from protomarketmaker.engine.portfolio import PortfolioManager
 
 
 class TestPortfolioManager:

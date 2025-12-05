@@ -11,9 +11,9 @@ from decimal import Decimal
 from datetime import datetime
 from threading import Lock
 
-from connectors.paperbroker_connector import PaperBrokerConnector
-from core.event import EventBus, FillEvent, OrderEvent
-from core.enums import EventType
+from protomarketmaker.connectors.paperbroker_connector import PaperBrokerConnector
+from protomarketmaker.core.event import EventBus, FillEvent, OrderEvent
+from protomarketmaker.core.enums import EventType
 
 
 class TestPaperBrokerConnector:

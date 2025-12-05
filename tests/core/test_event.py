@@ -4,11 +4,11 @@ Unit tests for event system
 import pytest
 from datetime import datetime
 from decimal import Decimal
-from core.event import (
+from protomarketmaker.core.event import (
     Event, EventBus, MarketDataEvent, SignalEvent,
     OrderEvent, FillEvent, TimeEvent
 )
-from core.enums import EventType
+from protomarketmaker.core.enums import EventType
 
 
 class TestEventClasses:

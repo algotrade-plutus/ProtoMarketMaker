@@ -15,11 +15,11 @@ from decimal import Decimal
 from datetime import datetime, date
 from unittest.mock import patch
 
-from tools.redis_publisher import RedisMarketDataPublisher
-from paper_trading.engine import RedisPaperTradingEngine
-from utils.contract_resolver import ContractSymbolResolver
-from core.event import EventBus, MarketDataEvent
-from core.enums import EventType
+from protomarketmaker.tools.redis_publisher import RedisMarketDataPublisher
+from protomarketmaker.paper_trading.engine import RedisPaperTradingEngine
+from protomarketmaker.utils.contract_resolver import ContractSymbolResolver
+from protomarketmaker.core.event import EventBus, MarketDataEvent
+from protomarketmaker.core.enums import EventType
 
 
 pytestmark = pytest.mark.integration

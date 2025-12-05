@@ -6,7 +6,7 @@ from decimal import Decimal
 from datetime import datetime
 from unittest.mock import Mock, MagicMock, patch
 
-from paper_trading.redis_session import RedisTradingSession
+from protomarketmaker.paper_trading.redis_session import RedisTradingSession
 
 
 class TestRedisTradingSession:
@@ -45,7 +45,7 @@ class TestRedisTradingSession:
         assert session.redis_handler is not None
         assert session.running is False
 
-    @patch('paper_trading.redis_session.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.redis_session.RedisMarketDataHandler')
     def test_start_success(self, mock_handler_class):
         """Test successful session start"""
         mock_handler = MagicMock()
@@ -68,7 +68,7 @@ class TestRedisTradingSession:
         mock_handler.subscribe.assert_called_once_with(['VN30F1M', 'VN30F2M'])
         mock_handler.start.assert_called_once()
 
-    @patch('paper_trading.redis_session.RedisMarketDataHandler')
+    @patch('protomarketmaker.paper_trading.redis_session.RedisMarketDataHandler')
     def test_start_connection_failure(self, mock_handler_class):
         """Test session start with connection failure"""
         mock_handler = MagicMock()

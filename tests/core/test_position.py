@@ -3,7 +3,7 @@ Unit tests for Position class
 """
 import pytest
 from decimal import Decimal
-from core.position import Position
+from protomarketmaker.core.position import Position
 
 
 class TestPosition:

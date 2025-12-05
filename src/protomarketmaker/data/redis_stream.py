@@ -10,7 +10,7 @@ import time
 from decimal import Decimal
 from datetime import datetime, date
 from dateutil.rrule import rrule, MONTHLY, TH
-from typing import List, Optional, Callable, Literal
+from typing import List, Optional, Callable, Literal, Dict
 import logging
 
 from protomarketmaker.core import EventBus, MarketDataEvent, EventType
@@ -26,6 +26,19 @@ class RedisMarketDataHandler:
     - Deserialize JSON to MarketDataEvent
     - Publish events to EventBus
     - Handle reconnection on disconnect
+    - Handle incomplete ticks with forward-fill (live data)
+
+    Incomplete Tick Handling:
+    - Live market data may have partial updates (bid/ask/price can be None)
+    - Maintains state cache per contract with last-known-good values
+    - Forward-fills missing values from cache when available
+    - Skips ticks when critical data (price) is missing with no cache
+    - Fully backward compatible with historical data (complete ticks)
+
+    Data Format Support:
+    - Live format: instrument, latest_matched_price, bid_price_1, ask_price_1
+    - Historical format: contract, price, bid, ask
+    - Timestamp formats: Unix timestamp (int/float) or ISO string
 
     Example:
         handler = RedisMarketDataHandler(
@@ -43,6 +56,8 @@ class RedisMarketDataHandler:
         redis_host: str = 'localhost',
         redis_port: int = 6379,
         redis_db: int = 0,
+        redis_password: Optional[str] = None,
+        redis_decode_responses: bool = True,
         channel_prefix: str = 'market',
         mode: Literal['playback', 'live'] = 'playback',
         f2m_window_days: int = 3
@@ -55,6 +70,8 @@ class RedisMarketDataHandler:
             redis_host: Redis server hostname
             redis_port: Redis server port
             redis_db: Redis database number
+            redis_password: Redis password for authentication (None if no auth required)
+            redis_decode_responses: Whether to decode responses to strings (True) or keep as bytes (False)
             channel_prefix: Channel name prefix (e.g., 'market:VN30F1M')
             mode: Operating mode - 'playback' (abstract symbols) or 'live' (actual contracts)
             f2m_window_days: Days before expiration to subscribe to F2M (default: 3)
@@ -63,6 +80,8 @@ class RedisMarketDataHandler:
         self.redis_host = redis_host
         self.redis_port = redis_port
         self.redis_db = redis_db
+        self.redis_password = redis_password
+        self.redis_decode_responses = redis_decode_responses
         self.channel_prefix = channel_prefix
         self.mode = mode
         self.f2m_window_days = f2m_window_days
@@ -89,6 +108,12 @@ class RedisMarketDataHandler:
         self.reconnect_count = 0
         self.last_message_time: Optional[datetime] = None
 
+        # State cache for incomplete tick handling (live data)
+        # Format: {'VN30F2511': {'price': Decimal('1250'), 'bid': Decimal('1249'), 'ask': Decimal('1251')}}
+        self.last_known_state: Dict[str, Dict[str, Decimal]] = {}
+        self.messages_skipped_incomplete = 0
+        self.messages_forward_filled = 0
+
         self.logger = logging.getLogger(__name__)
 
     def connect(self) -> bool:
@@ -103,7 +128,8 @@ class RedisMarketDataHandler:
                 host=self.redis_host,
                 port=self.redis_port,
                 db=self.redis_db,
-                decode_responses=True,
+                password=self.redis_password,
+                decode_responses=self.redis_decode_responses,
                 socket_connect_timeout=5,
                 socket_keepalive=True,
                 health_check_interval=30
@@ -429,32 +455,139 @@ class RedisMarketDataHandler:
         """
         Process incoming Redis message
 
+        Handles both complete ticks (historical data) and incomplete ticks (live data).
+        Uses forward-fill from last-known-state cache for missing values.
+
+        Data Format Detection:
+        - Live format: 'instrument', 'latest_matched_price', 'bid_price_1', 'ask_price_1'
+        - Historical format: 'contract', 'price', 'bid', 'ask'
+        - Auto-detects based on presence of 'instrument' vs 'contract' field
+
+        Timestamp Handling:
+        - Live: Unix timestamp (int/float) -> datetime.fromtimestamp()
+        - Historical: ISO string -> datetime.fromisoformat()
+
+        Forward-Fill Logic:
+        1. Extract new values from incoming tick (may be None)
+        2. Fill missing values from per-contract state cache
+        3. Skip tick if price is None (critical field)
+        4. Skip tick if bid/ask are None and not cached
+        5. Update cache with new non-None values
+        6. Emit MarketDataEvent only for complete ticks
+
+        Statistics Tracking:
+        - messages_processed: Successfully processed complete ticks
+        - messages_skipped_incomplete: Ticks skipped due to missing data
+        - messages_forward_filled: Ticks that used cached values
+        - messages_failed: JSON parsing or validation errors
+
         Args:
             message: Redis message dict with 'data' field
         """
         try:
             # Deserialize JSON
             data = json.loads(message['data'])
+            self.logger.debug(f"Received message fields: {list(data.keys())}")
 
-            # Validate required fields
-            required_fields = ['timestamp', 'contract', 'price', 'bid', 'ask']
-            for field in required_fields:
-                if field not in data:
-                    raise KeyError(f"Missing required field: {field}")
+            # Validate minimum required fields
+            if 'timestamp' not in data:
+                raise KeyError("Missing required field: timestamp")
 
-            # Create MarketDataEvent
+            # Detect data format and extract fields
+            # Live format: instrument, latest_matched_price, bid_price_1, ask_price_1
+            # Historical/playback format: contract, price, bid, ask
+            if 'instrument' in data:
+                # Live data format
+                contract = data['instrument'].split(':')[1] if ':' in data['instrument'] else data['instrument']
+                new_price = data.get('latest_matched_price')
+                new_bid = data.get('bid_price_1')
+                new_ask = data.get('ask_price_1')
+            elif 'contract' in data:
+                # Historical/playback data format
+                contract = data['contract']
+                new_price = data.get('price')
+                new_bid = data.get('bid')
+                new_ask = data.get('ask')
+            else:
+                raise KeyError("Missing required field: instrument or contract")
+
+            # Initialize cache for new contract
+            if contract not in self.last_known_state:
+                self.last_known_state[contract] = {}
+                self.logger.info(f"Initialized state cache for new contract: {contract}")
+
+            cache = self.last_known_state[contract]
+
+            # Forward-fill missing values from cache
+            price = new_price if new_price is not None else cache.get('price')
+            bid = new_bid if new_bid is not None else cache.get('bid')
+            ask = new_ask if new_ask is not None else cache.get('ask')
+
+            # Skip tick if no price (price is critical for trading)
+            if price is None:
+                self.logger.warning(
+                    f"Skipping tick for {contract}: no price data "
+                    f"(new_price={new_price}, cache_price={cache.get('price')})"
+                )
+                self.messages_skipped_incomplete += 1
+                return
+
+            # Skip tick if missing bid/ask and not in cache (incomplete data)
+            if bid is None or ask is None:
+                self.logger.debug(
+                    f"Skipping tick for {contract}: incomplete bid/ask "
+                    f"(new_bid={new_bid}, new_ask={new_ask}, "
+                    f"cache_bid={cache.get('bid')}, cache_ask={cache.get('ask')})"
+                )
+                self.messages_skipped_incomplete += 1
+
+                # Still update cache with price if available
+                if new_price is not None:
+                    cache['price'] = Decimal(str(new_price))
+
+                return
+
+            # Update cache with new non-None values
+            if new_price is not None:
+                cache['price'] = Decimal(str(new_price))
+            if new_bid is not None:
+                cache['bid'] = Decimal(str(new_bid))
+            if new_ask is not None:
+                cache['ask'] = Decimal(str(new_ask))
+
+            # Track forward-fill usage
+            forward_filled = (new_bid is None) or (new_ask is None) or (new_price is None)
+            if forward_filled:
+                self.messages_forward_filled += 1
+                self.logger.debug(
+                    f"Forward-filled tick for {contract}: "
+                    f"price={'cached' if new_price is None else 'new'}, "
+                    f"bid={'cached' if new_bid is None else 'new'}, "
+                    f"ask={'cached' if new_ask is None else 'new'}"
+                )
+
+            # Parse timestamp (handle both Unix timestamp and ISO string formats)
+            timestamp_value = data['timestamp']
+            if isinstance(timestamp_value, (int, float)):
+                # Live data: Unix timestamp
+                timestamp = datetime.fromtimestamp(timestamp_value)
+            else:
+                # Historical data: ISO string format
+                timestamp = datetime.fromisoformat(str(timestamp_value))
+
+            # Create complete MarketDataEvent
             event = MarketDataEvent(
-                timestamp=datetime.fromisoformat(data['timestamp']),
-                contract=data['contract'],
-                price=Decimal(str(data['price'])),
-                bid=Decimal(str(data['bid'])),
-                ask=Decimal(str(data['ask'])),
-                spread=Decimal(str(data.get('spread', float(data['ask']) - float(data['bid']))))
+                timestamp=timestamp,
+                contract=contract,
+                price=Decimal(str(price)),
+                bid=Decimal(str(bid)),
+                ask=Decimal(str(ask)),
+                spread=Decimal(str(ask)) - Decimal(str(bid))
             )
 
             # Check and manage F2M subscription on F1M messages
             # This enables automatic F2M subscription during rollover period
-            if 'F1M' in data['contract'] or (self.f1m_contract and data['contract'] == self.f1m_contract):
+            if 'F1M' in contract or (self.f1m_contract and contract == self.f1m_contract):
                 # Extract actual contract symbol from message (e.g., VN30F2201 from tickersymbol field if available)
                 # In playback mode, contract is abstract (VN30F1M), but we need actual contract for rollover detection
                 # The actual contract symbol should be passed in a separate field or extracted from context
@@ -463,7 +596,7 @@ class RedisMarketDataHandler:
                 current_date = event.timestamp.date()
 
                 # Try to get actual contract from message data (if available)
-                actual_contract = data.get('tickersymbol', data['contract'])
+                actual_contract = data.get('tickersymbol', contract)
 
                 # Only manage F2M subscription if we have an actual contract code (not abstract VN30F1M)
                 if len(actual_contract) > 8:  # VN30F2201 has more characters than VN30F1M
@@ -471,12 +604,17 @@ class RedisMarketDataHandler:
 
             # Publish to EventBus
             self.event_bus.publish(event)
-
             self.messages_processed += 1
 
-            # Log every 100 messages
+            # Log every 100 processed messages
             if self.messages_processed % 100 == 0:
-                self.logger.info(f"Processed {self.messages_processed} messages")
+                self.logger.info(
+                    f"Tick stats: received={self.messages_received} "
+                    f"processed={self.messages_processed} "
+                    f"skipped={self.messages_skipped_incomplete} "
+                    f"forward_filled={self.messages_forward_filled} "
+                    f"cache_size={len(self.last_known_state)}"
+                )
 
         except (json.JSONDecodeError, KeyError, ValueError, TypeError) as e:
             self.messages_failed += 1
@@ -506,16 +644,31 @@ class RedisMarketDataHandler:
 
     def get_statistics(self) -> dict:
         """
-        Get handler statistics
+        Get handler statistics including incomplete tick metrics
 
         Returns:
-            Dictionary with statistics
+            Dictionary with the following keys:
+            - messages_received: Total messages received from Redis
+            - messages_processed: Successfully processed complete ticks
+            - messages_failed: JSON parsing or validation errors
+            - messages_skipped_incomplete: Ticks skipped due to missing critical data
+            - messages_forward_filled: Ticks that used cached values
+            - processing_errors: Alias for messages_failed (backward compatibility)
+            - cache_size: Number of contracts with cached state
+            - cached_contracts: List of contract symbols in cache
+            - reconnect_count: Number of reconnection attempts
+            - is_running: Whether handler is currently running
+            - last_message_time: ISO timestamp of last received message (or None)
         """
         return {
             'messages_received': self.messages_received,
             'messages_processed': self.messages_processed,
             'messages_failed': self.messages_failed,
+            'messages_skipped_incomplete': self.messages_skipped_incomplete,
+            'messages_forward_filled': self.messages_forward_filled,
             'processing_errors': self.messages_failed,  # Alias for compatibility
+            'cache_size': len(self.last_known_state),
+            'cached_contracts': list(self.last_known_state.keys()),
             'reconnect_count': self.reconnect_count,
             'is_running': self.running,
             'last_message_time': self.last_message_time.isoformat() if self.last_message_time else None

@@ -10,9 +10,9 @@ import json
 from decimal import Decimal
 from datetime import datetime
 
-from core.event import EventBus, EventType
-from paper_trading.redis_session import RedisTradingSession
-from tools.redis_publisher import RedisMarketDataPublisher
+from protomarketmaker.core.event import EventBus, EventType
+from protomarketmaker.paper_trading.redis_session import RedisTradingSession
+from protomarketmaker.tools.redis_publisher import RedisMarketDataPublisher
 
 
 # Mark all tests in this file as integration tests

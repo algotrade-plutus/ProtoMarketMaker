@@ -4,9 +4,9 @@ Unit tests for OMS
 import pytest
 from decimal import Decimal
 from datetime import datetime
-from core.event import EventBus, SignalEvent, FillEvent
-from core.enums import OrderSide, OrderStatus
-from engine.oms import OrderManager
+from protomarketmaker.core.event import EventBus, SignalEvent, FillEvent
+from protomarketmaker.core.enums import OrderSide, OrderStatus
+from protomarketmaker.engine.oms import OrderManager
 
 
 class TestOrderManager:

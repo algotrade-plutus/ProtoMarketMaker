@@ -8,13 +8,13 @@ import pytest
 from decimal import Decimal
 from datetime import datetime, timedelta
 
-from core.event import EventBus, MarketDataEvent, TimeEvent
-from core.enums import EventType
-from engine.strategy import MarketMakerStrategy
-from engine.oms import OrderManager
-from engine.portfolio import PortfolioManager
-from engine.risk import RiskManager
-from engine.execution import MockExecutionEngine
+from protomarketmaker.core.event import EventBus, MarketDataEvent, TimeEvent
+from protomarketmaker.core.enums import EventType
+from protomarketmaker.engine.strategy import MarketMakerStrategy
+from protomarketmaker.engine.oms import OrderManager
+from protomarketmaker.engine.portfolio import PortfolioManager
+from protomarketmaker.engine.risk import RiskManager
+from protomarketmaker.engine.execution import MockExecutionEngine
 
 
 class TestEndToEndFlow:

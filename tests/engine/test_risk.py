@@ -4,11 +4,11 @@ Unit tests for Risk Manager
 import pytest
 from decimal import Decimal
 from datetime import datetime
-from core.event import EventBus, FillEvent, MarketDataEvent
-from core.order import Order
-from core.enums import OrderSide
-from engine.portfolio import PortfolioManager
-from engine.risk import RiskManager
+from protomarketmaker.core.event import EventBus, FillEvent, MarketDataEvent
+from protomarketmaker.core.order import Order
+from protomarketmaker.core.enums import OrderSide
+from protomarketmaker.engine.portfolio import PortfolioManager
+from protomarketmaker.engine.risk import RiskManager
 
 
 class TestRiskManager:

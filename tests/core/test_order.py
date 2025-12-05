@@ -3,8 +3,8 @@ Unit tests for Order class
 """
 import pytest
 from decimal import Decimal
-from core.order import Order
-from core.enums import OrderSide, OrderStatus
+from protomarketmaker.core.order import Order
+from protomarketmaker.core.enums import OrderSide, OrderStatus
 
 
 class TestOrder:

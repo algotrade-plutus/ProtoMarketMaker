@@ -5,9 +5,9 @@ import pytest
 from decimal import Decimal
 from datetime import datetime
 
-from core.event import EventBus, FillEvent, TimeEvent
-from core.enums import EventType
-from evaluation.monitor import PerformanceMonitor
+from protomarketmaker.core.event import EventBus, FillEvent, TimeEvent
+from protomarketmaker.core.enums import EventType
+from protomarketmaker.evaluation.monitor import PerformanceMonitor
 
 
 class TestPerformanceMonitor:

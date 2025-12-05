@@ -4,9 +4,9 @@ Unit tests for Mock Execution Engine
 import pytest
 from decimal import Decimal
 from datetime import datetime
-from core.event import EventBus, OrderEvent, MarketDataEvent, FillEvent
-from core.enums import EventType
-from engine.execution import MockExecutionEngine
+from protomarketmaker.core.event import EventBus, OrderEvent, MarketDataEvent, FillEvent
+from protomarketmaker.core.enums import EventType
+from protomarketmaker.engine.execution import MockExecutionEngine
 
 
 class TestMockExecutionEngine:

@@ -8,9 +8,9 @@ from pathlib import Path
 import tempfile
 import json
 
-from paper_trading.recorder import EventRecorder, EventReplayer
-from core.event import MarketDataEvent, SignalEvent, OrderEvent
-from core.enums import EventType
+from protomarketmaker.paper_trading.recorder import EventRecorder, EventReplayer
+from protomarketmaker.core.event import MarketDataEvent, SignalEvent, OrderEvent
+from protomarketmaker.core.enums import EventType
 
 
 class TestEventRecorder:
