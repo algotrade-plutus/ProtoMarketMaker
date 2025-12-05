@@ -259,7 +259,7 @@ class PaperBrokerConnector:
                 f"✅ Order submitted to PaperBroker: PMM:{order_id[:8]} → PB:{pb_order_id} | "
                 f"{side} {quantity} {symbol} @ {price}"
             )
-            self.logger.info(f"   Stored order details in order_map['{pb_order_id}']")
+            self.logger.debug(f"Stored order details in order_map['{pb_order_id}']")
 
             return pb_order_id
 
@@ -338,24 +338,19 @@ class PaperBrokerConnector:
     def _on_order_accepted(self, order_id, **kwargs):
         """Handle order accepted (NEW status)"""
         try:
-            self.logger.info(f"🔍 Order accepted event received:")
-            self.logger.info(f"   order_id parameter: {order_id}")
-            self.logger.info(f"   kwargs keys: {list(kwargs.keys())}")
-            self.logger.info(f"   Full kwargs: {kwargs}")
+            self.logger.debug(f"Order accepted event: order_id={order_id}, kwargs={kwargs}")
 
             # Try to find order info
             # The order_id parameter might be either the client order ID or server order ID
             client_order_id = kwargs.get('cl_ord_id', kwargs.get('client_order_id', None))
 
             with self.order_map_lock:
-                self.logger.info(f"   Current order_map keys: {list(self.order_map.keys())}")
-
                 # Try the parameter first
                 order_info = self.order_map.get(order_id)
 
                 # If not found, try the client order ID from kwargs
                 if not order_info and client_order_id:
-                    self.logger.info(f"   Trying client_order_id from kwargs: {client_order_id}")
+                    self.logger.debug(f"Using client_order_id from kwargs: {client_order_id}")
                     order_info = self.order_map.get(client_order_id)
 
             if not order_info:
@@ -393,12 +388,7 @@ class PaperBrokerConnector:
     def _on_order_filled(self, order_id, filled_qty=None, filled_price=None, **kwargs):
         """Handle order filled"""
         try:
-            self.logger.info(f"🔍 Order filled event received:")
-            self.logger.info(f"   order_id parameter: {order_id}")
-            self.logger.info(f"   filled_qty: {filled_qty}")
-            self.logger.info(f"   filled_price: {filled_price}")
-            self.logger.info(f"   kwargs keys: {list(kwargs.keys())}")
-            self.logger.info(f"   Full kwargs: {kwargs}")
+            self.logger.debug(f"Order filled event: order_id={order_id}, filled_qty={filled_qty}, filled_price={filled_price}, kwargs={kwargs}")
 
             # Try to find order info
             client_order_id = kwargs.get('cl_ord_id', kwargs.get('client_order_id', None))
@@ -406,14 +396,12 @@ class PaperBrokerConnector:
             # Determine which order ID to use
             lookup_id = None
             with self.order_map_lock:
-                self.logger.info(f"   Current order_map keys: {list(self.order_map.keys())}")
-
                 # Try the parameter first
                 if order_id in self.order_map:
                     lookup_id = order_id
                 # If not found, try the client order ID from kwargs
                 elif client_order_id and client_order_id in self.order_map:
-                    self.logger.info(f"   Using client_order_id from kwargs: {client_order_id}")
+                    self.logger.debug(f"Using client_order_id from kwargs: {client_order_id}")
                     lookup_id = client_order_id
 
                 if not lookup_id:
@@ -474,11 +462,7 @@ class PaperBrokerConnector:
     def _on_order_partially_filled(self, order_id, filled_qty=None, filled_price=None, **kwargs):
         """Handle order partially filled"""
         try:
-            self.logger.info(f"🔍 Order partially filled event received:")
-            self.logger.info(f"   order_id parameter: {order_id}")
-            self.logger.info(f"   filled_qty: {filled_qty}")
-            self.logger.info(f"   filled_price: {filled_price}")
-            self.logger.info(f"   kwargs: {kwargs}")
+            self.logger.debug(f"Order partially filled event: order_id={order_id}, filled_qty={filled_qty}, filled_price={filled_price}, kwargs={kwargs}")
 
             # Try to find order info
             client_order_id = kwargs.get('cl_ord_id', kwargs.get('client_order_id', None))
@@ -491,7 +475,7 @@ class PaperBrokerConnector:
                     lookup_id = order_id
                 # If not found, try the client order ID from kwargs
                 elif client_order_id and client_order_id in self.order_map:
-                    self.logger.info(f"   Using client_order_id from kwargs: {client_order_id}")
+                    self.logger.debug(f"Using client_order_id from kwargs: {client_order_id}")
                     lookup_id = client_order_id
 
                 if not lookup_id:
@@ -546,10 +530,7 @@ class PaperBrokerConnector:
     def _on_order_rejected(self, order_id, reason=None, **kwargs):
         """Handle order rejected"""
         try:
-            self.logger.info(f"🔍 Order rejected event received:")
-            self.logger.info(f"   order_id parameter: {order_id}")
-            self.logger.info(f"   reason: {reason}")
-            self.logger.info(f"   kwargs: {kwargs}")
+            self.logger.debug(f"Order rejected event: order_id={order_id}, reason={reason}, kwargs={kwargs}")
 
             # Try to find order info
             client_order_id = kwargs.get('cl_ord_id', kwargs.get('client_order_id', None))
@@ -604,9 +585,7 @@ class PaperBrokerConnector:
     def _on_order_cancelled(self, order_id, **kwargs):
         """Handle order cancelled"""
         try:
-            self.logger.info(f"🔍 Order cancelled event received:")
-            self.logger.info(f"   order_id parameter: {order_id}")
-            self.logger.info(f"   kwargs: {kwargs}")
+            self.logger.debug(f"Order cancelled event: order_id={order_id}, kwargs={kwargs}")
 
             # Try to find order info
             client_order_id = kwargs.get('cl_ord_id', kwargs.get('client_order_id', None))
@@ -657,151 +636,6 @@ class PaperBrokerConnector:
 
         except Exception as e:
             self.logger.error(f"❌ Exception in _on_order_cancelled: {e}", exc_info=True)
-
-    # OLD METHOD - NO LONGER USED (kept for reference, can be deleted)
-    def _on_execution_report(
-        self,
-        cl_ord_id,          # PaperBroker order ID
-        status,             # "NEW", "PARTIALLY_FILLED", "FILLED", "REJECTED", "CANCELLED"
-        symbol,
-        side,
-        qty,
-        qty_filled,
-        avg_price,
-        text=None,          # Rejection reason or other text
-        **kwargs
-    ):
-        """
-        Translate execution report to ProtoMarketMaker events
-
-        Status mapping:
-        - NEW → OrderEvent(ACCEPTED)
-        - PARTIALLY_FILLED → FillEvent (partial)
-        - FILLED → FillEvent (complete)
-        - REJECTED → OrderEvent(REJECTED)
-        - CANCELLED → OrderEvent(CANCELLED)
-        """
-        try:
-            # Debug: Log raw execution report
-            self.logger.debug(
-                f"🔍 RAW Execution Report: cl_ord_id={cl_ord_id} | status={status} | "
-                f"symbol={symbol} | side={side} | qty={qty} | qty_filled={qty_filled} | "
-                f"avg_price={avg_price} | text={text} | kwargs={kwargs}"
-            )
-
-            # Get ProtoMarketMaker order ID
-            with self.order_map_lock:
-                pmm_order_id = self.order_map.get(cl_ord_id)
-                last_filled = self.partial_fills.get(cl_ord_id, 0)
-
-            if not pmm_order_id:
-                self.logger.warning(
-                    f"Unknown order in execution report: {cl_ord_id[:8]} | "
-                    f"Known orders: {list(self.order_map.keys())}"
-                )
-                return
-
-            # Extract contract symbol (remove exchange prefix)
-            contract = symbol.split(":")[-1] if ":" in symbol else symbol
-
-            self.logger.info(
-                f"📥 Execution Report received: order={pmm_order_id[:8]} | "
-                f"status={status} | filled={qty_filled}/{qty} | price={avg_price}"
-            )
-
-            if status == "NEW":
-                # Order accepted by exchange
-                event = OrderEvent(
-                    order_id=pmm_order_id,
-                    contract=contract,
-                    side=side,
-                    price=Decimal(str(avg_price)) if avg_price else Decimal("0"),
-                    quantity=qty,
-                    status="ACCEPTED",
-                    timestamp=datetime.now()
-                )
-                self.event_bus.publish(event)
-                self.logger.info(f"Order accepted: {pmm_order_id[:8]}")
-
-            elif status in ["PARTIALLY_FILLED", "FILLED"]:
-                # Calculate incremental fill quantity
-                incremental_qty = qty_filled - last_filled
-
-                if incremental_qty > 0:
-                    # Order filled (partial or complete)
-                    event = FillEvent(
-                        order_id=pmm_order_id,
-                        contract=contract,
-                        side=side,
-                        fill_price=Decimal(str(avg_price)),
-                        fill_quantity=incremental_qty,  # Only the new fill
-                        fee=self._calculate_fee(incremental_qty, avg_price),
-                        timestamp=datetime.now()
-                    )
-                    self.event_bus.publish(event)
-
-                    # Update partial fill tracking
-                    with self.order_map_lock:
-                        self.partial_fills[cl_ord_id] = qty_filled
-
-                    self.logger.info(
-                        f"✅ Publishing FILL event: {pmm_order_id[:8]} | "
-                        f"{incremental_qty} {contract} @ {avg_price} | "
-                        f"status={'COMPLETE' if status == 'FILLED' else 'PARTIAL'} (total: {qty_filled}/{qty})"
-                    )
-
-                    # Clean up if fully filled
-                    if status == "FILLED":
-                        with self.order_map_lock:
-                            del self.order_map[cl_ord_id]
-                            del self.partial_fills[cl_ord_id]
-
-            elif status == "REJECTED":
-                # Order rejected
-                event = OrderEvent(
-                    order_id=pmm_order_id,
-                    contract=contract,
-                    side=side,
-                    price=Decimal(str(avg_price)) if avg_price else Decimal("0"),
-                    quantity=qty,
-                    status="REJECTED",
-                    timestamp=datetime.now()
-                )
-                self.event_bus.publish(event)
-
-                # Clean up mapping
-                with self.order_map_lock:
-                    del self.order_map[cl_ord_id]
-                    if cl_ord_id in self.partial_fills:
-                        del self.partial_fills[cl_ord_id]
-
-                self.logger.warning(
-                    f"Order rejected: {pmm_order_id[:8]} - {text or 'No reason provided'}"
-                )
-
-            elif status == "CANCELLED":
-                # Order cancelled
-                event = OrderEvent(
-                    order_id=pmm_order_id,
-                    contract=contract,
-                    side=side,
-                    price=Decimal(str(avg_price)) if avg_price else Decimal("0"),
-                    quantity=qty,
-                    status="CANCELLED",
-                    timestamp=datetime.now()
-                )
-                self.event_bus.publish(event)
-
-                # Clean up mapping
-                with self.order_map_lock:
-                    del self.order_map[cl_ord_id]
-                    if cl_ord_id in self.partial_fills:
-                        del self.partial_fills[cl_ord_id]
-
-                self.logger.info(f"Order cancelled: {pmm_order_id[:8]}")
-
-        except Exception as e:
-            self.logger.error(f"❌ Exception in _on_execution_report: {e}", exc_info=True)
 
     def _on_cancel_reject(self, order_id, reason, **kwargs):
         """Handle cancel rejection"""

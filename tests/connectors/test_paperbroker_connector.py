@@ -121,7 +121,7 @@ class TestPaperBrokerConnector:
         connector.client.disconnect.assert_called_once()
 
     def test_place_order_success(self, connector):
-        """Test successful order placement"""
+        """Test successful order placement - stores order details as dict"""
         connector.is_connected = True
         connector.client.place_order = Mock(return_value="PB_123")
 
@@ -134,7 +134,12 @@ class TestPaperBrokerConnector:
         )
 
         assert pb_order_id == "PB_123"
-        assert connector.order_map["PB_123"] == "PMM_456"
+        # Verify order_map stores dict with order details
+        assert connector.order_map["PB_123"]["pmm_order_id"] == "PMM_456"
+        assert connector.order_map["PB_123"]["symbol"] == "VN30F2511"
+        assert connector.order_map["PB_123"]["side"] == "BUY"
+        assert connector.order_map["PB_123"]["quantity"] == 1
+        assert connector.order_map["PB_123"]["price"] == 1950.0
         assert connector.partial_fills["PB_123"] == 0
 
         connector.client.place_order.assert_called_once_with(
@@ -161,9 +166,15 @@ class TestPaperBrokerConnector:
         assert len(connector.order_map) == 0
 
     def test_cancel_order_success(self, connector):
-        """Test successful order cancellation"""
+        """Test successful order cancellation - finds order by pmm_order_id"""
         connector.is_connected = True
-        connector.order_map["PB_123"] = "PMM_456"
+        connector.order_map["PB_123"] = {
+            'pmm_order_id': "PMM_456",
+            'symbol': "VN30F2511",
+            'side': "BUY",
+            'quantity': 1,
+            'price': 1950.0
+        }
         connector.client.cancel_order = Mock(return_value=True)
 
         result = connector.cancel_order("PMM_456")
@@ -180,9 +191,15 @@ class TestPaperBrokerConnector:
         assert result is False
         connector.client.cancel_order.assert_not_called()
 
-    def test_execution_report_new(self, connector, event_bus):
-        """Test NEW execution report translation"""
-        connector.order_map["PB_123"] = "PMM_456"
+    def test_order_accepted_event(self, connector, event_bus):
+        """Test order accepted event - retrieves stored order details"""
+        connector.order_map["PB_123"] = {
+            'pmm_order_id': "PMM_456",
+            'symbol': "VN30F2511",
+            'side': "BUY",
+            'quantity': 10,
+            'price': 1950.0
+        }
         captured_events = []
 
         def capture(event):
@@ -190,15 +207,10 @@ class TestPaperBrokerConnector:
 
         event_bus.subscribe(EventType.ORDER, capture)
 
-        # Simulate NEW execution report
-        connector._on_execution_report(
-            cl_ord_id="PB_123",
-            status="NEW",
-            symbol="HNXDS:VN30F2511",
-            side="BUY",
-            qty=10,
-            qty_filled=0,
-            avg_price=1950.0
+        # Simulate order accepted event (using cl_ord_id in kwargs)
+        connector._on_order_accepted(
+            order_id="SERVER_ORDER_ID",  # Server may use different ID
+            cl_ord_id="PB_123"  # Our client order ID is in kwargs
         )
 
         # Process events
@@ -212,9 +224,15 @@ class TestPaperBrokerConnector:
         assert order_event.side == "BUY"
         assert order_event.quantity == 10
 
-    def test_execution_report_filled(self, connector, event_bus):
-        """Test FILLED execution report translation"""
-        connector.order_map["PB_123"] = "PMM_456"
+    def test_order_filled_event(self, connector, event_bus):
+        """Test order filled event - retrieves stored order details for FillEvent"""
+        connector.order_map["PB_123"] = {
+            'pmm_order_id': "PMM_456",
+            'symbol': "VN30F2511",
+            'side': "BUY",
+            'quantity': 10,
+            'price': 1950.0
+        }
         connector.partial_fills["PB_123"] = 0
         captured_events = []
 
@@ -223,15 +241,12 @@ class TestPaperBrokerConnector:
 
         event_bus.subscribe(EventType.FILL, capture)
 
-        # Simulate FILLED execution report
-        connector._on_execution_report(
+        # Simulate filled event (kwargs contain cl_ord_id and fill details)
+        connector._on_order_filled(
+            order_id="SERVER_ORDER_ID",
             cl_ord_id="PB_123",
-            status="FILLED",
-            symbol="HNXDS:VN30F2511",
-            side="BUY",
-            qty=10,
-            qty_filled=10,
-            avg_price=1950.0
+            last_qty=10,
+            last_px=1950.0
         )
 
         # Process events
@@ -243,14 +258,21 @@ class TestPaperBrokerConnector:
         assert fill_event.fill_quantity == 10
         assert fill_event.fill_price == Decimal("1950.0")
         assert fill_event.contract == "VN30F2511"
+        assert fill_event.side == "BUY"
 
         # Order should be removed from maps
         assert "PB_123" not in connector.order_map
         assert "PB_123" not in connector.partial_fills
 
-    def test_execution_report_partial_fill(self, connector, event_bus):
-        """Test PARTIALLY_FILLED execution reports"""
-        connector.order_map["PB_123"] = "PMM_456"
+    def test_partial_fill_tracking(self, connector, event_bus):
+        """Test partial fill incremental quantity calculation"""
+        connector.order_map["PB_123"] = {
+            'pmm_order_id': "PMM_456",
+            'symbol': "VN30F2511",
+            'side': "BUY",
+            'quantity': 10,
+            'price': 1950.0
+        }
         connector.partial_fills["PB_123"] = 0
         captured_events = []
 
@@ -260,39 +282,30 @@ class TestPaperBrokerConnector:
         event_bus.subscribe(EventType.FILL, capture)
 
         # First partial fill (3 contracts)
-        connector._on_execution_report(
+        connector._on_order_partially_filled(
+            order_id="SERVER_ID",
             cl_ord_id="PB_123",
-            status="PARTIALLY_FILLED",
-            symbol="HNXDS:VN30F2511",
-            side="BUY",
-            qty=10,
-            qty_filled=3,
-            avg_price=1950.0
+            last_qty=3,
+            last_px=1950.0
         )
+        event_bus.process_events()
 
         # Second partial fill (5 total)
-        connector._on_execution_report(
+        connector._on_order_partially_filled(
+            order_id="SERVER_ID",
             cl_ord_id="PB_123",
-            status="PARTIALLY_FILLED",
-            symbol="HNXDS:VN30F2511",
-            side="BUY",
-            qty=10,
-            qty_filled=5,
-            avg_price=1950.0
+            last_qty=5,
+            last_px=1950.0
         )
+        event_bus.process_events()
 
         # Final fill (10 total)
-        connector._on_execution_report(
+        connector._on_order_filled(
+            order_id="SERVER_ID",
             cl_ord_id="PB_123",
-            status="FILLED",
-            symbol="HNXDS:VN30F2511",
-            side="BUY",
-            qty=10,
-            qty_filled=10,
-            avg_price=1950.0
+            last_qty=10,
+            last_px=1950.0
         )
-
-        # Process events
         event_bus.process_events()
 
         assert len(captured_events) == 3
@@ -310,9 +323,15 @@ class TestPaperBrokerConnector:
         assert "PB_123" not in connector.order_map
         assert "PB_123" not in connector.partial_fills
 
-    def test_execution_report_rejected(self, connector, event_bus):
-        """Test REJECTED execution report"""
-        connector.order_map["PB_123"] = "PMM_456"
+    def test_order_rejected_event(self, connector, event_bus):
+        """Test order rejected event - cleans up order_map"""
+        connector.order_map["PB_123"] = {
+            'pmm_order_id': "PMM_456",
+            'symbol': "VN30F2511",
+            'side': "BUY",
+            'quantity': 10,
+            'price': 1950.0
+        }
         captured_events = []
 
         def capture(event):
@@ -320,16 +339,11 @@ class TestPaperBrokerConnector:
 
         event_bus.subscribe(EventType.ORDER, capture)
 
-        # Simulate REJECTED execution report
-        connector._on_execution_report(
-            cl_ord_id="PB_123",
-            status="REJECTED",
-            symbol="HNXDS:VN30F2511",
-            side="BUY",
-            qty=10,
-            qty_filled=0,
-            avg_price=0,
-            text="Insufficient margin"
+        # Simulate rejected event
+        connector._on_order_rejected(
+            order_id="SERVER_ID",
+            reason="Insufficient margin",
+            cl_ord_id="PB_123"
         )
 
         # Process events
@@ -375,5 +389,65 @@ class TestPaperBrokerConnector:
 
         # Test concurrent access (would normally use threading)
         with connector.order_map_lock:
-            connector.order_map["PB_1"] = "PMM_1"
-            assert connector.order_map["PB_1"] == "PMM_1"
+            connector.order_map["PB_1"] = {
+                'pmm_order_id': "PMM_1",
+                'symbol': "VN30F2511",
+                'side': "BUY",
+                'quantity': 1,
+                'price': 1950.0
+            }
+            assert connector.order_map["PB_1"]["pmm_order_id"] == "PMM_1"
+
+    def test_order_cancelled_event(self, connector, event_bus):
+        """Test order cancelled event - cleans up order_map"""
+        connector.order_map["PB_123"] = {
+            'pmm_order_id': "PMM_456",
+            'symbol': "VN30F2511",
+            'side': "BUY",
+            'quantity': 10,
+            'price': 1950.0
+        }
+        captured_events = []
+
+        def capture(event):
+            captured_events.append(event)
+
+        event_bus.subscribe(EventType.ORDER, capture)
+
+        # Simulate cancelled event
+        connector._on_order_cancelled(
+            order_id="SERVER_ID",
+            cl_ord_id="PB_123"
+        )
+
+        # Process events
+        event_bus.process_events()
+
+        assert len(captured_events) == 1
+        order_event = captured_events[0]
+        assert order_event.order_id == "PMM_456"
+        assert order_event.status == "CANCELLED"
+
+        # Order should be removed from maps
+        assert "PB_123" not in connector.order_map
+
+    def test_unknown_order_handling(self, connector, event_bus):
+        """Test graceful handling of unknown order IDs"""
+        captured_events = []
+
+        def capture(event):
+            captured_events.append(event)
+
+        event_bus.subscribe(EventType.ORDER, capture)
+        event_bus.subscribe(EventType.FILL, capture)
+
+        # These should not raise exceptions or publish events
+        connector._on_order_accepted(order_id="UNKNOWN_ID", cl_ord_id="ALSO_UNKNOWN")
+        connector._on_order_filled(order_id="UNKNOWN_ID", cl_ord_id="ALSO_UNKNOWN")
+        connector._on_order_cancelled(order_id="UNKNOWN_ID", cl_ord_id="ALSO_UNKNOWN")
+
+        # Process events
+        event_bus.process_events()
+
+        # No events should be published for unknown orders
+        assert len(captured_events) == 0
