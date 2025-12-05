@@ -1,0 +1,84 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "protomarketmaker"
+version = "0.1.0"
+description = "Algorithmic trading system for Vietnamese futures market making"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "ProtoMarketMaker Team"}
+]
+keywords = ["trading", "algorithmic-trading", "market-making", "futures", "vietnam"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Office/Business :: Financial :: Investment",
+]
+dependencies = [
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "matplotlib>=3.7.0",
+    "psycopg2-binary>=2.9.0",
+    "python-dotenv>=1.0.0",
+    "optuna>=3.3.0",
+    "redis>=5.0.0",
+    "rich>=13.0.0",
+    "tqdm>=4.65.0",
+    "python-dateutil>=2.8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-redis>=3.0.0",
+    "pylint>=3.0.0",
+]
+plutus = [
+    "algotrade-plutus",
+]
+
+[project.scripts]
+pmm-paper-trade = "protomarketmaker.paper_trading.runner:main"
+pmm-backtest = "protomarketmaker.scripts.backtest:main"
+pmm-iterative-backtest = "protomarketmaker.scripts.iterative_backtest:main"
+pmm-optimize = "protomarketmaker.scripts.optimize:main"
+pmm-evaluate = "protomarketmaker.scripts.evaluate:main"
+pmm-load-data = "protomarketmaker.scripts.load_data:main"
+pmm-redis-publish = "protomarketmaker.tools.redis_publisher:main"
+
+[project.urls]
+"Homepage" = "https://github.com/example/ProtoMarketMaker"
+"Documentation" = "https://protomarketmaker.readthedocs.io"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["src/protomarketmaker"]
+omit = ["*/tests/*", "*/__pycache__/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+]

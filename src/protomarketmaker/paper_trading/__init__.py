@@ -7,14 +7,17 @@ Provides production-ready paper trading capabilities:
 - Results export (JSON)
 - Audit logging
 - Event recording
+- Flashy logger for demos
 """
 
 from .engine import RedisPaperTradingEngine
 from .results import PaperTradingResults
 from .audit_logger import AuditLogger
+from .flashy_logger import FlashyLogger
 
 __all__ = [
     'RedisPaperTradingEngine',
     'PaperTradingResults',
     'AuditLogger',
+    'FlashyLogger',
 ]

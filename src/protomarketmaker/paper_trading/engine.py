@@ -17,7 +17,9 @@ from protomarketmaker.engine import (
     RiskManager,
     MarketMakerStrategy,
     MockExecutionEngine,
+    PaperBrokerExecutionEngine,
 )
+from protomarketmaker.connectors import PaperBrokerConnector
 from protomarketmaker.evaluation import PerformanceMonitor
 from protomarketmaker.data import RedisMarketDataHandler
 from .recorder import EventRecorder
@@ -55,6 +57,9 @@ class RedisPaperTradingEngine:
         step: Decimal,
         redis_host: str = 'localhost',
         redis_port: int = 6379,
+        redis_db: int = 0,
+        redis_password: Optional[str] = None,
+        redis_decode_responses: bool = True,
         channel_prefix: str = 'market',
         contracts: list = None,
         update_interval_seconds: int = 15,
@@ -63,7 +68,10 @@ class RedisPaperTradingEngine:
         mode: str = 'playback',
         f2m_window_days: int = 3,
         audit_log_enabled: bool = False,
-        audit_log_path: str = None
+        audit_log_path: str = None,
+        execution_mode: str = 'mock',
+        paperbroker_config: dict = None,
+        flashy_mode: bool = False
     ):
         """
         Initialize paper trading engine with Redis data source
@@ -73,6 +81,9 @@ class RedisPaperTradingEngine:
             step: Strategy step parameter (e.g., 2.9)
             redis_host: Redis server hostname (localhost for playback, prod IP for live)
             redis_port: Redis server port (default 6379)
+            redis_db: Redis database number (default 0)
+            redis_password: Redis password for authentication (None if no auth required)
+            redis_decode_responses: Whether to decode responses to strings (default True)
             channel_prefix: Channel prefix (e.g., 'market' for 'market:VN30F2510')
             contracts: List of contracts to trade
                        - playback mode: abstract symbols (VN30F1M)
@@ -84,6 +95,11 @@ class RedisPaperTradingEngine:
             f2m_window_days: Days before expiration to subscribe to F2M (default: 3)
             audit_log_enabled: Whether to enable audit logging (signals, fills, rollovers)
             audit_log_path: Path to audit log file (if audit_log_enabled=True)
+            execution_mode: Execution mode - 'mock' or 'paperbroker' (default: 'mock')
+            paperbroker_config: Configuration dict for PaperBroker connection (if execution_mode='paperbroker')
+                               Should contain: fix_host, fix_port, sender_comp_id, target_comp_id,
+                               username, password, rest_base_url, default_sub_account
+            flashy_mode: Enable flashy terminal output for demos (uses Rich library) (default: False)
         """
         self.initial_capital = initial_capital
         self.step = step
@@ -93,6 +109,18 @@ class RedisPaperTradingEngine:
         self.start_time = None
         self.end_time = None
         self._running = False
+        self.execution_mode = execution_mode
+        self.paperbroker_config = paperbroker_config
+        self.event_count = 0  # Counter for periodic status logging
+        self.flashy_mode = flashy_mode
+
+        # Track closed positions for PnL statistics
+        self.closed_positions = []  # List of dicts with {contract, pnl_points, pnl_pct, timestamp}
+        self.total_realized_pnl_points = Decimal('0')  # Cumulative PnL in points
+
+        # Cache position state for accurate "before" logging
+        # Maps contract -> list of entry prices (snapshot taken before fills)
+        self.position_state_cache = {}
 
         # Core event bus
         self.event_bus = EventBus()
@@ -117,10 +145,40 @@ class RedisPaperTradingEngine:
             update_interval_seconds=update_interval_seconds
         )
 
-        self.execution = MockExecutionEngine(
-            event_bus=self.event_bus,
-            risk_manager=self.risk
-        )
+        # Initialize execution engine based on mode
+        if execution_mode == 'paperbroker':
+            if not paperbroker_config:
+                raise ValueError("paperbroker_config required when execution_mode='paperbroker'")
+
+            # Create PaperBroker connector
+            self.connector = PaperBrokerConnector(
+                event_bus=self.event_bus,
+                fix_host=paperbroker_config['fix_host'],
+                fix_port=paperbroker_config['fix_port'],
+                sender_comp_id=paperbroker_config['sender_comp_id'],
+                target_comp_id=paperbroker_config['target_comp_id'],
+                username=paperbroker_config['username'],
+                password=paperbroker_config['password'],
+                rest_base_url=paperbroker_config['rest_base_url'],
+                default_sub_account=paperbroker_config.get('default_sub_account', 'D1'),
+                fee_rate=paperbroker_config.get('fee_rate', 0.002)
+            )
+
+            # Create PaperBroker execution engine
+            self.execution = PaperBrokerExecutionEngine(
+                event_bus=self.event_bus,
+                connector=self.connector,
+                risk_manager=self.risk,
+                order_timeout_seconds=paperbroker_config.get('order_timeout_seconds', 60),
+                max_pending_orders=paperbroker_config.get('max_pending_orders', 10)
+            )
+        else:
+            # Default to mock execution
+            self.connector = None
+            self.execution = MockExecutionEngine(
+                event_bus=self.event_bus,
+                risk_manager=self.risk
+            )
 
         self.monitor = PerformanceMonitor(
             event_bus=self.event_bus
@@ -131,6 +189,9 @@ class RedisPaperTradingEngine:
             event_bus=self.event_bus,
             redis_host=redis_host,
             redis_port=redis_port,
+            redis_db=redis_db,
+            redis_password=redis_password,
+            redis_decode_responses=redis_decode_responses,
             channel_prefix=channel_prefix,
             mode=mode,
             f2m_window_days=f2m_window_days
@@ -147,7 +208,7 @@ class RedisPaperTradingEngine:
         # Optional audit logging for signals, fills, and rollovers
         self.audit_logger = None
         if audit_log_enabled:
-            from paper_trading.audit_logger import AuditLogger
+            from .audit_logger import AuditLogger
             self.audit_logger = AuditLogger(
                 log_path=audit_log_path or 'logs/audit/session.log',
                 enabled=True
@@ -155,6 +216,17 @@ class RedisPaperTradingEngine:
             # Subscribe to signal and fill events
             self.event_bus.subscribe(EventType.SIGNAL, self._log_signal)
             self.event_bus.subscribe(EventType.FILL, self._log_fill)
+
+        # Optional flashy logging for demos (uses Rich library)
+        self.flashy_logger = None
+        if self.flashy_mode:
+            from .flashy_logger import FlashyLogger
+            self.flashy_logger = FlashyLogger()
+            # Subscribe to signal and fill events for flashy output
+            if not audit_log_enabled:
+                # Only subscribe if not already subscribed via audit logging
+                self.event_bus.subscribe(EventType.SIGNAL, self._log_signal)
+                self.event_bus.subscribe(EventType.FILL, self._log_fill)
 
     @property
     def running(self) -> bool:
@@ -177,6 +249,14 @@ class RedisPaperTradingEngine:
             if self.recorder:
                 self.recorder.__enter__()
 
+            # Connect to PaperBroker if using real execution
+            if self.execution_mode == 'paperbroker' and self.connector:
+                print(f"Connecting to PaperBroker FIX server...")
+                if not self.connector.connect(timeout=10):
+                    print("Failed to connect to PaperBroker FIX server")
+                    return False
+                print(f"Connected to PaperBroker successfully")
+
             # Connect to Redis
             if not self.redis_handler.connect():
                 print("Failed to connect to Redis")
@@ -192,6 +272,7 @@ class RedisPaperTradingEngine:
             self._running = True
 
             print(f"Paper trading started at {self.start_time}")
+            print(f"Execution mode: {self.execution_mode}")
             print(f"Contracts: {self.contracts}")
             print(f"Redis: {self.redis_handler.redis_host}:{self.redis_handler.redis_port}")
 
@@ -202,11 +283,21 @@ class RedisPaperTradingEngine:
             return False
 
     def _log_signal(self, event):
-        """Log signal event to audit log"""
+        """Log signal event to audit log and position status"""
+        contract = event.contract
+
+        # Cache current position state BEFORE any fills can occur
+        # This snapshot will be used for accurate "before" logging in fills
+        position = self.portfolio.get_position(contract)
+        self.position_state_cache[contract] = {
+            'entry_prices': list(position.entry_prices),  # Copy the list
+            'quantity': position.quantity,
+            'average_price': position.average_price
+        }
+
         if self.audit_logger:
             # Extract signal data from event
             timestamp = event.timestamp
-            contract = event.contract
             reason = getattr(event, 'reason', 'TIME_ELAPSED')
 
             # Get current market price from portfolio's price cache
@@ -214,7 +305,6 @@ class RedisPaperTradingEngine:
             market_price = self.portfolio.current_prices.get(contract, Decimal('0'))
 
             # Get current inventory (get_position always returns a Position object)
-            position = self.portfolio.get_position(contract)
             inventory = position.quantity
 
             # Get bid/ask from signal event (strategy already calculated these)
@@ -233,30 +323,71 @@ class RedisPaperTradingEngine:
                 contract=contract
             )
 
+        # Log position and order status at INFO level (after signal processing)
+        self._log_position_status_after_signal(event)
+
     def _log_fill(self, event):
         """Log fill event to audit log"""
+        # IMPORTANT: Portfolio has ALREADY updated the position by the time we get here
+        # (both portfolio and this method subscribe to FILL events)
+        # But we cached the position state at signal time, so we can reconstruct accurate "before" state
+
+        position_after = self.portfolio.get_position(event.contract)
+        inv_after = position_after.quantity  # This is AFTER the fill
+        entry_price_after = position_after.average_price
+
+        # Extract fill data
+        contract = event.contract
+        side = event.side  # "BID" or "ASK"
+        price = event.fill_price
+        qty = event.fill_quantity
+
+        # Reverse-calculate BEFORE state from AFTER state
+        # BID = buy (inventory increased), ASK = sell (inventory decreased)
+        if side == "BID":
+            inv_before = inv_after - qty  # Undo the increase
+        else:  # ASK
+            inv_before = inv_after + qty  # Undo the decrease
+
+        # Calculate entry price before using cached position state
+        # This gives us the actual entry price(s) BEFORE the fill was processed
+        if inv_before != 0:
+            # Had a position before - get actual entry price from cache
+            cached_state = self.position_state_cache.get(contract, {})
+            cached_entry_prices = cached_state.get('entry_prices', [])
+
+            if cached_entry_prices:
+                # For closing positions, the FIFO entry price is the first one (oldest)
+                # For opening/adding positions, use the average
+                is_closing = abs(inv_after) < abs(inv_before)
+                if is_closing:
+                    # Get the entry price that was just closed (FIFO - first in list)
+                    entry_price_before = cached_entry_prices[0]
+                else:
+                    # Adding to position - use average from cache
+                    entry_price_before = cached_state.get('average_price', entry_price_after)
+            else:
+                # Fallback: use average price from cache or after state
+                entry_price_before = cached_state.get('average_price', entry_price_after)
+        else:
+            # Was flat before, just opened a position
+            entry_price_before = price  # The fill price is the entry
+
+        # Update cache with new state after fill
+        self.position_state_cache[contract] = {
+            'entry_prices': list(position_after.entry_prices),
+            'quantity': position_after.quantity,
+            'average_price': position_after.average_price
+        }
+
         if self.audit_logger:
-            # Extract fill data from event (FillEvent has these fields directly)
-            timestamp = event.timestamp
-            contract = event.contract
-            side = event.side  # Already a string: "BID" or "ASK"
-            price = event.fill_price
-            qty = event.fill_quantity
+            # Get inventory price after (if position closed, it's 0)
+            if inv_after == 0:
+                inv_price_after = Decimal('0')
+            else:
+                inv_price_after = entry_price_after
 
-            # Get inventory after the fill
-            position = self.portfolio.get_position(contract)
-            inv_after = position.quantity
-            inv_price_after = position.average_price
-
-            # Calculate inv_before (reverse the fill)
-            # Map "BID" -> BUY, "ASK" -> SELL
-            if side == "BID":
-                inv_before = inv_after - qty
-            else:  # "ASK"
-                inv_before = inv_after + qty
-
-            # Get inventory price before (simplified)
-            inv_price_before = inv_price_after  # Approximation
+            inv_price_before = entry_price_before if inv_before != 0 else Decimal('0')
 
             # Determine fill type
             if inv_before == 0:
@@ -267,7 +398,7 @@ class RedisPaperTradingEngine:
                 fill_type = "MODIFY"
 
             self.audit_logger.log_fill(
-                timestamp=timestamp,
+                timestamp=event.timestamp,
                 side=side,
                 price=price,
                 qty=qty,
@@ -278,6 +409,360 @@ class RedisPaperTradingEngine:
                 fill_type=fill_type,
                 contract=contract
             )
+
+        # Log PnL status at INFO level (pass all needed state)
+        self._log_pnl_status_after_fill(event, entry_price_before, inv_before, entry_price_after, inv_after)
+
+    def _log_position_status_after_signal(self, event):
+        """
+        Log current positions and pending orders after signal (INFO level)
+
+        Shows:
+        - Current inventory with detailed breakdown
+        - Position details: entry price, side, unrealized PnL in points per contract
+        - Pending orders
+        """
+        import logging
+        logger = logging.getLogger(__name__)
+
+        contract = event.contract
+
+        # Get current position
+        position = self.portfolio.get_position(contract)
+        market_price = self.portfolio.current_prices.get(contract, Decimal('0'))
+
+        # Update unrealized PnL
+        if market_price > 0:
+            position.update_unrealized_pnl(market_price)
+
+        # Get pending orders
+        active_orders = self.oms.get_active_orders_by_contract(contract)
+
+        # Calculate total unrealized PnL in points (needed for both plain and flashy)
+        total_pnl_points = Decimal('0')
+        if position.quantity != 0:
+            individual_pnls = position.get_individual_pnls(market_price)
+            for entry_price, pnl_pts in individual_pnls:
+                total_pnl_points += pnl_pts
+
+        # Use flashy logger if enabled
+        if self.flashy_mode and self.flashy_logger:
+            # Log signal change details first
+            timestamp = event.timestamp
+            reason = getattr(event, 'reason', 'TIME_ELAPSED')
+            bid_price = event.bid_price
+            ask_price = event.ask_price
+            spread = ask_price - bid_price
+
+            self.flashy_logger.log_signal_change(
+                contract=contract,
+                timestamp=timestamp,
+                reason=reason,
+                market_price=market_price,
+                bid_price=bid_price,
+                ask_price=ask_price,
+                spread=spread,
+                inventory=position.quantity
+            )
+
+            # Then show position status and pending orders
+            self.flashy_logger.log_position_status(
+                contract=contract,
+                inventory=position.quantity,
+                entry_prices=position.entry_prices,
+                market_price=market_price,
+                unrealized_pnl_pts=total_pnl_points,
+                unrealized_pnl_vnd=position.unrealized_pnl,
+                active_orders=active_orders
+            )
+        else:
+            # Use plain text logging
+            logger.info("=" * 80)
+            logger.info(f"POSITION STATUS | {contract}")
+
+            if position.quantity != 0:
+                side = "LONG" if position.quantity > 0 else "SHORT"
+
+                # Get individual PnLs for each contract (using actual entry prices)
+                individual_pnls = position.get_individual_pnls(market_price)
+
+                # Build detailed inventory breakdown showing each contract with its actual entry price
+                contracts_detail = []
+
+                for entry_price, pnl_pts in individual_pnls:
+                    contracts_detail.append(
+                        f"({float(entry_price):.1f}, {side}, {float(pnl_pts):+.2f}pts)"
+                    )
+
+                inventory_detail = f"[{', '.join(contracts_detail)}]"
+                unrealized_pnl_vnd = position.unrealized_pnl
+
+                logger.info(f"   Inventory ({position.quantity:+d}): {inventory_detail}")
+                logger.info(f"   Market Price:         {float(market_price):.1f}")
+                logger.info(f"   Total Unrealized PnL: {float(total_pnl_points):+.2f} pts | {float(unrealized_pnl_vnd):+,.0f} (k) VND")
+            else:
+                logger.info(f"   Inventory:            FLAT (0 contracts)")
+                logger.info(f"   Market Price:         {float(market_price):.1f}")
+
+            # Format pending orders info
+            if active_orders:
+                logger.info(f"PENDING ORDERS ({len(active_orders)}):")
+                for order in active_orders:
+                    logger.info(f"      {order.side.value:4s} {order.quantity} @ {float(order.price):.1f} | {order.status.value}")
+            else:
+                logger.info(f"PENDING ORDERS:    None")
+
+            logger.info("=" * 80 + "\n")
+
+    def _log_pnl_status_after_fill(self, event, entry_price_before: Decimal, inv_quantity_before: int,
+                                     entry_price_after: Decimal, inv_after: int):
+        """
+        Log PnL statistics after fill (INFO level)
+
+        Args:
+            event: Fill event
+            entry_price_before: Entry price before this fill
+            inv_quantity_before: Inventory quantity before this fill
+            entry_price_after: Entry price after this fill (from portfolio)
+            inv_after: Inventory quantity after this fill
+
+        Shows:
+        - Fill details
+        - Accumulated PnL in points
+        - PnL of recent closed position (if closed)
+        - Average PnL in points and %
+        - Current NAV and portfolio PnL %
+        """
+        import logging
+        logger = logging.getLogger(__name__)
+
+        contract = event.contract
+        fill_price = event.fill_price
+        fill_qty = event.fill_quantity
+        side = event.side
+
+        # Check if position was closed
+        position_closed = False
+        closed_pnl_points = Decimal('0')
+        closed_pnl_pct = Decimal('0')
+
+        # Determine if this fill closed a position
+        # BID = buy, ASK = sell
+        # Closing = reducing absolute position size (not just going to flat)
+        if side == "BID":
+            # Buying - closes short position if we were short
+            if inv_quantity_before < 0 and inv_after > inv_quantity_before:
+                position_closed = True
+        else:  # ASK = sell
+            # Selling - closes long position if we were long
+            if inv_quantity_before > 0 and inv_after < inv_quantity_before:
+                position_closed = True
+
+        # Get actual realized PnL from portfolio (already includes both opening and closing fees)
+        if position_closed:
+            cumulative_before = getattr(self, '_last_cumulative_realized_pnl', Decimal('0'))
+            cumulative_after = -self.portfolio.cumulative_realized_pnl
+            closed_pnl_vnd = cumulative_after - cumulative_before
+            closed_pnl_points = closed_pnl_vnd / Decimal('100')
+
+            if entry_price_before > 0:
+                if side == "BID":
+                    gross_profit = entry_price_before - fill_price
+                else:
+                    gross_profit = fill_price - entry_price_before
+                closed_pnl_pct = (gross_profit / entry_price_before) * 100
+            else:
+                closed_pnl_pct = Decimal('0')
+
+            self._last_cumulative_realized_pnl = cumulative_after
+
+        # Track closed position
+        if position_closed:
+            self.closed_positions.append({
+                'contract': contract,
+                'pnl_points': float(closed_pnl_points),
+                'pnl_pct': float(closed_pnl_pct),
+                'timestamp': event.timestamp
+            })
+            self.total_realized_pnl_points += closed_pnl_points
+
+            avg_pnl_points = self.total_realized_pnl_points / len(self.closed_positions)
+            avg_pnl_pct = sum(p['pnl_pct'] for p in self.closed_positions) / len(self.closed_positions)
+
+            current_nav = self.portfolio.calculate_nav()
+            portfolio_pnl = current_nav - self.initial_capital
+            portfolio_pnl_pct = (portfolio_pnl / self.initial_capital) * 100
+            total_fees = self.monitor.total_fees
+
+            realized_pnl_vnd = -self.portfolio.cumulative_realized_pnl
+            realized_pnl_pts = realized_pnl_vnd / Decimal('100')
+
+            total_unrealized_pnl_vnd = sum(pos.unrealized_pnl for pos in self.portfolio.positions.values())
+            total_unrealized_pnl_pts = total_unrealized_pnl_vnd / Decimal('100')
+
+            closed_trades_count = len(self.closed_positions)
+            total_realized_gross_pts = self.total_realized_pnl_points + (closed_trades_count * Decimal('0.4'))
+
+            if self.flashy_mode and self.flashy_logger:
+                self.flashy_logger.log_position_closure(
+                    contract=contract,
+                    side=side,
+                    qty=fill_qty,
+                    price=fill_price,
+                    inv_before=inv_quantity_before,
+                    inv_after=inv_after,
+                    closed_pnl_pts=closed_pnl_points,
+                    closed_pnl_pct=closed_pnl_pct,
+                    total_realized_gross_pts=total_realized_gross_pts,
+                    total_realized_pts=self.total_realized_pnl_points,
+                    closed_trades=len(self.closed_positions),
+                    avg_pnl_pts=avg_pnl_points,
+                    avg_pnl_pct=avg_pnl_pct,
+                    current_nav=current_nav,
+                    portfolio_pnl=portfolio_pnl,
+                    portfolio_pnl_pct=portfolio_pnl_pct,
+                    total_fees=total_fees,
+                    realized_pnl_vnd=realized_pnl_vnd,
+                    realized_pnl_pts=realized_pnl_pts,
+                    unrealized_pnl_vnd=total_unrealized_pnl_vnd,
+                    unrealized_pnl_pts=total_unrealized_pnl_pts
+                )
+            else:
+                side_before = "LONG" if inv_quantity_before > 0 else "SHORT"
+                position_before_detail = f"[({float(entry_price_before):.2f}, {side_before}, {float(closed_pnl_points):+.2f}pts)]"
+
+                if inv_after == 0:
+                    position_after_detail = "FLAT"
+                else:
+                    side_after = "LONG" if inv_after > 0 else "SHORT"
+                    position = self.portfolio.get_position(contract)
+                    market_price = self.portfolio.current_prices.get(contract, fill_price)
+                    remaining_contracts = []
+                    for entry, pnl in position.get_individual_pnls(market_price):
+                        remaining_contracts.append(f"({float(entry):.1f}, {side_after}, {float(pnl):+.2f}pts)")
+                    position_after_detail = f"[{', '.join(remaining_contracts)}]"
+
+                logger.info("=" * 80)
+                logger.info(f"POSITION CLOSED | {contract}")
+                logger.info(f"   Fill:                {side} {fill_qty} @ {float(fill_price):.1f}")
+                logger.info(f"   Position Before ({inv_quantity_before:+d}): {position_before_detail}")
+                logger.info(f"   Position After ({inv_after:+d}):  {position_after_detail}")
+                logger.info(f"   Closed PnL:          {float(closed_pnl_points):+.2f} pts | {float(closed_pnl_pct):+.2f}%")
+                logger.info(f"")
+                logger.info(f"CUMULATIVE PERFORMANCE:")
+                logger.info(f"   Total Realized:      {float(self.total_realized_pnl_points):+.2f} pts")
+                logger.info(f"   Closed Trades:       {len(self.closed_positions)}")
+                logger.info(f"   Avg PnL/Trade:       {float(avg_pnl_points):+.2f} pts | {float(avg_pnl_pct):+.2f}%")
+                logger.info(f"")
+                logger.info(f"PORTFOLIO STATUS:")
+                logger.info(f"   Realized PnL:        {float(realized_pnl_pts):+.2f} pts | {float(realized_pnl_vnd):+,.0f} (k) VND")
+                logger.info(f"   Unrealized PnL:      {float(total_unrealized_pnl_pts):+.2f} pts | {float(total_unrealized_pnl_vnd):+,.0f} (k) VND")
+                logger.info(f"   Current NAV:         {float(current_nav):,.0f} (k) VND")
+                logger.info(f"   Portfolio PnL:       {float(portfolio_pnl):+,.0f} (k) VND ({float(portfolio_pnl_pct):+.2f}%) | Total Fee: {float(total_fees):,.0f} (k) VND")
+                logger.info("=" * 80 + "\n")
+        else:
+            # Position opened or modified (not closed)
+            market_price = self.portfolio.current_prices.get(contract, fill_price)
+            position_after = self.portfolio.get_position(contract)
+
+            fill_realized_pnl_pts = None
+            fill_realized_pnl_vnd = None
+            is_closing = abs(inv_after) < abs(inv_quantity_before)
+
+            if is_closing:
+                if side == "BID":
+                    fill_realized_pnl_pts = entry_price_before - fill_price
+                else:
+                    fill_realized_pnl_pts = fill_price - entry_price_before
+                fill_realized_pnl_vnd = fill_realized_pnl_pts * Decimal('100') - event.fee
+
+            # Format position before
+            if inv_quantity_before != 0:
+                side_before = "LONG" if inv_quantity_before > 0 else "SHORT"
+                if abs(inv_after) < abs(inv_quantity_before):
+                    contracts_before = []
+                    if inv_quantity_before > 0:
+                        pnl_pts = market_price - entry_price_before
+                    else:
+                        pnl_pts = entry_price_before - market_price
+                    contracts_before.append(f"({float(entry_price_before):.1f}, {side_before}, {float(pnl_pts):+.2f}pts)")
+                    for entry, pnl in position_after.get_individual_pnls(market_price):
+                        contracts_before.append(f"({float(entry):.1f}, {side_before}, {float(pnl):+.2f}pts)")
+                else:
+                    individual_after = position_after.get_individual_pnls(market_price)
+                    contracts_before = []
+                    for entry, pnl in individual_after[:-1]:
+                        contracts_before.append(f"({float(entry):.1f}, {side_before}, {float(pnl):+.2f}pts)")
+                position_before_detail = f"[{', '.join(contracts_before)}]" if contracts_before else f"[({float(entry_price_before):.1f}, {side_before}, +0.00pts)]"
+            else:
+                position_before_detail = "FLAT"
+
+            # Format position after
+            if inv_after != 0:
+                side_after = "LONG" if inv_after > 0 else "SHORT"
+                individual_after = position_after.get_individual_pnls(market_price)
+                contracts_after = []
+                for entry, pnl in individual_after:
+                    contracts_after.append(f"({float(entry):.1f}, {side_after}, {float(pnl):+.2f}pts)")
+                position_after_detail = f"[{', '.join(contracts_after)}]"
+            else:
+                position_after_detail = "FLAT"
+
+            current_nav = self.portfolio.calculate_nav()
+            portfolio_pnl = current_nav - self.initial_capital
+            portfolio_pnl_pct = (portfolio_pnl / self.initial_capital) * 100
+            total_fees = self.monitor.total_fees
+
+            realized_pnl_vnd = -self.portfolio.cumulative_realized_pnl
+            realized_pnl_pts = realized_pnl_vnd / Decimal('100')
+
+            total_unrealized_pnl_vnd = sum(pos.unrealized_pnl for pos in self.portfolio.positions.values())
+            total_unrealized_pnl_pts = total_unrealized_pnl_vnd / Decimal('100')
+
+            if self.flashy_mode and self.flashy_logger:
+                self.flashy_logger.print_separator()
+                self.flashy_logger.console.print(f"[{self.flashy_logger.SECTION_COLOR}]FILL EXECUTED | {contract}[/{self.flashy_logger.SECTION_COLOR}]")
+                self.flashy_logger.log_fill(
+                    side=side,
+                    qty=fill_qty,
+                    price=fill_price,
+                    realized_pnl_pts=fill_realized_pnl_pts,
+                    realized_pnl_vnd=fill_realized_pnl_vnd
+                )
+                self.flashy_logger.log_position_before_after(
+                    inv_before=inv_quantity_before,
+                    inv_after=inv_after,
+                    position_before_detail=position_before_detail,
+                    position_after_detail=position_after_detail
+                )
+                self.flashy_logger.log_portfolio_status(
+                    realized_pnl_pts=realized_pnl_pts,
+                    realized_pnl_vnd=realized_pnl_vnd,
+                    unrealized_pnl_pts=total_unrealized_pnl_pts,
+                    unrealized_pnl_vnd=total_unrealized_pnl_vnd,
+                    current_nav=current_nav,
+                    portfolio_pnl=portfolio_pnl,
+                    portfolio_pnl_pct=portfolio_pnl_pct,
+                    total_fees=total_fees
+                )
+            else:
+                logger.info("=" * 80)
+                logger.info(f"FILL EXECUTED | {contract}")
+
+                if fill_realized_pnl_pts is not None and fill_realized_pnl_vnd is not None:
+                    logger.info(f"   Fill:                {side} {fill_qty} @ {float(fill_price):.1f} | Realized PnL: {float(fill_realized_pnl_pts):+.2f} pts | {float(fill_realized_pnl_vnd):+,.0f} (k) VND")
+                else:
+                    logger.info(f"   Fill:                {side} {fill_qty} @ {float(fill_price):.1f}")
+
+                logger.info(f"   Position Before ({inv_quantity_before:+d}): {position_before_detail}")
+                logger.info(f"   Position After ({inv_after:+d}):  {position_after_detail}")
+                logger.info(f"")
+                logger.info(f"PORTFOLIO STATUS:")
+                logger.info(f"   Realized PnL:        {float(realized_pnl_pts):+.2f} pts | {float(realized_pnl_vnd):+,.0f} (k) VND")
+                logger.info(f"   Unrealized PnL:      {float(total_unrealized_pnl_pts):+.2f} pts | {float(total_unrealized_pnl_vnd):+,.0f} (k) VND")
+                logger.info(f"   Current NAV:         {float(current_nav):,.0f} (k) VND")
+                logger.info(f"   Portfolio PnL:       {float(portfolio_pnl):+,.0f} (k) VND ({float(portfolio_pnl_pct):+.2f}%) | Total Fee: {float(total_fees):,.0f} (k) VND")
+                logger.info("=" * 80 + "\n")
 
     def stop(self) -> PaperTradingResults:
         """
@@ -295,6 +780,15 @@ class RedisPaperTradingEngine:
         # Stop Redis handler
         self.redis_handler.stop()
 
+        # Disconnect from PaperBroker if connected
+        if self.execution_mode == 'paperbroker' and self.connector:
+            print("Disconnecting from PaperBroker...")
+            self.connector.disconnect()
+
+        # Shutdown execution engine
+        if hasattr(self.execution, 'shutdown'):
+            self.execution.shutdown()
+
         # Close event recorder
         if self.recorder:
             self.recorder.__exit__(None, None, None)
@@ -304,13 +798,20 @@ class RedisPaperTradingEngine:
 
         # Log audit summary and close
         if self.audit_logger:
+            total_orders = self.audit_logger.signal_count * 2
+
             self.audit_logger.log_summary(
                 total_signals=self.audit_logger.signal_count,
                 total_fills=self.audit_logger.fill_count,
                 total_rollovers=self.audit_logger.rollover_count,
                 initial_capital=self.initial_capital,
                 final_nav=results.final_nav if results else self.initial_capital,
-                hpr=results.hpr if results else Decimal('0')
+                hpr=results.hpr if results else Decimal('0'),
+                total_trades=results.total_trades if results else 0,
+                buy_trades=results.buy_trades if results else 0,
+                sell_trades=results.sell_trades if results else 0,
+                total_fees=results.total_fees if results else Decimal('0'),
+                total_orders=total_orders
             )
             self.audit_logger.close()
 
@@ -333,7 +834,6 @@ class RedisPaperTradingEngine:
         """
         import time
 
-        # Setup Ctrl+C handler
         def signal_handler(sig, frame):
             print("\nStopping...")
             if self._running:
@@ -341,7 +841,6 @@ class RedisPaperTradingEngine:
 
         signal.signal(signal.SIGINT, signal_handler)
 
-        # Start trading
         if not self.start():
             return None
 
@@ -350,23 +849,54 @@ class RedisPaperTradingEngine:
                 print(f"Running for {duration_seconds}s...")
                 start_time = time.time()
                 while self._running and (time.time() - start_time) < duration_seconds:
-                    # Process queued events to dispatch to handlers
                     self.event_bus.process_events()
-                    time.sleep(0.01)  # 10ms processing interval
+                    time.sleep(0.01)
+                    self.event_count += 1
+                    if self.event_count % 3000 == 0:
+                        self._log_status()
             else:
                 print("Running indefinitely (Ctrl+C to stop)...")
                 while self._running:
-                    # Process queued events to dispatch to handlers
                     self.event_bus.process_events()
-                    time.sleep(0.01)  # 10ms processing interval
+                    time.sleep(0.01)
+                    self.event_count += 1
+                    if self.event_count % 3000 == 0:
+                        self._log_status()
         except KeyboardInterrupt:
             pass
 
-        # Stop and generate results
         if self._running:
             return self.stop()
         else:
             return None
+
+    def _log_status(self):
+        """Log periodic status update with key metrics"""
+        try:
+            active_orders = len(self.oms.get_active_orders())
+            pending_count = 0
+
+            if hasattr(self.execution, 'get_pending_count'):
+                pending_count = self.execution.get_pending_count()
+            elif hasattr(self.execution, 'pending_orders'):
+                pending_count = len(self.execution.pending_orders)
+
+            position_count = len(self.portfolio.positions)
+            current_nav = float(self.portfolio.calculate_nav())
+
+            import logging
+            logger = logging.getLogger('paper_trading.engine')
+            logger.info(
+                f"Status: events={self.event_count} | "
+                f"active_orders={active_orders} | "
+                f"pending={pending_count} | "
+                f"positions={position_count} | "
+                f"nav={current_nav:,.2f}"
+            )
+        except Exception as e:
+            import logging
+            logger = logging.getLogger('paper_trading.engine')
+            logger.debug(f"Error logging status: {e}")
 
     def get_summary(self) -> dict:
         """
@@ -376,7 +906,6 @@ class RedisPaperTradingEngine:
             Dictionary with current status
         """
         if not self._running:
-            # Return basic info when stopped
             return {
                 "status": "stopped",
                 "messages_processed": self.redis_handler.messages_processed if self.redis_handler else 0
@@ -399,7 +928,7 @@ class RedisPaperTradingEngine:
             },
             "total_trades": self.monitor.total_trades,
             "messages_processed": self.redis_handler.messages_processed,
-            "redis_messages": self.redis_handler.messages_processed,  # Backward compatibility
+            "redis_messages": self.redis_handler.messages_processed,
             "redis_latency_ms": self.redis_handler.get_latency_ms(),
             "is_healthy": self.redis_handler.is_healthy()
         }
@@ -413,46 +942,39 @@ class RedisPaperTradingEngine:
         """
         duration = (self.end_time - self.start_time).total_seconds()
 
-        # Get PLUTUS metrics from portfolio
         plutus_metrics = {}
         if hasattr(self.portfolio, 'performance_evaluator') and self.portfolio.performance_evaluator:
             plutus_metrics = self.portfolio.performance_evaluator.get_metrics()
 
-        # Get Redis statistics
         redis_stats = self.redis_handler.get_statistics()
 
+        final_nav = self.portfolio.calculate_nav()
+        if 'hpr' not in plutus_metrics or plutus_metrics.get('hpr') == 0.0:
+            hpr = float((final_nav - self.initial_capital) / self.initial_capital)
+        else:
+            hpr = plutus_metrics.get('hpr', 0.0)
+
         return PaperTradingResults(
-            # Session metadata
             start_time=self.start_time,
             end_time=self.end_time,
             duration_seconds=duration,
-            mode=self.mode,  # playback or live
-
-            # Performance metrics (from PLUTUS)
+            mode=self.mode,
             sharpe_ratio=plutus_metrics.get('sharpe_ratio', 0.0),
             sortino_ratio=plutus_metrics.get('sortino_ratio', 0.0),
             max_drawdown=plutus_metrics.get('max_drawdown', 0.0),
-            hpr=plutus_metrics.get('hpr', 0.0),
-
-            # Trading statistics (from Monitor)
+            hpr=hpr,
             total_trades=self.monitor.total_trades,
             buy_trades=self.monitor.buy_count if hasattr(self.monitor, 'buy_count') else 0,
             sell_trades=self.monitor.sell_count if hasattr(self.monitor, 'sell_count') else 0,
             total_fees=self.monitor.get_total_fees() if hasattr(self.monitor, 'get_total_fees') else Decimal('0'),
-
-            # Portfolio timeline (from Portfolio)
             initial_capital=self.initial_capital,
-            final_nav=self.portfolio.calculate_nav(),
+            final_nav=final_nav,
             daily_nav=self.portfolio.daily_nav if hasattr(self.portfolio, 'daily_nav') else [],
             daily_returns=self.portfolio.daily_returns if hasattr(self.portfolio, 'daily_returns') else [],
             tracking_dates=self.portfolio.tracking_dates if hasattr(self.portfolio, 'tracking_dates') else [],
-
-            # Redis-specific metrics
             messages_received=redis_stats.get('messages_received', 0),
             messages_processed=redis_stats.get('messages_processed', 0),
             avg_latency_ms=redis_stats.get('avg_latency_ms', 0.0),
             reconnect_count=redis_stats.get('reconnect_count', 0),
-
-            # Contract rollover tracking
             rollovers=self.portfolio.get_rollover_history() if hasattr(self.portfolio, 'get_rollover_history') else []
         )
