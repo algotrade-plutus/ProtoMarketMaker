@@ -70,42 +70,14 @@ To collect data from database, run this command below in the root directory:
 python data_loader.py
 ```
 The result will be stored in the `data/is/` and `data/os/`
-### In-sample Backtesting
+
+## In-sample Backtesting
 Specify period and parameters in `parameter/backtesting_parameter.json` file.
 ```bash
 python backtesting.py
 ```
 The results are stored in the `result/backtest/` folder.
 
-### Optimization
-To run the optimization, execute the command in the root folder:
-```bash
-python optimization.py
-```
-The optimization parameter are store in `parameter/optimization_parameter.json`. After optimizing, the optimized parameters are stored in `parameter/optimized_parameter.json`.
-
-### Out-of-sample Backtesting
-[TODO: change the script name to out_sample_backtest.py or something like that]: #
-To run the out-of-sample backtesting results, execute this command
-```bash
-python evaluation.py
-```
-[TODO: change the name of optimization folder to out-of-sample-backtesting or something like that]: #
-The script will get value from `parameter/optimized_parameter.json` to execute. The results are stored in the `result/optimization` folder.
-
-## In-sample Backtesting
-Running the in-sample backtesting by execute the command:
-```bash
-python backtesting.py
-```
-### Evaluation Metrics
-- Backtesting results are stored in the `result/backtest/` folder. 
-- Used metrics: 
-  - Sharpe ratio (SR)
-  - Sortino ratio (SoR)
-  - Maximum drawdown (MDD)
-- We use a risk-free rate of 6% per annum, equivalent to approximately 0.023% per day, as a benchmark for evaluating the Sharpe Ratio (SR) and Sortino Ratio (SoR).
-### Parameters
 ### In-sample Backtesting Result
 - The backtesting results are constructuted from 2022-01-01 to 2023-01-01.
 ```
@@ -124,6 +96,13 @@ python backtesting.py
 ![Drawdown chart](result/backtest/drawdown.svg)
 - Daily inventory. The chart is located at `result/backtest/inventory.svg`
 ![Inventory chart](result/backtest/inventory.svg)
+
+### Evaluation Metrics
+- Used metrics: 
+  - Sharpe ratio (SR)
+  - Sortino ratio (SoR)
+  - Maximum drawdown (MDD)
+- We use a risk-free rate of 6% per annum, equivalent to approximately 0.023% per day, as a benchmark for evaluating the Sharpe Ratio (SR) and Sortino Ratio (SoR).
 
 ## Optimization
 The configuration of optimization is stored in `parameter/optimization_parameter.json` you can adjust the range of parameters. Random seed is used for reconstructing the optimization process. The optimized parameter is stored in `parameter/optimized_parameter.json`
