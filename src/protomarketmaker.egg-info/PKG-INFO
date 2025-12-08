@@ -1,0 +1,242 @@
+Metadata-Version: 2.4
+Name: protomarketmaker
+Version: 0.1.0
+Summary: Algorithmic trading system for Vietnamese futures market making
+Author: ProtoMarketMaker Team
+License: MIT
+Project-URL: Homepage, https://github.com/example/ProtoMarketMaker
+Project-URL: Documentation, https://protomarketmaker.readthedocs.io
+Keywords: trading,algorithmic-trading,market-making,futures,vietnam
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Financial and Insurance Industry
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Office/Business :: Financial :: Investment
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: pandas>=2.0.0
+Requires-Dist: numpy>=1.24.0
+Requires-Dist: matplotlib>=3.7.0
+Requires-Dist: psycopg2-binary>=2.9.0
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: optuna>=3.3.0
+Requires-Dist: redis>=5.0.0
+Requires-Dist: rich>=13.0.0
+Requires-Dist: tqdm>=4.65.0
+Requires-Dist: python-dateutil>=2.8.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: pytest-redis>=3.0.0; extra == "dev"
+Requires-Dist: pylint>=3.0.0; extra == "dev"
+Provides-Extra: plutus
+Requires-Dist: algotrade-plutus; extra == "plutus"
+
+![Static Badge](https://img.shields.io/badge/PLUTUS-75%25-darkgreen)
+![Static Badge](https://img.shields.io/badge/PLUTUS-Sample-darkblue)
+![Static Badge](https://img.shields.io/badge/PLUTUS-PROTO-%23880A88) 
+
+# PROTO:Market Maker
+
+## Place bid-ask base on inventory
+> Place limit order in two sides base on current inventory quantity
+
+## Abstract
+In this project, we utilize inventory quantities to simultaneously place both bid and ask orders. The prices of these orders are adjusted dynamically in response to changes in the matched market price. Forced sale scenarios and asset expiration dates are accounted for by incorporating additional fees into the asset's valuation.
+
+## Introduction
+In market making, one common approach to liquidity provision involves simultaneously placing bid and ask orders based on the current inventory levels held by the market maker. This strategy dynamically adjusts order prices in response to changes in the matched market price, allowing the market maker to maintain balanced exposure while capturing the bid-ask spread. The positions are held overnight.
+
+## Hypothesis
+We place bid and ask price with our formula:
+- $$bid = (price - step) - step * max(inventory, 0) * 0.02$$
+- $$ask = (price + step) - step * min(inventory, 0) * 0.02$$
+
+The step size should exceed the sum of the transaction fee and slippage. Bid and ask prices are updated either every 15 seconds or upon the execution of a position.
+
+## Data
+- Data source: Algotrade database
+- Data period: from 2022-01-01 to 2025-04-29
+- Each sell or buy side will be charge 0.4 / 2 fee.
+### Data collection
+#### Daily closing price data
+- The daily close price, bid, ask and tick price are collected from Algotrade database using SQL queries. 
+- The data is collected using the script `data_loader.py` 
+- The data is stored in the `data/is/` and `data/os/` folders. 
+
+## Implementation
+### Environment Setup
+1. Set up python virtual environment
+```bash
+python -m venv venv
+source venv/bin/activate # for Linux/MacOS
+.\venv\Scripts\activate.bat # for Windows command line
+.\venv\Scripts\Activate.ps1 # for Windows PowerShell
+```
+2. Install the required packages
+```bash
+pip install -r requirements.txt
+```
+3. Configure the system - see [CONFIG_GUIDE.md](CONFIG_GUIDE.md) for detailed configuration instructions.
+   - Copy `.env.redis.example` to `.env.redis` and configure Redis settings
+   - (Optional) Copy `.env.paperbroker.example` to `.env.paperbroker` for FIX execution
+   - (Optional) Create `.env` for database credentials:
+```env
+DB_NAME=<database name>
+DB_USER=<database user name>
+DB_PASSWORD=<database password>
+DB_HOST=<host name or IP address>
+DB_PORT=<database port>
+```
+### Data Collection
+#### Option 1. Download from Google Drive
+Data can be download directly from [Google Drive](https://drive.google.com/drive/folders/181d7JcfHilIvviLgEuaDt2VqwZLYnYUF?usp=sharing). The data files are stored in the `data` folder with the following folder structure:
+```
+data
+├── is
+│   ├── VN30F1M_data.csv
+│   └── VN30F2M_data.csv
+└── os
+    ├── VN30F1M_data.csv
+    └── VN30F2M_data.csv
+```
+You should place this folder to the current ```PYTHONPATH``` for the following steps.
+#### Option 2. Run codes to collect data
+To collect data from database, run this command below in the root directory:
+```bash
+python data_loader.py
+```
+The result will be stored in the `data/is/` and `data/os/`
+### In-sample Backtesting
+Specify period and parameters in `parameter/backtesting_parameter.json` file.
+```bash
+python backtesting.py
+```
+The results are stored in the `result/backtest/` folder.
+
+### Optimization
+To run the optimization, execute the command in the root folder:
+```bash
+python optimization.py
+```
+The optimization parameter are store in `parameter/optimization_parameter.json`. After optimizing, the optimized parameters are stored in `parameter/optimized_parameter.json`.
+
+### Out-of-sample Backtesting
+[TODO: change the script name to out_sample_backtest.py or something like that]: #
+To run the out-of-sample backtesting results, execute this command
+```bash
+python evaluation.py
+```
+[TODO: change the name of optimization folder to out-of-sample-backtesting or something like that]: #
+The script will get value from `parameter/optimized_parameter.json` to execute. The results are stored in the `result/optimization` folder.
+
+## In-sample Backtesting
+Running the in-sample backtesting by execute the command:
+```bash
+python backtesting.py
+```
+### Evaluation Metrics
+- Backtesting results are stored in the `result/backtest/` folder. 
+- Used metrics: 
+  - Sharpe ratio (SR)
+  - Sortino ratio (SoR)
+  - Maximum drawdown (MDD)
+- We use a risk-free rate of 6% per annum, equivalent to approximately 0.023% per day, as a benchmark for evaluating the Sharpe Ratio (SR) and Sortino Ratio (SoR).
+### Parameters
+### In-sample Backtesting Result
+- The backtesting results are constructuted from 2022-01-01 to 2023-01-01.
+```
+| Metric                 | Value                              |
+|------------------------|------------------------------------|
+| Sharpe Ratio           | 1.4564                             |
+| Sortino Ratio          | 2.1903                             |
+| Maximum Drawdown (MDD) | -0.1638                            |
+| HPR (%)                | 49.98                              |
+| Monthly return (%)     | 3.26                               |
+| Annual return (%)      | 36.34                              |
+```
+- The HPR chart. The chart is located at: `result/backtest/hpr.svg`
+![HPR chart with VNINDEX benchmark](result/backtest/hpr.svg)
+- Drawdown chart. The chart is located at `result/backtest/drawdown.svg`
+![Drawdown chart](result/backtest/drawdown.svg)
+- Daily inventory. The chart is located at `result/backtest/inventory.svg`
+![Inventory chart](result/backtest/inventory.svg)
+
+## Optimization
+The configuration of optimization is stored in `parameter/optimization_parameter.json` you can adjust the range of parameters. Random seed is used for reconstructing the optimization process. The optimized parameter is stored in `parameter/optimized_parameter.json`
+The optimization process can be reproduced by executing the command:
+```bash
+python optimization.py
+```
+The currently found optimized parameters with the seed `2025` are:
+```json
+{
+    "step": 2.9
+}
+```
+## Out-of-sample Backtesting
+- Specify the out-sample period and parameters in `parameter/backtesting_parameter.json` file.
+- The out-sample data is loaded on the previous step. Refer to section [Data](#data) for more information.
+- To evaluate the out-sample data run the command below
+```bash
+python evaluation.py
+```
+### Out-of-sample Backtesting Result
+- The out-sample backtesting results are constructuted from 2024-01-02 to 2025-04-29.
+```
+| Metric                 | Value                              |
+|------------------------|------------------------------------|
+| Sharpe Ratio           | 0.2564                             |
+| Sortino Ratio          | 0.4365                             |
+| Maximum Drawdown (MDD) | -0.0854                            |
+| HPR (%)                | 11.23                              |
+| Monthly return (%)     | 1.01                               |
+| Annual return (%)      | 11.25                              |
+```
+- The HPR chart. The chart is located at `result/optimization/hpr.svg`.
+![HPR chart with VNINDEX benchmark](result/optimization/hpr.svg)
+- Drawdown chart. The chart is located at `result/optimization/drawdown.svg`.
+![Drawdown chart](result/optimization/drawdown.svg)
+- Daily inventory. The chart is located at `result/optimization/inventory.svg`
+![Inventory chart](result/optimization/inventory.svg)
+
+## Testing
+
+The project includes a comprehensive test suite covering all components:
+
+**Test Suite Statistics:**
+- **Total Tests:** 383 tests
+- **Pass Rate:** 100% (of runnable tests)
+- **Coverage:** 96%+ across all modules
+- **Test Modes:** Unit, Integration, End-to-End
+
+**Test Organization:**
+- Core tests (37 tests) - EventBus, Order, Position
+- Engine tests (45 tests) - OMS, Portfolio, Risk
+- Data tests (39 tests) - Redis streaming handler
+- Tools tests (38 tests) - Redis publisher
+- Paper trading tests (51 tests) - Trading engine
+- Utils tests (29 tests) - Contract resolution
+- Integration tests (20 tests) - End-to-end workflows
+- Evaluation tests (11 tests) - Monitoring and dashboards
+
+**Running Tests:**
+```bash
+# Run all tests
+pytest tests/ -v
+
+# Run specific component
+pytest tests/core/ -v           # Core tests
+pytest tests/engine/ -v         # Engine tests
+pytest tests/integration/ -v    # Integration tests
+
+# Run with coverage
+pytest tests/ --cov=. --cov-report=html
+```
+
+For detailed test documentation, see [tests/README.md](tests/README.md).
+
+## Reference
+[1] ALGOTRADE, Algorithmic Trading Theory and Practice - A Practical Guide with Applications on the Vietnamese Stock Market, 1st ed. DIMI BOOK, 2023, pp. 52–53. Accessed: May 12, 2025. [Online]. Available: [Link](https://hub.algotrade.vn/knowledge-hub/market-making-strategy/)

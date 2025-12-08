@@ -1,0 +1,8 @@
+[console_scripts]
+pmm-backtest = protomarketmaker.scripts.backtest:main
+pmm-evaluate = protomarketmaker.scripts.evaluate:main
+pmm-iterative-backtest = protomarketmaker.scripts.iterative_backtest:main
+pmm-load-data = protomarketmaker.scripts.load_data:main
+pmm-optimize = protomarketmaker.scripts.optimize:main
+pmm-paper-trade = protomarketmaker.paper_trading.runner:main
+pmm-redis-publish = protomarketmaker.tools.redis_publisher:main
