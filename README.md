@@ -4,8 +4,8 @@
 
 # PROTO:Market Maker
 
-## Place bid-ask base on inventory
-> Place limit order in two sides base on current inventory quantity
+## Place bid-ask based on inventory
+> Place limit orders on both sides based on current inventory quantity
 
 ## Abstract
 In this project, we utilize inventory quantities to simultaneously place both bid and ask orders. The prices of these orders are adjusted dynamically in response to changes in the matched market price. Forced sale scenarios and asset expiration dates are accounted for by incorporating additional fees into the asset's valuation.
@@ -14,7 +14,7 @@ In this project, we utilize inventory quantities to simultaneously place both bi
 In market making, one common approach to liquidity provision involves simultaneously placing bid and ask orders based on the current inventory levels held by the market maker. This strategy dynamically adjusts order prices in response to changes in the matched market price, allowing the market maker to maintain balanced exposure while capturing the bid-ask spread. The positions are held overnight.
 
 ## Hypothesis
-We place bid and ask price with our formula:
+We place bid and ask prices with our formula:
 - $$bid = (price - step) - step * max(inventory, 0) * 0.02$$
 - $$ask = (price + step) - step * min(inventory, 0) * 0.02$$
 
@@ -23,7 +23,7 @@ The step size should exceed the sum of the transaction fee and slippage. Bid and
 ## Data
 - Data source: Algotrade database
 - Data period: from 2022-01-01 to 2025-04-29
-- Each sell or buy side will be charge 0.4 / 2 fee.
+- Each sell or buy side will be charged 0.4 / 2 fee.
 ### Data collection
 #### Daily closing price data
 - The daily close price, bid, ask and tick price are collected from Algotrade database using SQL queries. 
@@ -32,6 +32,9 @@ The step size should exceed the sum of the transaction fee and slippage. Bid and
 
 ## Implementation
 ### Environment Setup
+
+**Recommendation:** We recommend using Python 3.12 for this project. While other versions may work, Python 3.12 has been tested and verified to work smoothly with all dependencies. Some dependencies (e.g., matplotlib) may have compatibility issues with Python 3.13.
+
 1. Set up python virtual environment
 ```bash
 python -m venv venv
@@ -53,7 +56,7 @@ DB_PORT=<database port>
 ```
 ### Data Collection
 #### Option 1. Download from Google Drive
-Data can be download directly from [Google Drive](https://drive.google.com/drive/folders/181d7JcfHilIvviLgEuaDt2VqwZLYnYUF?usp=sharing). The data files are stored in the `data` folder with the following folder structure:
+Data can be downloaded directly from [Google Drive](https://drive.google.com/drive/folders/181d7JcfHilIvviLgEuaDt2VqwZLYnYUF?usp=sharing). The data files are stored in the `data` folder with the following folder structure:
 ```
 data
 ├── is
@@ -70,44 +73,16 @@ To collect data from database, run this command below in the root directory:
 python data_loader.py
 ```
 The result will be stored in the `data/is/` and `data/os/`
-### In-sample Backtesting
+
+## In-sample Backtesting
 Specify period and parameters in `parameter/backtesting_parameter.json` file.
 ```bash
 python backtesting.py
 ```
 The results are stored in the `result/backtest/` folder.
 
-### Optimization
-To run the optimization, execute the command in the root folder:
-```bash
-python optimization.py
-```
-The optimization parameter are store in `parameter/optimization_parameter.json`. After optimizing, the optimized parameters are stored in `parameter/optimized_parameter.json`.
-
-### Out-of-sample Backtesting
-[TODO: change the script name to out_sample_backtest.py or something like that]: #
-To run the out-of-sample backtesting results, execute this command
-```bash
-python evaluation.py
-```
-[TODO: change the name of optimization folder to out-of-sample-backtesting or something like that]: #
-The script will get value from `parameter/optimized_parameter.json` to execute. The results are stored in the `result/optimization` folder.
-
-## In-sample Backtesting
-Running the in-sample backtesting by execute the command:
-```bash
-python backtesting.py
-```
-### Evaluation Metrics
-- Backtesting results are stored in the `result/backtest/` folder. 
-- Used metrics: 
-  - Sharpe ratio (SR)
-  - Sortino ratio (SoR)
-  - Maximum drawdown (MDD)
-- We use a risk-free rate of 6% per annum, equivalent to approximately 0.023% per day, as a benchmark for evaluating the Sharpe Ratio (SR) and Sortino Ratio (SoR).
-### Parameters
 ### In-sample Backtesting Result
-- The backtesting results are constructuted from 2022-01-01 to 2023-01-01.
+- The backtesting results are constructed from 2022-01-01 to 2023-01-01.
 ```
 | Metric                 | Value                              |
 |------------------------|------------------------------------|
@@ -125,8 +100,15 @@ python backtesting.py
 - Daily inventory. The chart is located at `result/backtest/inventory.svg`
 ![Inventory chart](result/backtest/inventory.svg)
 
+### Evaluation Metrics
+- Used metrics: 
+  - Sharpe ratio (SR)
+  - Sortino ratio (SoR)
+  - Maximum drawdown (MDD)
+- We use a risk-free rate of 6% per annum, equivalent to approximately 0.023% per day, as a benchmark for evaluating the Sharpe Ratio (SR) and Sortino Ratio (SoR).
+
 ## Optimization
-The configuration of optimization is stored in `parameter/optimization_parameter.json` you can adjust the range of parameters. Random seed is used for reconstructing the optimization process. The optimized parameter is stored in `parameter/optimized_parameter.json`
+The configuration of optimization is stored in `parameter/optimization_parameter.json`. You can adjust the range of parameters. Random seed is used for reconstructing the optimization process. The optimized parameter is stored in `parameter/optimized_parameter.json`.
 The optimization process can be reproduced by executing the command:
 ```bash
 python optimization.py
@@ -145,7 +127,7 @@ The currently found optimized parameters with the seed `2025` are:
 python evaluation.py
 ```
 ### Out-of-sample Backtesting Result
-- The out-sample backtesting results are constructuted from 2024-01-02 to 2025-04-29.
+- The out-sample backtesting results are constructed from 2024-01-02 to 2025-04-29.
 ```
 | Metric                 | Value                              |
 |------------------------|------------------------------------|
