@@ -170,7 +170,7 @@ class MarketMakerStrategy:
         Args:
             event: RolloverEvent with old/new contract information
         """
-        from core.event import RolloverEvent
+        from protomarketmaker.core.event import RolloverEvent
         if isinstance(event, RolloverEvent):
             self.logger.info(
                 f"Strategy: Contract rollover from {event.old_contract} "

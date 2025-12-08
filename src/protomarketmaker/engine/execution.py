@@ -98,8 +98,8 @@ class MockExecutionEngine:
             # IMPORTANT: Check margin for BOTH BID and ASK when opening positions
             if self.risk_manager:
                 # Create temp order for validation
-                from core.order import Order
-                from core.enums import OrderSide, OrderStatus
+                from protomarketmaker.core.order import Order
+                from protomarketmaker.core.enums import OrderSide, OrderStatus
                 temp_order = Order(
                     contract=order_event.contract,
                     side=OrderSide.BID if order_event.side == "BID" else OrderSide.ASK,

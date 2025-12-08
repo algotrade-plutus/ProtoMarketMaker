@@ -74,11 +74,12 @@ class TestPosition:
             quantity=2,
             average_price=Decimal("1250.0"),
             realized_pnl=Decimal("1000"),
-            total_fees=Decimal("40")
+            total_fees=Decimal("40")  # tracked for reporting only
         )
         pos.update_unrealized_pnl(Decimal("1260.0"))
-        # realized + unrealized - fees = 1000 + 2000 - 40 = 2960
-        assert pos.total_pnl() == Decimal("2960")
+        # realized + unrealized = 1000 + 2000 = 3000
+        # Note: fees are already deducted in realized_pnl, total_fees is for reporting only
+        assert pos.total_pnl() == Decimal("3000")
 
     def test_total_pnl_with_losses(self):
         pos = Position(
@@ -86,11 +87,12 @@ class TestPosition:
             quantity=2,
             average_price=Decimal("1250.0"),
             realized_pnl=Decimal("-500"),
-            total_fees=Decimal("40")
+            total_fees=Decimal("40")  # tracked for reporting only
         )
         pos.update_unrealized_pnl(Decimal("1240.0"))
-        # realized + unrealized - fees = -500 + (-2000) - 40 = -2540
-        assert pos.total_pnl() == Decimal("-2540")
+        # realized + unrealized = -500 + (-2000) = -2500
+        # Note: fees are already deducted in realized_pnl, total_fees is for reporting only
+        assert pos.total_pnl() == Decimal("-2500")
 
     def test_position_helpers(self):
         pos = Position(
@@ -196,7 +198,8 @@ class TestPositionIndividualContracts:
         # Remove 1 contract - should remove oldest (1540.9)
         removed = pos.remove_contracts(1)
 
-        assert removed == [Decimal("1540.9")]
+        # Returns list of (entry_price, opening_fee) tuples
+        assert removed == [(Decimal("1540.9"), Decimal("20"))]
         assert pos.entry_prices == [Decimal("1543.0"), Decimal("1543.7")]
 
     def test_remove_contracts_multiple(self):
@@ -209,7 +212,8 @@ class TestPositionIndividualContracts:
         # Remove 2 contracts - should remove 1540.9 and 1543.0 (FIFO)
         removed = pos.remove_contracts(2)
 
-        assert removed == [Decimal("1540.9"), Decimal("1543.0")]
+        # Returns list of (entry_price, opening_fee) tuples
+        assert removed == [(Decimal("1540.9"), Decimal("20")), (Decimal("1543.0"), Decimal("20"))]
         assert pos.entry_prices == [Decimal("1543.7")]
 
     def test_remove_contracts_all(self):
@@ -219,7 +223,8 @@ class TestPositionIndividualContracts:
 
         removed = pos.remove_contracts(2)
 
-        assert removed == [Decimal("1540.9"), Decimal("1540.9")]
+        # Returns list of (entry_price, opening_fee) tuples
+        assert removed == [(Decimal("1540.9"), Decimal("20")), (Decimal("1540.9"), Decimal("20"))]
         assert pos.entry_prices == []
 
     def test_remove_contracts_more_than_available(self):
@@ -322,7 +327,8 @@ class TestPositionIndividualContracts:
 
         # Close 1 contract (should close 1540.9 first - FIFO)
         removed = pos.remove_contracts(1)
-        assert removed[0] == Decimal("1540.9")
+        # Returns (entry_price, opening_fee) tuple
+        assert removed[0] == (Decimal("1540.9"), Decimal("20"))
         assert len(pos.entry_prices) == 2
         assert pos.entry_prices == [Decimal("1543.0"), Decimal("1543.7")]
 
@@ -332,5 +338,5 @@ class TestPositionIndividualContracts:
 
         # Close 2 contracts (should close 1543.0 and 1543.7 - FIFO)
         removed = pos.remove_contracts(2)
-        assert removed == [Decimal("1543.0"), Decimal("1543.7")]
+        assert removed == [(Decimal("1543.0"), Decimal("20")), (Decimal("1543.7"), Decimal("20"))]
         assert pos.entry_prices == [Decimal("1543.9")]

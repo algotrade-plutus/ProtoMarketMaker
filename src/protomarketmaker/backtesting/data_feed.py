@@ -291,7 +291,7 @@ class HistoricalDataFeed:
             row_date = row['date']
             if current_date != row_date and current_date is not None:
                 # Publish daily settlement event with close prices
-                from core.event import TimeEvent
+                from protomarketmaker.core.event import TimeEvent
                 # Use F2 close if we rolled over, otherwise F1 close
                 if using_f2_prices and current_contract and pd.notna(row.get('f2_close')):
                     daily_close_prices[current_contract] = Decimal(str(row['f2_close']))
@@ -332,7 +332,7 @@ class HistoricalDataFeed:
                     next_expiration = min(remaining_expirations)
                     if next_trading_date >= next_expiration:
                         # Rollover detected! Emit rollover event with BOTH prices
-                        from core.event import RolloverEvent
+                        from protomarketmaker.core.event import RolloverEvent
 
                         f1_price = Decimal(str(row['price']))
                         f2_price = Decimal(str(row.get('f2_price', 0)))
@@ -421,7 +421,7 @@ class HistoricalDataFeed:
 
         # Emit final daily settlement for the last day
         if current_date is not None:
-            from core.event import TimeEvent
+            from protomarketmaker.core.event import TimeEvent
             # Use last row's datetime for final settlement timestamp
             final_settlement = TimeEvent(
                 timestamp=replay_data.iloc[-1]['datetime'].to_pydatetime(),

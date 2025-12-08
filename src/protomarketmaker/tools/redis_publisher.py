@@ -39,7 +39,8 @@ class RedisMarketDataPublisher:
         self,
         redis_host: str = 'localhost',
         redis_port: int = 6379,
-        channel_prefix: str = 'market'
+        channel_prefix: str = 'market',
+        normalize_contracts: bool = False
     ):
         """
         Initialize publisher
@@ -48,29 +49,38 @@ class RedisMarketDataPublisher:
             redis_host: Redis server hostname
             redis_port: Redis server port
             channel_prefix: Channel prefix
+            normalize_contracts: If True, convert actual contract codes (VN30F2202)
+                               to abstract symbols (VN30F1M) for playback mode
         """
         self.redis_host = redis_host
         self.redis_port = redis_port
         self.channel_prefix = channel_prefix
+        self.normalize_contracts = normalize_contracts
 
+        self.redis_pool: Optional[redis.ConnectionPool] = None
         self.redis_client: Optional[redis.Redis] = None
         self.logger = logging.getLogger(__name__)
         self.messages_published = 0
 
+        # Track current front-month contract for normalization
+        self._current_f1m_contract: Optional[str] = None
+
     def connect(self) -> bool:
         """
-        Connect to Redis server
+        Connect to Redis server using connection pool (thread-safe)
 
         Returns:
             True if connected successfully
         """
         try:
-            self.redis_client = redis.Redis(
+            # Use connection pool for thread-safe access
+            self.redis_pool = redis.ConnectionPool(
                 host=self.redis_host,
                 port=self.redis_port,
                 decode_responses=True,
                 socket_connect_timeout=5
             )
+            self.redis_client = redis.Redis(connection_pool=self.redis_pool)
 
             # Test connection
             self.redis_client.ping()
@@ -93,6 +103,44 @@ class RedisMarketDataPublisher:
                 self.logger.error(f"Error disconnecting from Redis: {e}")
             finally:
                 self.redis_client = None
+        if self.redis_pool:
+            try:
+                self.redis_pool.disconnect()
+            except Exception:
+                pass
+            finally:
+                self.redis_pool = None
+
+    def _normalize_contract(self, contract: str) -> str:
+        """
+        Normalize actual contract code to abstract symbol
+
+        For merged CSV data in playback mode, the tickersymbol column contains
+        actual contract codes (e.g., VN30F2202) but we want to publish to
+        abstract channels (VN30F1M, VN30F2M).
+
+        In merged data, all rows represent F1M data (the front-month contract).
+        When a rollover happens, the tickersymbol changes (e.g., VN30F2202 → VN30F2203)
+        but it's still F1M data.
+
+        Args:
+            contract: Actual contract code (e.g., 'VN30F2202')
+
+        Returns:
+            Abstract symbol ('VN30F1M' for all contracts in merged data)
+        """
+        if not self.normalize_contracts:
+            return contract
+
+        # For merged CSV data, all data is F1M
+        # The contract code changes at rollovers but it's still the front month
+        # VN30F2202 = 9 chars, VN30F1M = 7 chars
+        if contract.startswith('VN30F') and len(contract) == 9:
+            # Actual contract code like VN30F2202
+            return 'VN30F1M'
+
+        # Already an abstract symbol
+        return contract
 
     def load_csv(self, csv_path: str):
         """
@@ -564,7 +612,9 @@ class RedisMarketDataPublisher:
         if not self.redis_client:
             raise RuntimeError("Not connected to Redis. Call connect() first.")
 
-        channel = f"{self.channel_prefix}:{contract}"
+        # Normalize contract if enabled (for playback mode)
+        normalized_contract = self._normalize_contract(contract)
+        channel = f"{self.channel_prefix}:{normalized_contract}"
         message = json.dumps(data)
 
         self.redis_client.publish(channel, message)

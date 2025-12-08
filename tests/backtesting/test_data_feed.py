@@ -7,7 +7,7 @@ from datetime import date
 from pathlib import Path
 
 from protomarketmaker.core.event import EventBus, EventType
-from backtesting.data_feed import HistoricalDataFeed
+from protomarketmaker.backtesting.data_feed import HistoricalDataFeed
 
 
 # Get path to test fixtures

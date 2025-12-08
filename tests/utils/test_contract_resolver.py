@@ -280,7 +280,11 @@ class TestContractSymbolResolverFromCSV:
 
     def test_from_csv_basic(self):
         """Test basic from_csv() functionality"""
-        resolver = ContractSymbolResolver.from_csv('data/sample/merged_is_data_1day.csv')
+        from pathlib import Path
+        csv_path = 'data/sample/merged_is_data_1day.csv'
+        if not Path(csv_path).exists():
+            pytest.skip(f"Sample data not found: {csv_path}")
+        resolver = ContractSymbolResolver.from_csv(csv_path)
 
         # Should detect VN30F2202 and VN30F2203 from February 2022 data
         assert resolver.resolve('VN30F1M') == 'VN30F2202'
@@ -288,9 +292,13 @@ class TestContractSymbolResolverFromCSV:
 
     def test_from_csv_with_reference_date(self):
         """Test from_csv() with explicit reference date"""
+        from pathlib import Path
+        csv_path = 'data/sample/merged_is_data_1day.csv'
+        if not Path(csv_path).exists():
+            pytest.skip(f"Sample data not found: {csv_path}")
         # Use a date early in February 2022
         resolver = ContractSymbolResolver.from_csv(
-            'data/sample/merged_is_data_1day.csv',
+            csv_path,
             reference_date=date(2022, 2, 7)
         )
 
@@ -299,7 +307,11 @@ class TestContractSymbolResolverFromCSV:
 
     def test_from_csv_resolver_has_manual_mappings(self):
         """Test that from_csv() creates manual mappings"""
-        resolver = ContractSymbolResolver.from_csv('data/sample/merged_is_data_1day.csv')
+        from pathlib import Path
+        csv_path = 'data/sample/merged_is_data_1day.csv'
+        if not Path(csv_path).exists():
+            pytest.skip(f"Sample data not found: {csv_path}")
+        resolver = ContractSymbolResolver.from_csv(csv_path)
 
         assert resolver.manual_mappings is not None
         assert 'VN30F1M' in resolver.manual_mappings
@@ -307,7 +319,11 @@ class TestContractSymbolResolverFromCSV:
 
     def test_from_csv_expiration_dates(self):
         """Test that detected contracts have correct expiration dates"""
-        resolver = ContractSymbolResolver.from_csv('data/sample/merged_is_data_1day.csv')
+        from pathlib import Path
+        csv_path = 'data/sample/merged_is_data_1day.csv'
+        if not Path(csv_path).exists():
+            pytest.skip(f"Sample data not found: {csv_path}")
+        resolver = ContractSymbolResolver.from_csv(csv_path)
 
         f1_code = resolver.resolve('VN30F1M')
         f2_code = resolver.resolve('VN30F2M')

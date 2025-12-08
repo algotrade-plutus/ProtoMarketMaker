@@ -39,7 +39,7 @@ class TestPaperBrokerConnector:
     @pytest.fixture
     def connector(self, event_bus):
         """Create connector with mocked client"""
-        with patch('connectors.paperbroker_connector.PaperBrokerClient') as MockClient:
+        with patch('protomarketmaker.connectors.paperbroker_connector.PaperBrokerClient') as MockClient:
             mock_instance = Mock()
             mock_instance.on = Mock()
             MockClient.return_value = mock_instance
@@ -60,7 +60,7 @@ class TestPaperBrokerConnector:
 
     def test_initialization(self, event_bus):
         """Test connector initialization"""
-        with patch('connectors.paperbroker_connector.PaperBrokerClient') as MockClient:
+        with patch('protomarketmaker.connectors.paperbroker_connector.PaperBrokerClient') as MockClient:
             mock_instance = Mock()
             mock_instance.on = Mock()
             MockClient.return_value = mock_instance

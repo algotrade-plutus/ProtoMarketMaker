@@ -47,7 +47,7 @@ class RiskManager:
         Returns:
             True if order passes all checks, False otherwise
         """
-        from core.enums import OrderSide
+        from protomarketmaker.core.enums import OrderSide
 
         # Check 1: Price reasonability
         if order.price <= 0:

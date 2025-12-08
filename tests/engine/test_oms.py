@@ -339,7 +339,7 @@ class TestOrderManager:
         def capture_event(event):
             published_events.append(event)
 
-        from core.enums import EventType
+        from protomarketmaker.core.enums import EventType
         bus.subscribe(EventType.ORDER, capture_event)
 
         order = oms.create_order("VN30F1M", OrderSide.BID, Decimal("1250"), 1)

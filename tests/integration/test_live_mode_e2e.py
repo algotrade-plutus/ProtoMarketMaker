@@ -147,7 +147,7 @@ class TestLiveModeEndToEnd:
 
     def test_live_mode_f2m_subscription(self):
         """Test F2M subscription in live mode during rollover"""
-        from data.redis_stream import RedisMarketDataHandler
+        from protomarketmaker.data.redis_stream import RedisMarketDataHandler
 
         # Mock current date to be near expiration
         bus = EventBus()
@@ -169,7 +169,7 @@ class TestLiveModeEndToEnd:
 
     def test_live_mode_contract_rollover(self):
         """Test contract rollover detection in live mode"""
-        from data.redis_stream import RedisMarketDataHandler
+        from protomarketmaker.data.redis_stream import RedisMarketDataHandler
 
         bus = EventBus()
         handler = RedisMarketDataHandler(

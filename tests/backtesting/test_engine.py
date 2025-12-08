@@ -6,7 +6,7 @@ from decimal import Decimal
 from datetime import date
 from pathlib import Path
 
-from backtesting.engine import BacktestingEngine
+from protomarketmaker.backtesting.engine import BacktestingEngine
 
 
 # Get path to test fixtures

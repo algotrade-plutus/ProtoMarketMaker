@@ -305,10 +305,12 @@ class TestEngineCore:
 
         portfolio_instance = Mock()
         portfolio_instance.get_total_value = Mock(return_value=Decimal('503000'))
+        portfolio_instance.calculate_nav = Mock(return_value=Decimal('503000'))
         portfolio_instance.get_daily_nav_history = Mock(return_value=[])
         portfolio_instance.get_daily_returns = Mock(return_value=[])
         portfolio_instance.get_tracking_dates = Mock(return_value=[])
         portfolio_instance.get_rollover_history = Mock(return_value=[])
+        portfolio_instance.positions = {}
         portfolio_instance.performance_evaluator = None
         mock_portfolio_class.return_value = portfolio_instance
 
@@ -387,10 +389,12 @@ class TestEngineCore:
 
         portfolio_instance = Mock()
         portfolio_instance.get_total_value = Mock(return_value=Decimal('503000'))
+        portfolio_instance.calculate_nav = Mock(return_value=Decimal('503000'))
         portfolio_instance.get_daily_nav_history = Mock(return_value=[])
         portfolio_instance.get_daily_returns = Mock(return_value=[])
         portfolio_instance.get_tracking_dates = Mock(return_value=[])
         portfolio_instance.get_rollover_history = Mock(return_value=[])
+        portfolio_instance.positions = {}
         portfolio_instance.performance_evaluator = None
         mock_portfolio_class.return_value = portfolio_instance
 

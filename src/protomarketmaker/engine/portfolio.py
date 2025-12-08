@@ -308,7 +308,7 @@ class PortfolioManager:
         Args:
             event: RolloverEvent with old/new contract and prices
         """
-        from core.event import RolloverEvent
+        from protomarketmaker.core.event import RolloverEvent
         if not isinstance(event, RolloverEvent):
             return
 
