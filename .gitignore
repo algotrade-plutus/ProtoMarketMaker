@@ -3,4 +3,12 @@ __init__.py
 .DS_Store
 .env
 *.csv
-venv/
+*venv/
+.python-version
+
+# plutus-verify ephemera
+.plutus/run/
+.plutus/build/
+.plutus/Dockerfile.generated
+.plutus/manifest.yaml.draft
+.plutus/manifest_TODO.md

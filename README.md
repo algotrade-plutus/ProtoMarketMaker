@@ -149,12 +149,12 @@ python evaluation.py
 ```
 | Metric                 | Value                              |
 |------------------------|------------------------------------|
-| Sharpe Ratio           | 0.1105                             |
-| Sortino Ratio          | 0.1605                             |
+| Sharpe Ratio           | 0.0815                             |
+| Sortino Ratio          | 0.1183                             |
 | Maximum Drawdown (MDD) | -0.1028                            |
-| HPR (%)                | 8.48                               |
-| Monthly return (%)     | 0.56                               |
-| Annual return (%)      | 6.20                               |
+| HPR (%)                | 8.02                               |
+| Monthly return (%)     | 0.57                               |
+| Annual return (%)      | 6.21                               |
 ```
 - The HPR chart. The chart is located at `result/optimization/hpr.svg`.
 ![HPR chart with VNINDEX benchmark](result/optimization/hpr.svg)

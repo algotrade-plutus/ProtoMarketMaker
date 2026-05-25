@@ -9,6 +9,8 @@ from typing import List
 import pandas as pd
 import matplotlib.pyplot as plt
 
+import plutus_verify as pv
+
 from config.config import BACKTESTING_CONFIG
 from metrics.metric import get_returns, Metric
 from utils import get_expired_dates, from_cash_to_tradeable_contracts, round_decimal
@@ -354,13 +356,12 @@ if __name__ == "__main__":
     data = bt.process_data()
     bt.run(data, Decimal("1.8"))
 
-    print(
-        f"Sharpe ratio: {bt.metric.sharpe_ratio(risk_free_return=Decimal('0.00023')) * Decimal(np.sqrt(250))}"
-    )
-    print(
-        f"Sortino ratio: {bt.metric.sortino_ratio(risk_free_return=Decimal('0.00023')) * Decimal(np.sqrt(250))}"
-    )
+    sharpe = bt.metric.sharpe_ratio(risk_free_return=Decimal('0.00023')) * Decimal(np.sqrt(250))
+    sortino = bt.metric.sortino_ratio(risk_free_return=Decimal('0.00023')) * Decimal(np.sqrt(250))
     mdd, _ = bt.metric.maximum_drawdown()
+
+    print(f"Sharpe ratio: {sharpe}")
+    print(f"Sortino ratio: {sortino}")
     print(f"Maximum drawdown: {mdd}")
 
     monthly_df = pd.DataFrame(bt.monthly_tracking, columns=["date", "asset"])
@@ -373,3 +374,15 @@ if __name__ == "__main__":
     bt.plot_hpr()
     bt.plot_drawdown()
     bt.plot_inventory()
+
+    with pv.step("in_sample_backtest") as r:
+        r.metric("sharpe_ratio",     float(sharpe),                    unit="ratio")
+        r.metric("sortino_ratio",    float(sortino),                   unit="ratio")
+        r.metric("maximum_drawdown", float(mdd),                       unit="ratio")
+        r.metric("hpr",              float(bt.metric.hpr()),           unit="ratio")
+        r.metric("monthly_return",   float(returns['monthly_return']), unit="ratio")
+        r.metric("annual_return",    float(returns['annual_return']),  unit="ratio")
+        r.artifact("equity_curve",   "result/backtest/hpr.svg",       kind="chart")
+        r.artifact("drawdown_chart", "result/backtest/drawdown.svg",  kind="chart")
+        r.artifact("inventory",      "result/backtest/inventory.svg", kind="chart")
+        r.metadata(seed=2025)
