@@ -6,7 +6,7 @@
 
 **Architecture:** All pipeline source moves under `src/proto_market_maker/`. Entry scripts become package modules exposing `main()`, wired as console scripts in `pyproject.toml`. Dependencies are upgraded and pinned via a committed `uv.lock`. The plutus manifest switches to `manager: uv` + `install_project: true` and invokes the console scripts. `plutus_verify` is **never** a runtime dependency — it is staged into the container by plutus and only installed locally for dev verification.
 
-**Tech Stack:** Python ≥3.11, uv, hatchling build backend, pytest, plutus-verify 0.4.4.
+**Tech Stack:** Python ≥3.11, uv, hatchling build backend, pytest, plutus-verify 0.4.6.
 
 ## Global Constraints
 
@@ -17,7 +17,7 @@
 - `plutus_verify` is NOT a project dependency (runtime or otherwise). Local dev installs it ad-hoc from the sibling wheel.
 - Console scripts: `pmm-load-data`, `pmm-backtest`, `pmm-optimize`, `pmm-evaluate`, each → `proto_market_maker.<module>:main`.
 - Data/config/output paths stay at repo root and are cwd-relative: `parameter/`, `data/`, `result/`. Pipeline runs from the repo root.
-- The plutus manifest uses `env.install_project: true` — a field added by a **separate plutus-verify patch**. The `plutus check`/`snapshot` gate (Task 6) is **blocked** until that patch lands; everything before it is verifiable locally.
+- The plutus manifest uses `env.install_project: true`. This field **landed in plutus-verify 0.4.6** (the local wheel/checkout), so the `plutus check`/`snapshot` gate (Task 6) can now run; everything before it is also verifiable locally.
 - All file moves use `git mv` to preserve history.
 
 ---
@@ -244,7 +244,7 @@ from proto_market_maker.config.config import db_params
 
 Run:
 ```bash
-uv pip install /Users/nadan/algotrade-research/plutus-verify/dist/plutus_verify-0.4.4-py3-none-any.whl
+uv pip install /Users/nadan/algotrade-research/plutus-verify/dist/plutus_verify-0.4.6-py3-none-any.whl
 uv run python -c "import proto_market_maker.backtest, proto_market_maker.evaluate, proto_market_maker.optimize, proto_market_maker.data_loader, proto_market_maker.utils, proto_market_maker.database.data_service; print('imports OK')"
 ```
 Expected: prints `imports OK`. (The first command installs `plutus_verify` into the dev venv only — it is needed because `backtest.py`/`evaluate.py` do `import plutus_verify`. It is NOT added to `pyproject.toml`.)
@@ -329,7 +329,7 @@ Expected: `['pmm-backtest', 'pmm-evaluate', 'pmm-load-data', 'pmm-optimize']`.
 (`data/is/` + `data/os/` CSVs are already present on disk from the earlier Drive download. `plutus_verify` was installed into the dev venv in Task 2.)
 Run:
 ```bash
-uv run --with /Users/nadan/algotrade-research/plutus-verify/dist/plutus_verify-0.4.4-py3-none-any.whl pmm-backtest
+uv run --with /Users/nadan/algotrade-research/plutus-verify/dist/plutus_verify-0.4.6-py3-none-any.whl pmm-backtest
 ```
 Expected: prints Sharpe/Sortino/MDD/HPR/returns and writes `result/backtest/{hpr,drawdown,inventory}.svg`. No `ImportError` (confirms the old `utils` collision is dead).
 
@@ -337,7 +337,7 @@ Expected: prints Sharpe/Sortino/MDD/HPR/returns and writes `result/backtest/{hpr
 
 Run:
 ```bash
-uv run --with /Users/nadan/algotrade-research/plutus-verify/dist/plutus_verify-0.4.4-py3-none-any.whl pmm-evaluate
+uv run --with /Users/nadan/algotrade-research/plutus-verify/dist/plutus_verify-0.4.6-py3-none-any.whl pmm-evaluate
 ```
 Expected: prints metrics and writes `result/optimization/{hpr,drawdown,inventory}.svg`.
 
@@ -408,7 +408,7 @@ def test_round_decimal_returns_decimal():
 
 Run:
 ```bash
-uv run --with /Users/nadan/algotrade-research/plutus-verify/dist/plutus_verify-0.4.4-py3-none-any.whl pytest -q
+uv run --with /Users/nadan/algotrade-research/plutus-verify/dist/plutus_verify-0.4.6-py3-none-any.whl pytest -q
 ```
 Expected: all tests PASS. (`--with` covers the `plutus_verify` import pulled in transitively by `proto_market_maker.backtest`.)
 
