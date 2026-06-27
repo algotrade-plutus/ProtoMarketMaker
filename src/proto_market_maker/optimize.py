@@ -7,8 +7,8 @@ from decimal import Decimal
 import logging
 import optuna
 from optuna.samplers import TPESampler
-from config.config import OPTIMIZATION_CONFIG
-from backtesting import Backtesting
+from proto_market_maker.config.config import OPTIMIZATION_CONFIG
+from proto_market_maker.backtest import Backtesting
 
 
 class OptunaCallBack:
