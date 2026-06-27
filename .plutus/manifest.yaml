@@ -10,7 +10,7 @@ env:
   manager: uv
   lockfile: uv.lock
   install_project: true
-  requirements_file: null
+  requirements_file:
   os_packages: []
 secrets:
   - key: DB_NAME
@@ -75,6 +75,8 @@ steps:
       - data/is/VN30F1M_data.csv
       - data/is/VN30F2M_data.csv
       - parameter/backtesting_parameter.json
+      - parameter/optimization_parameter.json
+      - parameter/optimized_parameter.json
     outputs:
       - result/backtest/hpr.svg
       - result/backtest/drawdown.svg
@@ -91,6 +93,7 @@ steps:
       - data/os/VN30F2M_data.csv
       - parameter/optimized_parameter.json
       - parameter/backtesting_parameter.json
+      - parameter/optimization_parameter.json
     outputs:
       - result/optimization/hpr.svg
       - result/optimization/drawdown.svg
