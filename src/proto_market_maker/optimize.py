@@ -46,7 +46,7 @@ class OptunaCallBack:
         )
 
 
-if __name__ == "__main__":
+def main():
     data = Backtesting.process_data()
 
     def objective(trial):
@@ -81,3 +81,7 @@ if __name__ == "__main__":
     study.optimize(
         objective, n_trials=OPTIMIZATION_CONFIG["no_trials"], callbacks=[optunaCallBack]
     )
+
+
+if __name__ == "__main__":
+    main()

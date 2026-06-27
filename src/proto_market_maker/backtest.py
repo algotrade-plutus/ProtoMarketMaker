@@ -348,7 +348,7 @@ class Backtesting:
         plt.savefig(path, dpi=300, bbox_inches='tight')
 
 
-if __name__ == "__main__":
+def main():
     bt = Backtesting(
         capital=Decimal("5e5"),
     )
@@ -386,3 +386,7 @@ if __name__ == "__main__":
         r.artifact("drawdown_chart", "result/backtest/drawdown.svg",  kind="chart")
         r.artifact("inventory",      "result/backtest/inventory.svg", kind="chart")
         r.metadata(seed=2025)
+
+
+if __name__ == "__main__":
+    main()
