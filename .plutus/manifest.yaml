@@ -1,4 +1,4 @@
-# PLUTUS-standard manifest (plutus-verify 0.4.4). Bless with `plutus snapshot .`,
+# PLUTUS-standard manifest (plutus-verify 0.4.6). Bless with `plutus snapshot .`,
 # verify with `plutus check .` (read-only). See plutus-verify GUIDELINE.md.
 schema_version: '2.0'
 repo:
