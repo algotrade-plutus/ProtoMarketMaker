@@ -7,7 +7,10 @@ repo:
 env:
   base: python
   python_version: '3.11'
-  requirements_file: requirements.txt
+  manager: uv
+  lockfile: uv.lock
+  install_project: true
+  requirements_file: null
   os_packages: []
 secrets:
   - key: DB_NAME
@@ -42,7 +45,7 @@ steps:
     required: true
     network: bridge
     timeout_seconds: 1800
-    command: "python data_loader.py"
+    command: "pmm-load-data"
     inputs: []
     outputs:
       - data/is/VN30F1M_data.csv
@@ -67,7 +70,7 @@ steps:
     required: true
     network: none
     timeout_seconds: 1800
-    command: "python backtesting.py"
+    command: "pmm-backtest"
     inputs:
       - data/is/VN30F1M_data.csv
       - data/is/VN30F2M_data.csv
@@ -82,7 +85,7 @@ steps:
     required: true
     network: none
     timeout_seconds: 1800
-    command: "python evaluation.py"
+    command: "pmm-evaluate"
     inputs:
       - data/os/VN30F1M_data.csv
       - data/os/VN30F2M_data.csv
