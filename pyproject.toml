@@ -1,0 +1,29 @@
+[project]
+name = "proto-market-maker"
+version = "0.1.0"
+description = "VN30 futures market-making research pipeline"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas>=2.2",
+    "numpy>=2.0",
+    "matplotlib>=3.9",
+    "optuna>=3.6",
+    "psycopg2-binary>=2.9",
+    "python-dotenv>=1.0",
+]
+
+[project.scripts]
+pmm-load-data = "proto_market_maker.data_loader:main"
+pmm-backtest  = "proto_market_maker.backtest:main"
+pmm-optimize  = "proto_market_maker.optimize:main"
+pmm-evaluate  = "proto_market_maker.evaluate:main"
+
+[dependency-groups]
+dev = ["pytest>=8", "pylint>=3.3"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/proto_market_maker"]
