@@ -5,8 +5,8 @@ Data service
 import psycopg2
 import pandas as pd
 
-from database.query import MATCHED_QUERY, BID_ASK_QUERY, CLOSE_QUERY
-from config.config import db_params
+from proto_market_maker.database.query import MATCHED_QUERY, BID_ASK_QUERY, CLOSE_QUERY
+from proto_market_maker.config.config import db_params
 
 
 class DataService:

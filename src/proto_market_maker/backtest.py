@@ -11,9 +11,9 @@ import matplotlib.pyplot as plt
 
 import plutus_verify as pv
 
-from config.config import BACKTESTING_CONFIG
-from metrics.metric import get_returns, Metric
-from utils import get_expired_dates, from_cash_to_tradeable_contracts, round_decimal
+from proto_market_maker.config.config import BACKTESTING_CONFIG
+from proto_market_maker.metrics.metric import get_returns, Metric
+from proto_market_maker.utils import get_expired_dates, from_cash_to_tradeable_contracts, round_decimal
 
 FEE_PER_CONTRACT = Decimal(BACKTESTING_CONFIG["fee"]) * Decimal('100')
 

@@ -5,8 +5,8 @@ Loading data to csv file
 import os
 from datetime import datetime
 import pandas as pd
-from database.data_service import DataService
-from config.config import BACKTESTING_CONFIG
+from proto_market_maker.database.data_service import DataService
+from proto_market_maker.config.config import BACKTESTING_CONFIG
 
 
 def init_folder(path: str):

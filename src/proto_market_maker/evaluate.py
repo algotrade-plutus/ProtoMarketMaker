@@ -8,9 +8,9 @@ import pandas as pd
 
 import plutus_verify as pv
 
-from config.config import BEST_CONFIG
-from backtesting import Backtesting
-from metrics.metric import get_returns
+from proto_market_maker.config.config import BEST_CONFIG
+from proto_market_maker.backtest import Backtesting
+from proto_market_maker.metrics.metric import get_returns
 
 
 if __name__ == "__main__":
