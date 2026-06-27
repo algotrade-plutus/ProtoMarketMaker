@@ -30,20 +30,21 @@ The step size should exceed the sum of the transaction fee and slippage. Bid and
 - The data is collected using the script `data_loader.py` 
 - The data is stored in the `data/is/` and `data/os/` folders. 
 
+## Setup & run
+
+```bash
+uv sync                 # create the env from the committed uv.lock
+uv run pmm-load-data    # pull data (needs DB secrets in .env)
+uv run pmm-optimize     # optimization study
+uv run pmm-backtest     # in-sample backtest
+uv run pmm-evaluate     # out-of-sample evaluation
+```
+
+Reproducibility is verified with `plutus check .` (see `.plutus/manifest.yaml`).
+
 ## Implementation
 ### Environment Setup
-1. Set up python virtual environment
-```bash
-python -m venv venv
-source venv/bin/activate # for Linux/MacOS
-.\venv\Scripts\activate.bat # for Windows command line
-.\venv\Scripts\Activate.ps1 # for Windows PowerShell
-```
-2. Install the required packages
-```bash
-pip install -r requirements.txt
-```
-3. (OPTIONAL) Create `.env` file in the root directory of the project and fill in the required information. The `.env` file is used to store environment variables that are used in the project. The following is an example of a `.env` file:
+1. (OPTIONAL) Create `.env` file in the root directory of the project and fill in the required information. The `.env` file is used to store environment variables that are used in the project. The following is an example of a `.env` file:
 ```env
 DB_NAME=<database name>
 DB_USER=<database user name>
@@ -67,28 +68,27 @@ You should place this folder to the current ```PYTHONPATH``` for the following s
 #### Option 2. Run codes to collect data
 To collect data from database, run this command below in the root directory:
 ```bash
-python data_loader.py
+uv run pmm-load-data
 ```
 The result will be stored in the `data/is/` and `data/os/`
 ### In-sample Backtesting
 Specify period and parameters in `parameter/backtesting_parameter.json` file.
 ```bash
-python backtesting.py
+uv run pmm-backtest
 ```
 The results are stored in the `result/backtest/` folder.
 
 ### Optimization
 To run the optimization, execute the command in the root folder:
 ```bash
-python optimization.py
+uv run pmm-optimize
 ```
 The optimization parameter are store in `parameter/optimization_parameter.json`. After optimizing, the optimized parameters are stored in `parameter/optimized_parameter.json`.
 
 ### Out-of-sample Backtesting
-[TODO: change the script name to out_sample_backtest.py or something like that]: #
 To run the out-of-sample backtesting results, execute this command
 ```bash
-python evaluation.py
+uv run pmm-evaluate
 ```
 [TODO: change the name of optimization folder to out-of-sample-backtesting or something like that]: #
 The script will get value from `parameter/optimized_parameter.json` to execute. The results are stored in the `result/optimization` folder.
@@ -96,7 +96,7 @@ The script will get value from `parameter/optimized_parameter.json` to execute. 
 ## In-sample Backtesting
 Running the in-sample backtesting by execute the command:
 ```bash
-python backtesting.py
+uv run pmm-backtest
 ```
 ### Evaluation Metrics
 - Backtesting results are stored in the `result/backtest/` folder. 
@@ -129,7 +129,7 @@ python backtesting.py
 The configuration of optimization is stored in `parameter/optimization_parameter.json` you can adjust the range of parameters. Random seed is used for reconstructing the optimization process. The optimized parameter is stored in `parameter/optimized_parameter.json`
 The optimization process can be reproduced by executing the command:
 ```bash
-python optimization.py
+uv run pmm-optimize
 ```
 The currently found optimized parameters with the seed `2025` are:
 ```json
@@ -142,7 +142,7 @@ The currently found optimized parameters with the seed `2025` are:
 - The out-sample data is loaded on the previous step. Refer to section [Data](#data) for more information.
 - To evaluate the out-sample data run the command below
 ```bash
-python evaluation.py
+uv run pmm-evaluate
 ```
 ### Out-of-sample Backtesting Result
 - The out-sample backtesting results are constructuted from 2024-01-02 to 2025-04-29.
