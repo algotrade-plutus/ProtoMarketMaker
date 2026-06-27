@@ -11,3 +11,7 @@ __pycache__
 .plutus/Dockerfile.generated
 .plutus/manifest.yaml.draft
 .plutus/manifest_TODO.md
+
+# build artifacts
+dist/
+*.egg-info/
