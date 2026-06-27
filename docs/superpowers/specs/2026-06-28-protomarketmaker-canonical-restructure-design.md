@@ -81,7 +81,7 @@ Deleted (empty, unused by the pipeline): `engine/`, `core/`, `connectors/`, `pap
 ## pyproject.toml
 
 - Build backend: **hatchling**; `requires-python = ">=3.11"`; package = `src/proto_market_maker`.
-- `dependencies` (pinned, from current requirements.txt): `pandas==2.2.2`, `numpy==2.0.1`, `matplotlib==3.9.1`, `optuna==3.6.1`, `psycopg2-binary==2.9.9`, `python-dotenv==1.0.1`.
+- `dependencies` (**upgrade pass** — declare loose lower-bound constraints, let `uv lock` resolve latest-compatible, pin via the committed `uv.lock`): `pandas`, `numpy`, `matplotlib`, `optuna`, `psycopg2-binary`, `python-dotenv`. Existing versions (`pandas 2.2.2`, `numpy 2.0.1`, `matplotlib 3.9.1`, `optuna 3.6.1`, `psycopg2-binary 2.9.9`, `python-dotenv 1.0.1`) are the floor, not the target. The local verification step must catch breakage from the bumps (numpy/pandas/matplotlib majors are the likely risk).
 - `[dependency-groups] dev`: `pylint`, `pytest` (PEP 735; installed by `uv sync`).
 - `[project.scripts]`:
   - `pmm-load-data = "proto_market_maker.data_loader:main"`
@@ -130,7 +130,8 @@ All intra-project imports become absolute, package-qualified:
 
 ## Risks / dependencies
 
-1. **Prerequisite:** the plutus `install_project` patch must land before the `plutus check` gate can import the package. Until then, local `uv run` verification stands in.
+1. **Prerequisite:** the plutus `install_project` patch must land before the `plutus check` gate can import the package. Implementation proceeds through all package/manifest work and **pauses at the `plutus check`/`snapshot` gate** for the user to verify once the patch lands; local `uv run` + `uv run pytest` verification stands in until then.
+5. **Dependency upgrade:** deps are bumped to latest-compatible (not held at current pins), so the local verification step is also a regression check against the new versions. If a bump breaks the pipeline, either fix forward or add a targeted upper-bound constraint and re-lock.
 2. **Re-blessed metrics:** values may differ slightly under pinned deps; that is expected and the new baseline is committed deliberately.
 3. **cwd-relative paths:** `parameter/`, `data/`, `result/` are resolved relative to the working directory; correct under plutus (`/work`) and documented for local runs (run from repo root). Making them configurable is out of scope.
 4. **`data/` not committed:** the verifier resolves it from the declared Google Drive source (requires plutus's `gdown` dependency, also handed off separately).
