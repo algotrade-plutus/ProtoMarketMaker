@@ -2,6 +2,7 @@
 This is main module for strategy backtesting
 """
 
+import os
 import numpy as np
 from datetime import timedelta
 from decimal import Decimal, ROUND_HALF_UP
@@ -307,6 +308,7 @@ class Backtesting:
         plt.ylabel('Holding Period Return (%)')
         plt.grid(True)
         plt.legend()
+        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
         plt.savefig(path, dpi=300, bbox_inches='tight')
 
     def plot_drawdown(self, path="result/backtest/drawdown.svg"):
@@ -330,6 +332,7 @@ class Backtesting:
         plt.xlabel('Time Step')
         plt.ylabel('Percentage')
         plt.grid(True)
+        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
         plt.savefig(path, dpi=300, bbox_inches='tight')
 
     def plot_inventory(self, path="result/backtest/inventory.svg"):
@@ -345,6 +348,7 @@ class Backtesting:
         plt.xlabel('Time Step')
         plt.grid(True)
         plt.tight_layout()
+        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
         plt.savefig(path, dpi=300, bbox_inches='tight')
 
 
