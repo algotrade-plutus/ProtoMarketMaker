@@ -13,7 +13,7 @@ from proto_market_maker.backtest import Backtesting
 from proto_market_maker.metrics.metric import get_returns
 
 
-if __name__ == "__main__":
+def main():
     data = Backtesting.process_data(evaluation=True)
     bt = Backtesting(capital=Decimal('5e5'))
 
@@ -47,3 +47,7 @@ if __name__ == "__main__":
         r.artifact("drawdown_chart", "result/optimization/drawdown.svg",  kind="chart")
         r.artifact("inventory",      "result/optimization/inventory.svg", kind="chart")
         r.metadata(seed=2025)
+
+
+if __name__ == "__main__":
+    main()

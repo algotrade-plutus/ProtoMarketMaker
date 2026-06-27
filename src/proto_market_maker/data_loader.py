@@ -61,7 +61,7 @@ def loading_bid_ask(from_date, to_date, contract_type, validation=False):
     )
 
 
-if __name__ == "__main__":
+def main():
     required_directories = [
         "data",
         "data/is",
@@ -89,3 +89,7 @@ if __name__ == "__main__":
     print("Loading out-sample data")
     loading_bid_ask(os_from_date, os_to_date, "VN30F1M", validation=True)
     loading_bid_ask(os_from_date, os_to_date, "VN30F2M", validation=True)
+
+
+if __name__ == "__main__":
+    main()
