@@ -40,6 +40,9 @@ uv run pmm-backtest     # in-sample backtest
 uv run pmm-evaluate     # out-of-sample evaluation
 ```
 
+Dependencies are pinned by the committed `uv.lock` (currently on the latest
+major lines — pandas 3.x, numpy 2.x); `uv sync` restores them exactly.
+
 Reproducibility is verified with `plutus check .` (see `.plutus/manifest.yaml`).
 
 ## Implementation
