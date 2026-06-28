@@ -24,7 +24,7 @@ The step size should exceed the sum of the transaction fee and slippage. Bid and
 - Data source: Algotrade database
 - Data period: from 2022-01-01 to 2025-04-29
 - Each sell or buy side will be charge 0.4 / 2 fee.
-### Data collection
+### Data Preparation
 #### Daily closing price data
 - The daily close price, bid, ask and tick price are collected from Algotrade database using SQL queries. 
 - The data is collected using the script `data_loader.py` 
@@ -43,7 +43,28 @@ uv run pmm-evaluate     # out-of-sample evaluation
 Dependencies are pinned by the committed `uv.lock` (currently on the latest
 major lines — pandas 3.x, numpy 2.x); `uv sync` restores them exactly.
 
-Reproducibility is verified with `plutus check .` (see `.plutus/manifest.yaml`).
+## Reproducibility (PLUTUS Standard v2025)
+
+This repo follows the **PLUTUS Standard v2025** nine-step taxonomy and ships a
+`.plutus/manifest.yaml` that declares the environment, data sources, steps, and
+expected metrics. Results are verified in an isolated Docker container with
+[plutus-verify](https://github.com/algotrade-plutus/plutus-verify) **v0.5.0**,
+installed straight from the public release wheel — no build-from-source needed:
+
+```bash
+# Requires Docker running and Python >= 3.11
+python -m venv .plutus-venv && source .plutus-venv/bin/activate
+pip install "plutus-verify[runner] @ https://github.com/algotrade-plutus/plutus-verify/releases/download/v0.5.0/plutus_verify-0.5.0-py3-none-any.whl"
+
+plutus check .     # build -> run each step in-container -> compare vs baseline
+```
+
+The `[runner]` extra brings Docker, repo2docker, and gdown, so `plutus check`
+builds the image, downloads the dataset from the declared Google Drive source,
+installs this package and runs each step's console script in-container, then
+compares the produced metrics and charts against the committed baseline in
+`.plutus/expected/`. Exit code `0` = reproduced (within tolerance), `1` =
+partial, `2` = failed.
 
 ## Implementation
 ### Environment Setup
@@ -55,7 +76,7 @@ DB_PASSWORD=<database password>
 DB_HOST=<host name or IP address>
 DB_PORT=<database port>
 ```
-### Data Collection
+### Data Preparation
 #### Option 1. Download from Google Drive
 Data can be download directly from [Google Drive](https://drive.google.com/drive/folders/181d7JcfHilIvviLgEuaDt2VqwZLYnYUF?usp=sharing). The data files are stored in the `data` folder with the following folder structure:
 ```
