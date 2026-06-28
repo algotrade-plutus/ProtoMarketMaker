@@ -37,8 +37,8 @@ Daily close price, bid, ask, and tick data are collected from the Algotrade data
 
 ### Obtaining the data
 
-**Option 1 — Download from Google Drive (no database credentials needed).**
-Download directly from [Google Drive](https://drive.google.com/drive/folders/181d7JcfHilIvviLgEuaDt2VqwZLYnYUF?usp=sharing). Place the `data/` folder at the repository root so the pipeline resolves `data/is/...` and `data/os/...`:
+**Option 1 — Download from Google Drive (Recommended; no database credentials needed).**
+This is the recommended path: the prepared data is published on Google Drive, so you can reproduce every downstream step without any database access. Download directly from [Google Drive](https://drive.google.com/drive/folders/181d7JcfHilIvviLgEuaDt2VqwZLYnYUF?usp=sharing). Place the `data/` folder at the repository root so the pipeline resolves `data/is/...` and `data/os/...`:
 
 ```
 data
@@ -81,12 +81,17 @@ The rules are evaluated with the following metrics, which are also the `expected
 With the rules and metrics defined, the strategy can be run and reproduced. The pipeline is packaged as `proto_market_maker` with console-script entry points (`pmm-load-data`, `pmm-backtest`, `pmm-optimize`, `pmm-evaluate`); each step below shows its own command.
 
 ### Environment setup
-
+#### Setup the virtual environment
 ```bash
 uv sync     # create the env from the committed uv.lock
 ```
 
-Dependencies are pinned by the committed `uv.lock` (currently on the latest major lines — pandas 3.x, numpy 2.x); `uv sync` restores them exactly. To collect data from the database (Step 2, Option 2), copy `.env.example` to `.env` at the repo root and fill in the credentials:
+Dependencies are pinned by the committed `uv.lock` (currently on the latest major lines — pandas 3.x, numpy 2.x); `uv sync` restores them exactly.
+
+#### Database credentials (Optional)
+*Database credentials are only needed if you intend to re-run the data preparation step from the database(Step 2, Option 2).* You can skip this entirely otherwise — the recommended path downloads the prepared data from Google Drive (Step 2, Option 1), and `plutus check` plus all backtests work with that, no database access required.
+
+To regenerate the data from the Algotrade database, copy `.env.example` to `.env` at the repo root and fill in the credentials:
 
 ```env
 HOST=<host name or IP address>
@@ -101,9 +106,10 @@ PASSWORD=<database password>
 This repo ships a `.plutus/manifest.yaml` declaring the environment, data sources, steps, and expected metrics. Reproduce every result in an isolated Docker container with [plutus-verify](https://github.com/algotrade-plutus/plutus-verify) **v0.5.0**, installed straight from the public release wheel — no build-from-source needed:
 
 ```bash
-# Requires Docker running and Python >= 3.11
-python -m venv .plutus-venv && source .plutus-venv/bin/activate
-pip install "plutus-verify[runner] @ https://github.com/algotrade-plutus/plutus-verify/releases/download/v0.5.0/plutus_verify-0.5.0-py3-none-any.whl"
+# Requires Docker running. `uv venv` provisions a suitable Python (>= 3.11)
+# automatically — no system python/pyenv needed.
+uv venv .plutus-venv && source .plutus-venv/bin/activate
+uv pip install "plutus-verify[runner] @ https://github.com/algotrade-plutus/plutus-verify/releases/download/v0.5.0/plutus_verify-0.5.0-py3-none-any.whl"
 
 plutus check .     # build -> run each step in-container -> compare vs baseline
 ```
