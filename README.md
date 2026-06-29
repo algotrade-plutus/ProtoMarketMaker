@@ -138,12 +138,15 @@ Charts are written to `result/backtest/`.
 | Annual return (%)      | 17.10   |
 
 HPR chart — `result/backtest/hpr.svg`
+
 ![HPR chart with VNINDEX benchmark](result/backtest/hpr.svg)
 
 Drawdown chart — `result/backtest/drawdown.svg`
+
 ![Drawdown chart](result/backtest/drawdown.svg)
 
 Daily inventory — `result/backtest/inventory.svg`
+
 ![Inventory chart](result/backtest/inventory.svg)
 
 ## 5. Optimization
@@ -184,12 +187,15 @@ uv run pmm-evaluate
 | Annual return (%)      | 6.21    |
 
 HPR chart — `result/optimization/hpr.svg`
+
 ![HPR chart with VNINDEX benchmark](result/optimization/hpr.svg)
 
 Drawdown chart — `result/optimization/drawdown.svg`
+
 ![Drawdown chart](result/optimization/drawdown.svg)
 
 Daily inventory — `result/optimization/inventory.svg`
+
 ![Inventory chart](result/optimization/inventory.svg)
 
 ## Reference
