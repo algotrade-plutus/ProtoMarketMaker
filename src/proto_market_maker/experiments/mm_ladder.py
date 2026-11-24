@@ -1,43 +1,37 @@
-"""MarketMaker attribution ladder (RIVF'26 camera-ready).
+"""MarketMaker attribution ladder, algorithm A fixed (RIVF'26 camera-ready).
 
-Attributes the naive -> faithful gap of ``mm_anchor`` one rung at a time. The
-design mismatches between the two arms are closed first (rung 1), then
-execution realism is added one rule per rung. Report, don't tune: every rung
-runs the same ``strategy.quote`` at the optimized ``step`` (3.1).
+Owner framing: the naive engine's behaviour **is** the algorithm A under study;
+the naive engine (N) and Plutus (F) are environments. Every rung keeps A fixed
+(same rows, same ``quote(price, inventory, 3.1)``, same 15 s / on-fill requote,
+overnight carry, the same F1->F2 roll) and changes one environment rule:
 
-====  =====================================================================
-rung  rule
-====  =====================================================================
-0     naive engine as-is (``mm_anchor.run_naive``)
-1     + aligned: flat every session (quote 09:00-14:25, close the residual at
-      the first print >= 14:25), traded contract's own prints only
-      (``windows.traded_contracts``), no overnight inventory / synthetic roll
-2     + own-price fills (a crossed quote books at the bid/ask, not the print)
-3     + dated VSD IM (13% before 2022-12-15, 17% from it)
-4     + fee on every fill (opening fills too)
-5     faithful arm, optimistic queue   (read from ``result/mm_anchor``)
-6     faithful arm, conservative queue (read from ``result/mm_anchor``)
-7     krx2025 only: the 20 post-cutover sessions the regime guard refuses
-====  =====================================================================
+======  ===============================================================
+rung    environment
+======  ===============================================================
+N0      naive engine as-is
+N1      + own-price fills (a crossed quote books at the bid/ask, not the print)
+N2      + dated VSD IM (13% before 2022-12-15, 17% from it)
+N3      + fee on every fill (opening fills too)
+F-opt   Plutus, faithful-A, optimistic queue  (``mm_faithful_a``)
+F-con   Plutus, faithful-A, conservative queue (``mm_faithful_a``)
+======  ===============================================================
 
-Rungs 0-4 are the pure naive engine (``naive_variants``; no plutus import).
-Rungs 5-7 are read from ``result/mm_anchor/<window>.json`` (its sha256 and
-the plutus-simulator commit it records are written out), not re-run. For
-krx2025 every rung is on the 20 **pre-cutover** sessions: the faithful arm
-refuses the post-cutover sessions and books them flat, so its whole-window
-fills and HPR are exactly its pre-cutover numbers (checked below from its
-per-session equity). Faithful round trips are not stored in the anchor JSON;
-every faithful session ends flat (closed out or marked), so
-``round_trips = (fills - closeout_marked_contracts) / 2`` exactly.
+N0-N3 run here (``naive_variants``; pure, no plutus). F-opt / F-con are read
+from ``result/mm_faithful_a/<window>_<queue>.json`` (sha256 recorded). For
+krx2025 every rung is compared on the 20 **pre-cutover** sessions: the naive
+rungs run on those sessions only (as ``mm_anchor``'s ``naive_pre_cutover_only``),
+and the faithful-A equity is read at the end of the 20th session (A carries
+inventory, so the open position is marked at that close, exactly as N marks
+its own). The post-cutover sessions (A has no guard) are reported separately.
 
 Units: real dong (naive thousand-dong x 1000), as ``mm_anchor``.
 
-Run::
+Run (after the four ``mm_faithful_a`` runs)::
 
-    .venv/bin/python -m proto_market_maker.experiments.mm_ladder krx2025
     .venv/bin/python -m proto_market_maker.experiments.mm_ladder im2022
+    .venv/bin/python -m proto_market_maker.experiments.mm_ladder krx2025
 
-Writes ``result/mm_ladder/<window>.json`` and ``result/mm_ladder/<window>.md``.
+Writes ``result/mm_ladder/<window>.json`` and ``.md``.
 """
 from __future__ import annotations
 
@@ -45,168 +39,215 @@ import argparse
 import hashlib
 import json
 import sys
-from datetime import date
 from decimal import Decimal
-from pathlib import Path
-from typing import List, Optional
-
-import pandas as pd
+from typing import List
 
 from proto_market_maker.experiments import mm_anchor as A
-from proto_market_maker.experiments.windows import WINDOWS, traded_contracts
-from proto_market_maker.naive_variants import (CLOSE_TO, QUOTE_FROM, NaiveOptions,
-                                               NaiveVariant)
+from proto_market_maker.experiments.windows import WINDOWS
+from proto_market_maker.naive_variants import NaiveOptions, NaiveVariant
 
-RUNG_LABELS = {
-    0: "naive as-is",
-    1: "+ aligned (flat each session, 09:00-14:25, own-contract prints)",
-    2: "+ own-price fills",
-    3: "+ dated VSD IM (13% / 17%)",
-    4: "+ fee on every fill",
-    5: "faithful, optimistic queue",
-    6: "faithful, conservative queue",
-    7: "post-cutover sessions (regime guard)",
+LABELS = {
+    "N0": "naive as-is",
+    "N1": "+ own-price fills",
+    "N2": "+ dated VSD IM (13% / 17%)",
+    "N3": "+ fee on every fill",
+    "F-opt": "Plutus faithful-A, optimistic queue",
+    "F-con": "Plutus faithful-A, conservative queue",
 }
+FA_DIR = A.REPO / "result" / "mm_faithful_a"
 
 
-def _dec(x) -> Decimal:
-    return Decimal(str(round(float(x), 10)))
+class _DailyCounts(NaiveVariant):
+    """Records cumulative fills / round trips at each session end."""
+
+    def update_pnl(self, close_price):
+        super().update_pnl(close_price)
+        self.daily_counts = getattr(self, "daily_counts", []) + [(self.fills, self.closing_fills)]
 
 
-def build_sessions(window: str, days: List[date], fcc):
-    band, l2 = A._roots(window)
-    traded = traded_contracts(days, fcc)
-    matched = pd.read_parquet(Path(l2) / "local_quote_matched.parquet")
-    matched = matched.sort_values("datetime", kind="stable")
-    matched["day"] = matched["datetime"].dt.date
-    t = matched["datetime"].dt.time
-    matched = matched[(t >= QUOTE_FROM) & (t <= CLOSE_TO)]
-    closes = pd.read_parquet(Path(band) / "quote_close.parquet")
-    close_of = {(pd.Timestamp(d).date(), tk): _dec(p)
-                for d, tk, p in zip(closes["datetime"], closes["tickersymbol"], closes["price"])}
-    out = []
-    for d in days:
-        tk = traded[d]
-        sub = matched[(matched["day"] == d) & (matched["tickersymbol"] == tk)]
-        ticks = [(ts.to_pydatetime(), _dec(p)) for ts, p in zip(sub["datetime"], sub["price"])]
-        out.append((d, tk, ticks, close_of.get((d, tk))))
-    return out
-
-
-def run_rung(n: int, window: str, days: List[date], fcc, step: Decimal, sessions=None) -> dict:
-    if n == 0:
-        r = A.run_naive(window, days, fcc, step)
-        return {k: r[k] for k in ("hpr", "sharpe", "mdd", "end_equity_dong", "fills",
-                                  "round_trips", "forced_reductions", "sessions",
-                                  "end_inventory")}
-    bt = NaiveVariant(Decimal("5e5"), NaiveOptions.rung(n))
-    bt.run_sessions(sessions, step)
+def naive_rung(n: int, data, step: Decimal) -> dict:
+    bt = _DailyCounts(Decimal("5e5"), NaiveOptions.rung(n))
+    bt.run(data.copy(), step)
     equity = [float(a) * A.NAIVE_SCALE for a in bt.daily_assets]
+    days = [d.isoformat() for d in bt.tracking_dates]
     out = A._metrics(equity)
-    out.update({
-        "fills": bt.fills,
-        "round_trips": bt.closing_fills,
-        "closeout_contracts": bt.closeout_contracts,
-        "marked_contracts": bt.marked_contracts,
-        "forced_reductions": bt.forced_reductions,
-        "fees_dong": float(bt.fees_charged) * A.NAIVE_SCALE,
-        "sessions": len(bt.daily_returns),
-        "end_inventory": bt.inventory,
-        "options": NaiveOptions.rung(n).__dict__,
-    })
     out.pop("start_equity_dong", None)
+    out.update({"fills": bt.fills, "round_trips": bt.closing_fills,
+                "forced_reductions": bt.forced_reductions,
+                "quote_fill_fees_dong": float(bt.fees_charged) * A.NAIVE_SCALE,
+                "sessions": len(bt.daily_returns), "end_inventory": bt.inventory,
+                "options": NaiveOptions.rung(n).__dict__,
+                "_daily": {d: {"equity": e, "fills": f, "round_trips": r}
+                           for d, e, (f, r) in zip(days, equity[1:], bt.daily_counts)}})
     return out
 
 
-def faithful_rung(arm: dict, days: List[date]) -> dict:
-    """Faithful numbers restricted to ``days`` from the per-session records."""
-    keep = {d.isoformat() for d in days}
-    recs = [r for r in arm["per_session"] if r["date"] in keep]
+def first_refused_roll(fa: dict):
+    """First session whose roll did not complete (a leg refused or unfilled)."""
+    for r in fa["per_session"]:
+        if r.get("roll_contracts") and r.get("roll_fills", 0) < 2 * r["roll_contracts"]:
+            return r["date"]
+    return None
+
+
+def _sum(recs, key):
+    return sum(r.get(key, 0) for r in recs)
+
+
+def faithful_span(fa: dict, days: List[str]) -> dict:
+    keep = set(days)
+    recs = [r for r in fa["per_session"] if r["date"] in keep]
+    assert [r["date"] for r in recs] == days, "faithful-A sessions differ from the naive rows"
     equity = [float(A.DEPOSIT_DONG)] + [r["end_equity_dong"] for r in recs]
     m = A._metrics(equity)
-    others = [r for r in arm["per_session"] if r["date"] not in keep]
-    if others:  # refused sessions must be flat, so whole-window == subset
-        assert all("refused" in r and not r.get("fills") for r in others)
-        assert abs(arm["hpr"] - m["hpr"]) < 1e-12 and arm["end_equity_dong"] == m["end_equity_dong"]
-    fills = sum(r.get("fills", 0) for r in recs)
-    marked = sum(r.get("closeout_marked_contracts", 0) for r in recs)
-    assert (fills - marked) % 2 == 0, (fills, marked)
-    acc = sum(r.get("submitted", 0) - r.get("rejected", 0) for r in recs)
-    ind = sum(r.get("indeterminate_orders", 0) for r in recs)
     m.pop("start_equity_dong", None)
-    m.update({"fills": fills, "round_trips": (fills - marked) // 2,
-              "round_trips_note": "derived: (fills - closeout_marked_contracts) / 2",
-              "closeout_fills": sum(r.get("closeout_fills", 0) for r in recs),
-              "closeout_marked_contracts": marked,
-              "charges_dong": sum(r.get("charges_dong", 0.0) for r in recs),
-              "sessions": len(recs),
-              "accepted_orders": acc, "undecided_orders": ind,
-              "undecided_order_rate": (ind / acc) if acc else None,
-              "queue": arm["queue"]})
+    accepted = sum(r.get(f"{role}_submitted", 0) - r.get(f"{role}_rejected", 0)
+                   for r in recs for role in ("quote", "roll"))
+    ind = _sum(recs, "indeterminate_orders")
+    acc = [0, 0]
+    daily = {}
+    for r, e in zip(recs, equity[1:]):
+        acc[0] += r.get("fills", 0); acc[1] += r.get("closing_fills", 0)
+        daily[r["date"]] = {"equity": e, "fills": acc[0], "round_trips": acc[1]}
+    m.update({
+        "_daily": daily,
+        "fills": _sum(recs, "fills"),
+        "round_trips": _sum(recs, "closing_fills"),
+        "quote_fills": _sum(recs, "quote_fills"),
+        "roll_fills": _sum(recs, "roll_fills"),
+        "engine_fills": _sum(recs, "engine_fills"),
+        "maker_fills": _sum(recs, "maker_fills"),
+        "taker_fills": _sum(recs, "taker_fills"),
+        "sessions": len(recs),
+        "accepted_orders": accepted,
+        "undecided_orders": ind,
+        "undecided_order_rate": (ind / accepted) if accepted else None,
+        "undecided_quote_orders_in_atc": _sum(recs, "indeterminate_orders_atc"),
+        "margin_warnings": _sum(recs, "margin_warning"),
+        "margin_calls": _sum(recs, "margin_call"),
+        "margin_calls_cleared": _sum(recs, "margin_call_cleared"),
+        "forced_liquidations": _sum(recs, "forced_liquidation"),
+        "forced_liquidations_executed": _sum(recs, "forced_liquidation_executed"),
+        "vm_settlement_days": sum(1 for r in recs if r.get("positions")),
+        "roll_triggers": _sum(recs, "roll_triggers"),
+        "roll_contracts": _sum(recs, "roll_contracts"),
+        "roll_expired_contracts": _sum(recs, "roll_expired_contracts"),
+        "expiry_settled_contracts": _sum(recs, "expiry_settled_contracts"),
+        "cancel_refused": _sum(recs, "cancel_refused"),
+        "quote_rejected": _sum(recs, "quote_rejected"),
+        "charges_dong": sum(r.get("charges_dong", 0.0) for r in recs),
+        "end_net_contracts": recs[-1]["end_net"] if recs else None,
+        "end_positions": recs[-1]["positions"] if recs else None,
+        "engine_deposit_end_dong": recs[-1]["engine_deposit_dong"] if recs else None,
+        "ledger_minus_engine_deposit_end_dong": (recs[-1]["end_equity_dong"]
+                                                 - recs[-1]["engine_deposit_dong"]) if recs else None,
+        "positions_match_engine_all_sessions": all(r["positions_match_engine"] for r in recs),
+    })
     return m
 
 
-def run_ladder(window: str, anchor_path: Optional[Path] = None, log=print) -> dict:
+def _end_equity(fa: dict, day: str) -> float:
+    return [r for r in fa["per_session"] if r["date"] == day][0]["end_equity_dong"]
+
+
+def run_ladder(window: str, log=print) -> dict:
+    from proto_market_maker.experiments.mm_faithful_a import naive_rows
     fcc, all_days = A.load_contract_map(window)
     step = A.step_param()
-    days = [d for d in all_days if d < A.KRX_CUTOVER] if window == "krx2025" else all_days
-    sessions = build_sessions(window, days, fcc)
+    pre = [d for d in all_days if d < A.KRX_CUTOVER] if window == "krx2025" else all_days
+    data = naive_rows(window, pre, fcc)
+    days = [d.isoformat() for d in data["date"].unique().tolist()]
 
     rungs = []
-    for n in range(5):
-        r = run_rung(n, window, days, fcc, step, sessions)
-        r.update({"rung": n, "label": RUNG_LABELS[n], "source": "naive engine (this run)"})
+    for n in range(4):
+        r = naive_rung(n, data, step)
+        r.update({"rung": f"N{n}", "label": LABELS[f"N{n}"], "source": "naive engine (this run)"})
         rungs.append(r)
-        log(f"rung {n}: fills={r['fills']} rt={r['round_trips']} hpr={r['hpr']:+.4%}")
+        log(f"N{n}: fills={r['fills']} rt={r['round_trips']} hpr={r['hpr']:+.4%}")
 
-    anchor_path = anchor_path or (A.REPO / "result" / "mm_anchor" / f"{window}.json")
-    raw = anchor_path.read_bytes()
-    anchor = json.loads(raw)
-    src = f"result/mm_anchor/{window}.json (read, not re-run)"
-    opt = faithful_rung(anchor["faithful_by_queue"]["optimistic"], days)
-    cons = faithful_rung(anchor["faithful"], days)
-    for n, r in ((5, opt), (6, cons)):
-        r.update({"rung": n, "label": RUNG_LABELS[n], "source": src})
+    sources, post = {}, {}
+    for key, q in (("F-opt", "optimistic"), ("F-con", "conservative")):
+        path = FA_DIR / f"{window}_{q}.json"
+        raw = path.read_bytes()
+        fa = json.loads(raw)
+        sources[key] = {"path": str(path.relative_to(A.REPO)),
+                        "sha256": hashlib.sha256(raw).hexdigest(),
+                        "plutus_simulator_commit": fa["plutus_simulator_commit"],
+                        "plutus_simulator_src_dirty": fa["plutus_simulator_src_dirty"],
+                        "vm_settlements_whole_run": fa["vm_settlements"],
+                        "engine_ignorance_whole_run": fa["engine_ignorance"],
+                        "refusals_whole_run": fa["refusals"],
+                        "wall_seconds": fa.get("wall_seconds")}
+        r = faithful_span(fa, days)
+        r.update({"rung": key, "label": LABELS[key], "source": sources[key]["path"]})
         rungs.append(r)
+        if window == "krx2025":
+            all_fa = [x["date"] for x in fa["per_session"]]
+            post_days = [d for d in all_fa if d not in set(days)]
+            whole = faithful_span(fa, all_fa)
+            p = faithful_span(fa, post_days) if post_days else None
+            post[key] = {
+                "sessions": len(post_days),
+                **({k: p[k] for k in ("fills", "round_trips", "margin_warnings", "margin_calls",
+                                      "margin_calls_cleared", "forced_liquidations",
+                                      "forced_liquidations_executed", "undecided_order_rate",
+                                      "end_positions", "ledger_minus_engine_deposit_end_dong")}
+                   if p else {}),
+                "hpr_over_post_sessions": (_end_equity(fa, post_days[-1]) / _end_equity(fa, days[-1]) - 1.0)
+                if post_days else None,
+                "hpr_whole_40_sessions": whole["hpr"],
+                "note": ("A has no regime guard; the engine admits orders after the 2025-05-05 "
+                         "cutover although margin_model() raises UnresolvedRule, margins them on "
+                         "the pre-KRX IM+VM shape and counts margin_model_unsourced blindness "
+                         "(see faithful_sources.*.engine_ignorance_whole_run)."),
+            }
 
     prev = None
     for r in rungs:
-        r["delta_fills"] = None if prev is None else r["fills"] - prev["fills"]
-        r["delta_round_trips"] = None if prev is None else r["round_trips"] - prev["round_trips"]
-        r["delta_hpr"] = None if prev is None else r["hpr"] - prev["hpr"]
+        for k in ("fills", "round_trips", "hpr"):
+            r[f"delta_{k}"] = None if prev is None else r[k] - prev[k]
         prev = r
 
-    rung7 = None
-    if window == "krx2025":
-        post = [d.isoformat() for d in all_days if d >= A.KRX_CUTOVER]
-        recs = [r for r in anchor["faithful"]["per_session"] if r["date"] in post]
-        diag = anchor.get("post_cutover_unguarded_diagnostic") or {}
-        rung7 = {"rung": 7, "label": RUNG_LABELS[7], "source": src,
-                 "sessions": len(recs),
-                 "refused_sessions": sum(1 for r in recs if "refused" in r),
-                 "refusal_reason": sorted({r.get("refused", "") for r in recs}),
-                 "fills": sum(r.get("fills", 0) for r in recs),
-                 "unguarded_diagnostic": {q: {"fills": a["fills"], "hpr": a["hpr"],
-                                              "undecided_order_rate": a["indeterminate"]["order_rate"]}
-                                          for q, a in diag.items()},
-                 "naive_post_cutover_context": "naive 40-session HPR {:+.2%} vs 20 pre-cutover {:+.2%}".format(
-                     anchor["naive"]["hpr"], anchor["naive_pre_cutover_only"]["hpr"])}
+    # Clean checkpoint: the last session before the first roll whose F1 close
+    # leg the engine refused (the frozen slice carries bands only for the
+    # traded contract, so F1 has no band on the roll day). Every rung is cut
+    # there, so the comparison is free of that data gap.
+    refused = sorted(filter(None, (first_refused_roll(json.loads((FA_DIR / f"{window}_{q}.json").read_bytes()))
+                                   for q in ("optimistic", "conservative"))))
+    checkpoint = None
+    if refused:
+        before = [d for d in days if d < refused[0]]
+        if before:
+            cut = before[-1]
+            rows, prev = [], None
+            for r in rungs:
+                x = r["_daily"][cut]
+                hpr = x["equity"] / float(A.DEPOSIT_DONG) - 1.0
+                rows.append({"rung": r["rung"], "fills": x["fills"], "round_trips": x["round_trips"],
+                             "hpr": hpr, "delta_hpr": None if prev is None else hpr - prev,
+                             "delta_fills": None if prev is None else x["fills"] - prows[-1]["fills"]})
+                prev, prows = hpr, rows
+            checkpoint = {"first_refused_roll_day": refused[0], "through": cut,
+                          "sessions": len(before), "rungs": rows}
 
-    return {
-        "window": window,
-        "sessions": [d.isoformat() for d in days],
-        "session_set": "20 pre-cutover sessions" if window == "krx2025" else "all 40 sessions",
-        "step": str(step),
-        "units": "real dong (naive thousand-dong x 1000)",
-        "rungs": rungs,
-        "rung7": rung7,
-        "anchor": {"path": f"result/mm_anchor/{window}.json",
-                   "sha256": hashlib.sha256(raw).hexdigest(),
-                   "plutus_simulator_commit": anchor.get("plutus_simulator_commit"),
-                   "plutus_simulator_src_dirty": anchor.get("plutus_simulator_src_dirty"),
-                   "faithful_rerun": False},
-        "plutus_simulator_head_at_ladder_run": A._engine_commit(),
-    }
+    anchor = {}
+    p = A.REPO / "result" / "mm_anchor" / f"{window}.json"
+    if p.exists():
+        a = json.loads(p.read_bytes())
+        ref = a["naive_pre_cutover_only"] if window == "krx2025" else a["naive"]
+        anchor = {"naive_hpr": ref["hpr"], "naive_fills": ref["fills"],
+                  "n0_matches_mm_anchor_naive": (abs(ref["hpr"] - rungs[0]["hpr"]) < 1e-12
+                                                 and ref["fills"] == rungs[0]["fills"]),
+                  "mm_anchor_faithful_conservative_hpr_flat_each_session": a["faithful"]["hpr"],
+                  "mm_anchor_faithful_optimistic_hpr_flat_each_session":
+                      a["faithful_by_queue"]["optimistic"]["hpr"]}
+
+    return {"window": window, "sessions": days,
+            "session_set": "20 pre-cutover sessions" if window == "krx2025" else "all 40 sessions",
+            "step": str(step), "units": "real dong (naive thousand-dong x 1000)",
+            "rungs": rungs, "clean_checkpoint": checkpoint, "post_cutover": post or None, "faithful_sources": sources,
+            "mm_anchor_crosscheck": anchor,
+            "plutus_simulator_head_at_ladder_run": A._engine_commit()}
 
 
 def _pct(x):
@@ -223,30 +264,51 @@ def _int(x):
 
 def markdown(out: dict) -> str:
     lines = [f"### {out['window']} ({out['session_set']})", "",
-             "| rung | | fills | Δ fills | round trips | HPR | Δ HPR | undecided |",
-             "|--:|---|--:|--:|--:|--:|--:|--:|"]
+             "| rung | environment | fills | Δ fills | round trips | HPR | Δ HPR | undecided orders |",
+             "|---|---|--:|--:|--:|--:|--:|--:|"]
     for r in out["rungs"]:
         und = r.get("undecided_order_rate")
         lines.append(f"| {r['rung']} | {r['label']} | {r['fills']} | {_int(r['delta_fills'])} | "
                      f"{r['round_trips']} | {_pct(r['hpr'])} | {_pp(r['delta_hpr'])} | "
                      f"{'' if und is None else f'{und:.2%}'} |")
-    r7 = out.get("rung7")
-    if r7:
-        lines.append(f"| 7 | {r7['label']} | {r7['fills']} | | | refused {r7['refused_sessions']}/"
-                     f"{r7['sessions']} sessions | | |")
-    a = out["anchor"]
-    lines += ["", f"Rungs 5–6 (and 7) read from `{a['path']}` (sha256 `{a['sha256'][:16]}…`, "
-              f"plutus-simulator `{a['plutus_simulator_commit'][:7]}`); not re-run."]
+    c = out.get("clean_checkpoint")
+    if c:
+        lines += ["", f"Clean checkpoint: through {c['through']} ({c['sessions']} sessions), the last "
+                      f"session before the first refused F1 roll leg ({c['first_refused_roll_day']}):", "",
+                  "| rung | fills | Δ fills | round trips | HPR | Δ HPR |", "|---|--:|--:|--:|--:|--:|"]
+        for r in c["rungs"]:
+            lines.append(f"| {r['rung']} | {r['fills']} | {_int(r['delta_fills'])} | {r['round_trips']} | "
+                         f"{_pct(r['hpr'])} | {_pp(r['delta_hpr'])} |")
+    f = [r for r in out["rungs"] if r["rung"].startswith("F")]
+    lines += ["", "Faithful-A Tier-1 (same span):", "",
+              "| | margin warnings | margin calls | forced liq. (executed) | VM settlement days | "
+              "roll fills / roll contracts | engine (forced) fills | ledger − engine deposit at end |",
+              "|---|--:|--:|--:|--:|--:|--:|--:|"]
+    for r in f:
+        lines.append(f"| {r['rung']} | {r['margin_warnings']} | {r['margin_calls']} | "
+                     f"{r['forced_liquidations']} ({r['forced_liquidations_executed']}) | "
+                     f"{r['vm_settlement_days']} | {r['roll_fills']} / {2 * r['roll_contracts']} | "
+                     f"{r['engine_fills']} | {r['ledger_minus_engine_deposit_end_dong']:,.0f}đ |")
+    if out.get("post_cutover"):
+        lines += ["", "krx2025 post-cutover (20 sessions, A unguarded):", ""]
+        for k, p in out["post_cutover"].items():
+            lines.append(f"- {k}: fills {p.get('fills')}, margin calls {p.get('margin_calls')}, forced "
+                         f"liquidations {p.get('forced_liquidations')} "
+                         f"({p.get('forced_liquidations_executed')} executed), HPR over the post "
+                         f"sessions {_pct(p['hpr_over_post_sessions'])}, whole 40 sessions "
+                         f"{_pct(p['hpr_whole_40_sessions'])}")
+    lines += [""]
+    for k, s in out["faithful_sources"].items():
+        lines.append(f"{k}: `{s['path']}` sha256 `{s['sha256'][:16]}…`, plutus-simulator "
+                     f"`{s['plutus_simulator_commit'][:7]}`")
     return "\n".join(lines) + "\n"
 
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("window", choices=sorted(WINDOWS))
-    ap.add_argument("--anchor", type=Path, default=None,
-                    help="mm_anchor JSON to read rungs 5-7 from (default result/mm_anchor/<window>.json)")
     args = ap.parse_args(argv)
-    out = run_ladder(args.window, args.anchor)
+    out = run_ladder(args.window)
     d = A.REPO / "result" / "mm_ladder"
     d.mkdir(parents=True, exist_ok=True)
     (d / f"{args.window}.json").write_text(json.dumps(out, indent=1, default=str) + "\n")

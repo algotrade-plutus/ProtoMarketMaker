@@ -1,0 +1,1534 @@
+{
+ "window": "krx2025",
+ "queue": "conservative",
+ "step": "3.1",
+ "sessions": 40,
+ "rows": 379002,
+ "plutus_simulator_commit": "f4463d611ebffbe5c49d89cc265508703fb962be",
+ "plutus_simulator_src_dirty": false,
+ "equity_dong": [
+  500000000.0,
+  500606315.0,
+  500606315.0,
+  486906876.0,
+  470148065.0,
+  467958454.0,
+  451940080.0,
+  395054440.0,
+  369253720.0,
+  362253720.0,
+  368763720.0,
+  381153720.0,
+  376349368.0,
+  376349368.0,
+  376349368.0,
+  372162076.0,
+  367662076.0,
+  364662076.0,
+  362235671.0,
+  362189266.0,
+  366249266.0,
+  359109266.0,
+  358339266.0,
+  353089266.0,
+  331572541.0,
+  335172541.0,
+  315245706.0,
+  310561810.0,
+  295711810.0,
+  291824656.0,
+  291824656.0,
+  292947578.0,
+  289880382.0,
+  288765863.0,
+  289971422.0,
+  289971422.0,
+  316628195.0,
+  315928195.0,
+  320260834.0,
+  322363535.0,
+  319423535.0
+ ],
+ "totals": {
+  "quote_submitted": 66838,
+  "indeterminate_evals": 787869,
+  "indeterminate_orders": 66309,
+  "cancel_refused": 212,
+  "quote_rejected": 220,
+  "fills": 332,
+  "quote_fills": 332,
+  "taker_fills": 203,
+  "closing_fills": 154,
+  "indeterminate_evals_atc": 3213,
+  "indeterminate_orders_atc": 182,
+  "quote_expired": 268,
+  "maker_fills": 129,
+  "margin_warning": 46,
+  "roll_triggers": 2,
+  "roll_contracts": 16,
+  "roll_submitted": 7,
+  "roll_rejected": 4,
+  "margin_call": 35,
+  "margin_call_cleared": 35,
+  "expiry_settled_contracts": 17
+ },
+ "refusals": {
+  "cancel:SESSION_SEMANTICS": 212,
+  "quote:SESSION_SEMANTICS": 24,
+  "quote:BAND_LIMIT": 162,
+  "roll:BAND_LIMIT": 2,
+  "quote:INSUFFICIENT_DEPOSIT": 34,
+  "roll:INSUFFICIENT_DEPOSIT": 2
+ },
+ "vm_settlements": {
+  "count": 31,
+  "net_dong": -160511128.79192442,
+  "first": "2025-04-03T15:00:00"
+ },
+ "margin_events": [
+  {
+   "ts": "2025-04-15T14:30:59.285072",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-04-16T09:00:01.165973",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-04-16T09:00:36.114308",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-08T14:30:12.789653",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-08T14:30:33.328286",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-08T15:00:00",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-09T14:30:32.082908",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-09T14:44:59",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-09T15:00:00",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-12T09:23:20.076150",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-12T14:30:20.057979",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-12T15:00:00",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-12T15:00:00",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-13T09:00:02.247930",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-13T09:16:52.675253",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-13T09:16:52.675253",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-13T14:30:31.743061",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-13T15:00:00",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-13T15:00:00",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-14T09:00:00.891162",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-14T15:00:00",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-14T15:00:00",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-15T09:00:01.065274",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-15T15:00:00",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-15T15:00:00",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:30:33.073449",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:30:33.653773",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:30:34.029984",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:30:34.029984",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:30:34.202233",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:30:34.570471",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:30:34.570471",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:30:35.092470",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:30:35.587999",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:30:35.587999",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:30:45.887599",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:30:46.122473",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:30:46.371747",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:30:46.371747",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:30:46.795565",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:30:46.934578",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:30:46.934578",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:30:47.391640",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:30:48.447800",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:30:48.447800",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:30:48.929562",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:30:49.056694",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:30:49.056694",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:30:55.860153",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:30:56.133732",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:31:06.220398",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:31:06.220398",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:31:06.470150",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:31:21.422830",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:31:21.422830",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:31:21.557105",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:31:21.684102",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:31:21.684102",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:31:22.222842",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:31:23.421956",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:31:23.421956",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:31:42.781416",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:31:46.192649",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:31:46.192649",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:31:59.618608",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:33:08.446922",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:33:08.446922",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:33:08.505182",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:33:08.587714",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:33:08.587714",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:33:49.352206",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:33:49.705536",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:34:52.280197",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:34:52.280197",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:34:52.369098",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:35:14.350464",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:35:14.350464",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:35:36.690321",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:35:37.568975",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:35:38.127282",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:35:40.805385",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:35:40.805385",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:35:42.473025",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:35:49.610602",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:35:49.610602",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:35:49.729344",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:36:36.545248",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:36:36.545248",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:36:36.659547",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:36:36.814533",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:36:36.814533",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:36:38.636451",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:36:38.874475",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:36:38.874475",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:36:40.169060",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:40:10.779458",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:40:40.802822",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T09:41:00.177585",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T09:41:00.177585",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T09:42:14.552453",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T10:01:04.263945",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T10:13:18.062634",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T14:17:37.094347",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-26T14:30:01.099186",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-26T14:30:15.705157",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-26T15:00:00",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-27T14:30:16.186124",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-27T14:30:56.608784",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-27T15:00:00",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-28T14:30:29.139109",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-29T14:30:11.446799",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-29T14:30:30.074559",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-29T15:00:00",
+   "kind": "margin_call_cleared"
+  },
+  {
+   "ts": "2025-05-30T14:30:11.942568",
+   "kind": "margin_warning"
+  },
+  {
+   "ts": "2025-05-30T14:30:30.676913",
+   "kind": "margin_call"
+  },
+  {
+   "ts": "2025-05-30T15:00:00",
+   "kind": "margin_call_cleared"
+  }
+ ],
+ "engine_ignorance": {
+  "evaluations": 1168590,
+  "indeterminate": 787889,
+  "silent_ignorance": {
+   "fill.decided_without.high": 332,
+   "fill.decided_without.low": 332,
+   "fill.decided_without.open": 332,
+   "fill.decided_without.volume": 332,
+   "rule.margin_model.unsourced": 269744,
+   "margin.overnight.uncomputed.margin_model_overnight.unstated": 20
+  }
+ },
+ "final_engine_deposit_dong": 266703535.0,
+ "per_session": [
+  {
+   "date": "2025-04-01",
+   "contract": "VN30F2504",
+   "rolled": false,
+   "quote_submitted": 1498,
+   "indeterminate_evals": 10106,
+   "indeterminate_orders": 1496,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "fills": 2,
+   "quote_fills": 2,
+   "taker_fills": 2,
+   "closing_fills": 1,
+   "indeterminate_evals_atc": 14,
+   "indeterminate_orders_atc": 4,
+   "quote_expired": 6,
+   "end_net": 0,
+   "positions": {},
+   "positions_match_engine": true,
+   "charges_dong": 33685.0,
+   "end_equity_dong": 500606315.0,
+   "engine_deposit_dong": 500606315.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-02",
+   "contract": "VN30F2504",
+   "rolled": false,
+   "quote_submitted": 1548,
+   "indeterminate_evals": 11166,
+   "indeterminate_orders": 1546,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "indeterminate_evals_atc": 24,
+   "indeterminate_orders_atc": 4,
+   "quote_expired": 8,
+   "end_net": 0,
+   "positions": {},
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 500606315.0,
+   "engine_deposit_dong": 500606315.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-03",
+   "contract": "VN30F2504",
+   "rolled": false,
+   "quote_submitted": 1644,
+   "indeterminate_evals": 13107,
+   "indeterminate_orders": 1590,
+   "fills": 3,
+   "quote_fills": 3,
+   "taker_fills": 3,
+   "cancel_refused": 2,
+   "quote_rejected": 52,
+   "indeterminate_evals_atc": 2,
+   "quote_expired": 2,
+   "end_net": 3,
+   "positions": {
+    "VN30F2504": 3
+   },
+   "positions_match_engine": true,
+   "charges_dong": 49439.0,
+   "end_equity_dong": 486906876.0,
+   "engine_deposit_dong": 486906876.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-04",
+   "contract": "VN30F2504",
+   "rolled": false,
+   "quote_submitted": 1786,
+   "indeterminate_evals": 15065,
+   "indeterminate_orders": 1751,
+   "closing_fills": 13,
+   "fills": 24,
+   "quote_fills": 24,
+   "taker_fills": 16,
+   "maker_fills": 8,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "indeterminate_evals_atc": 84,
+   "indeterminate_orders_atc": 5,
+   "quote_expired": 7,
+   "end_net": -1,
+   "positions": {
+    "VN30F2504": -1
+   },
+   "positions_match_engine": true,
+   "charges_dong": 378811.0,
+   "end_equity_dong": 470148065.0,
+   "engine_deposit_dong": 465268065.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-08",
+   "contract": "VN30F2504",
+   "rolled": false,
+   "quote_submitted": 1602,
+   "indeterminate_evals": 11878,
+   "indeterminate_orders": 1538,
+   "closing_fills": 4,
+   "fills": 9,
+   "quote_fills": 9,
+   "taker_fills": 8,
+   "maker_fills": 1,
+   "quote_rejected": 57,
+   "indeterminate_evals_atc": 1,
+   "quote_expired": 1,
+   "end_net": 2,
+   "positions": {
+    "VN30F2504": 2
+   },
+   "positions_match_engine": true,
+   "charges_dong": 139611.0,
+   "end_equity_dong": 467958454.0,
+   "engine_deposit_dong": 463078454.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-09",
+   "contract": "VN30F2504",
+   "rolled": false,
+   "quote_submitted": 1818,
+   "indeterminate_evals": 13457,
+   "indeterminate_orders": 1776,
+   "closing_fills": 27,
+   "fills": 59,
+   "quote_fills": 59,
+   "maker_fills": 6,
+   "taker_fills": 53,
+   "cancel_refused": 8,
+   "quote_rejected": 2,
+   "indeterminate_evals_atc": 102,
+   "indeterminate_orders_atc": 4,
+   "quote_expired": 9,
+   "end_net": -7,
+   "positions": {
+    "VN30F2504": -7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 898374.0,
+   "end_equity_dong": 451940080.0,
+   "engine_deposit_dong": 441940080.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-10",
+   "contract": "VN30F2504",
+   "rolled": false,
+   "quote_submitted": 120,
+   "indeterminate_evals": 431,
+   "indeterminate_orders": 63,
+   "fills": 6,
+   "quote_fills": 6,
+   "taker_fills": 2,
+   "quote_rejected": 49,
+   "closing_fills": 3,
+   "maker_fills": 4,
+   "indeterminate_evals_atc": 1,
+   "indeterminate_orders_atc": 1,
+   "quote_expired": 1,
+   "end_net": -7,
+   "positions": {
+    "VN30F2504": -7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 95640.0,
+   "end_equity_dong": 395054440.0,
+   "engine_deposit_dong": 360714440.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-11",
+   "contract": "VN30F2504",
+   "rolled": false,
+   "quote_submitted": 1728,
+   "indeterminate_evals": 14676,
+   "indeterminate_orders": 1718,
+   "fills": 10,
+   "quote_fills": 10,
+   "taker_fills": 9,
+   "closing_fills": 5,
+   "maker_fills": 1,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "indeterminate_evals_atc": 72,
+   "indeterminate_orders_atc": 2,
+   "quote_expired": 7,
+   "end_net": -7,
+   "positions": {
+    "VN30F2504": -7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 160720.0,
+   "end_equity_dong": 369253720.0,
+   "engine_deposit_dong": 325043720.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-14",
+   "contract": "VN30F2504",
+   "rolled": false,
+   "quote_submitted": 1700,
+   "indeterminate_evals": 12006,
+   "indeterminate_orders": 1700,
+   "indeterminate_evals_atc": 50,
+   "cancel_refused": 4,
+   "indeterminate_orders_atc": 4,
+   "quote_expired": 6,
+   "end_net": -7,
+   "positions": {
+    "VN30F2504": -7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 362253720.0,
+   "engine_deposit_dong": 318043720.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-15",
+   "contract": "VN30F2504",
+   "rolled": false,
+   "quote_submitted": 1712,
+   "indeterminate_evals": 12244,
+   "indeterminate_orders": 1712,
+   "indeterminate_evals_atc": 104,
+   "cancel_refused": 8,
+   "indeterminate_orders_atc": 8,
+   "margin_warning": 1,
+   "quote_expired": 10,
+   "end_net": -7,
+   "positions": {
+    "VN30F2504": -7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 368763720.0,
+   "engine_deposit_dong": 324553720.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-16",
+   "contract": "VN30F2505",
+   "rolled": true,
+   "roll_triggers": 1,
+   "roll_contracts": 7,
+   "roll_submitted": 5,
+   "roll_rejected": 2,
+   "quote_submitted": 1716,
+   "quote_rejected": 1,
+   "indeterminate_evals": 12341,
+   "indeterminate_orders": 1716,
+   "margin_call": 1,
+   "margin_call_cleared": 1,
+   "indeterminate_evals_atc": 106,
+   "cancel_refused": 6,
+   "indeterminate_orders_atc": 6,
+   "quote_expired": 8,
+   "end_net": -7,
+   "positions": {
+    "VN30F2504": -7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 381153720.0,
+   "engine_deposit_dong": 336943720.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-17",
+   "contract": "VN30F2504",
+   "rolled": false,
+   "quote_submitted": 1758,
+   "indeterminate_evals": 16310,
+   "indeterminate_orders": 1756,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "fills": 1,
+   "quote_fills": 1,
+   "taker_fills": 1,
+   "indeterminate_evals_atc": 28,
+   "indeterminate_orders_atc": 4,
+   "quote_expired": 7,
+   "expiry_settled_contracts": 8,
+   "end_net": 0,
+   "positions": {},
+   "positions_match_engine": true,
+   "charges_dong": 104352.0,
+   "end_equity_dong": 376349368.0,
+   "engine_deposit_dong": 332039368.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-18",
+   "contract": "VN30F2505",
+   "rolled": false,
+   "quote_submitted": 1672,
+   "indeterminate_evals": 11644,
+   "indeterminate_orders": 1672,
+   "indeterminate_evals_atc": 34,
+   "cancel_refused": 4,
+   "indeterminate_orders_atc": 4,
+   "quote_expired": 6,
+   "end_net": 0,
+   "positions": {},
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 376349368.0,
+   "engine_deposit_dong": 332039368.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-21",
+   "contract": "VN30F2505",
+   "rolled": false,
+   "quote_submitted": 1712,
+   "indeterminate_evals": 12410,
+   "indeterminate_orders": 1712,
+   "indeterminate_evals_atc": 58,
+   "cancel_refused": 8,
+   "indeterminate_orders_atc": 8,
+   "quote_expired": 10,
+   "end_net": 0,
+   "positions": {},
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 376349368.0,
+   "engine_deposit_dong": 332039368.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-22",
+   "contract": "VN30F2505",
+   "rolled": false,
+   "quote_submitted": 1722,
+   "indeterminate_evals": 13555,
+   "indeterminate_orders": 1708,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "fills": 25,
+   "quote_fills": 25,
+   "taker_fills": 23,
+   "maker_fills": 2,
+   "closing_fills": 10,
+   "indeterminate_evals_atc": 36,
+   "indeterminate_orders_atc": 6,
+   "quote_expired": 6,
+   "end_net": -5,
+   "positions": {
+    "VN30F2505": -5
+   },
+   "positions_match_engine": true,
+   "charges_dong": 397292.0,
+   "end_equity_dong": 372162076.0,
+   "engine_deposit_dong": 327852076.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-23",
+   "contract": "VN30F2505",
+   "rolled": false,
+   "quote_submitted": 1718,
+   "indeterminate_evals": 13065,
+   "indeterminate_orders": 1717,
+   "indeterminate_evals_atc": 48,
+   "cancel_refused": 2,
+   "indeterminate_orders_atc": 2,
+   "quote_expired": 4,
+   "end_net": -5,
+   "positions": {
+    "VN30F2505": -5
+   },
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 367662076.0,
+   "engine_deposit_dong": 323352076.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-24",
+   "contract": "VN30F2505",
+   "rolled": false,
+   "quote_submitted": 1702,
+   "indeterminate_evals": 11860,
+   "indeterminate_orders": 1702,
+   "indeterminate_evals_atc": 68,
+   "cancel_refused": 6,
+   "indeterminate_orders_atc": 6,
+   "quote_expired": 8,
+   "end_net": -5,
+   "positions": {
+    "VN30F2505": -5
+   },
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 364662076.0,
+   "engine_deposit_dong": 320352076.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-25",
+   "contract": "VN30F2505",
+   "rolled": false,
+   "quote_submitted": 1662,
+   "indeterminate_evals": 13119,
+   "indeterminate_orders": 1660,
+   "cancel_refused": 8,
+   "quote_rejected": 2,
+   "fills": 1,
+   "quote_fills": 1,
+   "taker_fills": 1,
+   "indeterminate_evals_atc": 123,
+   "indeterminate_orders_atc": 6,
+   "quote_expired": 9,
+   "end_net": -6,
+   "positions": {
+    "VN30F2505": -6
+   },
+   "positions_match_engine": true,
+   "charges_dong": 16405.0,
+   "end_equity_dong": 362235671.0,
+   "engine_deposit_dong": 317395671.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-28",
+   "contract": "VN30F2505",
+   "rolled": false,
+   "quote_submitted": 1630,
+   "indeterminate_evals": 13994,
+   "indeterminate_orders": 1626,
+   "cancel_refused": 6,
+   "quote_rejected": 4,
+   "fills": 1,
+   "quote_fills": 1,
+   "taker_fills": 1,
+   "indeterminate_evals_atc": 31,
+   "indeterminate_orders_atc": 4,
+   "quote_expired": 7,
+   "end_net": -7,
+   "positions": {
+    "VN30F2505": -7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 16405.0,
+   "end_equity_dong": 362189266.0,
+   "engine_deposit_dong": 317309266.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-04-29",
+   "contract": "VN30F2505",
+   "rolled": false,
+   "quote_submitted": 1568,
+   "indeterminate_evals": 9154,
+   "indeterminate_orders": 1568,
+   "indeterminate_evals_atc": 88,
+   "cancel_refused": 6,
+   "indeterminate_orders_atc": 6,
+   "quote_expired": 8,
+   "end_net": -7,
+   "positions": {
+    "VN30F2505": -7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 366249266.0,
+   "engine_deposit_dong": 321369266.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-05",
+   "contract": "VN30F2505",
+   "rolled": false,
+   "quote_submitted": 1548,
+   "indeterminate_evals": 12724,
+   "indeterminate_orders": 1548,
+   "indeterminate_evals_atc": 72,
+   "cancel_refused": 6,
+   "indeterminate_orders_atc": 6,
+   "quote_expired": 8,
+   "end_net": -7,
+   "positions": {
+    "VN30F2505": -7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 359109266.0,
+   "engine_deposit_dong": 314229266.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-06",
+   "contract": "VN30F2505",
+   "rolled": false,
+   "quote_submitted": 1668,
+   "indeterminate_evals": 23372,
+   "indeterminate_orders": 1668,
+   "indeterminate_evals_atc": 78,
+   "cancel_refused": 6,
+   "indeterminate_orders_atc": 6,
+   "quote_expired": 8,
+   "end_net": -7,
+   "positions": {
+    "VN30F2505": -7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 358339266.0,
+   "engine_deposit_dong": 313459266.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-07",
+   "contract": "VN30F2505",
+   "rolled": false,
+   "quote_submitted": 1660,
+   "indeterminate_evals": 20812,
+   "indeterminate_orders": 1660,
+   "indeterminate_evals_atc": 62,
+   "cancel_refused": 4,
+   "indeterminate_orders_atc": 4,
+   "quote_expired": 6,
+   "end_net": -7,
+   "positions": {
+    "VN30F2505": -7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 353089266.0,
+   "engine_deposit_dong": 308209266.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-08",
+   "contract": "VN30F2505",
+   "rolled": false,
+   "quote_submitted": 1670,
+   "indeterminate_evals": 24437,
+   "indeterminate_orders": 1670,
+   "fills": 1,
+   "quote_fills": 1,
+   "taker_fills": 1,
+   "indeterminate_evals_atc": 68,
+   "cancel_refused": 4,
+   "indeterminate_orders_atc": 4,
+   "margin_warning": 1,
+   "margin_call": 1,
+   "quote_expired": 6,
+   "margin_call_cleared": 1,
+   "end_net": -8,
+   "positions": {
+    "VN30F2505": -8
+   },
+   "positions_match_engine": true,
+   "charges_dong": 16725.0,
+   "end_equity_dong": 331572541.0,
+   "engine_deposit_dong": 284192541.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-09",
+   "contract": "VN30F2505",
+   "rolled": false,
+   "quote_submitted": 1728,
+   "indeterminate_evals": 24966,
+   "indeterminate_orders": 1728,
+   "indeterminate_evals_atc": 60,
+   "cancel_refused": 6,
+   "indeterminate_orders_atc": 6,
+   "margin_warning": 1,
+   "margin_call": 1,
+   "quote_expired": 8,
+   "margin_call_cleared": 1,
+   "end_net": -8,
+   "positions": {
+    "VN30F2505": -8
+   },
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 335172541.0,
+   "engine_deposit_dong": 287792541.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-12",
+   "contract": "VN30F2505",
+   "rolled": false,
+   "quote_submitted": 1774,
+   "indeterminate_evals": 31481,
+   "indeterminate_orders": 1772,
+   "fills": 1,
+   "quote_fills": 1,
+   "taker_fills": 1,
+   "margin_warning": 2,
+   "indeterminate_evals_atc": 104,
+   "cancel_refused": 5,
+   "indeterminate_orders_atc": 4,
+   "margin_call": 1,
+   "quote_rejected": 2,
+   "quote_expired": 6,
+   "margin_call_cleared": 1,
+   "end_net": -9,
+   "positions": {
+    "VN30F2505": -9
+   },
+   "positions_match_engine": true,
+   "charges_dong": 16835.0,
+   "end_equity_dong": 315245706.0,
+   "engine_deposit_dong": 266625706.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-13",
+   "contract": "VN30F2505",
+   "rolled": false,
+   "quote_submitted": 1710,
+   "indeterminate_evals": 23085,
+   "indeterminate_orders": 1709,
+   "margin_call": 2,
+   "closing_fills": 1,
+   "fills": 2,
+   "quote_fills": 2,
+   "taker_fills": 2,
+   "margin_call_cleared": 2,
+   "margin_warning": 2,
+   "indeterminate_evals_atc": 114,
+   "cancel_refused": 6,
+   "indeterminate_orders_atc": 5,
+   "quote_rejected": 1,
+   "quote_expired": 6,
+   "end_net": -9,
+   "positions": {
+    "VN30F2505": -9
+   },
+   "positions_match_engine": true,
+   "charges_dong": 33896.0,
+   "end_equity_dong": 310561810.0,
+   "engine_deposit_dong": 261341810.0,
+   "engine_margin_status": "warning"
+  },
+  {
+   "date": "2025-05-14",
+   "contract": "VN30F2506",
+   "rolled": true,
+   "roll_triggers": 1,
+   "roll_contracts": 9,
+   "roll_submitted": 2,
+   "roll_rejected": 2,
+   "quote_submitted": 1806,
+   "indeterminate_evals": 36736,
+   "indeterminate_orders": 1798,
+   "margin_call": 1,
+   "indeterminate_evals_atc": 40,
+   "cancel_refused": 2,
+   "quote_rejected": 8,
+   "quote_expired": 2,
+   "margin_call_cleared": 1,
+   "margin_warning": 1,
+   "end_net": -9,
+   "positions": {
+    "VN30F2505": -9
+   },
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 295711810.0,
+   "engine_deposit_dong": 246491810.0,
+   "engine_margin_status": "warning"
+  },
+  {
+   "date": "2025-05-15",
+   "contract": "VN30F2505",
+   "rolled": false,
+   "quote_submitted": 1786,
+   "indeterminate_evals": 42700,
+   "indeterminate_orders": 1783,
+   "margin_call": 1,
+   "indeterminate_evals_atc": 74,
+   "cancel_refused": 4,
+   "quote_rejected": 3,
+   "indeterminate_orders_atc": 3,
+   "quote_expired": 5,
+   "margin_call_cleared": 1,
+   "margin_warning": 1,
+   "expiry_settled_contracts": 9,
+   "end_net": 0,
+   "positions": {},
+   "positions_match_engine": true,
+   "charges_dong": 107154.0,
+   "end_equity_dong": 291824656.0,
+   "engine_deposit_dong": 242604656.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-16",
+   "contract": "VN30F2506",
+   "rolled": false,
+   "quote_submitted": 1744,
+   "indeterminate_evals": 28924,
+   "indeterminate_orders": 1744,
+   "indeterminate_evals_atc": 196,
+   "cancel_refused": 6,
+   "indeterminate_orders_atc": 6,
+   "quote_expired": 8,
+   "end_net": 0,
+   "positions": {},
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 291824656.0,
+   "engine_deposit_dong": 242604656.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-19",
+   "contract": "VN30F2506",
+   "rolled": false,
+   "quote_submitted": 1748,
+   "indeterminate_evals": 27887,
+   "indeterminate_orders": 1748,
+   "fills": 1,
+   "quote_fills": 1,
+   "taker_fills": 1,
+   "indeterminate_evals_atc": 138,
+   "cancel_refused": 6,
+   "indeterminate_orders_atc": 6,
+   "quote_expired": 8,
+   "end_net": -1,
+   "positions": {
+    "VN30F2506": -1
+   },
+   "positions_match_engine": true,
+   "charges_dong": 17078.0,
+   "end_equity_dong": 292947578.0,
+   "engine_deposit_dong": 243727578.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-20",
+   "contract": "VN30F2506",
+   "rolled": false,
+   "quote_submitted": 1786,
+   "indeterminate_evals": 38991,
+   "indeterminate_orders": 1784,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "fills": 1,
+   "quote_fills": 1,
+   "taker_fills": 1,
+   "indeterminate_evals_atc": 134,
+   "indeterminate_orders_atc": 4,
+   "quote_expired": 7,
+   "end_net": -2,
+   "positions": {
+    "VN30F2506": -2
+   },
+   "positions_match_engine": true,
+   "charges_dong": 17196.0,
+   "end_equity_dong": 289880382.0,
+   "engine_deposit_dong": 238130382.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-21",
+   "contract": "VN30F2506",
+   "rolled": false,
+   "quote_submitted": 1744,
+   "indeterminate_evals": 28442,
+   "indeterminate_orders": 1741,
+   "fills": 2,
+   "quote_fills": 2,
+   "maker_fills": 1,
+   "closing_fills": 1,
+   "taker_fills": 1,
+   "indeterminate_evals_atc": 94,
+   "cancel_refused": 6,
+   "indeterminate_orders_atc": 6,
+   "quote_expired": 8,
+   "end_net": -2,
+   "positions": {
+    "VN30F2506": -2
+   },
+   "positions_match_engine": true,
+   "charges_dong": 34519.0,
+   "end_equity_dong": 288765863.0,
+   "engine_deposit_dong": 236415863.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-22",
+   "contract": "VN30F2506",
+   "rolled": false,
+   "quote_submitted": 1764,
+   "indeterminate_evals": 30221,
+   "indeterminate_orders": 1763,
+   "closing_fills": 2,
+   "fills": 2,
+   "quote_fills": 2,
+   "taker_fills": 2,
+   "indeterminate_evals_atc": 104,
+   "cancel_refused": 6,
+   "indeterminate_orders_atc": 5,
+   "quote_expired": 7,
+   "end_net": 0,
+   "positions": {},
+   "positions_match_engine": true,
+   "charges_dong": 34441.0,
+   "end_equity_dong": 289971422.0,
+   "engine_deposit_dong": 237621422.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-23",
+   "contract": "VN30F2506",
+   "rolled": false,
+   "quote_submitted": 1730,
+   "indeterminate_evals": 23316,
+   "indeterminate_orders": 1730,
+   "indeterminate_evals_atc": 176,
+   "cancel_refused": 6,
+   "indeterminate_orders_atc": 6,
+   "quote_expired": 8,
+   "end_net": 0,
+   "positions": {},
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 289971422.0,
+   "engine_deposit_dong": 237621422.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-26",
+   "contract": "VN30F2506",
+   "rolled": false,
+   "quote_submitted": 2144,
+   "indeterminate_evals": 38192,
+   "indeterminate_orders": 1925,
+   "fills": 179,
+   "quote_fills": 179,
+   "taker_fills": 73,
+   "closing_fills": 86,
+   "maker_fills": 106,
+   "quote_rejected": 24,
+   "margin_warning": 33,
+   "margin_call": 24,
+   "margin_call_cleared": 24,
+   "indeterminate_evals_atc": 154,
+   "cancel_refused": 7,
+   "indeterminate_orders_atc": 6,
+   "quote_expired": 8,
+   "end_net": 7,
+   "positions": {
+    "VN30F2506": 7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 3043227.0,
+   "end_equity_dong": 316628195.0,
+   "engine_deposit_dong": 264278195.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-27",
+   "contract": "VN30F2506",
+   "rolled": false,
+   "quote_submitted": 1746,
+   "indeterminate_evals": 25005,
+   "indeterminate_orders": 1745,
+   "indeterminate_evals_atc": 91,
+   "cancel_refused": 6,
+   "indeterminate_orders_atc": 5,
+   "margin_warning": 1,
+   "margin_call": 1,
+   "quote_rejected": 1,
+   "quote_expired": 7,
+   "margin_call_cleared": 1,
+   "end_net": 7,
+   "positions": {
+    "VN30F2506": 7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 315928195.0,
+   "engine_deposit_dong": 263578195.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-28",
+   "contract": "VN30F2506",
+   "rolled": false,
+   "quote_submitted": 1728,
+   "indeterminate_evals": 25041,
+   "indeterminate_orders": 1728,
+   "closing_fills": 1,
+   "fills": 1,
+   "quote_fills": 1,
+   "taker_fills": 1,
+   "indeterminate_evals_atc": 84,
+   "cancel_refused": 4,
+   "indeterminate_orders_atc": 4,
+   "margin_warning": 1,
+   "quote_expired": 6,
+   "end_net": 6,
+   "positions": {
+    "VN30F2506": 6
+   },
+   "positions_match_engine": true,
+   "charges_dong": 17361.0,
+   "end_equity_dong": 320260834.0,
+   "engine_deposit_dong": 267910834.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-29",
+   "contract": "VN30F2506",
+   "rolled": false,
+   "quote_submitted": 1680,
+   "indeterminate_evals": 21379,
+   "indeterminate_orders": 1680,
+   "fills": 1,
+   "quote_fills": 1,
+   "taker_fills": 1,
+   "indeterminate_evals_atc": 134,
+   "cancel_refused": 6,
+   "indeterminate_orders_atc": 6,
+   "margin_warning": 1,
+   "margin_call": 1,
+   "quote_expired": 8,
+   "margin_call_cleared": 1,
+   "end_net": 7,
+   "positions": {
+    "VN30F2506": 7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 17299.0,
+   "end_equity_dong": 322363535.0,
+   "engine_deposit_dong": 269643535.0,
+   "engine_margin_status": "ok"
+  },
+  {
+   "date": "2025-05-30",
+   "contract": "VN30F2506",
+   "rolled": false,
+   "quote_submitted": 1658,
+   "indeterminate_evals": 18570,
+   "indeterminate_orders": 1658,
+   "indeterminate_evals_atc": 162,
+   "cancel_refused": 6,
+   "indeterminate_orders_atc": 6,
+   "margin_warning": 1,
+   "margin_call": 1,
+   "quote_expired": 8,
+   "margin_call_cleared": 1,
+   "end_net": 7,
+   "positions": {
+    "VN30F2506": 7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 319423535.0,
+   "engine_deposit_dong": 266703535.0,
+   "engine_margin_status": "ok"
+  }
+ ],
+ "wall_seconds": 4469.3
+}
