@@ -594,6 +594,13 @@ def run_mm_anchor(window: str, queues=QUEUES, unguarded_diag: bool = True,
                 for q in ("conservative", "optimistic")}
         for d in diag.values():
             d.pop("per_session", None)
+    naive_pre = None
+    if window == "krx2025":
+        # Like-for-like span: the faithful arm quotes only pre-cutover sessions
+        # (the regime guard refuses the rest), so the naive arm is also run on
+        # those sessions alone.
+        naive_pre = run_naive(window, [d for d in sessions if d < KRX_CUTOVER],
+                              fcc, step)
     tier1 = {
         "queue_fill_spread": spread,
         "indeterminate_rate_by_queue": {
@@ -616,6 +623,7 @@ def run_mm_anchor(window: str, queues=QUEUES, unguarded_diag: bool = True,
         "plutus_simulator_commit": _engine_commit(),
         "plutus_simulator_src_dirty": _engine_dirty(),
         "naive": naive,
+        "naive_pre_cutover_only": naive_pre,
         "faithful": faithful,
         "faithful_by_queue": {q: a for q, a in arms.items() if q != "conservative"},
         "post_cutover_unguarded_diagnostic": diag,

@@ -201,3 +201,67 @@ Daily inventory — `result/optimization/inventory.svg`
 ## Reference
 
 [1] ALGOTRADE, Algorithmic Trading Theory and Practice - A Practical Guide with Applications on the Vietnamese Stock Market, 1st ed. DIMI BOOK, 2023, pp. 52–53. Accessed: May 12, 2025. [Online]. Available: [Link](https://hub.algotrade.vn/knowledge-hub/market-making-strategy/)
+
+## RIVF'26: naive vs faithful execution (branch `rivf26`)
+
+**Hypothesis.** The same quoting signal, `strategy.quote(price, inventory, step)` at `step = 3.1`, fills far less and earns less once
+execution is simulated faithfully (queue position, dated margin, exchange phases), and stops trading where the margin rule in force
+cannot be sourced. MM is an execution-fidelity demonstrator: Tier-1 counters are the headline, P&L is Tier-2.
+
+**Modelling choices.**
+- One signal, two arms. The naive arm is this repo's engine (`backtest.py`, now calling `strategy.quote`): a quote fills when the
+  last trade crosses it, capacity is a flat 17% margin, inventory is carried overnight. Its internal units are thousand đồng with a
+  100/point multiplier; results are reported ×1000 in real đồng.
+- The faithful arm (`experiments/mm_anchor.py`) drives `plutus.execution.PlutusBackend` over an `ExchangeSession` (HNXDS, tick
+  resolution, `BookSessionSource` = daily bands + L2 depth 1–3 + sized tape). Real đồng: a 500,000,000đ derivatives deposit and the
+  real VN30F multiplier of 100,000đ/point. The dated VSD initial margin comes from `plutus.market.margin.vsd_initial_margin` (13%
+  before 2022-12-15, 17% from it). Fills come from `book_walk` under the `conservative` queue (headline) and the `optimistic` queue
+  (bound). A third arm, `conservative_untaped`, replays the engine as it was before plutus-simulator `e528633`, when conservative
+  taker sweeps had no prints and were always INDETERMINATE.
+- Cadence: requote on each print when 15 s have passed since the last timed requote, or right after a fill. Requotes are
+  cancel-and-replace, one contract per side. Quoting runs 09:00–14:25. Each session is then closed out with a marketable LIMIT
+  priced 1 point through the touch until 14:29:59. Anything left open is marked at that day's close by the harness and counted
+  (`closeout_marked_contracts`). The next session opens flat with the previous session's equity as its deposit.
+- Regime guard (S6): before each session the strategy asks the dated rulebook for `margin_model()`. From the 2025-05-05 KRX cutover
+  that call raises `UnresolvedRule`, because the post-trade COMS formula is unsourced, so the strategy refuses to quote rather than
+  invent a margin rule. A diagnostic with the guard off is kept in `post_cutover_unguarded_diagnostic`.
+- Contract per day: VN30F1M, or VN30F2M on the naive engine's roll session, mapped to the dated contract via `futurecontractcode`.
+- Prices are index points; 1 point = 100,000đ per contract.
+
+**Windows, and why they are the minimum.** There is no look-back, so no warm-up is needed. Each window is 20 sessions on each side
+of one dated rule change, the floor of the handoff's 20–30.
+- `krx2025` (primary): 2025-04-01 .. 2025-05-30, around the KRX cutover. Book and tape come from the Algotrade DB (sizes exist from
+  2023).
+- `im2022` (robustness): 2022-11-17 .. 2023-01-12, around the 13% → 17% IM step. Book and tape come from the local archive (the DB
+  has no sizes before 2023); daily bands come from the DB.
+
+Details, sizes and sha256 are in `data/<window>-MANIFEST.md`.
+
+**Results** (`result/mm_anchor/<window>.json`, plutus-simulator `fc94743`):
+
+| window | naive fills | faithful fills: conservative / optimistic / untaped | f/n (cons.) | HPR naive → faithful (cons.) |
+|---|--:|--:|--:|--:|
+| krx2025, all 40 sessions | 693 | 116 / 160 / 21 | 16.7% | +29.57% → −6.03% |
+| krx2025, the 20 pre-cutover sessions (like-for-like) | 228 | 116 / 160 / 21 | 50.9% | −5.22% → −6.03% |
+| im2022 | 129 | 70 / 98 / 6 | 54.3% | −12.93% → +2.19% |
+
+The queue spread (conservative vs optimistic) is 27.5% in krx2025 and 28.6% in im2022. The conservative arm's maker quotes rest
+about 3.1 points (31 ticks) away, beyond the three observed levels, so the queue ahead of them cannot be read. That leaves 99.8%
+(krx2025) and 99.9% (im2022) of accepted orders INDETERMINATE at least once (`book_size`).
+
+Dated-IM capacity on the same 500,000,000đ deposit at 1,059 points is 36 contracts at 13% and 27 at 17%. In the run itself
+capacity was 36 on 2022-12-14 and 28 on 2022-12-15.
+
+Post-cutover, the strategy refused all 20 of 20 sessions.
+
+**Regenerate.**
+
+```bash
+# extraction (needs the plutus-simulator checkout + its venv + DB access; writes rivf26/data and data/)
+.venv/bin/python -m proto_market_maker.experiments.extract_slices krx2025
+.venv/bin/python -m proto_market_maker.experiments.extract_slices im2022
+# runs (shipped data only; ~1 h each)
+.venv/bin/python -m proto_market_maker.experiments.mm_anchor krx2025
+.venv/bin/python -m proto_market_maker.experiments.mm_anchor im2022
+.venv/bin/python -m pytest -q
+```
