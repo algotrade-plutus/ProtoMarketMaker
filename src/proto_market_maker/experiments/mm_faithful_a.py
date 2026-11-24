@@ -99,7 +99,10 @@ def _session(start: date, end: date, deposit: int, queue: str, source):
     return PlutusBackend(ExchangeSession.build(config, source=source))
 
 
-def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[int] = None) -> dict:
+def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[int] = None,
+                   on_fill=None) -> dict:
+    """``on_fill`` (optional) receives one dict per fill event: ts, ticker,
+    side, price, qty, maker, limit, role. Observation only: the run is unchanged."""
     from plutus.market.adapters.book_session import BookSessionSource
     from plutus.market.protocol import Order
     from plutus.core.order import OrderType, Side
@@ -133,6 +136,7 @@ def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[in
     last_px: Dict[str, Decimal] = {}
     side_of: Dict[str, object] = {}       # every order we submitted
     role_of: Dict[str, str] = {}          # quote | roll
+    limit_of: Dict[str, Decimal] = {}     # limit price of every order seen
     live_quotes: Dict[str, object] = {}
     roll_legs: List[dict] = []            # A's roll legs today: {ticker, side, qty, oid, tries}
     roll_by_oid: Dict[str, dict] = {}
@@ -153,6 +157,8 @@ def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[in
             if rec.order_id == oid:
                 side_of[oid] = rec.order.side
                 role_of[oid] = "engine"
+                if rec.order.limit_price is not None:
+                    limit_of[oid] = Decimal(str(rec.order.limit_price))
                 return rec.order.side
         return None
 
@@ -176,6 +182,13 @@ def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[in
                 s["maker_fills" if e.detail.get("maker") else "taker_fills"] += q
                 if role == "quote":
                     quote_filled = True
+                if on_fill is not None:
+                    lim = limit_of.get(e.order_id)
+                    on_fill({"ts": e.ts.isoformat(sep=" "), "ticker": e.ticker,
+                             "side": getattr(side, "name", None), "price": str(px), "qty": q,
+                             "maker": (bool(e.detail["maker"]) if "maker" in (e.detail or {})
+                                       else None),
+                             "limit": None if lim is None else str(lim), "role": role})
                 leg = roll_by_oid.get(e.order_id)
                 if leg is not None:
                     leg["qty"] -= q
@@ -225,6 +238,7 @@ def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[in
         if isinstance(ack, Accepted):
             side_of[ack.order_id] = side
             role_of[ack.order_id] = role
+            limit_of[ack.order_id] = px.quantize(Decimal("0.1"))
             return ack.order_id
         rule = getattr(ack.rule, "name", str(ack.rule))
         refusals[f"{role}:{rule}"] += 1

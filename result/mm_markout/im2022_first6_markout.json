@@ -1,0 +1,508 @@
+{
+ "window": "im2022",
+ "session_set": "all 40 sessions, first 6",
+ "sessions": [
+  "2022-11-17",
+  "2022-11-18",
+  "2022-11-21",
+  "2022-11-22",
+  "2022-11-23",
+  "2022-11-24"
+ ],
+ "price_path": "tape",
+ "horizons": [
+  "1m",
+  "5m",
+  "close"
+ ],
+ "units": "markouts in index points per contract (+ = good for A); P&L in real \u0111\u1ed3ng",
+ "arms": {
+  "N0": {
+   "fills": 29,
+   "contracts": 29,
+   "markout_mean_points": {
+    "1m": -0.21379310344828528,
+    "5m": -1.3413793103448268,
+    "close": 2.4931034482758645
+   },
+   "markout_total_points": {
+    "1m": -6.200000000000273,
+    "5m": -38.89999999999998,
+    "close": 72.30000000000007
+   },
+   "markout_total_dong": {
+    "1m": -620000.0000000272,
+    "5m": -3889999.9999999977,
+    "close": 7230000.0000000065
+   },
+   "by_liquidity": {
+    "maker": {
+     "fills": 29,
+     "contracts": 29,
+     "markout_mean_points": {
+      "1m": -0.21379310344828528,
+      "5m": -1.3413793103448268,
+      "close": 2.4931034482758645
+     },
+     "markout_total_points": {
+      "1m": -6.200000000000273,
+      "5m": -38.89999999999998,
+      "close": 72.30000000000007
+     },
+     "markout_total_dong": {
+      "1m": -620000.0000000272,
+      "5m": -3889999.9999999977,
+      "close": 7230000.0000000065
+     }
+    },
+    "taker": {
+     "fills": 0,
+     "contracts": 0,
+     "markout_mean_points": {
+      "1m": null,
+      "5m": null,
+      "close": null
+     },
+     "markout_total_points": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     },
+     "markout_total_dong": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     }
+    },
+    "unknown": {
+     "fills": 0,
+     "contracts": 0,
+     "markout_mean_points": {
+      "1m": null,
+      "5m": null,
+      "close": null
+     },
+     "markout_total_points": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     },
+     "markout_total_dong": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     }
+    }
+   },
+   "taker_share": 0.0,
+   "price_improvement_points": {
+    "n": 0,
+    "median": null,
+    "mean": null,
+    "min": null,
+    "max": null,
+    "sum": 0
+   },
+   "by_role": {
+    "quote": 29
+   },
+   "close_from_last_print": 0,
+   "arm": "N0",
+   "sessions": 6,
+   "sessions_with_fills": 6,
+   "ticker_inferred": 0,
+   "ticker_ambiguous": 0,
+   "pnl_dong": 10990000.0,
+   "hpr": 0.02198000000000011,
+   "carry_dong": 4279999.999999995,
+   "trading_dong": 6710000.000000006,
+   "carry_missing_close": 0,
+   "mean_abs_end_inventory": 1.5,
+   "per_session": [
+    {
+     "date": "2022-11-17",
+     "pnl_dong": -1520000.0,
+     "carry_dong": 0.0,
+     "trading_dong": -1520000.0,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-18",
+     "pnl_dong": 1110000.0,
+     "carry_dong": 10000.000000002274,
+     "trading_dong": 1099999.9999999977,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-21",
+     "pnl_dong": 1090000.0,
+     "carry_dong": 2479999.9999999953,
+     "trading_dong": -1389999.9999999953,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-22",
+     "pnl_dong": 9790000.0,
+     "carry_dong": 1220000.0000000047,
+     "trading_dong": 8569999.999999996,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    },
+    {
+     "date": "2022-11-23",
+     "pnl_dong": 2000000.0,
+     "carry_dong": 569999.9999999931,
+     "trading_dong": 1430000.000000007,
+     "end_positions": {}
+    },
+    {
+     "date": "2022-11-24",
+     "pnl_dong": -1480000.0,
+     "carry_dong": 0.0,
+     "trading_dong": -1480000.0,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    }
+   ]
+  },
+  "N3": {
+   "fills": 29,
+   "contracts": 29,
+   "markout_mean_points": {
+    "1m": -0.731034482758634,
+    "5m": -1.8586206896551756,
+    "close": 1.9758620689655157
+   },
+   "markout_total_points": {
+    "1m": -21.200000000000387,
+    "5m": -53.90000000000009,
+    "close": 57.299999999999955
+   },
+   "markout_total_dong": {
+    "1m": -2120000.0000000386,
+    "5m": -5390000.000000009,
+    "close": 5729999.999999995
+   },
+   "by_liquidity": {
+    "maker": {
+     "fills": 29,
+     "contracts": 29,
+     "markout_mean_points": {
+      "1m": -0.731034482758634,
+      "5m": -1.8586206896551756,
+      "close": 1.9758620689655157
+     },
+     "markout_total_points": {
+      "1m": -21.200000000000387,
+      "5m": -53.90000000000009,
+      "close": 57.299999999999955
+     },
+     "markout_total_dong": {
+      "1m": -2120000.0000000386,
+      "5m": -5390000.000000009,
+      "close": 5729999.999999995
+     }
+    },
+    "taker": {
+     "fills": 0,
+     "contracts": 0,
+     "markout_mean_points": {
+      "1m": null,
+      "5m": null,
+      "close": null
+     },
+     "markout_total_points": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     },
+     "markout_total_dong": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     }
+    },
+    "unknown": {
+     "fills": 0,
+     "contracts": 0,
+     "markout_mean_points": {
+      "1m": null,
+      "5m": null,
+      "close": null
+     },
+     "markout_total_points": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     },
+     "markout_total_dong": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     }
+    }
+   },
+   "taker_share": 0.0,
+   "price_improvement_points": {
+    "n": 0,
+    "median": null,
+    "mean": null,
+    "min": null,
+    "max": null,
+    "sum": 0
+   },
+   "by_role": {
+    "quote": 29
+   },
+   "close_from_last_print": 0,
+   "arm": "N3",
+   "sessions": 6,
+   "sessions_with_fills": 6,
+   "ticker_inferred": 0,
+   "ticker_ambiguous": 0,
+   "pnl_dong": 8850000.0,
+   "hpr": 0.01770000000000005,
+   "carry_dong": 4279999.999999995,
+   "trading_dong": 4570000.000000006,
+   "carry_missing_close": 0,
+   "mean_abs_end_inventory": 1.5,
+   "per_session": [
+    {
+     "date": "2022-11-17",
+     "pnl_dong": -1640000.0,
+     "carry_dong": 0.0,
+     "trading_dong": -1640000.0,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-18",
+     "pnl_dong": 800000.0,
+     "carry_dong": 10000.000000002274,
+     "trading_dong": 789999.9999999977,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-21",
+     "pnl_dong": 950000.0,
+     "carry_dong": 2479999.9999999953,
+     "trading_dong": -1529999.9999999953,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-22",
+     "pnl_dong": 8700000.0,
+     "carry_dong": 1220000.0000000047,
+     "trading_dong": 7479999.999999995,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    },
+    {
+     "date": "2022-11-23",
+     "pnl_dong": 1770000.0,
+     "carry_dong": 569999.9999999931,
+     "trading_dong": 1200000.000000007,
+     "end_positions": {}
+    },
+    {
+     "date": "2022-11-24",
+     "pnl_dong": -1730000.0,
+     "carry_dong": 0.0,
+     "trading_dong": -1730000.0,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    }
+   ]
+  },
+  "F-opt": {
+   "fills": 39,
+   "contracts": 39,
+   "markout_mean_points": {
+    "1m": -0.5410256410256591,
+    "5m": -0.9153846153846223,
+    "close": 3.684615384615383
+   },
+   "markout_total_points": {
+    "1m": -21.100000000000705,
+    "5m": -35.70000000000027,
+    "close": 143.69999999999993
+   },
+   "markout_total_dong": {
+    "1m": -2110000.0000000703,
+    "5m": -3570000.0000000275,
+    "close": 14369999.999999993
+   },
+   "by_liquidity": {
+    "maker": {
+     "fills": 16,
+     "contracts": 16,
+     "markout_mean_points": {
+      "1m": 0.14374999999998295,
+      "5m": -0.4625000000000057,
+      "close": -0.48750000000000426
+     },
+     "markout_total_points": {
+      "1m": 2.299999999999727,
+      "5m": -7.400000000000091,
+      "close": -7.800000000000068
+     },
+     "markout_total_dong": {
+      "1m": 229999.9999999727,
+      "5m": -740000.0000000091,
+      "close": -780000.0000000069
+     }
+    },
+    "taker": {
+     "fills": 23,
+     "contracts": 23,
+     "markout_mean_points": {
+      "1m": -1.0173913043478449,
+      "5m": -1.2304347826087036,
+      "close": 6.586956521739131
+     },
+     "markout_total_points": {
+      "1m": -23.400000000000432,
+      "5m": -28.300000000000182,
+      "close": 151.5
+     },
+     "markout_total_dong": {
+      "1m": -2340000.0000000433,
+      "5m": -2830000.000000018,
+      "close": 15150000.0
+     }
+    },
+    "unknown": {
+     "fills": 0,
+     "contracts": 0,
+     "markout_mean_points": {
+      "1m": null,
+      "5m": null,
+      "close": null
+     },
+     "markout_total_points": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     },
+     "markout_total_dong": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     }
+    }
+   },
+   "taker_share": 0.5897435897435898,
+   "price_improvement_points": {
+    "n": 23,
+    "median": 0.39999999999997726,
+    "mean": 0.5478260869565178,
+    "min": 0.0,
+    "max": 1.6000000000000227,
+    "sum": 12.599999999999909
+   },
+   "by_role": {
+    "unknown": 39
+   },
+   "close_from_last_print": 0,
+   "arm": "F-opt",
+   "sessions": 6,
+   "sessions_with_fills": 6,
+   "ticker_inferred": 39,
+   "ticker_ambiguous": 0,
+   "pnl_dong": 20202922.0,
+   "hpr": 0.04040584399999991,
+   "carry_dong": 6279999.999999994,
+   "trading_dong": 13922922.000000006,
+   "carry_missing_close": 0,
+   "mean_abs_end_inventory": 2.5,
+   "per_session": [
+    {
+     "date": "2022-11-17",
+     "pnl_dong": -451482.0,
+     "carry_dong": 0.0,
+     "trading_dong": -451482.0,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-18",
+     "pnl_dong": -815984.0,
+     "carry_dong": 10000.000000002274,
+     "trading_dong": -825984.0000000023,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    },
+    {
+     "date": "2022-11-21",
+     "pnl_dong": 3641411.0,
+     "carry_dong": 7439999.999999986,
+     "trading_dong": -3798588.999999986,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-22",
+     "pnl_dong": 16962061.0,
+     "carry_dong": 1220000.0000000047,
+     "trading_dong": 15742060.999999996,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    },
+    {
+     "date": "2022-11-23",
+     "pnl_dong": 5410873.0,
+     "carry_dong": 569999.9999999931,
+     "trading_dong": 4840873.0000000065,
+     "end_positions": {
+      "VN30F2212": -2
+     }
+    },
+    {
+     "date": "2022-11-24",
+     "pnl_dong": -4543957.0,
+     "carry_dong": -2959999.9999999907,
+     "trading_dong": -1583957.0000000093,
+     "end_positions": {
+      "VN30F2212": -5
+     }
+    }
+   ]
+  }
+ },
+ "inputs": {
+  "N0": {
+   "traced_here": true
+  },
+  "N3": {
+   "traced_here": true
+  },
+  "F-opt": {
+   "fills_file": "fills_opt6.json",
+   "fills_sha256": "7d953daec3f2b69fd19ff599e12847ff74a86a391fc590c3b176f4de4f5dd295",
+   "per_session_from": {
+    "path": "result/mm_faithful_a/im2022_optimistic.json",
+    "sha256": "d1e4c02f63552cf7b51082f3119a5ca9deb586e286ffc4e4d4978d27cbaa0839"
+   }
+  }
+ },
+ "plutus_simulator_head": "a8ed240fbb0f5d7f3d908bb66f9a0a271ed075dd"
+}
