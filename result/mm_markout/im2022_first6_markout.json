@@ -116,6 +116,8 @@
    "hpr": 0.02198000000000011,
    "carry_dong": 4279999.999999995,
    "trading_dong": 6710000.000000006,
+   "mark_switch_dong": 0.0,
+   "fills_match_equity_source_per_session": true,
    "carry_missing_close": 0,
    "mean_abs_end_inventory": 1.5,
    "per_session": [
@@ -123,6 +125,7 @@
      "date": "2022-11-17",
      "pnl_dong": -1520000.0,
      "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
      "trading_dong": -1520000.0,
      "end_positions": {
       "VN30F2212": -1
@@ -132,6 +135,7 @@
      "date": "2022-11-18",
      "pnl_dong": 1110000.0,
      "carry_dong": 10000.000000002274,
+     "mark_switch_dong": 0.0,
      "trading_dong": 1099999.9999999977,
      "end_positions": {
       "VN30F2212": -1
@@ -141,6 +145,7 @@
      "date": "2022-11-21",
      "pnl_dong": 1090000.0,
      "carry_dong": 2479999.9999999953,
+     "mark_switch_dong": 0.0,
      "trading_dong": -1389999.9999999953,
      "end_positions": {
       "VN30F2212": -1
@@ -150,6 +155,7 @@
      "date": "2022-11-22",
      "pnl_dong": 9790000.0,
      "carry_dong": 1220000.0000000047,
+     "mark_switch_dong": 0.0,
      "trading_dong": 8569999.999999996,
      "end_positions": {
       "VN30F2212": -3
@@ -159,6 +165,7 @@
      "date": "2022-11-23",
      "pnl_dong": 2000000.0,
      "carry_dong": 569999.9999999931,
+     "mark_switch_dong": 0.0,
      "trading_dong": 1430000.000000007,
      "end_positions": {}
     },
@@ -166,6 +173,7 @@
      "date": "2022-11-24",
      "pnl_dong": -1480000.0,
      "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
      "trading_dong": -1480000.0,
      "end_positions": {
       "VN30F2212": -3
@@ -272,6 +280,8 @@
    "hpr": 0.01770000000000005,
    "carry_dong": 4279999.999999995,
    "trading_dong": 4570000.000000006,
+   "mark_switch_dong": 0.0,
+   "fills_match_equity_source_per_session": true,
    "carry_missing_close": 0,
    "mean_abs_end_inventory": 1.5,
    "per_session": [
@@ -279,6 +289,7 @@
      "date": "2022-11-17",
      "pnl_dong": -1640000.0,
      "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
      "trading_dong": -1640000.0,
      "end_positions": {
       "VN30F2212": -1
@@ -288,6 +299,7 @@
      "date": "2022-11-18",
      "pnl_dong": 800000.0,
      "carry_dong": 10000.000000002274,
+     "mark_switch_dong": 0.0,
      "trading_dong": 789999.9999999977,
      "end_positions": {
       "VN30F2212": -1
@@ -297,6 +309,7 @@
      "date": "2022-11-21",
      "pnl_dong": 950000.0,
      "carry_dong": 2479999.9999999953,
+     "mark_switch_dong": 0.0,
      "trading_dong": -1529999.9999999953,
      "end_positions": {
       "VN30F2212": -1
@@ -306,6 +319,7 @@
      "date": "2022-11-22",
      "pnl_dong": 8700000.0,
      "carry_dong": 1220000.0000000047,
+     "mark_switch_dong": 0.0,
      "trading_dong": 7479999.999999995,
      "end_positions": {
       "VN30F2212": -3
@@ -315,6 +329,7 @@
      "date": "2022-11-23",
      "pnl_dong": 1770000.0,
      "carry_dong": 569999.9999999931,
+     "mark_switch_dong": 0.0,
      "trading_dong": 1200000.000000007,
      "end_positions": {}
     },
@@ -322,6 +337,7 @@
      "date": "2022-11-24",
      "pnl_dong": -1730000.0,
      "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
      "trading_dong": -1730000.0,
      "end_positions": {
       "VN30F2212": -3
@@ -428,6 +444,8 @@
    "hpr": 0.04040584399999991,
    "carry_dong": 6279999.999999994,
    "trading_dong": 13922922.000000006,
+   "mark_switch_dong": 0.0,
+   "fills_match_equity_source_per_session": true,
    "carry_missing_close": 0,
    "mean_abs_end_inventory": 2.5,
    "per_session": [
@@ -435,6 +453,7 @@
      "date": "2022-11-17",
      "pnl_dong": -451482.0,
      "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
      "trading_dong": -451482.0,
      "end_positions": {
       "VN30F2212": -1
@@ -444,6 +463,7 @@
      "date": "2022-11-18",
      "pnl_dong": -815984.0,
      "carry_dong": 10000.000000002274,
+     "mark_switch_dong": 0.0,
      "trading_dong": -825984.0000000023,
      "end_positions": {
       "VN30F2212": -3
@@ -453,6 +473,7 @@
      "date": "2022-11-21",
      "pnl_dong": 3641411.0,
      "carry_dong": 7439999.999999986,
+     "mark_switch_dong": 0.0,
      "trading_dong": -3798588.999999986,
      "end_positions": {
       "VN30F2212": -1
@@ -462,6 +483,7 @@
      "date": "2022-11-22",
      "pnl_dong": 16962061.0,
      "carry_dong": 1220000.0000000047,
+     "mark_switch_dong": 0.0,
      "trading_dong": 15742060.999999996,
      "end_positions": {
       "VN30F2212": -3
@@ -471,6 +493,7 @@
      "date": "2022-11-23",
      "pnl_dong": 5410873.0,
      "carry_dong": 569999.9999999931,
+     "mark_switch_dong": 0.0,
      "trading_dong": 4840873.0000000065,
      "end_positions": {
       "VN30F2212": -2
@@ -480,6 +503,7 @@
      "date": "2022-11-24",
      "pnl_dong": -4543957.0,
      "carry_dong": -2959999.9999999907,
+     "mark_switch_dong": 0.0,
      "trading_dong": -1583957.0000000093,
      "end_positions": {
       "VN30F2212": -5
@@ -504,5 +528,5 @@
    }
   }
  },
- "plutus_simulator_head": "a8ed240fbb0f5d7f3d908bb66f9a0a271ed075dd"
+ "plutus_simulator_head": "e4c5f87b5e7370f8b36ec7de1cdd2ef8c7ecd29e"
 }

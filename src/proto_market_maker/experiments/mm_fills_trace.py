@@ -140,7 +140,8 @@ def _naive_tracer_class():
             tk = self._ticker()
             eq = float(self.daily_assets[-1]) * 1000      # naive units: thousand đồng
             self.per_session.append({"date": d.isoformat(), "contract": tk,
-                                     "rolled": self._rolled, "fills": self._day_fills,
+                                     "mark_contract": tk, "rolled": self._rolled,
+                                     "fills": self._day_fills,
                                      "end_net": self.inventory,
                                      "positions": {tk: self.inventory} if self.inventory else {},
                                      "end_equity_dong": eq})

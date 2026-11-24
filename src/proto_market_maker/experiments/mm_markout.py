@@ -30,7 +30,10 @@ environment. This module asks *why* the environments disagree, fill by fill:
   i.e. what the overnight inventory earned or lost on the close-to-close move
   of the contract actually held, and everything else (intraday trading,
   fees, the roll). A carried contract with no close on day ``d`` books no
-  carry and is counted (``carry_missing_close``).
+  carry and is counted (``carry_missing_close``). Naive keeps one stitched
+  position and marks it to F2's close on its roll session, then to the
+  expiring F1's close on expiry day, then to the new F1: the basis in those
+  revaluations is booked apart as ``mark_switch`` (see ``decompose``).
 
 Session set: the ladder's (``mm_ladder``): all 40 for im2022, the 20
 pre-cutover sessions for krx2025; ``--max-sessions K`` keeps the first K.
@@ -180,15 +183,35 @@ def summarise(fills: List[Fill], path: PricePath,
 
 def decompose(days: Sequence[date], pnl_dong: Sequence[float],
               end_positions: Sequence[Dict[str, int]],
-              closes: Dict[Tuple[date, str], float]) -> dict:
-    """Daily P&L = carry (yesterday's positions x today's close-to-close move) + trading."""
-    carry = trading = 0.0
+              closes: Dict[Tuple[date, str], float],
+              marks: Optional[Sequence[str]] = None) -> dict:
+    """Daily P&L = carry (yesterday's positions x today's close-to-close move) + trading.
+
+    ``marks`` (single-position arms, i.e. naive): the contract the arm marked
+    its net position to at each close. Naive stitches F1/F2 into one
+    position, so on a day its mark contract changes its books revalue the
+    position from yesterday's close of one contract to today's close of
+    another. That revaluation is split into carry on one contract (today's,
+    if it had a close yesterday, else yesterday's) and ``mark_switch`` (the
+    basis between the two contracts), which is neither carry nor trading."""
+    carry = trading = switch = 0.0
     missing = 0
     rows = []
     prev: Dict[str, int] = {}
     for i, d in enumerate(days):
-        c = 0.0
-        if i > 0:
+        c = sw = 0.0
+        if i > 0 and marks is not None:
+            q = sum(prev.values())
+            cp, cn = marks[i - 1], marks[i]
+            ref = cn if (days[i - 1], cn) in closes else cp
+            a, b = closes.get((days[i - 1], ref)), closes.get((d, ref))
+            start, end = closes.get((days[i - 1], cp)), closes.get((d, cn))
+            if q and (a is None or b is None or start is None or end is None):
+                missing += 1
+            elif q:
+                c = q * (b - a) * MULT
+                sw = q * (end - start) * MULT - c
+        elif i > 0:
             for tk, q in prev.items():
                 a, b = closes.get((days[i - 1], tk)), closes.get((d, tk))
                 if not q:
@@ -197,13 +220,16 @@ def decompose(days: Sequence[date], pnl_dong: Sequence[float],
                     missing += 1
                     continue
                 c += q * (b - a) * MULT
-        tr = pnl_dong[i] - c
+        tr = pnl_dong[i] - c - sw
         carry += c
+        switch += sw
         trading += tr
         rows.append({"date": d.isoformat(), "pnl_dong": pnl_dong[i], "carry_dong": c,
-                     "trading_dong": tr, "end_positions": dict(end_positions[i])})
+                     "mark_switch_dong": sw, "trading_dong": tr,
+                     "end_positions": dict(end_positions[i])})
         prev = end_positions[i]
-    return {"carry_dong": carry, "trading_dong": trading, "total_dong": carry + trading,
+    return {"carry_dong": carry, "mark_switch_dong": switch, "trading_dong": trading,
+            "total_dong": carry + switch + trading,
             "carry_missing_close": missing, "per_session": rows}
 
 
@@ -368,13 +394,23 @@ def analyse_arm(arm, fills, per_session, days, path, closes, cand) -> dict:
     eq = [float(DEPOSIT_DONG)] + [float(recs[d]["end_equity_dong"]) for d in span]
     pnl = [eq[i + 1] - eq[i] for i in range(len(span))]
     pos = [{k: int(v) for k, v in (recs[d].get("positions") or {}).items() if int(v)} for d in span]
-    dec = decompose(span, pnl, pos, closes)
+    marks = ([recs[d]["mark_contract"] for d in span]
+             if span and all("mark_contract" in recs[d] for d in span) else None)
+    dec = decompose(span, pnl, pos, closes, marks=marks)
+    # consistency: fill contracts per session in the fills file vs the equity source's own count
+    per_day: Dict[date, int] = {}
+    for f in fills:
+        per_day[f.ts.date()] = per_day.get(f.ts.date(), 0) + f.qty
+    have = [d for d in span if "fills" in recs[d]]
+    fills_match = (all(per_day.get(d, 0) == int(recs[d]["fills"]) for d in have) if have else None)
     out = summarise(fills, path, closes)
     out.update({"arm": arm, "sessions": len(span),
                 "sessions_with_fills": len({f.ts.date() for f in fills}),
                 "ticker_inferred": missing, "ticker_ambiguous": amb,
                 "pnl_dong": dec["total_dong"], "hpr": eq[-1] / eq[0] - 1.0,
                 "carry_dong": dec["carry_dong"], "trading_dong": dec["trading_dong"],
+                "mark_switch_dong": dec["mark_switch_dong"],
+                "fills_match_equity_source_per_session": fills_match,
                 "carry_missing_close": dec["carry_missing_close"],
                 "mean_abs_end_inventory": (sum(abs(sum(p.values())) for p in pos) / len(pos)) if pos else None,
                 "per_session": dec["per_session"]})
@@ -419,8 +455,8 @@ def _f(x, fmt="{:+.2f}"):
 def markdown(out: dict) -> str:
     lines = [f"### {out['window']}: markouts ({out['session_set']}; price path: {out['price_path']})", "",
              "| arm | sessions | contracts | taker share | taker price impr. (median, pts) | "
-             "markout 1 min | 5 min | close | P&L (M đ) | carry (M đ) | trading (M đ) |",
-             "|---|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|"]
+             "markout 1 min | 5 min | close | P&L (M đ) | carry (M đ) | mark switch (M đ) | trading (M đ) |",
+             "|---|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|"]
     for arm, a in out["arms"].items():
         m = a["markout_mean_points"]
         ts = a["taker_share"]
@@ -428,7 +464,7 @@ def markdown(out: dict) -> str:
             f"| {arm} | {a['sessions']} | {a['contracts']} | {'' if ts is None else f'{ts:.0%}'} | "
             f"{_f(a['price_improvement_points']['median'])} | {_f(m['1m'])} | {_f(m['5m'])} | "
             f"{_f(m['close'])} | {a['pnl_dong'] / 1e6:+.1f} | {a['carry_dong'] / 1e6:+.1f} | "
-            f"{a['trading_dong'] / 1e6:+.1f} |")
+            f"{a.get('mark_switch_dong', 0.0) / 1e6:+.1f} | {a['trading_dong'] / 1e6:+.1f} |")
     notes = []
     for arm, a in out["arms"].items():
         if a["ticker_inferred"]:
@@ -440,7 +476,8 @@ def markdown(out: dict) -> str:
             notes.append(f"{arm}: no equity record for {len(a['sessions_missing'])} sessions.")
     lines += ["", "Markouts: mean per contract, index points, + = good for A (1 point = 100,000 đ "
                   "per contract). Taker share: contracts filled as taker among those with a liquidity "
-                  "side. Carry = previous end positions x close-to-close move; trading = the rest."]
+                  "side. Carry = previous end positions x close-to-close move; mark switch = naive's "
+                  "revaluation across its F1/F2 stitch (the basis, naive only); trading = the rest."]
     if notes:
         lines += [""] + [f"- {n}" for n in notes]
     lines += ["", "Inputs:", ""]

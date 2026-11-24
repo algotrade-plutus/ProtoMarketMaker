@@ -113,3 +113,24 @@ def test_load_fills_reads_the_scratch_trace_format(tmp_path):
     # the committed trace format wraps the list: {"fills": [...], ...}
     p.write_text(json.dumps({"fills": rows}))
     assert len(load_fills(p)) == 2
+
+
+def test_decompose_with_marks_splits_a_mark_contract_switch_from_carry():
+    # Naive marks a stitched position: day 1 at F2's close, day 2 at the expiring F1's
+    # close, day 3 at F2 again. The basis at each switch is booked as mark_switch, not carry.
+    days = [D0, date(2022, 11, 22), date(2022, 11, 23)]
+    closes = {(days[0], "F2"): 1000.0, (days[1], "F2"): 1004.0, (days[1], "F1"): 1010.0,
+              (days[2], "F2"): 1001.0}
+    pos = [{"F2": -2}, {"F1": -2}, {"F2": -2}]
+    marks = ["F2", "F1", "F2"]
+    pnl = [0.0, -2 * (1010.0 - 1000.0) * MULT, -2 * (1001.0 - 1010.0) * MULT]
+    out = decompose(days, pnl, pos, closes, marks=marks)
+    rows = out["per_session"]
+    # day 2: carry on F2 (-2 x +4), switch -2 x (F1 - F2 at day 2) = -2 x 6
+    assert rows[1]["carry_dong"] == pytest.approx(-8 * MULT)
+    assert rows[1]["mark_switch_dong"] == pytest.approx(-12 * MULT)
+    # day 3: F1 has no close; carry on F2 (-2 x -3), switch -2 x (F2 - F1 at day 2) = +12
+    assert rows[2]["carry_dong"] == pytest.approx(6 * MULT)
+    assert rows[2]["mark_switch_dong"] == pytest.approx(12 * MULT)
+    assert out["mark_switch_dong"] == pytest.approx(0.0)
+    assert out["trading_dong"] == pytest.approx(0.0) and out["carry_missing_close"] == 0

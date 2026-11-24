@@ -1,0 +1,2082 @@
+{
+ "window": "im2022",
+ "session_set": "all 40 sessions",
+ "sessions": [
+  "2022-11-17",
+  "2022-11-18",
+  "2022-11-21",
+  "2022-11-22",
+  "2022-11-23",
+  "2022-11-24",
+  "2022-11-25",
+  "2022-11-28",
+  "2022-11-29",
+  "2022-11-30",
+  "2022-12-01",
+  "2022-12-02",
+  "2022-12-05",
+  "2022-12-06",
+  "2022-12-07",
+  "2022-12-08",
+  "2022-12-09",
+  "2022-12-12",
+  "2022-12-13",
+  "2022-12-14",
+  "2022-12-15",
+  "2022-12-16",
+  "2022-12-19",
+  "2022-12-20",
+  "2022-12-21",
+  "2022-12-22",
+  "2022-12-23",
+  "2022-12-26",
+  "2022-12-27",
+  "2022-12-28",
+  "2022-12-29",
+  "2022-12-30",
+  "2023-01-03",
+  "2023-01-04",
+  "2023-01-05",
+  "2023-01-06",
+  "2023-01-09",
+  "2023-01-10",
+  "2023-01-11",
+  "2023-01-12"
+ ],
+ "price_path": "tape",
+ "horizons": [
+  "1m",
+  "5m",
+  "close"
+ ],
+ "units": "markouts in index points per contract (+ = good for A); P&L in real \u0111\u1ed3ng",
+ "arms": {
+  "N0": {
+   "fills": 131,
+   "contracts": 137,
+   "markout_mean_points": {
+    "1m": 0.6131386861313843,
+    "5m": 0.3781021897810282,
+    "close": -0.5766423357664242
+   },
+   "markout_total_points": {
+    "1m": 83.99999999999966,
+    "5m": 51.800000000000864,
+    "close": -79.00000000000011
+   },
+   "markout_total_dong": {
+    "1m": 8399999.999999966,
+    "5m": 5180000.000000087,
+    "close": -7900000.000000011
+   },
+   "by_liquidity": {
+    "maker": {
+     "fills": 129,
+     "contracts": 129,
+     "markout_mean_points": {
+      "1m": 0.2914728682170544,
+      "5m": -0.004651162790688157,
+      "close": -0.8976744186046464
+     },
+     "markout_total_points": {
+      "1m": 37.60000000000002,
+      "5m": -0.5999999999987722,
+      "close": -115.79999999999939
+     },
+     "markout_total_dong": {
+      "1m": 3760000.0000000023,
+      "5m": -59999.99999987722,
+      "close": -11579999.999999939
+     }
+    },
+    "taker": {
+     "fills": 0,
+     "contracts": 0,
+     "markout_mean_points": {
+      "1m": null,
+      "5m": null,
+      "close": null
+     },
+     "markout_total_points": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     },
+     "markout_total_dong": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     }
+    },
+    "unknown": {
+     "fills": 2,
+     "contracts": 8,
+     "markout_mean_points": {
+      "1m": 5.7999999999999545,
+      "5m": 6.5499999999999545,
+      "close": 4.599999999999909
+     },
+     "markout_total_points": {
+      "1m": 46.399999999999636,
+      "5m": 52.399999999999636,
+      "close": 36.79999999999927
+     },
+     "markout_total_dong": {
+      "1m": 4639999.999999964,
+      "5m": 5239999.999999964,
+      "close": 3679999.9999999274
+     }
+    }
+   },
+   "taker_share": 0.0,
+   "price_improvement_points": {
+    "n": 0,
+    "median": null,
+    "mean": null,
+    "min": null,
+    "max": null,
+    "sum": 0
+   },
+   "by_role": {
+    "quote": 129,
+    "roll": 8
+   },
+   "close_from_last_print": 0,
+   "arm": "N0",
+   "sessions": 40,
+   "sessions_with_fills": 31,
+   "ticker_inferred": 0,
+   "ticker_ambiguous": 0,
+   "pnl_dong": -64659999.99999999,
+   "hpr": -0.12932,
+   "carry_dong": -55260000.00000003,
+   "trading_dong": -10440000.000000013,
+   "mark_switch_dong": 1040000.0000000545,
+   "fills_match_equity_source_per_session": true,
+   "carry_missing_close": 0,
+   "mean_abs_end_inventory": 3.225,
+   "per_session": [
+    {
+     "date": "2022-11-17",
+     "pnl_dong": -1520000.0,
+     "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1520000.0,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-18",
+     "pnl_dong": 1110000.0,
+     "carry_dong": 10000.000000002274,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1099999.9999999977,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-21",
+     "pnl_dong": 1090000.0,
+     "carry_dong": 2479999.9999999953,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1389999.9999999953,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-22",
+     "pnl_dong": 9790000.0,
+     "carry_dong": 1220000.0000000047,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 8569999.999999996,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    },
+    {
+     "date": "2022-11-23",
+     "pnl_dong": 2000000.0,
+     "carry_dong": 569999.9999999931,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1430000.000000007,
+     "end_positions": {}
+    },
+    {
+     "date": "2022-11-24",
+     "pnl_dong": -1480000.0,
+     "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1480000.0,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    },
+    {
+     "date": "2022-11-25",
+     "pnl_dong": -12460000.0,
+     "carry_dong": -9030000.000000007,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -3429999.9999999925,
+     "end_positions": {
+      "VN30F2212": -5
+     }
+    },
+    {
+     "date": "2022-11-28",
+     "pnl_dong": -10080000.0,
+     "carry_dong": -12350000.000000022,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 2270000.0000000224,
+     "end_positions": {
+      "VN30F2212": -9
+     }
+    },
+    {
+     "date": "2022-11-29",
+     "pnl_dong": -19620000.0,
+     "carry_dong": -19619999.99999996,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -4.0978193283081055e-08,
+     "end_positions": {
+      "VN30F2212": -9
+     }
+    },
+    {
+     "date": "2022-11-30",
+     "pnl_dong": -11160000.0,
+     "carry_dong": -11160000.000000082,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 8.195638656616211e-08,
+     "end_positions": {
+      "VN30F2212": -9
+     }
+    },
+    {
+     "date": "2022-12-01",
+     "pnl_dong": 170000.0,
+     "carry_dong": -989999.9999999182,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1159999.999999918,
+     "end_positions": {
+      "VN30F2212": -10
+     }
+    },
+    {
+     "date": "2022-12-02",
+     "pnl_dong": -62560000.0,
+     "carry_dong": -72000000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 9440000.0,
+     "end_positions": {
+      "VN30F2212": -9
+     }
+    },
+    {
+     "date": "2022-12-05",
+     "pnl_dong": -3160000.0,
+     "carry_dong": -2700000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -460000.0,
+     "end_positions": {
+      "VN30F2212": -6
+     }
+    },
+    {
+     "date": "2022-12-06",
+     "pnl_dong": 32110000.0,
+     "carry_dong": 34800000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -2690000.0,
+     "end_positions": {
+      "VN30F2212": -4
+     }
+    },
+    {
+     "date": "2022-12-07",
+     "pnl_dong": -1490000.0,
+     "carry_dong": -2919999.999999982,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1429999.9999999818,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    },
+    {
+     "date": "2022-12-08",
+     "pnl_dong": -10460000.0,
+     "carry_dong": -510000.0000000136,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -9949999.999999987,
+     "end_positions": {
+      "VN30F2212": 4
+     }
+    },
+    {
+     "date": "2022-12-09",
+     "pnl_dong": 3220000.0,
+     "carry_dong": 6000000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -2780000.0,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-12-12",
+     "pnl_dong": -1750000.0,
+     "carry_dong": 3479999.9999999953,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -5229999.999999995,
+     "end_positions": {
+      "VN30F2212": 1
+     }
+    },
+    {
+     "date": "2022-12-13",
+     "pnl_dong": -3660000.0,
+     "carry_dong": 2279999.9999999953,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -5939999.999999995,
+     "end_positions": {
+      "VN30F2212": -4
+     }
+    },
+    {
+     "date": "2022-12-14",
+     "pnl_dong": 3860000.0,
+     "carry_dong": -2160000.0000000363,
+     "mark_switch_dong": 1760000.0000000363,
+     "trading_dong": 4260000.0,
+     "end_positions": {
+      "VN30F2301": -3
+     }
+    },
+    {
+     "date": "2022-12-15",
+     "pnl_dong": -1180000.0,
+     "carry_dong": -1650000.0,
+     "mark_switch_dong": -179999.99999997276,
+     "trading_dong": 649999.9999999728,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-12-16",
+     "pnl_dong": 510000.0,
+     "carry_dong": 1050000.0,
+     "mark_switch_dong": -540000.0000000091,
+     "trading_dong": 9.080395102500916e-09,
+     "end_positions": {
+      "VN30F2301": -1
+     }
+    },
+    {
+     "date": "2022-12-19",
+     "pnl_dong": 2580000.0,
+     "carry_dong": 1500000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1080000.0,
+     "end_positions": {
+      "VN30F2301": -2
+     }
+    },
+    {
+     "date": "2022-12-20",
+     "pnl_dong": 2160000.0,
+     "carry_dong": 3600000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1440000.0,
+     "end_positions": {
+      "VN30F2301": -2
+     }
+    },
+    {
+     "date": "2022-12-21",
+     "pnl_dong": -5500000.0,
+     "carry_dong": -2000000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -3500000.0,
+     "end_positions": {
+      "VN30F2301": -5
+     }
+    },
+    {
+     "date": "2022-12-22",
+     "pnl_dong": 280000.0,
+     "carry_dong": -350000.00000002276,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 630000.0000000228,
+     "end_positions": {
+      "VN30F2301": -6
+     }
+    },
+    {
+     "date": "2022-12-23",
+     "pnl_dong": 2010000.0,
+     "carry_dong": 1740000.0000000545,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 269999.9999999455,
+     "end_positions": {
+      "VN30F2301": -6
+     }
+    },
+    {
+     "date": "2022-12-26",
+     "pnl_dong": 24610000.0,
+     "carry_dong": 29039999.999999985,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -4429999.999999985,
+     "end_positions": {
+      "VN30F2301": -5
+     }
+    },
+    {
+     "date": "2022-12-27",
+     "pnl_dong": -7890000.0,
+     "carry_dong": -7300000.000000011,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -589999.9999999888,
+     "end_positions": {
+      "VN30F2301": -4
+     }
+    },
+    {
+     "date": "2022-12-28",
+     "pnl_dong": -2800000.0,
+     "carry_dong": -2800000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 0.0,
+     "end_positions": {
+      "VN30F2301": -4
+     }
+    },
+    {
+     "date": "2022-12-29",
+     "pnl_dong": 4080000.0,
+     "carry_dong": 6000000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1920000.0,
+     "end_positions": {
+      "VN30F2301": -2
+     }
+    },
+    {
+     "date": "2022-12-30",
+     "pnl_dong": -980000.0,
+     "carry_dong": -2300000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1320000.0,
+     "end_positions": {}
+    },
+    {
+     "date": "2023-01-03",
+     "pnl_dong": 2050000.0,
+     "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 2050000.0,
+     "end_positions": {
+      "VN30F2301": 1
+     }
+    },
+    {
+     "date": "2023-01-04",
+     "pnl_dong": -280000.0,
+     "carry_dong": -279999.99999999546,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -4.540197551250458e-09,
+     "end_positions": {
+      "VN30F2301": 1
+     }
+    },
+    {
+     "date": "2023-01-05",
+     "pnl_dong": 1110000.0,
+     "carry_dong": 1109999.999999991,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 9.080395102500916e-09,
+     "end_positions": {
+      "VN30F2301": 1
+     }
+    },
+    {
+     "date": "2023-01-06",
+     "pnl_dong": -280000.0,
+     "carry_dong": -279999.99999999546,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -4.540197551250458e-09,
+     "end_positions": {
+      "VN30F2301": 1
+     }
+    },
+    {
+     "date": "2023-01-09",
+     "pnl_dong": 740000.0,
+     "carry_dong": 259999.99999999092,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 480000.0000000091,
+     "end_positions": {}
+    },
+    {
+     "date": "2023-01-10",
+     "pnl_dong": 0.0,
+     "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 0.0,
+     "end_positions": {}
+    },
+    {
+     "date": "2023-01-11",
+     "pnl_dong": 0.0,
+     "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 0.0,
+     "end_positions": {}
+    },
+    {
+     "date": "2023-01-12",
+     "pnl_dong": 170000.0,
+     "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 170000.0,
+     "end_positions": {
+      "VN30F2301": -1
+     }
+    }
+   ]
+  },
+  "N3": {
+   "fills": 131,
+   "contracts": 137,
+   "markout_mean_points": {
+    "1m": -0.4700729927007497,
+    "5m": -0.7051094890511058,
+    "close": -1.6598540145985583
+   },
+   "markout_total_points": {
+    "1m": -64.4000000000027,
+    "5m": -96.6000000000015,
+    "close": -227.40000000000248
+   },
+   "markout_total_dong": {
+    "1m": -6440000.000000271,
+    "5m": -9660000.00000015,
+    "close": -22740000.00000025
+   },
+   "by_liquidity": {
+    "maker": {
+     "fills": 129,
+     "contracts": 129,
+     "markout_mean_points": {
+      "1m": -0.8589147286821887,
+      "5m": -1.1550387596899312,
+      "close": -2.0480620155038896
+     },
+     "markout_total_points": {
+      "1m": -110.80000000000234,
+      "5m": -149.00000000000114,
+      "close": -264.20000000000175
+     },
+     "markout_total_dong": {
+      "1m": -11080000.000000235,
+      "5m": -14900000.000000114,
+      "close": -26420000.000000175
+     }
+    },
+    "taker": {
+     "fills": 0,
+     "contracts": 0,
+     "markout_mean_points": {
+      "1m": null,
+      "5m": null,
+      "close": null
+     },
+     "markout_total_points": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     },
+     "markout_total_dong": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     }
+    },
+    "unknown": {
+     "fills": 2,
+     "contracts": 8,
+     "markout_mean_points": {
+      "1m": 5.7999999999999545,
+      "5m": 6.5499999999999545,
+      "close": 4.599999999999909
+     },
+     "markout_total_points": {
+      "1m": 46.399999999999636,
+      "5m": 52.399999999999636,
+      "close": 36.79999999999927
+     },
+     "markout_total_dong": {
+      "1m": 4639999.999999964,
+      "5m": 5239999.999999964,
+      "close": 3679999.9999999274
+     }
+    }
+   },
+   "taker_share": 0.0,
+   "price_improvement_points": {
+    "n": 0,
+    "median": null,
+    "mean": null,
+    "min": null,
+    "max": null,
+    "sum": 0
+   },
+   "by_role": {
+    "quote": 129,
+    "roll": 8
+   },
+   "close_from_last_print": 0,
+   "arm": "N3",
+   "sessions": 40,
+   "sessions_with_fills": 31,
+   "ticker_inferred": 0,
+   "ticker_ambiguous": 0,
+   "pnl_dong": -82100000.0,
+   "hpr": -0.1642,
+   "carry_dong": -55260000.00000003,
+   "trading_dong": -27880000.000000022,
+   "mark_switch_dong": 1040000.0000000545,
+   "fills_match_equity_source_per_session": true,
+   "carry_missing_close": 0,
+   "mean_abs_end_inventory": 3.225,
+   "per_session": [
+    {
+     "date": "2022-11-17",
+     "pnl_dong": -1640000.0,
+     "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1640000.0,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-18",
+     "pnl_dong": 800000.0,
+     "carry_dong": 10000.000000002274,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 789999.9999999977,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-21",
+     "pnl_dong": 950000.0,
+     "carry_dong": 2479999.9999999953,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1529999.9999999953,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-22",
+     "pnl_dong": 8700000.0,
+     "carry_dong": 1220000.0000000047,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 7479999.999999995,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    },
+    {
+     "date": "2022-11-23",
+     "pnl_dong": 1770000.0,
+     "carry_dong": 569999.9999999931,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1200000.000000007,
+     "end_positions": {}
+    },
+    {
+     "date": "2022-11-24",
+     "pnl_dong": -1730000.0,
+     "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1730000.0,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    },
+    {
+     "date": "2022-11-25",
+     "pnl_dong": -12950000.0,
+     "carry_dong": -9030000.000000007,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -3919999.9999999925,
+     "end_positions": {
+      "VN30F2212": -5
+     }
+    },
+    {
+     "date": "2022-11-28",
+     "pnl_dong": -10480000.0,
+     "carry_dong": -12350000.000000022,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1870000.0000000224,
+     "end_positions": {
+      "VN30F2212": -9
+     }
+    },
+    {
+     "date": "2022-11-29",
+     "pnl_dong": -19620000.0,
+     "carry_dong": -19619999.99999996,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -4.0978193283081055e-08,
+     "end_positions": {
+      "VN30F2212": -9
+     }
+    },
+    {
+     "date": "2022-11-30",
+     "pnl_dong": -11160000.0,
+     "carry_dong": -11160000.000000082,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 8.195638656616211e-08,
+     "end_positions": {
+      "VN30F2212": -9
+     }
+    },
+    {
+     "date": "2022-12-01",
+     "pnl_dong": -760000.0,
+     "carry_dong": -989999.9999999182,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 229999.99999991816,
+     "end_positions": {
+      "VN30F2212": -10
+     }
+    },
+    {
+     "date": "2022-12-02",
+     "pnl_dong": -65010000.0,
+     "carry_dong": -72000000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 6990000.0,
+     "end_positions": {
+      "VN30F2212": -9
+     }
+    },
+    {
+     "date": "2022-12-05",
+     "pnl_dong": -3910000.0,
+     "carry_dong": -2700000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1210000.0,
+     "end_positions": {
+      "VN30F2212": -6
+     }
+    },
+    {
+     "date": "2022-12-06",
+     "pnl_dong": 31120000.0,
+     "carry_dong": 34800000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -3680000.0,
+     "end_positions": {
+      "VN30F2212": -4
+     }
+    },
+    {
+     "date": "2022-12-07",
+     "pnl_dong": -2680000.0,
+     "carry_dong": -2919999.999999982,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 239999.99999998184,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    },
+    {
+     "date": "2022-12-08",
+     "pnl_dong": -11470000.0,
+     "carry_dong": -510000.0000000136,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -10959999.999999987,
+     "end_positions": {
+      "VN30F2212": 4
+     }
+    },
+    {
+     "date": "2022-12-09",
+     "pnl_dong": 2260000.0,
+     "carry_dong": 6000000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -3740000.0,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-12-12",
+     "pnl_dong": -2160000.0,
+     "carry_dong": 3479999.9999999953,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -5639999.999999995,
+     "end_positions": {
+      "VN30F2212": 1
+     }
+    },
+    {
+     "date": "2022-12-13",
+     "pnl_dong": -3940000.0,
+     "carry_dong": 2279999.9999999953,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -6219999.999999995,
+     "end_positions": {
+      "VN30F2212": -4
+     }
+    },
+    {
+     "date": "2022-12-14",
+     "pnl_dong": 3840000.0,
+     "carry_dong": -2160000.0000000363,
+     "mark_switch_dong": 1760000.0000000363,
+     "trading_dong": 4240000.0,
+     "end_positions": {
+      "VN30F2301": -3
+     }
+    },
+    {
+     "date": "2022-12-15",
+     "pnl_dong": -1300000.0,
+     "carry_dong": -1650000.0,
+     "mark_switch_dong": -179999.99999997276,
+     "trading_dong": 529999.9999999728,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-12-16",
+     "pnl_dong": 510000.0,
+     "carry_dong": 1050000.0,
+     "mark_switch_dong": -540000.0000000091,
+     "trading_dong": 9.080395102500916e-09,
+     "end_positions": {
+      "VN30F2301": -1
+     }
+    },
+    {
+     "date": "2022-12-19",
+     "pnl_dong": 2260000.0,
+     "carry_dong": 1500000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 760000.0,
+     "end_positions": {
+      "VN30F2301": -2
+     }
+    },
+    {
+     "date": "2022-12-20",
+     "pnl_dong": 1810000.0,
+     "carry_dong": 3600000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1790000.0,
+     "end_positions": {
+      "VN30F2301": -2
+     }
+    },
+    {
+     "date": "2022-12-21",
+     "pnl_dong": -5790000.0,
+     "carry_dong": -2000000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -3790000.0,
+     "end_positions": {
+      "VN30F2301": -5
+     }
+    },
+    {
+     "date": "2022-12-22",
+     "pnl_dong": -880000.0,
+     "carry_dong": -350000.00000002276,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -529999.9999999772,
+     "end_positions": {
+      "VN30F2301": -6
+     }
+    },
+    {
+     "date": "2022-12-23",
+     "pnl_dong": 1500000.0,
+     "carry_dong": 1740000.0000000545,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -240000.00000005448,
+     "end_positions": {
+      "VN30F2301": -6
+     }
+    },
+    {
+     "date": "2022-12-26",
+     "pnl_dong": 23630000.0,
+     "carry_dong": 29039999.999999985,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -5409999.999999985,
+     "end_positions": {
+      "VN30F2301": -5
+     }
+    },
+    {
+     "date": "2022-12-27",
+     "pnl_dong": -7930000.0,
+     "carry_dong": -7300000.000000011,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -629999.9999999888,
+     "end_positions": {
+      "VN30F2301": -4
+     }
+    },
+    {
+     "date": "2022-12-28",
+     "pnl_dong": -2800000.0,
+     "carry_dong": -2800000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 0.0,
+     "end_positions": {
+      "VN30F2301": -4
+     }
+    },
+    {
+     "date": "2022-12-29",
+     "pnl_dong": 3250000.0,
+     "carry_dong": 6000000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -2750000.0,
+     "end_positions": {
+      "VN30F2301": -2
+     }
+    },
+    {
+     "date": "2022-12-30",
+     "pnl_dong": -1120000.0,
+     "carry_dong": -2300000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1180000.0,
+     "end_positions": {}
+    },
+    {
+     "date": "2023-01-03",
+     "pnl_dong": 1970000.0,
+     "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1970000.0,
+     "end_positions": {
+      "VN30F2301": 1
+     }
+    },
+    {
+     "date": "2023-01-04",
+     "pnl_dong": -280000.0,
+     "carry_dong": -279999.99999999546,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -4.540197551250458e-09,
+     "end_positions": {
+      "VN30F2301": 1
+     }
+    },
+    {
+     "date": "2023-01-05",
+     "pnl_dong": 1110000.0,
+     "carry_dong": 1109999.999999991,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 9.080395102500916e-09,
+     "end_positions": {
+      "VN30F2301": 1
+     }
+    },
+    {
+     "date": "2023-01-06",
+     "pnl_dong": -280000.0,
+     "carry_dong": -279999.99999999546,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -4.540197551250458e-09,
+     "end_positions": {
+      "VN30F2301": 1
+     }
+    },
+    {
+     "date": "2023-01-09",
+     "pnl_dong": 240000.0,
+     "carry_dong": 259999.99999999092,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -19999.99999999092,
+     "end_positions": {}
+    },
+    {
+     "date": "2023-01-10",
+     "pnl_dong": 0.0,
+     "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 0.0,
+     "end_positions": {}
+    },
+    {
+     "date": "2023-01-11",
+     "pnl_dong": 0.0,
+     "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 0.0,
+     "end_positions": {}
+    },
+    {
+     "date": "2023-01-12",
+     "pnl_dong": 70000.0,
+     "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 70000.0,
+     "end_positions": {
+      "VN30F2301": -1
+     }
+    }
+   ]
+  },
+  "F-opt": {
+   "fills": 180,
+   "contracts": 198,
+   "markout_mean_points": {
+    "1m": 0.21111111111110284,
+    "5m": 0.41010101010100575,
+    "close": 3.7818181818181724
+   },
+   "markout_total_points": {
+    "1m": 41.79999999999836,
+    "5m": 81.19999999999914,
+    "close": 748.7999999999981
+   },
+   "markout_total_dong": {
+    "1m": 4179999.999999836,
+    "5m": 8119999.999999913,
+    "close": 74879999.9999998
+   },
+   "by_liquidity": {
+    "maker": {
+     "fills": 60,
+     "contracts": 69,
+     "markout_mean_points": {
+      "1m": 0.12753623188402435,
+      "5m": 0.8391304347825886,
+      "close": 0.014492753623173578
+     },
+     "markout_total_points": {
+      "1m": 8.79999999999768,
+      "5m": 57.89999999999861,
+      "close": 0.9999999999989768
+     },
+     "markout_total_dong": {
+      "1m": 879999.9999997681,
+      "5m": 5789999.999999861,
+      "close": 99999.99999989769
+     }
+    },
+    "taker": {
+     "fills": 120,
+     "contracts": 129,
+     "markout_mean_points": {
+      "1m": 0.2558139534883774,
+      "5m": 0.18062015503876375,
+      "close": 5.796899224806195
+     },
+     "markout_total_points": {
+      "1m": 33.00000000000068,
+      "5m": 23.300000000000523,
+      "close": 747.7999999999992
+     },
+     "markout_total_dong": {
+      "1m": 3300000.000000068,
+      "5m": 2330000.000000052,
+      "close": 74779999.99999991
+     }
+    },
+    "unknown": {
+     "fills": 0,
+     "contracts": 0,
+     "markout_mean_points": {
+      "1m": null,
+      "5m": null,
+      "close": null
+     },
+     "markout_total_points": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     },
+     "markout_total_dong": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     }
+    }
+   },
+   "taker_share": 0.6515151515151515,
+   "price_improvement_points": {
+    "n": 120,
+    "median": 0.5,
+    "mean": 1.9625000000000048,
+    "min": 0.0,
+    "max": 11.0,
+    "sum": 235.50000000000057
+   },
+   "by_role": {
+    "unknown": 198
+   },
+   "close_from_last_print": 0,
+   "arm": "F-opt",
+   "sessions": 40,
+   "sessions_with_fills": 38,
+   "ticker_inferred": 180,
+   "ticker_ambiguous": 3,
+   "pnl_dong": -12617762.99999997,
+   "hpr": -0.025235526000000008,
+   "carry_dong": -85009999.9999999,
+   "trading_dong": 72392236.99999993,
+   "mark_switch_dong": 0.0,
+   "fills_match_equity_source_per_session": true,
+   "carry_missing_close": 0,
+   "mean_abs_end_inventory": 5.8,
+   "per_session": [
+    {
+     "date": "2022-11-17",
+     "pnl_dong": -451482.0,
+     "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -451482.0,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-18",
+     "pnl_dong": -815984.0,
+     "carry_dong": 10000.000000002274,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -825984.0000000023,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    },
+    {
+     "date": "2022-11-21",
+     "pnl_dong": 3641411.0,
+     "carry_dong": 7439999.999999986,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -3798588.999999986,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-22",
+     "pnl_dong": 16962061.0,
+     "carry_dong": 1220000.0000000047,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 15742060.999999996,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    },
+    {
+     "date": "2022-11-23",
+     "pnl_dong": 5410873.0,
+     "carry_dong": 569999.9999999931,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 4840873.0000000065,
+     "end_positions": {
+      "VN30F2212": -2
+     }
+    },
+    {
+     "date": "2022-11-24",
+     "pnl_dong": -4543957.0,
+     "carry_dong": -2959999.9999999907,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1583957.0000000093,
+     "end_positions": {
+      "VN30F2212": -5
+     }
+    },
+    {
+     "date": "2022-11-25",
+     "pnl_dong": -18952845.0,
+     "carry_dong": -15050000.000000011,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -3902844.999999989,
+     "end_positions": {
+      "VN30F2212": -7
+     }
+    },
+    {
+     "date": "2022-11-28",
+     "pnl_dong": -15338651.0,
+     "carry_dong": -17290000.000000034,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1951349.0000000335,
+     "end_positions": {
+      "VN30F2212": -10
+     }
+    },
+    {
+     "date": "2022-11-29",
+     "pnl_dong": -24041706.0,
+     "carry_dong": -21799999.999999955,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -2241706.0000000447,
+     "end_positions": {
+      "VN30F2212": -11
+     }
+    },
+    {
+     "date": "2022-11-30",
+     "pnl_dong": -14391883.0,
+     "carry_dong": -13640000.0000001,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -751882.9999998994,
+     "end_positions": {
+      "VN30F2212": -12
+     }
+    },
+    {
+     "date": "2022-12-01",
+     "pnl_dong": 3261945.0,
+     "carry_dong": -1319999.9999998908,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 4581944.999999891,
+     "end_positions": {
+      "VN30F2212": -16
+     }
+    },
+    {
+     "date": "2022-12-02",
+     "pnl_dong": -89546535.0,
+     "carry_dong": -115200000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 25653465.0,
+     "end_positions": {
+      "VN30F2212": -12
+     }
+    },
+    {
+     "date": "2022-12-05",
+     "pnl_dong": -5301832.0,
+     "carry_dong": -3600000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1701832.0,
+     "end_positions": {
+      "VN30F2212": -9
+     }
+    },
+    {
+     "date": "2022-12-06",
+     "pnl_dong": 69172338.0,
+     "carry_dong": 52200000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 16972338.0,
+     "end_positions": {
+      "VN30F2212": -11
+     }
+    },
+    {
+     "date": "2022-12-07",
+     "pnl_dong": -3634174.0,
+     "carry_dong": -8029999.99999995,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 4395825.99999995,
+     "end_positions": {
+      "VN30F2212": -8
+     }
+    },
+    {
+     "date": "2022-12-08",
+     "pnl_dong": 8312688.0,
+     "carry_dong": -1360000.0000000363,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 9672688.000000037,
+     "end_positions": {
+      "VN30F2212": -6
+     }
+    },
+    {
+     "date": "2022-12-09",
+     "pnl_dong": -6373159.0,
+     "carry_dong": -9000000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 2626841.0,
+     "end_positions": {
+      "VN30F2212": -8
+     }
+    },
+    {
+     "date": "2022-12-12",
+     "pnl_dong": 25119119.0,
+     "carry_dong": 27839999.999999963,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -2720880.9999999627,
+     "end_positions": {
+      "VN30F2212": -7
+     }
+    },
+    {
+     "date": "2022-12-13",
+     "pnl_dong": -18650200.0,
+     "carry_dong": -15959999.999999968,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -2690200.0000000317,
+     "end_positions": {
+      "VN30F2212": -10
+     }
+    },
+    {
+     "date": "2022-12-14",
+     "pnl_dong": -1520096.0,
+     "carry_dong": -1599999.999999909,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 79903.99999990896,
+     "end_positions": {
+      "VN30F2301": -9
+     }
+    },
+    {
+     "date": "2022-12-15",
+     "pnl_dong": -9698686.0,
+     "carry_dong": -10350000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 651314.0,
+     "end_positions": {
+      "VN30F2301": -9
+     }
+    },
+    {
+     "date": "2022-12-16",
+     "pnl_dong": 9065709.0,
+     "carry_dong": 9450000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -384291.0,
+     "end_positions": {
+      "VN30F2301": -8
+     }
+    },
+    {
+     "date": "2022-12-19",
+     "pnl_dong": 10107444.0,
+     "carry_dong": 12000000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1892556.0,
+     "end_positions": {
+      "VN30F2301": -5
+     }
+    },
+    {
+     "date": "2022-12-20",
+     "pnl_dong": 11170255.0,
+     "carry_dong": 9000000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 2170255.0,
+     "end_positions": {
+      "VN30F2301": -6
+     }
+    },
+    {
+     "date": "2022-12-21",
+     "pnl_dong": -1745719.0,
+     "carry_dong": -6000000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 4254281.0,
+     "end_positions": {
+      "VN30F2301": -4
+     }
+    },
+    {
+     "date": "2022-12-22",
+     "pnl_dong": 2109572.0,
+     "carry_dong": -280000.00000001816,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 2389572.000000018,
+     "end_positions": {
+      "VN30F2301": -7
+     }
+    },
+    {
+     "date": "2022-12-23",
+     "pnl_dong": 2647917.0,
+     "carry_dong": 2030000.0000000636,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 617916.9999999364,
+     "end_positions": {
+      "VN30F2301": -6
+     }
+    },
+    {
+     "date": "2022-12-26",
+     "pnl_dong": 24594592.0,
+     "carry_dong": 29039999.999999985,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -4445407.999999985,
+     "end_positions": {
+      "VN30F2301": -4
+     }
+    },
+    {
+     "date": "2022-12-27",
+     "pnl_dong": -496624.0,
+     "carry_dong": -5840000.000000009,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 5343376.000000009,
+     "end_positions": {
+      "VN30F2301": -9
+     }
+    },
+    {
+     "date": "2022-12-28",
+     "pnl_dong": -6453830.0,
+     "carry_dong": -6300000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -153830.0,
+     "end_positions": {
+      "VN30F2301": -8
+     }
+    },
+    {
+     "date": "2022-12-29",
+     "pnl_dong": 5957348.0,
+     "carry_dong": 12000000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -6042652.0,
+     "end_positions": {
+      "VN30F2301": -2
+     }
+    },
+    {
+     "date": "2022-12-30",
+     "pnl_dong": 365078.0,
+     "carry_dong": -2300000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 2665078.0,
+     "end_positions": {
+      "VN30F2301": 2
+     }
+    },
+    {
+     "date": "2023-01-03",
+     "pnl_dong": 7472129.0,
+     "carry_dong": 8200000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -727871.0,
+     "end_positions": {
+      "VN30F2301": 2
+     }
+    },
+    {
+     "date": "2023-01-04",
+     "pnl_dong": -594115.0,
+     "carry_dong": -559999.9999999909,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -34115.00000000908,
+     "end_positions": {
+      "VN30F2301": 3
+     }
+    },
+    {
+     "date": "2023-01-05",
+     "pnl_dong": 2945824.0,
+     "carry_dong": 3329999.9999999725,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -384175.9999999725,
+     "end_positions": {
+      "VN30F2301": 2
+     }
+    },
+    {
+     "date": "2023-01-06",
+     "pnl_dong": -560000.0,
+     "carry_dong": -559999.9999999909,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -9.080395102500916e-09,
+     "end_positions": {
+      "VN30F2301": 2
+     }
+    },
+    {
+     "date": "2023-01-09",
+     "pnl_dong": 1643029.0,
+     "carry_dong": 519999.99999998184,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1123029.0000000182,
+     "end_positions": {}
+    },
+    {
+     "date": "2023-01-10",
+     "pnl_dong": -364201.0,
+     "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -364201.0,
+     "end_positions": {
+      "VN30F2301": -1
+     }
+    },
+    {
+     "date": "2023-01-11",
+     "pnl_dong": -610000.0,
+     "carry_dong": -610000.0000000136,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1.3620592653751373e-08,
+     "end_positions": {
+      "VN30F2301": -1
+     }
+    },
+    {
+     "date": "2023-01-12",
+     "pnl_dong": 1508584.0,
+     "carry_dong": -250000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1758584.0,
+     "end_positions": {}
+    }
+   ]
+  },
+  "F-con": {
+   "fills": 109,
+   "contracts": 116,
+   "markout_mean_points": {
+    "1m": -0.3112068965517263,
+    "5m": -0.5706896551724063,
+    "close": 3.1198275862068887
+   },
+   "markout_total_points": {
+    "1m": -36.10000000000025,
+    "5m": -66.19999999999914,
+    "close": 361.89999999999907
+   },
+   "markout_total_dong": {
+    "1m": -3610000.000000025,
+    "5m": -6619999.999999913,
+    "close": 36189999.9999999
+   },
+   "by_liquidity": {
+    "maker": {
+     "fills": 5,
+     "contracts": 10,
+     "markout_mean_points": {
+      "1m": 0.14000000000003182,
+      "5m": -0.9699999999999818,
+      "close": -1.8600000000000592
+     },
+     "markout_total_points": {
+      "1m": 1.4000000000003183,
+      "5m": -9.699999999999818,
+      "close": -18.60000000000059
+     },
+     "markout_total_dong": {
+      "1m": 140000.00000003184,
+      "5m": -969999.9999999818,
+      "close": -1860000.0000000591
+     }
+    },
+    "taker": {
+     "fills": 104,
+     "contracts": 106,
+     "markout_mean_points": {
+      "1m": -0.35377358490566574,
+      "5m": -0.5330188679245219,
+      "close": 3.589622641509431
+     },
+     "markout_total_points": {
+      "1m": -37.50000000000057,
+      "5m": -56.49999999999932,
+      "close": 380.49999999999966
+     },
+     "markout_total_dong": {
+      "1m": -3750000.000000057,
+      "5m": -5649999.999999932,
+      "close": 38049999.99999996
+     }
+    },
+    "unknown": {
+     "fills": 0,
+     "contracts": 0,
+     "markout_mean_points": {
+      "1m": null,
+      "5m": null,
+      "close": null
+     },
+     "markout_total_points": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     },
+     "markout_total_dong": {
+      "1m": 0,
+      "5m": 0,
+      "close": 0
+     }
+    }
+   },
+   "taker_share": 0.9137931034482759,
+   "price_improvement_points": {
+    "n": 104,
+    "median": 0.3000000000000682,
+    "mean": 1.046153846153851,
+    "min": 0.0,
+    "max": 11.5,
+    "sum": 108.80000000000052
+   },
+   "by_role": {
+    "unknown": 116
+   },
+   "close_from_last_print": 0,
+   "arm": "F-con",
+   "sessions": 40,
+   "sessions_with_fills": 35,
+   "ticker_inferred": 109,
+   "ticker_ambiguous": 1,
+   "pnl_dong": -57328285.00000003,
+   "hpr": -0.11465656999999996,
+   "carry_dong": -92069999.99999999,
+   "trading_dong": 34741714.999999955,
+   "mark_switch_dong": 0.0,
+   "fills_match_equity_source_per_session": true,
+   "carry_missing_close": 0,
+   "mean_abs_end_inventory": 4.25,
+   "per_session": [
+    {
+     "date": "2022-11-17",
+     "pnl_dong": -451482.0,
+     "carry_dong": 0.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -451482.0,
+     "end_positions": {
+      "VN30F2212": -1
+     }
+    },
+    {
+     "date": "2022-11-18",
+     "pnl_dong": -1642913.0,
+     "carry_dong": 10000.000000002274,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1652913.0000000023,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    },
+    {
+     "date": "2022-11-21",
+     "pnl_dong": 5725705.0,
+     "carry_dong": 7439999.999999986,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1714294.999999986,
+     "end_positions": {
+      "VN30F2212": -2
+     }
+    },
+    {
+     "date": "2022-11-22",
+     "pnl_dong": 26931631.0,
+     "carry_dong": 2440000.0000000093,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 24491630.999999993,
+     "end_positions": {
+      "VN30F2212": -6
+     }
+    },
+    {
+     "date": "2022-11-23",
+     "pnl_dong": 1676000.0,
+     "carry_dong": 1139999.9999999863,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 536000.0000000137,
+     "end_positions": {
+      "VN30F2212": -5
+     }
+    },
+    {
+     "date": "2022-11-24",
+     "pnl_dong": -7911320.0,
+     "carry_dong": -7399999.999999978,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -511320.00000002235,
+     "end_positions": {
+      "VN30F2212": -6
+     }
+    },
+    {
+     "date": "2022-11-25",
+     "pnl_dong": -19661445.0,
+     "carry_dong": -18060000.000000015,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1601444.999999985,
+     "end_positions": {
+      "VN30F2212": -7
+     }
+    },
+    {
+     "date": "2022-11-28",
+     "pnl_dong": -15285224.0,
+     "carry_dong": -17290000.000000034,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 2004776.0000000335,
+     "end_positions": {
+      "VN30F2212": -8
+     }
+    },
+    {
+     "date": "2022-11-29",
+     "pnl_dong": -19691705.0,
+     "carry_dong": -17439999.999999963,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -2251705.0000000373,
+     "end_positions": {
+      "VN30F2212": -9
+     }
+    },
+    {
+     "date": "2022-11-30",
+     "pnl_dong": -11911883.0,
+     "carry_dong": -11160000.000000082,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -751882.999999918,
+     "end_positions": {
+      "VN30F2212": -10
+     }
+    },
+    {
+     "date": "2022-12-01",
+     "pnl_dong": 67985.0,
+     "carry_dong": -1099999.999999909,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1167984.999999909,
+     "end_positions": {
+      "VN30F2212": -11
+     }
+    },
+    {
+     "date": "2022-12-02",
+     "pnl_dong": -68618139.0,
+     "carry_dong": -79200000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 10581861.0,
+     "end_positions": {
+      "VN30F2212": -9
+     }
+    },
+    {
+     "date": "2022-12-05",
+     "pnl_dong": -3554646.0,
+     "carry_dong": -2700000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -854646.0,
+     "end_positions": {
+      "VN30F2212": -7
+     }
+    },
+    {
+     "date": "2022-12-06",
+     "pnl_dong": 34240874.0,
+     "carry_dong": 40600000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -6359126.0,
+     "end_positions": {
+      "VN30F2212": -5
+     }
+    },
+    {
+     "date": "2022-12-07",
+     "pnl_dong": -2818119.0,
+     "carry_dong": -3649999.999999977,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 831880.9999999772,
+     "end_positions": {
+      "VN30F2212": -5
+     }
+    },
+    {
+     "date": "2022-12-08",
+     "pnl_dong": 5427305.0,
+     "carry_dong": -850000.0000000227,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 6277305.000000022,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    },
+    {
+     "date": "2022-12-09",
+     "pnl_dong": -2093220.0,
+     "carry_dong": -4500000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 2406780.0,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    },
+    {
+     "date": "2022-12-12",
+     "pnl_dong": 10431276.0,
+     "carry_dong": 10439999.999999987,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -8723.999999986961,
+     "end_positions": {
+      "VN30F2212": -3
+     }
+    },
+    {
+     "date": "2022-12-13",
+     "pnl_dong": -9350204.0,
+     "carry_dong": -6839999.999999986,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -2510204.000000014,
+     "end_positions": {
+      "VN30F2212": -6
+     }
+    },
+    {
+     "date": "2022-12-14",
+     "pnl_dong": -1942552.0,
+     "carry_dong": -959999.9999999454,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -982552.0000000546,
+     "end_positions": {
+      "VN30F2301": -5
+     }
+    },
+    {
+     "date": "2022-12-15",
+     "pnl_dong": -5108685.0,
+     "carry_dong": -5750000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 641315.0,
+     "end_positions": {
+      "VN30F2301": -5
+     }
+    },
+    {
+     "date": "2022-12-16",
+     "pnl_dong": 4885710.0,
+     "carry_dong": 5250000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -364290.0,
+     "end_positions": {
+      "VN30F2301": -4
+     }
+    },
+    {
+     "date": "2022-12-19",
+     "pnl_dong": 6000000.0,
+     "carry_dong": 6000000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 0.0,
+     "end_positions": {
+      "VN30F2301": -4
+     }
+    },
+    {
+     "date": "2022-12-20",
+     "pnl_dong": 8924281.0,
+     "carry_dong": 7200000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1724281.0,
+     "end_positions": {
+      "VN30F2301": -4
+     }
+    },
+    {
+     "date": "2022-12-21",
+     "pnl_dong": 644255.0,
+     "carry_dong": -4000000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 4644255.0,
+     "end_positions": {
+      "VN30F2301": -2
+     }
+    },
+    {
+     "date": "2022-12-22",
+     "pnl_dong": 1693690.0,
+     "carry_dong": -140000.00000000908,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 1833690.000000009,
+     "end_positions": {
+      "VN30F2301": -4
+     }
+    },
+    {
+     "date": "2022-12-23",
+     "pnl_dong": 1160000.0,
+     "carry_dong": 1160000.0000000363,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -3.632158041000366e-08,
+     "end_positions": {
+      "VN30F2301": -4
+     }
+    },
+    {
+     "date": "2022-12-26",
+     "pnl_dong": 19338601.0,
+     "carry_dong": 19359999.999999993,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -21398.99999999255,
+     "end_positions": {
+      "VN30F2301": -3
+     }
+    },
+    {
+     "date": "2022-12-27",
+     "pnl_dong": -3737423.0,
+     "carry_dong": -4380000.0000000065,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 642577.0000000065,
+     "end_positions": {
+      "VN30F2301": -3
+     }
+    },
+    {
+     "date": "2022-12-28",
+     "pnl_dong": -2100000.0,
+     "carry_dong": -2100000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 0.0,
+     "end_positions": {
+      "VN30F2301": -3
+     }
+    },
+    {
+     "date": "2022-12-29",
+     "pnl_dong": 3496225.0,
+     "carry_dong": 4500000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -1003775.0,
+     "end_positions": {
+      "VN30F2301": -2
+     }
+    },
+    {
+     "date": "2022-12-30",
+     "pnl_dong": -1543723.0,
+     "carry_dong": -2300000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 756277.0,
+     "end_positions": {
+      "VN30F2301": -1
+     }
+    },
+    {
+     "date": "2023-01-03",
+     "pnl_dong": -6783910.0,
+     "carry_dong": -4100000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -2683910.0,
+     "end_positions": {
+      "VN30F2301": -2
+     }
+    },
+    {
+     "date": "2023-01-04",
+     "pnl_dong": 525885.0,
+     "carry_dong": 559999.9999999909,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -34114.99999999092,
+     "end_positions": {
+      "VN30F2301": -1
+     }
+    },
+    {
+     "date": "2023-01-05",
+     "pnl_dong": -1484177.0,
+     "carry_dong": -1109999.999999991,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -374177.0000000091,
+     "end_positions": {
+      "VN30F2301": -2
+     }
+    },
+    {
+     "date": "2023-01-06",
+     "pnl_dong": 560000.0,
+     "carry_dong": 559999.9999999909,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 9.080395102500916e-09,
+     "end_positions": {
+      "VN30F2301": -2
+     }
+    },
+    {
+     "date": "2023-01-09",
+     "pnl_dong": -288472.0,
+     "carry_dong": -519999.99999998184,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 231527.99999998184,
+     "end_positions": {
+      "VN30F2301": -2
+     }
+    },
+    {
+     "date": "2023-01-10",
+     "pnl_dong": -954202.0,
+     "carry_dong": -600000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -354202.0,
+     "end_positions": {
+      "VN30F2301": -3
+     }
+    },
+    {
+     "date": "2023-01-11",
+     "pnl_dong": -1830000.0,
+     "carry_dong": -1830000.000000041,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 4.0978193283081055e-08,
+     "end_positions": {
+      "VN30F2301": -3
+     }
+    },
+    {
+     "date": "2023-01-12",
+     "pnl_dong": -294264.0,
+     "carry_dong": -750000.0,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 455736.0,
+     "end_positions": {
+      "VN30F2301": -2
+     }
+    }
+   ]
+  }
+ },
+ "inputs": {
+  "N0": {
+   "traced_here": true
+  },
+  "N3": {
+   "traced_here": true
+  },
+  "F-opt": {
+   "fills_file": "fills_optimistic40.json",
+   "fills_sha256": "106887adb392315baee238a106c1fbd1c0bdf5b11d9e3a17d3836eed0e0068f8",
+   "per_session_from": {
+    "path": "result/mm_faithful_a/im2022_optimistic.json",
+    "sha256": "d1e4c02f63552cf7b51082f3119a5ca9deb586e286ffc4e4d4978d27cbaa0839"
+   }
+  },
+  "F-con": {
+   "fills_file": "fills_conservative40.json",
+   "fills_sha256": "e99e702b773595ff46575573d4682d072ceefb5648c9795ed934ef728b30f502",
+   "per_session_from": {
+    "path": "result/mm_faithful_a/im2022_conservative.json",
+    "sha256": "dbd6104fc1d0ed2a12aa5c533b9a053e856c9c35c0fd8a2f0698814c2c425ebe"
+   }
+  }
+ },
+ "plutus_simulator_head": "e4c5f87b5e7370f8b36ec7de1cdd2ef8c7ecd29e"
+}
