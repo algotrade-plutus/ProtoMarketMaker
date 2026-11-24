@@ -2,7 +2,7 @@
 name = "proto-market-maker"
 version = "0.1.0"
 description = "VN30 futures market-making research pipeline"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
     "pandas>=2.2",
     "numpy>=2.0",
@@ -10,6 +10,12 @@ dependencies = [
     "optuna>=3.6",
     "psycopg2-binary>=2.9",
     "python-dotenv>=1.0",
+    "pyarrow>=12.0",
+    "duckdb>=1.0",
+    "python-dateutil",
+    # RIVF'26 faithful arm: install plutus-simulator editable from its checkout
+    # (pip install -e <path-to>/plutus-simulator); not on PyPI under this name.
+    "algotrade-plutus",
 ]
 
 [project.scripts]
@@ -17,6 +23,8 @@ pmm-load-data = "proto_market_maker.data_loader:main"
 pmm-backtest  = "proto_market_maker.backtest:main"
 pmm-optimize  = "proto_market_maker.optimize:main"
 pmm-evaluate  = "proto_market_maker.evaluate:main"
+pmm-extract-slices = "proto_market_maker.experiments.extract_slices:main"
+pmm-anchor    = "proto_market_maker.experiments.mm_anchor:main"
 
 [dependency-groups]
 dev = ["pytest>=8", "pylint>=3.3"]

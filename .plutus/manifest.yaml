@@ -6,7 +6,7 @@ repo:
   primary_language: python
 env:
   base: python
-  python_version: '3.11'
+  python_version: '3.12'
   manager: uv
   lockfile: uv.lock
   install_project: true
@@ -169,7 +169,7 @@ expected:
 nine_step_coverage:
   step_1_hypothesis: {present: true, section: "Hypothesis"}
   step_2_data_preparation: {present: true, section: "Data Collection"}
-  step_3_forming_set_of_rules: {present: false, section: null}
+  step_3_forming_set_of_rules: {present: true, section: "Forming Set of Rules"}
   step_4_in_sample: {present: true, section: "In-sample Backtesting"}
   step_5_optimization: {present: true, section: "Optimization"}
   step_6_out_of_sample: {present: true, section: "Out-of-sample Backtesting"}

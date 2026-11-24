@@ -6,7 +6,10 @@ from decimal import Decimal
 import numpy as np
 import pandas as pd
 
-import plutus_verify as pv
+try:  # the reproducibility harness; optional so the engine imports without it
+    import plutus_verify as pv
+except ImportError:  # pragma: no cover
+    pv = None
 
 from proto_market_maker.config.config import BEST_CONFIG
 from proto_market_maker.backtest import Backtesting
@@ -36,6 +39,8 @@ def main():
     print(f"Sortino ratio: {sortino}")
     print(f"Maximum drawdown: {mdd}")
 
+    if pv is None:
+        return
     with pv.step("out_of_sample_backtest") as r:
         r.metric("sharpe_ratio",     float(sharpe),                    unit="ratio")
         r.metric("sortino_ratio",    float(sortino),                   unit="ratio")

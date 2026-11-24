@@ -19,3 +19,7 @@ dist/
 # local + generated, not tracked
 .env.redis.local
 .dockerignore
+
+# RIVF'26: the frozen contract map is committed with its slice
+!data/market/**/futurecontractcode.csv
+.pytest_cache/

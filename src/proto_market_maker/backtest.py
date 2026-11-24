@@ -10,10 +10,14 @@ from typing import List
 import pandas as pd
 import matplotlib.pyplot as plt
 
-import plutus_verify as pv
+try:  # the reproducibility harness; optional so the engine imports without it
+    import plutus_verify as pv
+except ImportError:  # pragma: no cover
+    pv = None
 
 from proto_market_maker.config.config import BACKTESTING_CONFIG
 from proto_market_maker.metrics.metric import get_returns, Metric
+from proto_market_maker.strategy import quote
 from proto_market_maker.utils import get_expired_dates, from_cash_to_tradeable_contracts, round_decimal
 
 FEE_PER_CONTRACT = Decimal(BACKTESTING_CONFIG["fee"]) * Decimal('100')
@@ -175,24 +179,22 @@ class Backtesting:
             seconds=int(BACKTESTING_CONFIG["time"])
         ):
             self.old_timestamp = timestamp
-            self.bid_price = (
-                price - step * Decimal(max(self.inventory, 0) * 0.02 + 1)
-            ).quantize(Decimal("0.0"), rounding=ROUND_HALF_UP)
-            self.ask_price = (
-                price - step * Decimal(min(self.inventory, 0) * 0.02 - 1)
-            ).quantize(Decimal("0.0"), rounding=ROUND_HALF_UP)
+            self.bid_price, self.ask_price = quote(price, self.inventory, step)
         elif matched != 0:
-            self.bid_price = (
-                price - step * Decimal(max(self.inventory, 0) * 0.02 + 1)
-            ).quantize(Decimal("0.0"), rounding=ROUND_HALF_UP)
-            self.ask_price = (
-                price - step * Decimal(min(self.inventory, 0) * 0.02 - 1)
-            ).quantize(Decimal("0.0"), rounding=ROUND_HALF_UP)
+            self.bid_price, self.ask_price = quote(price, self.inventory, step)
 
     @staticmethod
     def process_data(evaluation=False):
         prefix_path = "data/os/" if evaluation else "data/is/"
-        f1_data = pd.read_csv(f"{prefix_path}VN30F1M_data.csv")
+        return Backtesting.prepare(pd.read_csv(f"{prefix_path}VN30F1M_data.csv"),
+                                   pd.read_csv(f"{prefix_path}VN30F2M_data.csv"))
+
+    @staticmethod
+    def prepare(f1_data: pd.DataFrame, f2_data: pd.DataFrame) -> pd.DataFrame:
+        """The engine's row stream from the two per-contract frames
+        (``data_loader`` layout); split out of ``process_data`` so the RIVF'26
+        runner can feed frames built from the frozen L2 slice."""
+        f1_data = f1_data.copy()
         f1_data["datetime"] = pd.to_datetime(
             f1_data["datetime"], format="%Y-%m-%d %H:%M:%S.%f"
         )
@@ -203,7 +205,6 @@ class Backtesting:
         for col in rounding_columns:
             f1_data = round_decimal(f1_data, col)
 
-        f2_data = pd.read_csv(f"{prefix_path}VN30F2M_data.csv")
         f2_data = f2_data[["date", "datetime", "tickersymbol", "price", "close"]].copy()
         f2_data["datetime"] = pd.to_datetime(
             f2_data["datetime"], format="%Y-%m-%d %H:%M:%S.%f"
@@ -379,6 +380,8 @@ def main():
     bt.plot_drawdown()
     bt.plot_inventory()
 
+    if pv is None:
+        return
     with pv.step("in_sample_backtest") as r:
         r.metric("sharpe_ratio",     float(sharpe),                    unit="ratio")
         r.metric("sortino_ratio",    float(sortino),                   unit="ratio")
