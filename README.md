@@ -265,3 +265,60 @@ Post-cutover, the strategy refused all 20 of 20 sessions.
 .venv/bin/python -m proto_market_maker.experiments.mm_anchor im2022
 .venv/bin/python -m pytest -q
 ```
+
+### Attribution ladder
+
+The naive → faithful gap above mixes design choices with execution realism. The ladder closes the design mismatches first
+(rung 1), then adds one realism rule per rung. Rungs 1–4 are opt-in options on the naive engine
+(`naive_variants.NaiveVariant`, a subclass; `backtest.py` is unchanged and imports no plutus). Rungs 5–7 are read from
+`result/mm_anchor/<window>.json`, not re-run (sha256 and plutus-simulator commit are recorded in `result/mm_ladder/<window>.json`).
+Same signal (`quote`, `step = 3.1`), same 15 s / on-fill requote, real đồng.
+
+- **Rung 1, aligned:** traded contract's own prints only (`windows.traded_contracts`; no F1/F2 merge, no forward fill, no
+  synthetic roll); quoting 09:00–14:25; at the first print at or after 14:25:00 the residual closes at that print (a reducing
+  trade, so the naive fee applies). If the contract has no such print, the residual is marked at the close (krx2025: 6
+  contracts on 2025-04-03, 04-08 and 04-10, the days the contract printed nothing after 14:25). No inventory overnight.
+- **Rung 2, own-price fills:** a crossed quote books at the bid/ask, not at the crossing print.
+- **Rung 3, dated IM:** capacity at the VSD rate, 13% before 2022-12-15 and 17% from it.
+- **Rung 4, fee on every fill:** 0.4 point (40,000đ) per contract on opening fills too.
+- **Rung 5 / 6:** faithful arm, optimistic / conservative queue. Rung 5 changes several things at once, all of them the
+  exchange model: `book_walk` fills, the real fee schedule, the through-the-touch close-out, and band/session rejections.
+- **Rung 7 (krx2025):** the 20 post-cutover sessions, which the regime guard refuses.
+
+krx2025 is compared on the 20 pre-cutover sessions only. The faithful arm books refused sessions flat, so its whole-window
+fills and HPR are its pre-cutover numbers; the runner checks this. Faithful round trips are `(fills − marked) / 2`, exact because
+every faithful session ends flat.
+
+| window | rung | | fills | Δ fills | round trips | HPR | Δ HPR |
+|---|--:|---|--:|--:|--:|--:|--:|
+| im2022 (40 sessions) | 0 | naive as-is | 129 | | 64 | −12.93% | |
+| | 1 | + aligned | 142 | +13 | 71 | +1.37% | +14.31 pp |
+| | 2 | + own-price fills | 142 | 0 | 71 | +0.08% | −1.29 pp |
+| | 3 | + dated VSD IM | 142 | 0 | 71 | +0.08% | 0.00 pp |
+| | 4 | + fee on every fill | 142 | 0 | 71 | −0.49% | −0.57 pp |
+| | 5 | faithful, optimistic | 98 | −44 | 49 | +2.21% | +2.70 pp |
+| | 6 | faithful, conservative (99.93% of orders undecided) | 70 | −28 | 35 | +2.19% | −0.02 pp |
+| krx2025 (20 pre-cutover sessions) | 0 | naive as-is | 228 | | 112 | −5.22% | |
+| | 1 | + aligned | 228 | 0 | 111 | −6.95% | −1.73 pp |
+| | 2 | + own-price fills | 228 | 0 | 111 | −12.31% | −5.36 pp |
+| | 3 | + dated VSD IM | 228 | 0 | 111 | −12.31% | 0.00 pp |
+| | 4 | + fee on every fill | 228 | 0 | 111 | −13.25% | −0.94 pp |
+| | 5 | faithful, optimistic | 160 | −68 | 76 | −13.59% | −0.34 pp |
+| | 6 | faithful, conservative (99.76% of orders undecided) | 116 | −44 | 56 | −6.03% | +7.57 pp |
+| | 7 | post-cutover sessions | 0 | | | refused 20 of 20 | |
+
+Reading:
+- **im2022:** aligning the design (rung 1) moves naive by +14.31 pp of the +15.12 pp gap. Once naive is flat every session it
+  makes money (+1.37%), so the reversal is a design artifact, mostly overnight inventory.
+- **krx2025:** the largest single realism step is own-price fills (−5.36 pp). The conservative queue's +7.57 pp comes from 99.76%
+  undecided orders, so it is not evidence about execution.
+- **Rung 3 changes nothing in either window.** Capacity never binds: peak |inventory| is 6 (im2022) and 13 (krx2025) contracts,
+  against a minimum capacity of 26 and 19 contracts, which always leaves 8 or more contracts of headroom. Every krx2025 session falls after 2022-12-15 in any case.
+
+Regenerate (seconds; reads the committed slices and `result/mm_anchor/*.json`):
+
+```bash
+.venv/bin/python -m proto_market_maker.experiments.mm_ladder im2022
+.venv/bin/python -m proto_market_maker.experiments.mm_ladder krx2025
+.venv/bin/python -m pytest -q tests/test_naive_variants.py tests/test_regression_baseline.py
+```
