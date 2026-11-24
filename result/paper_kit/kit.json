@@ -1,0 +1,189 @@
+{
+ "generator": "proto_market_maker.experiments.mm_paper_kit",
+ "ladder": {
+  "im2022": {
+   "source": "result/mm_ladder/im2022.json",
+   "sha256": "aa4c9551545099b8bc99cc550a722101260e95d142d21a738c3e2a9ed7c56ba5",
+   "session_set": "all 40 sessions",
+   "sessions": 40,
+   "rungs": {
+    "N0": {
+     "hpr": -0.12932,
+     "fills": 129,
+     "round_trips": 64,
+     "label": "naive as-is"
+    },
+    "N1": {
+     "hpr": -0.15900000000000003,
+     "fills": 129,
+     "round_trips": 64,
+     "label": "+ own-price fills"
+    },
+    "N2": {
+     "hpr": -0.15900000000000003,
+     "fills": 129,
+     "round_trips": 64,
+     "label": "+ dated VSD IM (13% / 17%)"
+    },
+    "N3": {
+     "hpr": -0.1642,
+     "fills": 129,
+     "round_trips": 64,
+     "label": "+ fee on every fill"
+    },
+    "F-opt": {
+     "hpr": -0.025235526000000008,
+     "fills": 198,
+     "round_trips": 99,
+     "label": "Plutus faithful-A, optimistic queue"
+    },
+    "F-con": {
+     "hpr": -0.11465656999999996,
+     "fills": 116,
+     "round_trips": 57,
+     "label": "Plutus faithful-A, conservative queue"
+    }
+   },
+   "band": {
+    "low": -0.11465656999999996,
+    "high": -0.025235526000000008
+   },
+   "naive_outside_band": [
+    "N0",
+    "N1",
+    "N2",
+    "N3"
+   ]
+  },
+  "krx2025": {
+   "source": "result/mm_ladder/krx2025.json",
+   "sha256": "d8ae7770b1d5e78ebefacc4d80bcdd01041a2ea8fb61a7c0e5dedc86dbef7532",
+   "session_set": "20 pre-cutover sessions",
+   "sessions": 20,
+   "rungs": {
+    "N0": {
+     "hpr": -0.052180000000000004,
+     "fills": 228,
+     "round_trips": 112,
+     "label": "naive as-is"
+    },
+    "N1": {
+     "hpr": -0.14093999999999995,
+     "fills": 228,
+     "round_trips": 112,
+     "label": "+ own-price fills"
+    },
+    "N2": {
+     "hpr": -0.14093999999999995,
+     "fills": 228,
+     "round_trips": 112,
+     "label": "+ dated VSD IM (13% / 17%)"
+    },
+    "N3": {
+     "hpr": -0.15022000000000002,
+     "fills": 228,
+     "round_trips": 112,
+     "label": "+ fee on every fill"
+    },
+    "F-opt": {
+     "hpr": -0.07575191400000003,
+     "fills": 261,
+     "round_trips": 127,
+     "label": "Plutus faithful-A, optimistic queue"
+    },
+    "F-con": {
+     "hpr": -0.255499712,
+     "fills": 153,
+     "round_trips": 71,
+     "label": "Plutus faithful-A, conservative queue"
+    }
+   },
+   "band": {
+    "low": -0.255499712,
+    "high": -0.07575191400000003
+   },
+   "naive_outside_band": [
+    "N0"
+   ]
+  }
+ },
+ "markouts": [
+  {
+   "source": "result/mm_markout/im2022_markout.json",
+   "sha256": "445c24a3324fad612a2e2d6f2481093ce16c1bf13a83ef2c41ddc2b6f39e5d2e",
+   "window": "im2022",
+   "session_set": "all 40 sessions",
+   "price_path": "tape",
+   "arms": {
+    "N0": {
+     "sessions": 40,
+     "contracts": 137,
+     "taker_share": 0.0,
+     "price_improvement_median": null,
+     "markout_mean_points": {
+      "1m": 0.6131386861313843,
+      "5m": 0.3781021897810282,
+      "close": -0.5766423357664242
+     },
+     "pnl_dong": -64659999.99999999,
+     "carry_dong": -55260000.00000003,
+     "mark_switch_dong": 1040000.0000000545,
+     "trading_dong": -10440000.000000013
+    },
+    "N3": {
+     "sessions": 40,
+     "contracts": 137,
+     "taker_share": 0.0,
+     "price_improvement_median": null,
+     "markout_mean_points": {
+      "1m": -0.4700729927007497,
+      "5m": -0.7051094890511058,
+      "close": -1.6598540145985583
+     },
+     "pnl_dong": -82100000.0,
+     "carry_dong": -55260000.00000003,
+     "mark_switch_dong": 1040000.0000000545,
+     "trading_dong": -27880000.000000022
+    },
+    "F-opt": {
+     "sessions": 40,
+     "contracts": 198,
+     "taker_share": 0.6515151515151515,
+     "price_improvement_median": 0.5,
+     "markout_mean_points": {
+      "1m": 0.21111111111110284,
+      "5m": 0.41010101010100575,
+      "close": 3.7818181818181724
+     },
+     "pnl_dong": -12617762.99999997,
+     "carry_dong": -85009999.9999999,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 72392236.99999993
+    },
+    "F-con": {
+     "sessions": 40,
+     "contracts": 116,
+     "taker_share": 0.9137931034482759,
+     "price_improvement_median": 0.3000000000000682,
+     "markout_mean_points": {
+      "1m": -0.3112068965517263,
+      "5m": -0.5706896551724063,
+      "close": 3.1198275862068887
+     },
+     "pnl_dong": -57328285.00000003,
+     "carry_dong": -92069999.99999999,
+     "mark_switch_dong": 0.0,
+     "trading_dong": 34741714.999999955
+    }
+   }
+  }
+ ],
+ "written": [
+  "mm_ladder.pdf",
+  "mm_ladder.png",
+  "mm_ladder.md",
+  "mm_ladder.tex",
+  "mm_markout.md",
+  "mm_markout.tex"
+ ]
+}
