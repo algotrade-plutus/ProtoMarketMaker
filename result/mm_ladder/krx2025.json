@@ -527,10 +527,10 @@
    "delta_hpr": -0.009280000000000066
   },
   {
-   "hpr": -0.08982707199999995,
-   "sharpe": -1.2420406353717348,
-   "mdd": -0.1510869519303898,
-   "end_equity_dong": 455086464.0,
+   "hpr": -0.07575191400000003,
+   "sharpe": -1.077579569963325,
+   "mdd": -0.13787494070149842,
+   "end_equity_dong": 462124043.0,
    "_daily": {
     "2025-04-01": {
      "equity": 500586317.0,
@@ -583,100 +583,103 @@
      "round_trips": 93
     },
     "2025-04-16": {
-     "equity": 486895664.0,
-     "fills": 208,
-     "round_trips": 93
+     "equity": 500456131.0,
+     "fills": 219,
+     "round_trips": 104
     },
     "2025-04-17": {
-     "equity": 508914069.0,
-     "fills": 210,
-     "round_trips": 95
+     "equity": 515951648.0,
+     "fills": 221,
+     "round_trips": 104
     },
     "2025-04-18": {
-     "equity": 494174069.0,
-     "fills": 210,
-     "round_trips": 95
+     "equity": 501211648.0,
+     "fills": 221,
+     "round_trips": 104
     },
     "2025-04-21": {
-     "equity": 495274069.0,
-     "fills": 210,
-     "round_trips": 95
+     "equity": 502311648.0,
+     "fills": 221,
+     "round_trips": 104
     },
     "2025-04-22": {
-     "equity": 455708500.0,
-     "fills": 245,
-     "round_trips": 117
+     "equity": 462746079.0,
+     "fills": 256,
+     "round_trips": 126
     },
     "2025-04-23": {
-     "equity": 454205690.0,
-     "fills": 247,
-     "round_trips": 118
+     "equity": 461243269.0,
+     "fills": 258,
+     "round_trips": 127
     },
     "2025-04-24": {
-     "equity": 453005690.0,
-     "fills": 247,
-     "round_trips": 118
+     "equity": 460043269.0,
+     "fills": 258,
+     "round_trips": 127
     },
     "2025-04-25": {
-     "equity": 452242866.0,
-     "fills": 249,
-     "round_trips": 118
+     "equity": 459280445.0,
+     "fills": 260,
+     "round_trips": 127
     },
     "2025-04-28": {
-     "equity": 452186464.0,
-     "fills": 250,
-     "round_trips": 118
+     "equity": 459224043.0,
+     "fills": 261,
+     "round_trips": 127
     },
     "2025-04-29": {
-     "equity": 455086464.0,
-     "fills": 250,
-     "round_trips": 118
+     "equity": 462124043.0,
+     "fills": 261,
+     "round_trips": 127
     }
    },
-   "fills": 250,
-   "round_trips": 118,
+   "fills": 261,
+   "round_trips": 127,
    "quote_fills": 239,
-   "roll_fills": 11,
+   "roll_fills": 22,
    "engine_fills": 0,
    "maker_fills": 89,
-   "taker_fills": 161,
+   "taker_fills": 172,
    "sessions": 20,
-   "accepted_orders": 31061,
-   "undecided_orders": 28,
-   "undecided_order_rate": 0.0009014519815846239,
+   "accepted_orders": 31996,
+   "undecided_orders": 27,
+   "undecided_order_rate": 0.000843855481935242,
    "undecided_quote_orders_in_atc": 0,
-   "margin_warnings": 2,
-   "margin_calls": 2,
+   "margin_warnings": 1,
+   "margin_calls": 1,
    "margin_calls_cleared": 1,
-   "forced_liquidations": 13081,
-   "forced_liquidations_executed": 13080,
+   "forced_liquidations": 0,
+   "forced_liquidations_executed": 0,
    "vm_settlement_days": 18,
    "roll_triggers": 1,
    "roll_contracts": 11,
-   "roll_expired_contracts": 0,
-   "expiry_settled_contracts": 9,
-   "cancel_refused": 121,
-   "quote_rejected": 1110,
-   "charges_dong": 4013536.0,
+   "roll_retries": 4,
+   "roll_rejected": 0,
+   "roll_unfilled_contracts": 0,
+   "expiry_settled_contracts": 2,
+   "cancel_refused": 125,
+   "quote_rejected": 178,
+   "charges_dong": 4115957.0,
    "end_net_contracts": -5,
    "end_positions": {
     "VN30F2505": -5
    },
-   "engine_deposit_end_dong": 414606464.0,
-   "ledger_minus_engine_deposit_end_dong": 40480000.0,
+   "engine_deposit_end_dong": 462124043.0,
+   "ledger_minus_engine_deposit_end_dong": 0.0,
+   "max_abs_deposit_drift_dong": 0.0,
    "positions_match_engine_all_sessions": true,
    "rung": "F-opt",
    "label": "Plutus faithful-A, optimistic queue",
    "source": "result/mm_faithful_a/krx2025_optimistic.json",
-   "delta_fills": 22,
-   "delta_round_trips": 6,
-   "delta_hpr": 0.06039292800000007
+   "delta_fills": 33,
+   "delta_round_trips": 15,
+   "delta_hpr": 0.07446808599999999
   },
   {
-   "hpr": -0.26750146799999996,
-   "sharpe": -7.137369409522601,
-   "mdd": -0.2764988072513628,
-   "end_equity_dong": 366249266.0,
+   "hpr": -0.255499712,
+   "sharpe": -6.354191781130687,
+   "mdd": -0.2763700553797449,
+   "end_equity_dong": 372250144.0,
    "_daily": {
     "2025-04-01": {
      "equity": 500606315.0,
@@ -729,98 +732,102 @@
      "round_trips": 53
     },
     "2025-04-16": {
-     "equity": 381153720.0,
-     "fills": 113,
-     "round_trips": 53
+     "equity": 381255110.0,
+     "fills": 127,
+     "round_trips": 60
     },
     "2025-04-17": {
-     "equity": 376349368.0,
-     "fills": 114,
-     "round_trips": 53
+     "equity": 370227870.0,
+     "fills": 128,
+     "round_trips": 60
     },
     "2025-04-18": {
-     "equity": 376349368.0,
-     "fills": 114,
-     "round_trips": 53
+     "equity": 379607870.0,
+     "fills": 128,
+     "round_trips": 60
     },
     "2025-04-21": {
-     "equity": 376349368.0,
-     "fills": 114,
-     "round_trips": 53
+     "equity": 378907870.0,
+     "fills": 128,
+     "round_trips": 60
     },
     "2025-04-22": {
-     "equity": 372162076.0,
-     "fills": 139,
-     "round_trips": 63
+     "equity": 384406551.0,
+     "fills": 152,
+     "round_trips": 71
     },
     "2025-04-23": {
-     "equity": 367662076.0,
-     "fills": 139,
-     "round_trips": 63
+     "equity": 376306551.0,
+     "fills": 152,
+     "round_trips": 71
     },
     "2025-04-24": {
-     "equity": 364662076.0,
-     "fills": 139,
-     "round_trips": 63
+     "equity": 370906551.0,
+     "fills": 152,
+     "round_trips": 71
     },
     "2025-04-25": {
-     "equity": 362235671.0,
-     "fills": 140,
-     "round_trips": 63
+     "equity": 366550144.0,
+     "fills": 153,
+     "round_trips": 71
     },
     "2025-04-28": {
-     "equity": 362189266.0,
-     "fills": 141,
-     "round_trips": 63
+     "equity": 366450144.0,
+     "fills": 153,
+     "round_trips": 71
     },
     "2025-04-29": {
-     "equity": 366249266.0,
-     "fills": 141,
-     "round_trips": 63
+     "equity": 372250144.0,
+     "fills": 153,
+     "round_trips": 71
     }
    },
-   "fills": 141,
-   "round_trips": 63,
-   "quote_fills": 141,
-   "roll_fills": 0,
+   "fills": 153,
+   "round_trips": 71,
+   "quote_fills": 139,
+   "roll_fills": 14,
    "engine_fills": 0,
-   "maker_fills": 22,
-   "taker_fills": 119,
+   "maker_fills": 23,
+   "taker_fills": 130,
    "sessions": 20,
-   "accepted_orders": 31840,
+   "accepted_orders": 31844,
    "undecided_orders": 31727,
-   "undecided_order_rate": 0.9964510050251256,
+   "undecided_order_rate": 0.9963258384625047,
    "undecided_quote_orders_in_atc": 84,
-   "margin_warnings": 1,
-   "margin_calls": 1,
-   "margin_calls_cleared": 1,
+   "margin_warnings": 4,
+   "margin_calls": 0,
+   "margin_calls_cleared": 0,
    "forced_liquidations": 0,
    "forced_liquidations_executed": 0,
-   "vm_settlement_days": 15,
+   "vm_settlement_days": 18,
    "roll_triggers": 1,
    "roll_contracts": 7,
-   "roll_expired_contracts": 0,
-   "expiry_settled_contracts": 8,
+   "roll_retries": 6,
+   "roll_rejected": 0,
+   "roll_unfilled_contracts": 0,
+   "expiry_settled_contracts": 1,
    "cancel_refused": 104,
-   "quote_rejected": 179,
-   "charges_dong": 2290734.0,
-   "end_net_contracts": -7,
+   "quote_rejected": 178,
+   "charges_dong": 2409856.0,
+   "end_net_contracts": -10,
    "end_positions": {
-    "VN30F2505": -7
+    "VN30F2505": -10
    },
-   "engine_deposit_end_dong": 321369266.0,
-   "ledger_minus_engine_deposit_end_dong": 44880000.0,
+   "engine_deposit_end_dong": 372250144.0,
+   "ledger_minus_engine_deposit_end_dong": 0.0,
+   "max_abs_deposit_drift_dong": 0.0,
    "positions_match_engine_all_sessions": true,
    "rung": "F-con",
    "label": "Plutus faithful-A, conservative queue",
    "source": "result/mm_faithful_a/krx2025_conservative.json",
-   "delta_fills": -109,
-   "delta_round_trips": -55,
-   "delta_hpr": -0.177674396
+   "delta_fills": -108,
+   "delta_round_trips": -56,
+   "delta_hpr": -0.17974779799999996
   }
  ],
  "clean_checkpoint": {
   "first_refused_roll_day": "2025-04-16",
+  "basis": "first non-empty roll (every roll completed)",
   "through": "2025-04-15",
   "sessions": 10,
   "rungs": [
@@ -877,105 +884,105 @@
  "post_cutover": {
   "F-opt": {
    "sessions": 20,
-   "fills": 255,
-   "round_trips": 123,
-   "margin_warnings": 22,
-   "margin_calls": 14,
-   "margin_calls_cleared": 14,
+   "fills": 314,
+   "round_trips": 156,
+   "margin_warnings": 17,
+   "margin_calls": 7,
+   "margin_calls_cleared": 7,
    "forced_liquidations": 0,
    "forced_liquidations_executed": 0,
-   "undecided_order_rate": 2.8642625955947643e-05,
+   "undecided_order_rate": 2.8573061317789587e-05,
    "end_positions": {
-    "VN30F2506": 5
+    "VN30F2506": 7
    },
-   "ledger_minus_engine_deposit_end_dong": 64240000.0,
-   "hpr_over_post_sessions": -0.08787757747943037,
-   "hpr_whole_40_sessions": -0.169810864,
+   "ledger_minus_engine_deposit_end_dong": 0.0,
+   "hpr_over_post_sessions": -0.048080257533798076,
+   "hpr_whole_40_sessions": -0.12019000000000002,
    "note": "A has no regime guard; the engine admits orders after the 2025-05-05 cutover although margin_model() raises UnresolvedRule, margins them on the pre-KRX IM+VM shape and counts margin_model_unsourced blindness (see faithful_sources.*.engine_ignorance_whole_run)."
   },
   "F-con": {
    "sessions": 20,
-   "fills": 191,
-   "round_trips": 91,
-   "margin_warnings": 45,
-   "margin_calls": 34,
-   "margin_calls_cleared": 34,
-   "forced_liquidations": 0,
-   "forced_liquidations_executed": 0,
-   "undecided_order_rate": 0.9942784853799488,
+   "fills": 259,
+   "round_trips": 131,
+   "margin_warnings": 38,
+   "margin_calls": 23,
+   "margin_calls_cleared": 20,
+   "forced_liquidations": 18485,
+   "forced_liquidations_executed": 3,
+   "undecided_order_rate": 0.9931056833917681,
    "end_positions": {
     "VN30F2506": 7
    },
-   "ledger_minus_engine_deposit_end_dong": 52720000.0,
-   "hpr_over_post_sessions": -0.12785208148376193,
-   "hpr_whole_40_sessions": -0.36115293000000004,
+   "ledger_minus_engine_deposit_end_dong": 0.0,
+   "hpr_over_post_sessions": -0.17303732728710508,
+   "hpr_whole_40_sessions": -0.38432605200000003,
    "note": "A has no regime guard; the engine admits orders after the 2025-05-05 cutover although margin_model() raises UnresolvedRule, margins them on the pre-KRX IM+VM shape and counts margin_model_unsourced blindness (see faithful_sources.*.engine_ignorance_whole_run)."
   }
  },
  "faithful_sources": {
   "F-opt": {
    "path": "result/mm_faithful_a/krx2025_optimistic.json",
-   "sha256": "02ae3176586bca2b87d089d2cf99efe1d4648dca3bb415e2c8ef7271a5d49fd0",
-   "plutus_simulator_commit": "f4463d611ebffbe5c49d89cc265508703fb962be",
+   "sha256": "ba3d87b6cd379cad8b2127bf8979e84ea79c735d33fc91336bd0ed4817ff6280",
+   "plutus_simulator_commit": "b52877e3b6bcefd50746761bd518f0c4b93ac40d",
    "plutus_simulator_src_dirty": false,
+   "plutus_simulator_commit_at_end": "af55e29e855d7f74b95c0b723a3f78b8b0b3405c",
    "vm_settlements_whole_run": {
-    "count": 36,
-    "net_dong": -36567226.69999992,
+    "count": 38,
+    "net_dong": -24188404.04684092,
     "first": "2025-04-03T15:00:00"
    },
    "engine_ignorance_whole_run": {
-    "evaluations": 1163647,
-    "indeterminate": 7012,
+    "evaluations": 1163725,
+    "indeterminate": 67,
     "silent_ignorance": {
-     "fill.decided_without.high": 497,
-     "fill.decided_without.low": 497,
-     "fill.decided_without.open": 497,
-     "fill.decided_without.volume": 497,
-     "rule.margin_model.unsourced": 269747,
+     "fill.decided_without.high": 542,
+     "fill.decided_without.low": 542,
+     "fill.decided_without.open": 542,
+     "fill.decided_without.volume": 542,
+     "rule.margin_model.unsourced": 269752,
      "margin.overnight.uncomputed.margin_model_overnight.unstated": 20
     }
    },
    "refusals_whole_run": {
-    "cancel:SESSION_SEMANTICS": 239,
+    "cancel:SESSION_SEMANTICS": 243,
     "quote:SESSION_SEMANTICS": 24,
     "quote:BAND_LIMIT": 163,
-    "roll:BAND_LIMIT": 2,
-    "quote:INSUFFICIENT_DEPOSIT": 948,
-    "roll:INSUFFICIENT_DEPOSIT": 1
+    "quote:INSUFFICIENT_DEPOSIT": 12,
+    "roll:INSUFFICIENT_DEPOSIT": 2
    },
-   "wall_seconds": 4938.0
+   "wall_seconds": 2144.4
   },
   "F-con": {
    "path": "result/mm_faithful_a/krx2025_conservative.json",
-   "sha256": "00280016c66d61a929e3702e528e05ce925df4869543ca978ab4abfd90582623",
-   "plutus_simulator_commit": "f4463d611ebffbe5c49d89cc265508703fb962be",
+   "sha256": "d4466fcfd69d968b8895c23d689c11debd37ca1383b5e805e9a21158fc24d087",
+   "plutus_simulator_commit": "b52877e3b6bcefd50746761bd518f0c4b93ac40d",
    "plutus_simulator_src_dirty": false,
+   "plutus_simulator_commit_at_end": "af55e29e855d7f74b95c0b723a3f78b8b0b3405c",
    "vm_settlements_whole_run": {
-    "count": 31,
-    "net_dong": -160511128.79192442,
+    "count": 34,
+    "net_dong": -183382250.73184198,
     "first": "2025-04-03T15:00:00"
    },
    "engine_ignorance_whole_run": {
-    "evaluations": 1168590,
-    "indeterminate": 787889,
+    "evaluations": 1151926,
+    "indeterminate": 771067,
     "silent_ignorance": {
-     "fill.decided_without.high": 332,
-     "fill.decided_without.low": 332,
-     "fill.decided_without.open": 332,
-     "fill.decided_without.volume": 332,
-     "rule.margin_model.unsourced": 269744,
+     "fill.decided_without.high": 372,
+     "fill.decided_without.low": 372,
+     "fill.decided_without.open": 372,
+     "fill.decided_without.volume": 372,
+     "rule.margin_model.unsourced": 269733,
      "margin.overnight.uncomputed.margin_model_overnight.unstated": 20
     }
    },
    "refusals_whole_run": {
-    "cancel:SESSION_SEMANTICS": 212,
+    "cancel:SESSION_SEMANTICS": 215,
     "quote:SESSION_SEMANTICS": 24,
     "quote:BAND_LIMIT": 162,
-    "roll:BAND_LIMIT": 2,
-    "quote:INSUFFICIENT_DEPOSIT": 34,
+    "quote:INSUFFICIENT_DEPOSIT": 924,
     "roll:INSUFFICIENT_DEPOSIT": 2
    },
-   "wall_seconds": 4469.3
+   "wall_seconds": 2179.0
   }
  },
  "mm_anchor_crosscheck": {
@@ -985,5 +992,5 @@
   "mm_anchor_faithful_conservative_hpr_flat_each_session": -0.06025583599999995,
   "mm_anchor_faithful_optimistic_hpr_flat_each_session": -0.13592448999999995
  },
- "plutus_simulator_head_at_ladder_run": "f4463d611ebffbe5c49d89cc265508703fb962be"
+ "plutus_simulator_head_at_ladder_run": "af55e29e855d7f74b95c0b723a3f78b8b0b3405c"
 }

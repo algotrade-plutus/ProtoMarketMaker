@@ -947,10 +947,10 @@
    "delta_hpr": -0.005199999999999982
   },
   {
-   "hpr": -0.018052712000000026,
-   "sharpe": 0.1752994372475071,
+   "hpr": -0.025235526000000008,
+   "sharpe": 0.11403473700378533,
    "mdd": -0.3217845989323168,
-   "end_equity_dong": 490973644.0,
+   "end_equity_dong": 487382237.0,
    "_daily": {
     "2022-11-17": {
      "equity": 499548518.0,
@@ -1048,153 +1048,156 @@
      "round_trips": 53
     },
     "2022-12-14": {
-     "equity": 437429878.0,
-     "fills": 129,
-     "round_trips": 55
-    },
-    "2022-12-15": {
-     "equity": 422210652.0,
-     "fills": 131,
-     "round_trips": 56
-    },
-    "2022-12-16": {
-     "equity": 431276361.0,
-     "fills": 132,
-     "round_trips": 57
-    },
-    "2022-12-19": {
-     "equity": 441383805.0,
-     "fills": 135,
-     "round_trips": 60
-    },
-    "2022-12-20": {
-     "equity": 452554060.0,
-     "fills": 140,
-     "round_trips": 62
-    },
-    "2022-12-21": {
-     "equity": 450808341.0,
-     "fills": 144,
+     "equity": 428317931.0,
+     "fills": 139,
      "round_trips": 65
     },
-    "2022-12-22": {
-     "equity": 452917913.0,
-     "fills": 149,
+    "2022-12-15": {
+     "equity": 418619245.0,
+     "fills": 141,
      "round_trips": 66
     },
-    "2022-12-23": {
-     "equity": 455565830.0,
-     "fills": 152,
-     "round_trips": 68
+    "2022-12-16": {
+     "equity": 427684954.0,
+     "fills": 142,
+     "round_trips": 67
     },
-    "2022-12-26": {
-     "equity": 480160422.0,
-     "fills": 156,
-     "round_trips": 71
+    "2022-12-19": {
+     "equity": 437792398.0,
+     "fills": 145,
+     "round_trips": 70
     },
-    "2022-12-27": {
-     "equity": 479663798.0,
-     "fills": 163,
+    "2022-12-20": {
+     "equity": 448962653.0,
+     "fills": 150,
      "round_trips": 72
     },
-    "2022-12-28": {
-     "equity": 473209968.0,
-     "fills": 164,
-     "round_trips": 73
+    "2022-12-21": {
+     "equity": 447216934.0,
+     "fills": 154,
+     "round_trips": 75
     },
-    "2022-12-29": {
-     "equity": 479167316.0,
-     "fills": 170,
-     "round_trips": 79
+    "2022-12-22": {
+     "equity": 449326506.0,
+     "fills": 159,
+     "round_trips": 76
     },
-    "2022-12-30": {
-     "equity": 479532394.0,
-     "fills": 174,
+    "2022-12-23": {
+     "equity": 451974423.0,
+     "fills": 162,
+     "round_trips": 78
+    },
+    "2022-12-26": {
+     "equity": 476569015.0,
+     "fills": 166,
      "round_trips": 81
     },
-    "2023-01-03": {
-     "equity": 487004523.0,
-     "fills": 176,
+    "2022-12-27": {
+     "equity": 476072391.0,
+     "fills": 173,
      "round_trips": 82
+    },
+    "2022-12-28": {
+     "equity": 469618561.0,
+     "fills": 174,
+     "round_trips": 83
+    },
+    "2022-12-29": {
+     "equity": 475575909.0,
+     "fills": 180,
+     "round_trips": 89
+    },
+    "2022-12-30": {
+     "equity": 475940987.0,
+     "fills": 184,
+     "round_trips": 91
+    },
+    "2023-01-03": {
+     "equity": 483413116.0,
+     "fills": 186,
+     "round_trips": 92
     },
     "2023-01-04": {
-     "equity": 486410408.0,
-     "fills": 177,
-     "round_trips": 82
+     "equity": 482819001.0,
+     "fills": 187,
+     "round_trips": 92
     },
     "2023-01-05": {
-     "equity": 489356232.0,
-     "fills": 178,
-     "round_trips": 83
+     "equity": 485764825.0,
+     "fills": 188,
+     "round_trips": 93
     },
     "2023-01-06": {
-     "equity": 488796232.0,
-     "fills": 178,
-     "round_trips": 83
+     "equity": 485204825.0,
+     "fills": 188,
+     "round_trips": 93
     },
     "2023-01-09": {
-     "equity": 490439261.0,
-     "fills": 182,
-     "round_trips": 86
+     "equity": 486847854.0,
+     "fills": 192,
+     "round_trips": 96
     },
     "2023-01-10": {
-     "equity": 490075060.0,
-     "fills": 183,
-     "round_trips": 86
+     "equity": 486483653.0,
+     "fills": 193,
+     "round_trips": 96
     },
     "2023-01-11": {
-     "equity": 489465060.0,
-     "fills": 183,
-     "round_trips": 86
+     "equity": 485873653.0,
+     "fills": 193,
+     "round_trips": 96
     },
     "2023-01-12": {
-     "equity": 490973644.0,
-     "fills": 188,
-     "round_trips": 89
+     "equity": 487382237.0,
+     "fills": 198,
+     "round_trips": 99
     }
    },
-   "fills": 188,
-   "round_trips": 89,
+   "fills": 198,
+   "round_trips": 99,
    "quote_fills": 178,
-   "roll_fills": 10,
+   "roll_fills": 20,
    "engine_fills": 0,
-   "maker_fills": 67,
-   "taker_fills": 121,
+   "maker_fills": 69,
+   "taker_fills": 129,
    "sessions": 40,
-   "accepted_orders": 66931,
+   "accepted_orders": 67195,
    "undecided_orders": 29,
-   "undecided_order_rate": 0.0004332820367243878,
+   "undecided_order_rate": 0.00043157973063471985,
    "undecided_quote_orders_in_atc": 0,
-   "margin_warnings": 2,
-   "margin_calls": 1,
-   "margin_calls_cleared": 1,
+   "margin_warnings": 0,
+   "margin_calls": 0,
+   "margin_calls_cleared": 0,
    "forced_liquidations": 0,
    "forced_liquidations_executed": 0,
    "vm_settlement_days": 38,
    "roll_triggers": 2,
    "roll_contracts": 10,
-   "roll_expired_contracts": 0,
-   "expiry_settled_contracts": 10,
-   "cancel_refused": 261,
-   "quote_rejected": 315,
-   "charges_dong": 2456356.0,
+   "roll_retries": 3,
+   "roll_rejected": 0,
+   "roll_unfilled_contracts": 0,
+   "expiry_settled_contracts": 0,
+   "cancel_refused": 262,
+   "quote_rejected": 58,
+   "charges_dong": 2487763.0,
    "end_net_contracts": 0,
    "end_positions": {},
-   "engine_deposit_end_dong": 430053644.0,
-   "ledger_minus_engine_deposit_end_dong": 60920000.0,
+   "engine_deposit_end_dong": 487382237.0,
+   "ledger_minus_engine_deposit_end_dong": 0.0,
+   "max_abs_deposit_drift_dong": 0.0,
    "positions_match_engine_all_sessions": true,
    "rung": "F-opt",
    "label": "Plutus faithful-A, optimistic queue",
    "source": "result/mm_faithful_a/im2022_optimistic.json",
-   "delta_fills": 59,
-   "delta_round_trips": 25,
-   "delta_hpr": 0.146147288
+   "delta_fills": 69,
+   "delta_round_trips": 35,
+   "delta_hpr": 0.138964474
   },
   {
-   "hpr": -0.10913880200000003,
-   "sharpe": -1.2161363465466493,
+   "hpr": -0.11465656999999996,
+   "sharpe": -1.296487825863878,
    "mdd": -0.2753770265749871,
-   "end_equity_dong": 445430599.0,
+   "end_equity_dong": 442671715.0,
    "_daily": {
     "2022-11-17": {
      "equity": 499548518.0,
@@ -1292,122 +1295,122 @@
      "round_trips": 33
     },
     "2022-12-14": {
-     "equity": 425651130.0,
-     "fills": 81,
-     "round_trips": 35
+     "equity": 419567924.0,
+     "fills": 87,
+     "round_trips": 41
     },
     "2022-12-15": {
-     "equity": 417218123.0,
-     "fills": 83,
-     "round_trips": 36
-    },
-    "2022-12-16": {
-     "equity": 422103833.0,
-     "fills": 84,
-     "round_trips": 37
-    },
-    "2022-12-19": {
-     "equity": 428103833.0,
-     "fills": 84,
-     "round_trips": 37
-    },
-    "2022-12-20": {
-     "equity": 437028114.0,
-     "fills": 88,
-     "round_trips": 39
-    },
-    "2022-12-21": {
-     "equity": 437672369.0,
-     "fills": 92,
+     "equity": 414459239.0,
+     "fills": 89,
      "round_trips": 42
     },
-    "2022-12-22": {
-     "equity": 439366059.0,
-     "fills": 96,
+    "2022-12-16": {
+     "equity": 419344949.0,
+     "fills": 90,
      "round_trips": 43
     },
-    "2022-12-23": {
-     "equity": 440526059.0,
-     "fills": 96,
+    "2022-12-19": {
+     "equity": 425344949.0,
+     "fills": 90,
      "round_trips": 43
     },
-    "2022-12-26": {
-     "equity": 459864660.0,
-     "fills": 99,
+    "2022-12-20": {
+     "equity": 434269230.0,
+     "fills": 94,
      "round_trips": 45
     },
+    "2022-12-21": {
+     "equity": 434913485.0,
+     "fills": 98,
+     "round_trips": 48
+    },
+    "2022-12-22": {
+     "equity": 436607175.0,
+     "fills": 102,
+     "round_trips": 49
+    },
+    "2022-12-23": {
+     "equity": 437767175.0,
+     "fills": 102,
+     "round_trips": 49
+    },
+    "2022-12-26": {
+     "equity": 457105776.0,
+     "fills": 105,
+     "round_trips": 51
+    },
     "2022-12-27": {
-     "equity": 456127237.0,
-     "fills": 101,
-     "round_trips": 46
+     "equity": 453368353.0,
+     "fills": 107,
+     "round_trips": 52
     },
     "2022-12-28": {
-     "equity": 454027237.0,
-     "fills": 101,
-     "round_trips": 46
+     "equity": 451268353.0,
+     "fills": 107,
+     "round_trips": 52
     },
     "2022-12-29": {
-     "equity": 457523462.0,
-     "fills": 102,
-     "round_trips": 47
+     "equity": 454764578.0,
+     "fills": 108,
+     "round_trips": 53
     },
     "2022-12-30": {
-     "equity": 455979739.0,
-     "fills": 103,
-     "round_trips": 48
+     "equity": 453220855.0,
+     "fills": 109,
+     "round_trips": 54
     },
     "2023-01-03": {
-     "equity": 449195829.0,
-     "fills": 104,
-     "round_trips": 48
+     "equity": 446436945.0,
+     "fills": 110,
+     "round_trips": 54
     },
     "2023-01-04": {
-     "equity": 449721714.0,
-     "fills": 105,
-     "round_trips": 49
+     "equity": 446962830.0,
+     "fills": 111,
+     "round_trips": 55
     },
     "2023-01-05": {
-     "equity": 448237537.0,
-     "fills": 106,
-     "round_trips": 49
+     "equity": 445478653.0,
+     "fills": 112,
+     "round_trips": 55
     },
     "2023-01-06": {
-     "equity": 448797537.0,
-     "fills": 106,
-     "round_trips": 49
+     "equity": 446038653.0,
+     "fills": 112,
+     "round_trips": 55
     },
     "2023-01-09": {
-     "equity": 448509065.0,
-     "fills": 108,
-     "round_trips": 50
+     "equity": 445750181.0,
+     "fills": 114,
+     "round_trips": 56
     },
     "2023-01-10": {
-     "equity": 447554863.0,
-     "fills": 109,
-     "round_trips": 50
+     "equity": 444795979.0,
+     "fills": 115,
+     "round_trips": 56
     },
     "2023-01-11": {
-     "equity": 445724863.0,
-     "fills": 109,
-     "round_trips": 50
+     "equity": 442965979.0,
+     "fills": 115,
+     "round_trips": 56
     },
     "2023-01-12": {
-     "equity": 445430599.0,
-     "fills": 110,
-     "round_trips": 51
+     "equity": 442671715.0,
+     "fills": 116,
+     "round_trips": 57
     }
    },
-   "fills": 110,
-   "round_trips": 51,
+   "fills": 116,
+   "round_trips": 57,
    "quote_fills": 104,
-   "roll_fills": 6,
+   "roll_fills": 12,
    "engine_fills": 0,
-   "maker_fills": 4,
+   "maker_fills": 10,
    "taker_fills": 106,
    "sessions": 40,
-   "accepted_orders": 67080,
+   "accepted_orders": 67083,
    "undecided_orders": 67001,
-   "undecided_order_rate": 0.9988223017292784,
+   "undecided_order_rate": 0.9987776336776829,
    "undecided_quote_orders_in_atc": 208,
    "margin_warnings": 0,
    "margin_calls": 0,
@@ -1417,28 +1420,32 @@
    "vm_settlement_days": 40,
    "roll_triggers": 2,
    "roll_contracts": 6,
-   "roll_expired_contracts": 0,
-   "expiry_settled_contracts": 6,
+   "roll_retries": 5,
+   "roll_rejected": 0,
+   "roll_unfilled_contracts": 0,
+   "expiry_settled_contracts": 0,
    "cancel_refused": 257,
    "quote_rejected": 58,
-   "charges_dong": 1429401.0,
+   "charges_dong": 1448285.0,
    "end_net_contracts": -2,
    "end_positions": {
     "VN30F2301": -2
    },
-   "engine_deposit_end_dong": 381840599.0,
-   "ledger_minus_engine_deposit_end_dong": 63590000.0,
+   "engine_deposit_end_dong": 442671715.0,
+   "ledger_minus_engine_deposit_end_dong": 0.0,
+   "max_abs_deposit_drift_dong": 0.0,
    "positions_match_engine_all_sessions": true,
    "rung": "F-con",
    "label": "Plutus faithful-A, conservative queue",
    "source": "result/mm_faithful_a/im2022_conservative.json",
-   "delta_fills": -78,
-   "delta_round_trips": -38,
-   "delta_hpr": -0.09108609000000001
+   "delta_fills": -82,
+   "delta_round_trips": -42,
+   "delta_hpr": -0.08942104399999995
   }
  ],
  "clean_checkpoint": {
   "first_refused_roll_day": "2022-12-14",
+  "basis": "first non-empty roll (every roll completed)",
   "through": "2022-12-13",
   "sessions": 19,
   "rungs": [
@@ -1496,60 +1503,59 @@
  "faithful_sources": {
   "F-opt": {
    "path": "result/mm_faithful_a/im2022_optimistic.json",
-   "sha256": "e0af92e8bd172d5600832d8e86c62b3f7af4d13f85e0430c628da5c98a7281c6",
-   "plutus_simulator_commit": "f4463d611ebffbe5c49d89cc265508703fb962be",
+   "sha256": "d1e4c02f63552cf7b51082f3119a5ca9deb586e286ffc4e4d4978d27cbaa0839",
+   "plutus_simulator_commit": "b52877e3b6bcefd50746761bd518f0c4b93ac40d",
    "plutus_simulator_src_dirty": false,
+   "plutus_simulator_commit_at_end": "af55e29e855d7f74b95c0b723a3f78b8b0b3405c",
    "vm_settlements_whole_run": {
     "count": 38,
-    "net_dong": -89647500.0,
+    "net_dong": -41464395.876986265,
     "first": "2022-11-17T15:00:00"
    },
    "engine_ignorance_whole_run": {
-    "evaluations": 685478,
+    "evaluations": 686675,
     "indeterminate": 43,
     "silent_ignorance": {
-     "fill.decided_without.high": 179,
-     "fill.decided_without.low": 179,
-     "fill.decided_without.open": 179,
-     "fill.decided_without.volume": 179
+     "fill.decided_without.high": 180,
+     "fill.decided_without.low": 180,
+     "fill.decided_without.open": 180,
+     "fill.decided_without.volume": 180
     }
    },
    "refusals_whole_run": {
-    "cancel:SESSION_SEMANTICS": 261,
+    "cancel:SESSION_SEMANTICS": 262,
     "quote:SESSION_SEMANTICS": 56,
-    "quote:BAND_LIMIT": 2,
-    "roll:BAND_LIMIT": 1,
-    "quote:INSUFFICIENT_DEPOSIT": 257
+    "quote:BAND_LIMIT": 2
    },
-   "wall_seconds": 2773.4
+   "wall_seconds": 1066.2
   },
   "F-con": {
    "path": "result/mm_faithful_a/im2022_conservative.json",
-   "sha256": "1363a7648c8f23e6ae9b6dbdeebf0f1729846742271d6c66026db62041ba8610",
-   "plutus_simulator_commit": "f4463d611ebffbe5c49d89cc265508703fb962be",
+   "sha256": "dbd6104fc1d0ed2a12aa5c533b9a053e856c9c35c0fd8a2f0698814c2c425ebe",
+   "plutus_simulator_commit": "b52877e3b6bcefd50746761bd518f0c4b93ac40d",
    "plutus_simulator_src_dirty": false,
+   "plutus_simulator_commit_at_end": "af55e29e855d7f74b95c0b723a3f78b8b0b3405c",
    "vm_settlements_whole_run": {
     "count": 40,
-    "net_dong": -111383333.33333333,
+    "net_dong": -71216591.63059163,
     "first": "2022-11-17T15:00:00"
    },
    "engine_ignorance_whole_run": {
-    "evaluations": 686879,
-    "indeterminate": 471913,
+    "evaluations": 686286,
+    "indeterminate": 471306,
     "silent_ignorance": {
-     "fill.decided_without.high": 107,
-     "fill.decided_without.low": 107,
-     "fill.decided_without.open": 107,
-     "fill.decided_without.volume": 107
+     "fill.decided_without.high": 108,
+     "fill.decided_without.low": 108,
+     "fill.decided_without.open": 108,
+     "fill.decided_without.volume": 108
     }
    },
    "refusals_whole_run": {
     "cancel:SESSION_SEMANTICS": 257,
     "quote:SESSION_SEMANTICS": 56,
-    "quote:BAND_LIMIT": 2,
-    "roll:BAND_LIMIT": 1
+    "quote:BAND_LIMIT": 2
    },
-   "wall_seconds": 2784.9
+   "wall_seconds": 1040.4
   }
  },
  "mm_anchor_crosscheck": {
@@ -1559,5 +1565,5 @@
   "mm_anchor_faithful_conservative_hpr_flat_each_session": 0.02189912999999999,
   "mm_anchor_faithful_optimistic_hpr_flat_each_session": 0.02211576599999998
  },
- "plutus_simulator_head_at_ladder_run": "f4463d611ebffbe5c49d89cc265508703fb962be"
+ "plutus_simulator_head_at_ladder_run": "af55e29e855d7f74b95c0b723a3f78b8b0b3405c"
 }

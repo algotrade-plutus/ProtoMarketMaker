@@ -82,10 +82,11 @@ def naive_rung(n: int, data, step: Decimal) -> dict:
     return out
 
 
-def first_refused_roll(fa: dict):
-    """First session whose roll did not complete (a leg refused or unfilled)."""
+def first_roll(fa: dict, incomplete_only: bool):
+    """First session with a non-empty roll (optionally: one that did not complete)."""
     for r in fa["per_session"]:
-        if r.get("roll_contracts") and r.get("roll_fills", 0) < 2 * r["roll_contracts"]:
+        if r.get("roll_contracts") and (not incomplete_only
+                                        or r.get("roll_fills", 0) < 2 * r["roll_contracts"]):
             return r["date"]
     return None
 
@@ -131,7 +132,9 @@ def faithful_span(fa: dict, days: List[str]) -> dict:
         "vm_settlement_days": sum(1 for r in recs if r.get("positions")),
         "roll_triggers": _sum(recs, "roll_triggers"),
         "roll_contracts": _sum(recs, "roll_contracts"),
-        "roll_expired_contracts": _sum(recs, "roll_expired_contracts"),
+        "roll_retries": _sum(recs, "roll_retries"),
+        "roll_rejected": _sum(recs, "roll_rejected"),
+        "roll_unfilled_contracts": _sum(recs, "roll_unfilled_contracts"),
         "expiry_settled_contracts": _sum(recs, "expiry_settled_contracts"),
         "cancel_refused": _sum(recs, "cancel_refused"),
         "quote_rejected": _sum(recs, "quote_rejected"),
@@ -141,6 +144,8 @@ def faithful_span(fa: dict, days: List[str]) -> dict:
         "engine_deposit_end_dong": recs[-1]["engine_deposit_dong"] if recs else None,
         "ledger_minus_engine_deposit_end_dong": (recs[-1]["end_equity_dong"]
                                                  - recs[-1]["engine_deposit_dong"]) if recs else None,
+        "max_abs_deposit_drift_dong": max((abs(r["end_equity_dong"] - r["engine_deposit_dong"])
+                                           for r in recs), default=None),
         "positions_match_engine_all_sessions": all(r["positions_match_engine"] for r in recs),
     })
     return m
@@ -174,6 +179,7 @@ def run_ladder(window: str, log=print) -> dict:
                         "sha256": hashlib.sha256(raw).hexdigest(),
                         "plutus_simulator_commit": fa["plutus_simulator_commit"],
                         "plutus_simulator_src_dirty": fa["plutus_simulator_src_dirty"],
+                        "plutus_simulator_commit_at_end": fa.get("plutus_simulator_commit_at_end"),
                         "vm_settlements_whole_run": fa["vm_settlements"],
                         "engine_ignorance_whole_run": fa["engine_ignorance"],
                         "refusals_whole_run": fa["refusals"],
@@ -208,12 +214,17 @@ def run_ladder(window: str, log=print) -> dict:
             r[f"delta_{k}"] = None if prev is None else r[k] - prev[k]
         prev = r
 
-    # Clean checkpoint: the last session before the first roll whose F1 close
-    # leg the engine refused (the frozen slice carries bands only for the
-    # traded contract, so F1 has no band on the roll day). Every rung is cut
-    # there, so the comparison is free of that data gap.
-    refused = sorted(filter(None, (first_refused_roll(json.loads((FA_DIR / f"{window}_{q}.json").read_bytes()))
-                                   for q in ("optimistic", "conservative"))))
+    # Cross-check checkpoint: every rung cut at the last session before the
+    # first roll that did not complete in either queue or, if every roll
+    # completed, before the first non-empty roll. It is free of anything the
+    # roll does, so it shows whether the full-window direction is a roll artefact.
+    fas = [json.loads((FA_DIR / f"{window}_{q}.json").read_bytes())
+           for q in ("optimistic", "conservative")]
+    refused = sorted(filter(None, (first_roll(fa, True) for fa in fas)))
+    basis = "first roll that did not complete"
+    if not refused:
+        refused = sorted(filter(None, (first_roll(fa, False) for fa in fas)))
+        basis = "first non-empty roll (every roll completed)"
     checkpoint = None
     if refused:
         before = [d for d in days if d < refused[0]]
@@ -227,7 +238,7 @@ def run_ladder(window: str, log=print) -> dict:
                              "hpr": hpr, "delta_hpr": None if prev is None else hpr - prev,
                              "delta_fills": None if prev is None else x["fills"] - prows[-1]["fills"]})
                 prev, prows = hpr, rows
-            checkpoint = {"first_refused_roll_day": refused[0], "through": cut,
+            checkpoint = {"first_refused_roll_day": refused[0], "basis": basis, "through": cut,
                           "sessions": len(before), "rungs": rows}
 
     anchor = {}
@@ -273,8 +284,8 @@ def markdown(out: dict) -> str:
                      f"{'' if und is None else f'{und:.2%}'} |")
     c = out.get("clean_checkpoint")
     if c:
-        lines += ["", f"Clean checkpoint: through {c['through']} ({c['sessions']} sessions), the last "
-                      f"session before the first refused F1 roll leg ({c['first_refused_roll_day']}):", "",
+        lines += ["", f"Cross-check checkpoint: through {c['through']} ({c['sessions']} sessions), the last "
+                      f"session before the {c['basis']} ({c['first_refused_roll_day']}):", "",
                   "| rung | fills | Δ fills | round trips | HPR | Δ HPR |", "|---|--:|--:|--:|--:|--:|"]
         for r in c["rungs"]:
             lines.append(f"| {r['rung']} | {r['fills']} | {_int(r['delta_fills'])} | {r['round_trips']} | "
@@ -282,13 +293,15 @@ def markdown(out: dict) -> str:
     f = [r for r in out["rungs"] if r["rung"].startswith("F")]
     lines += ["", "Faithful-A Tier-1 (same span):", "",
               "| | margin warnings | margin calls | forced liq. (executed) | VM settlement days | "
-              "roll fills / roll contracts | engine (forced) fills | ledger − engine deposit at end |",
-              "|---|--:|--:|--:|--:|--:|--:|--:|"]
+              "roll fills / roll legs | roll retries | roll unfilled | engine (forced) fills | "
+              "max abs(ledger − engine deposit) |",
+              "|---|--:|--:|--:|--:|--:|--:|--:|--:|--:|"]
     for r in f:
         lines.append(f"| {r['rung']} | {r['margin_warnings']} | {r['margin_calls']} | "
                      f"{r['forced_liquidations']} ({r['forced_liquidations_executed']}) | "
                      f"{r['vm_settlement_days']} | {r['roll_fills']} / {2 * r['roll_contracts']} | "
-                     f"{r['engine_fills']} | {r['ledger_minus_engine_deposit_end_dong']:,.0f}đ |")
+                     f"{r['roll_retries']} | {r['roll_unfilled_contracts']} | "
+                     f"{r['engine_fills']} | {r['max_abs_deposit_drift_dong']:,.0f}đ |")
     if out.get("post_cutover"):
         lines += ["", "krx2025 post-cutover (20 sessions, A unguarded):", ""]
         for k, p in out["post_cutover"].items():
@@ -299,8 +312,10 @@ def markdown(out: dict) -> str:
                          f"{_pct(p['hpr_whole_40_sessions'])}")
     lines += [""]
     for k, s in out["faithful_sources"].items():
+        end = s.get("plutus_simulator_commit_at_end")
+        moved = f" (checkout moved to `{end[:7]}` before the run ended)" if end and end != s["plutus_simulator_commit"] else ""
         lines.append(f"{k}: `{s['path']}` sha256 `{s['sha256'][:16]}…`, plutus-simulator "
-                     f"`{s['plutus_simulator_commit'][:7]}`")
+                     f"`{s['plutus_simulator_commit'][:7]}`{moved}")
     return "\n".join(lines) + "\n"
 
 

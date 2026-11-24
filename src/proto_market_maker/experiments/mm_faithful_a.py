@@ -21,8 +21,11 @@ runs A exactly and lets only the environment differ. Compared with the
     ``move_f1_to_f2``: the first row of the session whose next session is on or
     after the front month's expiry) A sends real orders: close the F1 position
     and open the same signed position in F2, each a marketable LIMIT one point
-    through the opposite touch, re-priced on the 15 s clock until filled or the
-    day ends. Fills are whatever F gives.
+    through the opposite touch. A's roll is instantaneous in naive, so in F a
+    leg that is refused or unfilled is cancelled (if live) and resubmitted for
+    its remainder on A's next timed requote tick (15 s) until it is done or the
+    session ends (``roll_retries``, ``roll_unfilled_contracts``). Fills are
+    whatever F gives.
 #11 **Same decision clock.** F's clock steps on the same merged F1/F2 rows naive
     iterates (``Backtesting.prepare`` over ``mm_anchor._naive_frames``), and A
     quotes off the same row price (F1, or F2 while rolling) with the same rule:
@@ -102,6 +105,10 @@ def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[in
     from plutus.core.order import OrderType, Side
     from plutus.market.session import Accepted, Cancelled
 
+    # The engine code a run uses is the code imported at its start; record that
+    # commit, and the one at the end, so a checkout that moves mid-run shows.
+    commit_at_start = A._engine_commit()
+    dirty_at_start = A._engine_dirty()
     fcc, sessions = A.load_contract_map(window)
     step = A.step_param()
     band, l2 = A._roots(window)
@@ -127,7 +134,8 @@ def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[in
     side_of: Dict[str, object] = {}       # every order we submitted
     role_of: Dict[str, str] = {}          # quote | roll
     live_quotes: Dict[str, object] = {}
-    roll_legs: Dict[str, dict] = {}       # oid -> {ticker, side, qty}
+    roll_legs: List[dict] = []            # A's roll legs today: {ticker, side, qty, oid, tries}
+    roll_by_oid: Dict[str, dict] = {}
     ind_orders = set()
     tot = Counter()
     refusals = Counter()
@@ -168,18 +176,20 @@ def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[in
                 s["maker_fills" if e.detail.get("maker") else "taker_fills"] += q
                 if role == "quote":
                     quote_filled = True
-                if e.order_id in roll_legs:
-                    roll_legs[e.order_id]["qty"] -= q
-                    if roll_legs[e.order_id]["qty"] <= 0:
-                        roll_legs.pop(e.order_id)
+                leg = roll_by_oid.get(e.order_id)
+                if leg is not None:
+                    leg["qty"] -= q
+                    if leg["qty"] <= 0 or k == "filled":
+                        roll_by_oid.pop(e.order_id, None)
+                        leg["oid"] = None
                 if k == "filled":
                     live_quotes.pop(e.order_id, None)
             elif k in ("cancelled", "expired"):
                 live_quotes.pop(e.order_id, None)
+                leg = roll_by_oid.pop(e.order_id, None)
+                if leg is not None:
+                    leg["oid"] = None             # not live: resubmitted on the next tick
                 if k == "expired":
-                    leg = roll_legs.pop(e.order_id, None)
-                    if leg:
-                        s["roll_expired_contracts"] += leg["qty"]
                     if role_of.get(e.order_id) == "quote":
                         s["quote_expired"] += 1
             elif k == "indeterminate":
@@ -239,24 +249,44 @@ def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[in
             if oid is not None:
                 live_quotes[oid] = side
 
-    def roll_order(ticker, side, qty, ts, ref_price):
-        book = source.book_at(ticker, ts)
+    def send_leg(leg, ts, ref_price):
+        """(Re)submit a roll leg's remainder, a marketable LIMIT one point
+        through the opposite touch. A keeps trying: a refused or unfilled leg
+        is resubmitted on A's next requote tick (15 s) until done or the
+        session ends."""
+        book = source.book_at(leg["ticker"], ts)
         touch = None
         if book is not None:
-            lvl = book.bid.best if side is Side.SELL else book.ask.best
+            lvl = book.bid.best if leg["side"] is Side.SELL else book.ask.best
             touch = lvl.price if lvl is not None else None
         base = touch if touch is not None else ref_price
-        px = base - THROUGH if side is Side.SELL else base + THROUGH
-        oid = submit(ticker, side, qty, px, "roll")
+        if base is None:
+            s["roll_no_price"] += 1
+            return
+        px = base - THROUGH if leg["side"] is Side.SELL else base + THROUGH
+        if leg["tries"]:
+            s["roll_retries"] += 1
+        leg["tries"] += 1
+        oid = submit(leg["ticker"], leg["side"], leg["qty"], px, "roll")
         if oid is not None:
-            roll_legs[oid] = {"ticker": ticker, "side": side, "qty": qty}
+            leg["oid"] = oid
+            roll_by_oid[oid] = leg
 
-    def reprice_rolls(ts, prices):
-        for oid, leg in list(roll_legs.items()):
-            if cancel(oid):
-                roll_legs.pop(oid)
-                roll_order(leg["ticker"], leg["side"], leg["qty"], ts,
-                           prices.get(leg["ticker"]))
+    def new_leg(ticker, side, qty, ts, ref_price):
+        leg = {"ticker": ticker, "side": side, "qty": qty, "oid": None, "tries": 0}
+        roll_legs.append(leg)
+        send_leg(leg, ts, ref_price)
+
+    def retry_rolls(ts, prices):
+        for leg in roll_legs:
+            if leg["qty"] <= 0:
+                continue
+            if leg["oid"] is not None:
+                if not cancel(leg["oid"]):
+                    continue                  # still live (e.g. cancel refused in the ATC)
+                roll_by_oid.pop(leg["oid"], None)
+                leg["oid"] = None
+            send_leg(leg, ts, prices.get(leg["ticker"]))
 
     # ---- naive's loop, verbatim control flow ----------------------------
     expiration_dates = get_expired_dates(data["datetime"].iloc[0], data["datetime"].iloc[-1])
@@ -284,14 +314,14 @@ def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[in
             s["roll_triggers"] += 1
             if q != 0:
                 s["roll_contracts"] += abs(q)
-                roll_order(tk1, Side.SELL if q > 0 else Side.BUY, abs(q), ts, p1)
-                roll_order(tk2, Side.BUY if q > 0 else Side.SELL, abs(q), ts, p2)
+                new_leg(tk1, Side.SELL if q > 0 else Side.BUY, abs(q), ts, p1)
+                new_leg(tk2, Side.BUY if q > 0 else Side.SELL, abs(q), ts, p2)
         ticker = tk2 if moving_to_f2 else tk1
         price = p2 if moving_to_f2 else p1
         if last_timed is None or ts > last_timed + A.REQUOTE:
             last_timed = ts
-            if roll_legs:
-                reprice_rolls(ts, {tk1: p1, tk2: p2})
+            if any(leg["qty"] > 0 for leg in roll_legs):
+                retry_rolls(ts, {tk1: p1, tk2: p2})
             requote(ticker, price)
         elif quote_filled:
             requote(ticker, price)
@@ -301,9 +331,10 @@ def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[in
             absorb(backend.advance_to(datetime.combine(d, time(14, 44, 59))))
             absorb(backend.advance_to(datetime.combine(d, DAY_END)))
             live_quotes.clear()
-            for oid, leg in list(roll_legs.items()):
-                s["roll_expired_contracts"] += leg["qty"]
+            for leg in roll_legs:
+                s["roll_unfilled_contracts"] += max(leg["qty"], 0)
             roll_legs.clear()
+            roll_by_oid.clear()
             charges = sum((c.total for c in backend.charges()), Decimal(0))
             mtm = Decimal(0)
             for c, q in pos.items():
@@ -341,8 +372,9 @@ def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[in
         "window": window, "queue": queue, "step": str(step),
         "sessions": len(per_session),
         "rows": n,
-        "plutus_simulator_commit": A._engine_commit(),
-        "plutus_simulator_src_dirty": A._engine_dirty(),
+        "plutus_simulator_commit": commit_at_start,
+        "plutus_simulator_src_dirty": dirty_at_start,
+        "plutus_simulator_commit_at_end": A._engine_commit(),
         "equity_dong": equity,
         "totals": {k: int(v) for k, v in tot.items()},
         "refusals": dict(refusals),

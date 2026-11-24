@@ -277,13 +277,23 @@ changes one environment rule.
   **N2** + dated VSD IM (13% before 2022-12-15, 17% from it). **N3** + fee on every fill. These are opt-in options on
   `naive_variants.NaiveVariant`; `backtest.py` is unchanged and plutus-free.
 - **F-opt / F-con**: `experiments/mm_faithful_a.py` runs A in **one multi-day `ExchangeSession`** (`book_walk`,
-  optimistic / conservative queue). The session clock steps on naive's own rows, and quotes run 09:00–14:30:59, so
-  quotes resting at 14:30 meet the ATC under the engine's rules. Inventory is carried: the engine settles VM daily, applies
-  the dated IM, runs the margin ladder and executes forced closes. Naive's `handle_force_sell` is not ported. On naive's
-  roll trigger A sends real orders that close F1 and open the same signed position in F2. These are marketable LIMITs 1
-  point through the touch, re-priced every 15 s; a refused leg is not retried. P&L is the harness's own ledger
-  (fills, expiry settlements, close marks, engine charges); the engine's deposit is recorded beside it.
-  `mm_anchor.py` and `result/mm_anchor/*` are untouched.
+  optimistic / conservative queue).
+  - The session clock steps on naive's own rows; quotes run 09:00–14:30:59, so quotes resting at 14:30 meet the ATC
+    under the engine's rules.
+  - Inventory is carried: the engine settles VM daily, applies the dated IM, runs the margin ladder and executes forced
+    closes. Naive's `handle_force_sell` is not ported.
+  - On naive's roll trigger A sends real orders that close F1 and open the same signed position in F2. These are
+    marketable LIMITs 1 point through the touch. A refused or unfilled leg is resubmitted on every 15 s requote tick until
+    it is done or the session ends.
+  - P&L is the harness's own ledger (fills, expiry settlements, close marks, engine charges); the engine deposit is
+    recorded beside it and now agrees with it to 0đ.
+  - `mm_anchor.py` and `result/mm_anchor/*` are untouched.
+- **Data.** On every day A holds or trades a contract, everything F reads for that contract is in the slice
+  (`extract_slices.touched`):
+  - Bands: both VN30F1M and VN30F2M on every session.
+  - Book (depth 1–3 with sizes) and sized tape: the traded contract, plus both contracts on roll days and on the session
+    after a roll.
+  - See `data/<window>-MANIFEST.md`.
 - krx2025 is compared on the 20 pre-cutover sessions. F runs all 40; A has no guard, so the post-cutover sessions are
   reported separately.
 
@@ -295,10 +305,10 @@ changes one environment rule.
 | N1 | + own-price fills | 129 | +0 | 64 | -15.90% | -2.97 pp |  |
 | N2 | + dated VSD IM (13% / 17%) | 129 | +0 | 64 | -15.90% | +0.00 pp |  |
 | N3 | + fee on every fill | 129 | +0 | 64 | -16.42% | -0.52 pp |  |
-| F-opt | Plutus faithful-A, optimistic queue | 188 | +59 | 89 | -1.81% | +14.61 pp | 0.04% |
-| F-con | Plutus faithful-A, conservative queue | 110 | -78 | 51 | -10.91% | -9.11 pp | 99.88% |
+| F-opt | Plutus faithful-A, optimistic queue | 198 | +69 | 99 | -2.52% | +13.90 pp | 0.04% |
+| F-con | Plutus faithful-A, conservative queue | 116 | -82 | 57 | -11.47% | -8.94 pp | 99.88% |
 
-Clean checkpoint: through 2022-12-13 (19 sessions), the last session before the first refused F1 roll leg (2022-12-14):
+Cross-check checkpoint: through 2022-12-13 (19 sessions), the last session before the first non-empty roll (every roll completed) (2022-12-14):
 
 | rung | fills | Δ fills | round trips | HPR | Δ HPR |
 |---|--:|--:|--:|--:|--:|
@@ -311,13 +321,13 @@ Clean checkpoint: through 2022-12-13 (19 sessions), the last session before the 
 
 Faithful-A Tier-1 (same span):
 
-| | margin warnings | margin calls | forced liq. (executed) | VM settlement days | roll fills / roll contracts | engine (forced) fills | ledger − engine deposit at end |
-|---|--:|--:|--:|--:|--:|--:|--:|
-| F-opt | 2 | 1 | 0 (0) | 38 | 10 / 20 | 0 | 60,920,000đ |
-| F-con | 0 | 0 | 0 (0) | 40 | 6 / 12 | 0 | 63,590,000đ |
+| | margin warnings | margin calls | forced liq. (executed) | VM settlement days | roll fills / roll legs | roll retries | roll unfilled | engine (forced) fills | max abs(ledger − engine deposit) |
+|---|--:|--:|--:|--:|--:|--:|--:|--:|--:|
+| F-opt | 0 | 0 | 0 (0) | 38 | 20 / 20 | 3 | 0 | 0 | 0đ |
+| F-con | 0 | 0 | 0 (0) | 40 | 12 / 12 | 5 | 0 | 0 | 0đ |
 
-F-opt: `result/mm_faithful_a/im2022_optimistic.json` sha256 `e0af92e8bd172d56…`, plutus-simulator `f4463d6`
-F-con: `result/mm_faithful_a/im2022_conservative.json` sha256 `1363a7648c8f23e6…`, plutus-simulator `f4463d6`
+F-opt: `result/mm_faithful_a/im2022_optimistic.json` sha256 `d1e4c02f63552cf7…`, plutus-simulator `b52877e` (checkout moved to `af55e29` before the run ended)
+F-con: `result/mm_faithful_a/im2022_conservative.json` sha256 `dbd6104fc1d0ed2a…`, plutus-simulator `b52877e` (checkout moved to `af55e29` before the run ended)
 
 #### krx2025 (20 pre-cutover sessions)
 
@@ -327,10 +337,10 @@ F-con: `result/mm_faithful_a/im2022_conservative.json` sha256 `1363a7648c8f23e6�
 | N1 | + own-price fills | 228 | +0 | 112 | -14.09% | -8.88 pp |  |
 | N2 | + dated VSD IM (13% / 17%) | 228 | +0 | 112 | -14.09% | +0.00 pp |  |
 | N3 | + fee on every fill | 228 | +0 | 112 | -15.02% | -0.93 pp |  |
-| F-opt | Plutus faithful-A, optimistic queue | 250 | +22 | 118 | -8.98% | +6.04 pp | 0.09% |
-| F-con | Plutus faithful-A, conservative queue | 141 | -109 | 63 | -26.75% | -17.77 pp | 99.65% |
+| F-opt | Plutus faithful-A, optimistic queue | 261 | +33 | 127 | -7.58% | +7.45 pp | 0.08% |
+| F-con | Plutus faithful-A, conservative queue | 153 | -108 | 71 | -25.55% | -17.97 pp | 99.63% |
 
-Clean checkpoint: through 2025-04-15 (10 sessions), the last session before the first refused F1 roll leg (2025-04-16):
+Cross-check checkpoint: through 2025-04-15 (10 sessions), the last session before the first non-empty roll (every roll completed) (2025-04-16):
 
 | rung | fills | Δ fills | round trips | HPR | Δ HPR |
 |---|--:|--:|--:|--:|--:|
@@ -343,45 +353,43 @@ Clean checkpoint: through 2025-04-15 (10 sessions), the last session before the 
 
 Faithful-A Tier-1 (same span):
 
-| | margin warnings | margin calls | forced liq. (executed) | VM settlement days | roll fills / roll contracts | engine (forced) fills | ledger − engine deposit at end |
-|---|--:|--:|--:|--:|--:|--:|--:|
-| F-opt | 2 | 2 | 13081 (13080) | 18 | 11 / 22 | 0 | 40,480,000đ |
-| F-con | 1 | 1 | 0 (0) | 15 | 0 / 14 | 0 | 44,880,000đ |
+| | margin warnings | margin calls | forced liq. (executed) | VM settlement days | roll fills / roll legs | roll retries | roll unfilled | engine (forced) fills | max abs(ledger − engine deposit) |
+|---|--:|--:|--:|--:|--:|--:|--:|--:|--:|
+| F-opt | 1 | 1 | 0 (0) | 18 | 22 / 22 | 4 | 0 | 0 | 0đ |
+| F-con | 4 | 0 | 0 (0) | 18 | 14 / 14 | 6 | 0 | 0 | 0đ |
 
 krx2025 post-cutover (20 sessions, A unguarded):
 
-- F-opt: fills 255, margin calls 14, forced liquidations 0 (0 executed), HPR over the post sessions -8.79%, whole 40 sessions -16.98%
-- F-con: fills 191, margin calls 34, forced liquidations 0 (0 executed), HPR over the post sessions -12.79%, whole 40 sessions -36.12%
+- F-opt: fills 314, margin calls 7, forced liquidations 0 (0 executed), HPR over the post sessions -4.81%, whole 40 sessions -12.02%
+- F-con: fills 259, margin calls 23, forced liquidations 18485 (3 executed), HPR over the post sessions -17.30%, whole 40 sessions -38.43%
 
-F-opt: `result/mm_faithful_a/krx2025_optimistic.json` sha256 `02ae3176586bca2b…`, plutus-simulator `f4463d6`
-F-con: `result/mm_faithful_a/krx2025_conservative.json` sha256 `00280016c66d61a9…`, plutus-simulator `f4463d6`
+F-opt: `result/mm_faithful_a/krx2025_optimistic.json` sha256 `ba3d87b6cd379cad…`, plutus-simulator `b52877e` (checkout moved to `af55e29` before the run ended)
+F-con: `result/mm_faithful_a/krx2025_conservative.json` sha256 `d4466fcfd69d968b…`, plutus-simulator `b52877e` (checkout moved to `af55e29` before the run ended)
 
 Reading (report, don't tune):
-- **The im2022 reversal does not survive A with overnight carry.** The flat-each-session faithful arm earned +2.2%. Running A
-  itself, F-opt makes −1.81% and F-con −10.91%. F still beats naive (−12.93%), but no longer flips its sign. Through
-  the clean checkpoint (19 sessions) the three are close: N0 −17.98%, F-opt −14.03%, F-con −15.70%.
-- **The naive-side rungs:** own-price fills is the only one that moves anything (−2.97 pp im2022, −8.88 pp krx2025). The
-  dated IM changes nothing in N, because its capacity never binds. It does bind in F: on 2022-12-15, with F-opt at −19
-  contracts, 257 quotes were refused `INSUFFICIENT_DEPOSIT`.
-- **N3 → F is the largest step, and it depends on the queue.** Optimistic vs conservative differs by 9 pp (im2022) and
-  18 pp (krx2025; 31 pp at the checkpoint). The conservative queue leaves 99.6–99.9% of orders undecided. With carry,
-  which quotes fill decides which side the inventory sits on through the April 2025 gaps, so this step is path, not a
-  single mechanism.
-- **Roll data gap.** The frozen slices carry daily bands only for the traded contract. On a roll day the F1 contract
-  has no band, so A's F1 close is refused (`BAND_LIMIT`, `band_source: absent`). The F2 leg fills when it is admitted,
-  exposure doubles for a day, and the stranded F1 leg is cash-settled at expiry by the engine. The clean checkpoint stops
-  the day before.
-- **Engine accounting.** In plutus-simulator `f4463d6`, contracts added to a position that has already been through a
-  daily settlement are measured from the previous settlement price, not from their fill price
-  (`DerivativesAccount.apply_fill` / `variation_reference`). The engine deposit therefore drifts from true P&L: by
-  40–64M đ by the end of these runs. The deposit is lower than the ledger, so margin calls fire earlier than they
-  should. HPR here uses the ledger.
-- **krx2025 F-opt:** on 2025-04-16/17, with the doubled roll exposure, the engine emitted 13,081 forced-liquidation events
-  (one per advance). Its close orders were refused, and none filled.
+- **Does F < N hold on return for A?** Measured against naive as-is (N0):
+  - **im2022: no.** Both F arms lose less than N0: F-opt −2.52% and F-con −11.47%, against −12.93%. It holds at the
+    19-session checkpoint too (−14.03% and −15.70%, against −17.98%).
+  - **krx2025 (pre-cutover): yes.** F-opt −7.58% and F-con −25.55%, against −5.22%.
+  - **krx2025 at the 10-session checkpoint:** F-opt is +4.49% against −7.15%, the opposite direction to the full window.
+    F-con, at −26.25%, agrees with the full window.
+- **The im2022 reversal does not survive A with overnight carry.** The flat-each-session faithful arm made +2.2%; A in
+  F loses in both queues. F still loses less than N.
+- **The naive-side rungs:** own-price fills is the only one that moves anything (−2.97 pp im2022, −8.88 pp krx2025).
+  The dated IM changes nothing in N, because N's capacity never binds. It does bind in F: there are
+  `INSUFFICIENT_DEPOSIT` quote refusals in krx2025 (924 under conservative).
+- **N3 → F is the largest step, and it depends on the queue.** Optimistic vs conservative differs by 8.9 pp (im2022)
+  and 18 pp (krx2025; 31 pp at the checkpoint). The conservative queue leaves 99.6–99.9% of orders undecided. With carry,
+  which quotes fill decides which side the inventory sits on through the April 2025 gaps.
+- **Rolls now complete in every run:** 20/20, 12/12, 22/22 and 14/14 legs, after 3–6 retries.
+- **krx2025 post-cutover, F-con:** 18,485 forced-liquidation events; 3 had a close accepted and 21 contracts were
+  force-closed.
 
-Regenerate (the four faithful-A runs take 45–85 min each, and can run in parallel):
+Regenerate (each faithful-A run takes about 17–36 min at plutus-simulator `b52877e`):
 
 ```bash
+.venv/bin/python -m proto_market_maker.experiments.extract_slices im2022   # needs DB + archive
+.venv/bin/python -m proto_market_maker.experiments.extract_slices krx2025  # needs DB
 for w in im2022 krx2025; do for q in optimistic conservative; do
   .venv/bin/python -m proto_market_maker.experiments.mm_faithful_a $w --queue $q; done; done
 .venv/bin/python -m proto_market_maker.experiments.mm_ladder im2022

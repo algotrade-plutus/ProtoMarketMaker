@@ -7,24 +7,25 @@
 
 | file | rows (slice -> repo) | bytes | sha256 |
 |---|--:|--:|---|
-| data/band/krx2025/quote_ceil.parquet | 40 -> 40 | 1381 | `73281207e9de0b64987efac57bbff15af0d05f2b61c042b8baec2b799e79f82d` |
+| data/band/krx2025/quote_ceil.parquet | 80 -> 80 | 1560 | `f3ff1f0a3a1ba1c0b06ed5eb24f4f5186447e7771e1339c6c9e4a5f562d409e0` |
 | data/band/krx2025/quote_close.parquet | 80 -> 80 | 1559 | `7df64b37bd54d518297c91b8f7a6ecda6752f6072d5d87b4871f179e90da635d` |
-| data/band/krx2025/quote_floor.parquet | 40 -> 40 | 1387 | `a6b67ce7b7203655a441fcca37b1b5ff3c30b783d5713aea4b8b94f993986b08` |
-| data/band/krx2025/quote_reference.parquet | 40 -> 40 | 1373 | `3c6a74b157d4d82631d8f3f6e4711c41575435a6a01db14e2c88df5eab03fe71` |
-| data/band/krx2025/quote_ticker.parquet | 3 -> 3 | 1869 | `91cd7860a527a0b3287384fe2991dd2170d99ecdcfd09794fb2b93bcc93b326c` |
-| data/l2/krx2025/local_quote_askprice.parquet | 560235 -> 560235 | 1590970 | `3ed8b419cf647a7454c290d568e8c1d762498b01bdd9ea711ad374d3d5912af6` |
-| data/l2/krx2025/local_quote_asksize.parquet | 1063401 -> 1063401 | 3956300 | `6778d3b78add461ef7c0d909533defabcdf2bc2916a55c15fe0adcf8cacc4f94` |
-| data/l2/krx2025/local_quote_bidprice.parquet | 551474 -> 551474 | 1571821 | `e279194e4c1977174f4e1d9aff0a3fea370faaded2252c587d21ab3daededc16` |
-| data/l2/krx2025/local_quote_bidsize.parquet | 1056601 -> 1056601 | 4141847 | `39a0bfa1051588ee6e018c913bac0a881bfdd9cba3018619f9eb07fd216d5969` |
+| data/band/krx2025/quote_floor.parquet | 80 -> 80 | 1568 | `c97fa97a9c16f083567b1f1d72c83615a9b20de7942571f1169dd0fe3d74198a` |
+| data/band/krx2025/quote_reference.parquet | 80 -> 80 | 1560 | `7ea9641a620a0aeee56521f2bda3ba2569cbdb4a39a81b23d7e147f21017c6f5` |
+| data/band/krx2025/quote_ticker.parquet | 4 -> 4 | 1879 | `722b3ed7b70c6a7b8eaecda358473cbe7729d6de59ea226abc01779c8fbabec3` |
+| data/l2/krx2025/local_quote_askprice.parquet | 579833 -> 579833 | 1631341 | `4dbac7d83b12f1c6c8cc3eadeb339123305744d27825cfff78575c07a93d82f5` |
+| data/l2/krx2025/local_quote_asksize.parquet | 1094467 -> 1094467 | 4089466 | `0d135f7028ebfdfcc50cf6f8c541240f0b601d2aef0b0ea49d839a0b853faf45` |
+| data/l2/krx2025/local_quote_bidprice.parquet | 566375 -> 566375 | 1610202 | `eaac7b7068e24d50647b7dece2eaf047d9a27c2f647977f01a304fef1592e8c4` |
+| data/l2/krx2025/local_quote_bidsize.parquet | 1083873 -> 1083873 | 4266338 | `271325ca7481c92a04c9a5dcb023179f4d5c7a41092af063ff4d3f76fe3edb46` |
 | data/l2/krx2025/local_quote_matched.parquet | 343840 -> 343840 | 1677831 | `1f19f3ecae1f8bef6fb5b890862ae07c63ae935cb90540303dad7cc7aa8bfc04` |
-| data/l2/krx2025/local_quote_total.parquet | 522343 -> 522335 | 2858217 | `899c0b66a8c19fc80ea1a4abc5fcabf38d622479ce8d988cff35076811bac93e` |
+| data/l2/krx2025/local_quote_total.parquet | 571605 -> 571597 | 3062829 | `e8cbad842ddfe2a0f44acc7bd7dc06c7583789c1015a207957a0165a0ce07bb1` |
 | data/market/krx2025/futurecontractcode.csv | 80 | 2353 | `2f3d6c53cd0392800e465a40b8c0375856e427d14b526ee2249fad96ffc1ba71` |
 
-Total: 15806908 bytes (15.07 MiB).
+Total: 16348486 bytes (15.59 MiB).
+
 ## Why this window is minimal
 
-20 sessions either side of the 2025-05-05 KRX cutover, the low end of the handoff's 20-30: enough for the regime guard to act on every post-cutover session and for both arms to quote a non-trivial number of times on each side. MM has no look-back, so no warm-up. Only the contract the signal trades each day carries book and tape; VN30F2M otherwise contributes only matched prices and closes (read by the naive engine's F1/F2 merge). Depth 1-3 is all the DB holds and all the book walk reads.
+20 sessions either side of the 2025-05-05 KRX cutover, the low end of the handoff's 20-30: enough for the regime guard to act on every post-cutover session and for both arms to quote a non-trivial number of times on each side. MM has no look-back, so no warm-up. Only the contract the signal trades each day carries book and tape; VN30F2M otherwise contributes matched prices, closes and daily bands (bands for both contracts on every session, so a roll can close F1 and open F2). Depth 1-3 is all the DB holds and all the book walk reads.
 
 ## Size flag
 
-Over 3 MiB: L2 depth 1-3 with sizes plus the sized tape is what the queue claims read; 40 sessions is the handoff's floor, so this is irreducible without shortening the window.
+Over 3 MiB: L2 depth 1-3 with sizes plus the sized tape is what the queue claims read; 40 sessions is the handoff's floor, so this is irreducible without shortening the window. The growth over the first extraction (+0.11 MiB im2022, +0.52 MiB krx2025) comes only from the roll days and the session after each roll, where book and sized tape now cover both contracts A holds or trades (see ``touched``); bands grew by the F2M rows.

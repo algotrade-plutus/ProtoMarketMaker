@@ -4,8 +4,9 @@
  "step": "3.1",
  "sessions": 40,
  "rows": 214390,
- "plutus_simulator_commit": "f4463d611ebffbe5c49d89cc265508703fb962be",
+ "plutus_simulator_commit": "b52877e3b6bcefd50746761bd518f0c4b93ac40d",
  "plutus_simulator_src_dirty": false,
+ "plutus_simulator_commit_at_end": "af55e29e855d7f74b95c0b723a3f78b8b0b3405c",
  "equity_dong": [
   500000000.0,
   499548518.0,
@@ -27,72 +28,71 @@
   420429404.0,
   430860680.0,
   421510476.0,
-  425651130.0,
-  417218123.0,
-  422103833.0,
-  428103833.0,
-  437028114.0,
-  437672369.0,
-  439366059.0,
-  440526059.0,
-  459864660.0,
-  456127237.0,
-  454027237.0,
-  457523462.0,
-  455979739.0,
-  449195829.0,
-  449721714.0,
-  448237537.0,
-  448797537.0,
-  448509065.0,
-  447554863.0,
-  445724863.0,
-  445430599.0
+  419567924.0,
+  414459239.0,
+  419344949.0,
+  425344949.0,
+  434269230.0,
+  434913485.0,
+  436607175.0,
+  437767175.0,
+  457105776.0,
+  453368353.0,
+  451268353.0,
+  454764578.0,
+  453220855.0,
+  446436945.0,
+  446962830.0,
+  445478653.0,
+  446038653.0,
+  445750181.0,
+  444795979.0,
+  442965979.0,
+  442671715.0
  ],
  "totals": {
   "roll_triggers": 2,
   "quote_submitted": 67134,
-  "indeterminate_evals": 471913,
+  "indeterminate_evals": 471306,
   "indeterminate_orders": 67001,
   "cancel_refused": 257,
   "quote_rejected": 58,
-  "fills": 110,
+  "fills": 116,
   "quote_fills": 104,
   "taker_fills": 106,
   "indeterminate_evals_atc": 2205,
   "indeterminate_orders_atc": 208,
   "quote_expired": 295,
-  "closing_fills": 51,
-  "maker_fills": 4,
+  "closing_fills": 57,
+  "maker_fills": 10,
   "roll_contracts": 6,
-  "roll_submitted": 5,
-  "roll_rejected": 1,
-  "roll_fills": 6,
-  "expiry_settled_contracts": 6
+  "roll_submitted": 7,
+  "roll_retries": 5,
+  "roll_fills": 12,
+  "roll_unfilled_contracts": 0
  },
  "refusals": {
   "cancel:SESSION_SEMANTICS": 257,
   "quote:SESSION_SEMANTICS": 56,
-  "quote:BAND_LIMIT": 2,
-  "roll:BAND_LIMIT": 1
+  "quote:BAND_LIMIT": 2
  },
  "vm_settlements": {
   "count": 40,
-  "net_dong": -111383333.33333333,
+  "net_dong": -71216591.63059163,
   "first": "2022-11-17T15:00:00"
  },
  "margin_events": [],
  "engine_ignorance": {
-  "evaluations": 686879,
-  "indeterminate": 471913,
+  "evaluations": 686286,
+  "indeterminate": 471306,
   "silent_ignorance": {
-   "fill.decided_without.high": 107,
-   "fill.decided_without.low": 107,
-   "fill.decided_without.open": 107,
-   "fill.decided_without.volume": 107
+   "fill.decided_without.high": 108,
+   "fill.decided_without.low": 108,
+   "fill.decided_without.open": 108,
+   "fill.decided_without.volume": 108
   }
  },
- "final_engine_deposit_dong": 381840599.0,
+ "final_engine_deposit_dong": 442671715.0,
  "per_session": [
   {
    "date": "2022-11-17",
@@ -142,7 +142,7 @@
    "positions_match_engine": true,
    "charges_dong": 22913.0,
    "end_equity_dong": 497905605.0,
-   "engine_deposit_dong": 499555605.0,
+   "engine_deposit_dong": 497905605.0,
    "engine_margin_status": "ok"
   },
   {
@@ -168,7 +168,7 @@
    "positions_match_engine": true,
    "charges_dong": 34295.0,
    "end_equity_dong": 503631310.0,
-   "engine_deposit_dong": 506681310.0,
+   "engine_deposit_dong": 503631310.0,
    "engine_margin_status": "ok"
   },
   {
@@ -194,7 +194,7 @@
    "positions_match_engine": true,
    "charges_dong": 138369.0,
    "end_equity_dong": 530562941.0,
-   "engine_deposit_dong": 506892941.0,
+   "engine_deposit_dong": 530562941.0,
    "engine_margin_status": "ok"
   },
   {
@@ -220,7 +220,7 @@
    "positions_match_engine": true,
    "charges_dong": 34000.0,
    "end_equity_dong": 532238941.0,
-   "engine_deposit_dong": 506708941.0,
+   "engine_deposit_dong": 532238941.0,
    "engine_margin_status": "ok"
   },
   {
@@ -244,7 +244,7 @@
    "positions_match_engine": true,
    "charges_dong": 11320.0,
    "end_equity_dong": 524327621.0,
-   "engine_deposit_dong": 497817621.0,
+   "engine_deposit_dong": 524327621.0,
    "engine_margin_status": "ok"
   },
   {
@@ -269,7 +269,7 @@
    "positions_match_engine": true,
    "charges_dong": 11445.0,
    "end_equity_dong": 504666176.0,
-   "engine_deposit_dong": 476736176.0,
+   "engine_deposit_dong": 504666176.0,
    "engine_margin_status": "ok"
   },
   {
@@ -295,7 +295,7 @@
    "positions_match_engine": true,
    "charges_dong": 35224.0,
    "end_equity_dong": 489380952.0,
-   "engine_deposit_dong": 454750952.0,
+   "engine_deposit_dong": 489380952.0,
    "engine_margin_status": "ok"
   },
   {
@@ -320,7 +320,7 @@
    "positions_match_engine": true,
    "charges_dong": 11705.0,
    "end_equity_dong": 469689247.0,
-   "engine_deposit_dong": 435119247.0,
+   "engine_deposit_dong": 469689247.0,
    "engine_margin_status": "ok"
   },
   {
@@ -345,7 +345,7 @@
    "positions_match_engine": true,
    "charges_dong": 11883.0,
    "end_equity_dong": 457777364.0,
-   "engine_deposit_dong": 422707364.0,
+   "engine_deposit_dong": 457777364.0,
    "engine_margin_status": "ok"
   },
   {
@@ -369,7 +369,7 @@
    "positions_match_engine": true,
    "charges_dong": 12015.0,
    "end_equity_dong": 457845349.0,
-   "engine_deposit_dong": 421485349.0,
+   "engine_deposit_dong": 457845349.0,
    "engine_margin_status": "ok"
   },
   {
@@ -395,7 +395,7 @@
    "positions_match_engine": true,
    "charges_dong": 48139.0,
    "end_equity_dong": 389227210.0,
-   "engine_deposit_dong": 351797210.0,
+   "engine_deposit_dong": 389227210.0,
    "engine_margin_status": "ok"
   },
   {
@@ -420,7 +420,7 @@
    "positions_match_engine": true,
    "charges_dong": 74646.0,
    "end_equity_dong": 385672564.0,
-   "engine_deposit_dong": 347332564.0,
+   "engine_deposit_dong": 385672564.0,
    "engine_margin_status": "ok"
   },
   {
@@ -446,7 +446,7 @@
    "positions_match_engine": true,
    "charges_dong": 49126.0,
    "end_equity_dong": 419913438.0,
-   "engine_deposit_dong": 383373438.0,
+   "engine_deposit_dong": 419913438.0,
    "engine_margin_status": "ok"
   },
   {
@@ -471,7 +471,7 @@
    "positions_match_engine": true,
    "charges_dong": 48119.0,
    "end_equity_dong": 417095319.0,
-   "engine_deposit_dong": 380705319.0,
+   "engine_deposit_dong": 417095319.0,
    "engine_margin_status": "ok"
   },
   {
@@ -496,7 +496,7 @@
    "positions_match_engine": true,
    "charges_dong": 122695.0,
    "end_equity_dong": 422522624.0,
-   "engine_deposit_dong": 369802624.0,
+   "engine_deposit_dong": 422522624.0,
    "engine_margin_status": "ok"
   },
   {
@@ -523,7 +523,7 @@
    "positions_match_engine": true,
    "charges_dong": 73220.0,
    "end_equity_dong": 420429404.0,
-   "engine_deposit_dong": 362049404.0,
+   "engine_deposit_dong": 420429404.0,
    "engine_margin_status": "ok"
   },
   {
@@ -549,7 +549,7 @@
    "positions_match_engine": true,
    "charges_dong": 48724.0,
    "end_equity_dong": 430860680.0,
-   "engine_deposit_dong": 373200680.0,
+   "engine_deposit_dong": 430860680.0,
    "engine_margin_status": "ok"
   },
   {
@@ -575,7 +575,7 @@
    "positions_match_engine": true,
    "charges_dong": 60204.0,
    "end_equity_dong": 421510476.0,
-   "engine_deposit_dong": 359270476.0,
+   "engine_deposit_dong": 421510476.0,
    "engine_margin_status": "ok"
   },
   {
@@ -584,31 +584,31 @@
    "rolled": true,
    "roll_triggers": 1,
    "roll_contracts": 6,
-   "roll_submitted": 5,
-   "roll_rejected": 1,
+   "roll_submitted": 7,
+   "roll_retries": 5,
    "quote_submitted": 1696,
-   "indeterminate_evals": 12488,
+   "indeterminate_evals": 11889,
    "indeterminate_orders": 1693,
-   "fills": 9,
-   "roll_fills": 6,
-   "maker_fills": 1,
+   "closing_fills": 8,
+   "fills": 15,
+   "roll_fills": 12,
+   "maker_fills": 7,
    "taker_fills": 8,
-   "closing_fills": 2,
    "quote_fills": 3,
    "cancel_refused": 8,
    "quote_rejected": 2,
    "indeterminate_evals_atc": 56,
    "indeterminate_orders_atc": 6,
    "quote_expired": 8,
-   "end_net": -11,
+   "roll_unfilled_contracts": 0,
+   "end_net": -5,
    "positions": {
-    "VN30F2212": -6,
     "VN30F2301": -5
    },
    "positions_match_engine": true,
-   "charges_dong": 109346.0,
-   "end_equity_dong": 425651130.0,
-   "engine_deposit_dong": 363411130.0,
+   "charges_dong": 182552.0,
+   "end_equity_dong": 419567924.0,
+   "engine_deposit_dong": 419567924.0,
    "engine_margin_status": "ok"
   },
   {
@@ -616,7 +616,7 @@
    "contract": "VN30F2212",
    "rolled": false,
    "quote_submitted": 1692,
-   "indeterminate_evals": 13571,
+   "indeterminate_evals": 13563,
    "indeterminate_orders": 1690,
    "cancel_refused": 6,
    "quote_rejected": 2,
@@ -627,15 +627,14 @@
    "indeterminate_evals_atc": 40,
    "indeterminate_orders_atc": 4,
    "quote_expired": 6,
-   "expiry_settled_contracts": 6,
    "end_net": -5,
    "positions": {
     "VN30F2301": -5
    },
    "positions_match_engine": true,
-   "charges_dong": 83007.0,
-   "end_equity_dong": 417218123.0,
-   "engine_deposit_dong": 353608123.0,
+   "charges_dong": 28685.0,
+   "end_equity_dong": 414459239.0,
+   "engine_deposit_dong": 414459239.0,
    "engine_margin_status": "ok"
   },
   {
@@ -660,8 +659,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 14290.0,
-   "end_equity_dong": 422103833.0,
-   "engine_deposit_dong": 358493833.0,
+   "end_equity_dong": 419344949.0,
+   "engine_deposit_dong": 419344949.0,
    "engine_margin_status": "ok"
   },
   {
@@ -681,8 +680,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 0.0,
-   "end_equity_dong": 428103833.0,
-   "engine_deposit_dong": 364493833.0,
+   "end_equity_dong": 425344949.0,
+   "engine_deposit_dong": 425344949.0,
    "engine_margin_status": "ok"
   },
   {
@@ -707,8 +706,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 55719.0,
-   "end_equity_dong": 437028114.0,
-   "engine_deposit_dong": 377298114.0,
+   "end_equity_dong": 434269230.0,
+   "engine_deposit_dong": 434269230.0,
    "engine_margin_status": "ok"
   },
   {
@@ -734,8 +733,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 55745.0,
-   "end_equity_dong": 437672369.0,
-   "engine_deposit_dong": 377612369.0,
+   "end_equity_dong": 434913485.0,
+   "engine_deposit_dong": 434913485.0,
    "engine_margin_status": "ok"
   },
   {
@@ -760,8 +759,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 56310.0,
-   "end_equity_dong": 439366059.0,
-   "engine_deposit_dong": 377986059.0,
+   "end_equity_dong": 436607175.0,
+   "engine_deposit_dong": 436607175.0,
    "engine_margin_status": "ok"
   },
   {
@@ -781,8 +780,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 0.0,
-   "end_equity_dong": 440526059.0,
-   "engine_deposit_dong": 379146059.0,
+   "end_equity_dong": 437767175.0,
+   "engine_deposit_dong": 437767175.0,
    "engine_margin_status": "ok"
   },
   {
@@ -807,8 +806,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 41399.0,
-   "end_equity_dong": 459864660.0,
-   "engine_deposit_dong": 400404660.0,
+   "end_equity_dong": 457105776.0,
+   "engine_deposit_dong": 457105776.0,
    "engine_margin_status": "ok"
   },
   {
@@ -833,8 +832,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 27423.0,
-   "end_equity_dong": 456127237.0,
-   "engine_deposit_dong": 395427237.0,
+   "end_equity_dong": 453368353.0,
+   "engine_deposit_dong": 453368353.0,
    "engine_margin_status": "ok"
   },
   {
@@ -854,8 +853,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 0.0,
-   "end_equity_dong": 454027237.0,
-   "engine_deposit_dong": 393327237.0,
+   "end_equity_dong": 451268353.0,
+   "engine_deposit_dong": 451268353.0,
    "engine_margin_status": "ok"
   },
   {
@@ -879,8 +878,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 13775.0,
-   "end_equity_dong": 457523462.0,
-   "engine_deposit_dong": 396823462.0,
+   "end_equity_dong": 454764578.0,
+   "engine_deposit_dong": 454764578.0,
    "engine_margin_status": "ok"
   },
   {
@@ -904,8 +903,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 13723.0,
-   "end_equity_dong": 455979739.0,
-   "engine_deposit_dong": 395279739.0,
+   "end_equity_dong": 453220855.0,
+   "engine_deposit_dong": 453220855.0,
    "engine_margin_status": "ok"
   },
   {
@@ -929,8 +928,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 13910.0,
-   "end_equity_dong": 449195829.0,
-   "engine_deposit_dong": 387065829.0,
+   "end_equity_dong": 446436945.0,
+   "engine_deposit_dong": 446436945.0,
    "engine_margin_status": "ok"
   },
   {
@@ -955,8 +954,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 14115.0,
-   "end_equity_dong": 449721714.0,
-   "engine_deposit_dong": 387591714.0,
+   "end_equity_dong": 446962830.0,
+   "engine_deposit_dong": 446962830.0,
    "engine_margin_status": "ok"
   },
   {
@@ -980,8 +979,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 14177.0,
-   "end_equity_dong": 448237537.0,
-   "engine_deposit_dong": 385357537.0,
+   "end_equity_dong": 445478653.0,
+   "engine_deposit_dong": 445478653.0,
    "engine_margin_status": "ok"
   },
   {
@@ -1001,8 +1000,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 0.0,
-   "end_equity_dong": 448797537.0,
-   "engine_deposit_dong": 385917537.0,
+   "end_equity_dong": 446038653.0,
+   "engine_deposit_dong": 446038653.0,
    "engine_margin_status": "ok"
   },
   {
@@ -1027,8 +1026,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 28472.0,
-   "end_equity_dong": 448509065.0,
-   "engine_deposit_dong": 384879065.0,
+   "end_equity_dong": 445750181.0,
+   "engine_deposit_dong": 445750181.0,
    "engine_margin_status": "ok"
   },
   {
@@ -1052,8 +1051,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 14202.0,
-   "end_equity_dong": 447554863.0,
-   "engine_deposit_dong": 383964863.0,
+   "end_equity_dong": 444795979.0,
+   "engine_deposit_dong": 444795979.0,
    "engine_margin_status": "ok"
   },
   {
@@ -1073,8 +1072,8 @@
    },
    "positions_match_engine": true,
    "charges_dong": 0.0,
-   "end_equity_dong": 445724863.0,
-   "engine_deposit_dong": 382134863.0,
+   "end_equity_dong": 442965979.0,
+   "engine_deposit_dong": 442965979.0,
    "engine_margin_status": "ok"
   },
   {
@@ -1099,10 +1098,10 @@
    },
    "positions_match_engine": true,
    "charges_dong": 14264.0,
-   "end_equity_dong": 445430599.0,
-   "engine_deposit_dong": 381840599.0,
+   "end_equity_dong": 442671715.0,
+   "engine_deposit_dong": 442671715.0,
    "engine_margin_status": "ok"
   }
  ],
- "wall_seconds": 2784.9
+ "wall_seconds": 1040.4
 }
