@@ -1461,7 +1461,7 @@
  ],
  "views": {
   "pre_cutover": {
-   "session_set": "20 pre-cutover sessions (like-for-like with the results committed before plutus-simulator 391e2e2, which compared these sessions only)",
+   "session_set": "20 pre-cutover sessions (like-for-like with the results committed before plutus-simulator 4867d46, which compared these sessions only)",
    "sessions": [
     "2025-04-01",
     "2025-04-02",
@@ -3138,10 +3138,10 @@
  "faithful_sources": {
   "F-opt": {
    "path": "result/mm_faithful_a/krx2025_optimistic.json",
-   "sha256": "5ca99d11a3e9af34d5e36a199c33cc505e292776369b86f1e4800c32bbd09c99",
-   "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
+   "sha256": "a246e27ac0e5b37558ca557775cb998df845d86c1a9969000fee850b28f8a94c",
+   "plutus_simulator_commit": "8d46c56040451b9811e030b0c93a80a793aea8d6",
    "plutus_simulator_src_dirty": false,
-   "plutus_simulator_commit_at_end": "373f9a764215c5008248ead5a3502b18fec55e0c",
+   "plutus_simulator_commit_at_end": "8d46c56040451b9811e030b0c93a80a793aea8d6",
    "vm_settlements_whole_run": {
     "count": 38,
     "net_dong": -24188404.04684092,
@@ -3171,10 +3171,10 @@
   },
   "F-con": {
    "path": "result/mm_faithful_a/krx2025_conservative.json",
-   "sha256": "f45e3db0e26939114fbc53e753275f5296e38fad882cf011ed991e48c18f72ad",
-   "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
+   "sha256": "5010472d8c91027838e6d73f1f8727046e43494538f54f7326a69c94f6bb0f10",
+   "plutus_simulator_commit": "8d46c56040451b9811e030b0c93a80a793aea8d6",
    "plutus_simulator_src_dirty": false,
-   "plutus_simulator_commit_at_end": "373f9a764215c5008248ead5a3502b18fec55e0c",
+   "plutus_simulator_commit_at_end": "8d46c56040451b9811e030b0c93a80a793aea8d6",
    "vm_settlements_whole_run": {
     "count": 37,
     "net_dong": -191323901.93897516,
@@ -3246,8 +3246,8 @@
   "n0_matches_mm_anchor_naive": true,
   "mm_anchor_faithful_conservative_hpr_flat_each_session": -0.06025583599999995,
   "mm_anchor_faithful_optimistic_hpr_flat_each_session": -0.13592448999999995,
-  "mm_anchor_plutus_simulator_commit": "fc94743640c9ce3706e3cd019217d1898d67b26f",
+  "mm_anchor_plutus_simulator_commit": "31e3405bd7efc47cdc9be2a1ca4640ff7c3a1e93",
   "pre_cutover_n0_matches_mm_anchor_naive_pre_cutover_only": true
  },
- "plutus_simulator_head_at_ladder_run": "373f9a764215c5008248ead5a3502b18fec55e0c"
+ "plutus_simulator_head_at_ladder_run": "8d46c56040451b9811e030b0c93a80a793aea8d6"
 }

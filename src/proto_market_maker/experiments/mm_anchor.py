@@ -26,7 +26,7 @@ Faithful arm (``plutus.execution.PlutusBackend`` over an ``ExchangeSession``)
       queue spread is reported relative to the optimistic arm. A third arm,
       ``conservative_untaped``, injects a conservative queue whose taker walk
       gets no prints: it reproduces the engine before plutus-simulator
-      ``e528633`` (taker sweeps undecidable), so the before/after of that
+      ``254aa1d`` (taker sweeps undecidable), so the before/after of that
       engine change is measured on the same run.
     * Cadence: on every trade print of the traded contract between 09:00 and
       14:25 the clock is advanced to it; the quotes are cancelled and replaced
@@ -42,9 +42,9 @@ Faithful arm (``plutus.execution.PlutusBackend`` over an ``ExchangeSession``)
     * Regime guard (the S6 rule): before each session the strategy asks the
       dated rulebook for the margin model and quotes only under a model it
       knows (``KNOWN_MARGIN_MODELS``: ``pre_margin``, and ``krx_two_layer`` from
-      the 2025-05-05 KRX cutover, sourced in plutus-simulator ``391e2e2``); an
+      the 2025-05-05 KRX cutover, sourced in plutus-simulator ``4867d46``); an
       unresolved or unknown model refuses the session rather than invent a
-      margin rule. Before ``391e2e2`` the post-KRX model was unsourced and the
+      margin rule. Before ``4867d46`` the post-KRX model was unsourced and the
       guard refused all 20 post-cutover sessions; it no longer refuses any.
       ``--unguarded`` skips the check.
 
@@ -264,7 +264,7 @@ def _untaped_conservative():
     from plutus.market.session.book_walk import ConservativeQueue
 
     class UntapedConservative(ConservativeQueue):
-        """Pre-e528633 behaviour: the taker walk gets no prints (a subclass, so
+        """Pre-254aa1d behaviour: the taker walk gets no prints (a subclass, so
         ``BookWalkFillPolicy`` does not swap in the tape-fed queue)."""
 
         @property
@@ -304,7 +304,7 @@ def _kind(e) -> str:
 
 
 #: The dated margin models this strategy knows how to be margined under
-#: (plutus-simulator ``391e2e2``): ``pre_margin`` before the 2025-05-05 KRX
+#: (plutus-simulator ``4867d46``): ``pre_margin`` before the 2025-05-05 KRX
 #: cutover, ``krx_two_layer`` (QD 26: broker IM intraday, VSDC CCP after the
 #: close) from it. Anything else, or an unresolved rule, is refused.
 KNOWN_MARGIN_MODELS = frozenset({"pre_margin", "krx_two_layer"})

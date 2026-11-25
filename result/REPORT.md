@@ -23,7 +23,7 @@ Hold the algorithm fixed and change only the execution environment: how much of 
 
 N0..N3 are cumulative opt-in options on `naive_variants.NaiveVariant` (`backtest.py` is unchanged). F-opt / F-con run A in one multi-day Plutus `ExchangeSession` (`experiments/mm_faithful_a.py`): the engine settles variation margin daily, applies the dated VSD IM, runs the margin ladder and executes forced closes; A's roll is sent as real orders; quotes resting at 14:30 meet the closing auction under the engine's rules; P&L is the harness ledger in real đồng (500,000,000 đ deposit, 100,000 đ per index point), cross-checked against the engine deposit.
 
-Windows: `im2022`, 20 sessions either side of the 2022-12-15 VSD IM step (13% → 17%; book from the local archive), and `krx2025`, 20 sessions either side of the 2025-05-05 KRX cutover (book from the Algotrade DB). Every rung runs over all 40 sessions of its window: since plutus-simulator `391e2e2` the post-KRX margin is modelled in QD 26's two layers (broker IM on VSDC's published 0.17 intraday, no VM; the VSDC CCP requirement after each close on the VN30 index close, which the krx2025 slice carries), so the post-cutover sessions are no longer set apart as unmodelled. krx2025 also shows two views cut from the same runs: `pre_cutover`, the 20 sessions before 2025-05-05 (like for like with the results committed before `391e2e2`, which compared those only), and `post_cutover`, the 20 from it. Slices and sha256: `data/<window>-MANIFEST.md`.
+Windows: `im2022`, 20 sessions either side of the 2022-12-15 VSD IM step (13% → 17%; book from the local archive), and `krx2025`, 20 sessions either side of the 2025-05-05 KRX cutover (book from the Algotrade DB). Every rung runs over all 40 sessions of its window: since plutus-simulator `4867d46` the post-KRX margin is modelled in QD 26's two layers (broker IM on VSDC's published 0.17 intraday, no VM; the VSDC CCP requirement after each close on the VN30 index close, which the krx2025 slice carries), so the post-cutover sessions are no longer set apart as unmodelled. krx2025 also shows two views cut from the same runs: `pre_cutover`, the 20 sessions before 2025-05-05 (like for like with the results committed before `4867d46`, which compared those only), and `post_cutover`, the 20 from it. Slices and sha256: `data/<window>-MANIFEST.md`.
 
 ## 3. Results: the ladder
 
@@ -99,7 +99,7 @@ Faithful-A Tier-1 counters (same span):
 | F-opt | 286 / 289 | 535 / 40 / 0 | 16 | 8 | 0 (0) | 38 | 40 / 40 | 7 | 0 đ | yes | 20 / 0 | 0 |
 | F-con | 115 / 243 | 310 / 36 / 12 | 47 | 31 | 30248 (3) | 37 | 36 / 36 | 9 | 0 đ | yes | 19 / 0 | 0 |
 
-#### krx2025, view `pre_cutover`: 20 pre-cutover sessions (like-for-like with the results committed before plutus-simulator 391e2e2, which compared these sessions only)
+#### krx2025, view `pre_cutover`: 20 pre-cutover sessions (like-for-like with the results committed before plutus-simulator 4867d46, which compared these sessions only)
 
 | rung | environment | fills | Δ fills | round trips | return (HPR) | Δ HPR | max drawdown | undecided orders |
 |---|---|--:|--:|--:|--:|--:|--:|--:|
@@ -206,7 +206,7 @@ Fill contracts per session equal the equity source's own fill count: N0 yes, N3 
 | F-opt | 40 | 575 | 50% | +1.20 | +0.06 | -0.68 | -1.67 | -60.1M đ | +45.3M đ | +0.0M đ | -105.4M đ | 6.8 |
 | F-con | 40 | 358 | 68% | +0.70 | -0.08 | -0.31 | -0.41 | -214.8M đ | -194.1M đ | +0.0M đ | -20.7M đ | 7.3 |
 
-##### krx2025, view `pre_cutover`: 20 pre-cutover sessions (like-for-like with the results committed before plutus-simulator 391e2e2)
+##### krx2025, view `pre_cutover`: 20 pre-cutover sessions (like-for-like with the results committed before plutus-simulator 4867d46)
 
 | arm | sessions | contracts | taker share | taker price improvement, median (pt) | markout 1 min | 5 min | close | P&L | carry | mark switch | trading | mean abs end inventory |
 |---|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|
@@ -277,21 +277,21 @@ Source: `result/mm_markout/krx2025_markout.json`.
 
 ## 9. Provenance
 
-| result | sha256 | plutus-simulator commit | at end of run | src dirty | includes 67f18fa | includes dcaecb9 | includes 391e2e2 |
+| result | sha256 | plutus-simulator commit | at end of run | src dirty | includes ba0d9f4 | includes 6e6c104 | includes 4867d46 |
 |---|---|---|---|---|---|---|---|
-| `result/mm_faithful_a/im2022_conservative.json` | `a6ebe71f60ad` | `373f9a7` | `373f9a7` | no | yes | yes | yes |
-| `result/mm_faithful_a/im2022_optimistic.json` | `e3964f2919c8` | `373f9a7` | `373f9a7` | no | yes | yes | yes |
-| `result/mm_faithful_a/krx2025_conservative.json` | `f45e3db0e269` | `373f9a7` | `373f9a7` | no | yes | yes | yes |
-| `result/mm_faithful_a/krx2025_optimistic.json` | `5ca99d11a3e9` | `373f9a7` | `373f9a7` | no | yes | yes | yes |
-| `result/mm_anchor/im2022.json` | `7fe2a2a98708` | `373f9a7` | `373f9a7` | no | yes | yes | yes |
-| `result/mm_anchor/krx2025.json` | `fef0c4f0f6b5` | `373f9a7` | `373f9a7` | no | yes | yes | yes |
-| `result/mm_ladder/im2022.json` | `677d7370abb8` | `373f9a7` | `373f9a7` | n/a | yes | yes | yes |
-| `result/mm_ladder/krx2025.json` | `02dccecd959c` | `373f9a7` | `373f9a7` | n/a | yes | yes | yes |
-| `result/mm_markout/im2022_first6_markout.json` | `6ab53ebbb3b8` | `373f9a7` (head when assembled) | | n/a | see faithful inputs | see faithful inputs | see faithful inputs |
-| `result/mm_markout/im2022_markout.json` | `680e4430f909` | `373f9a7` (head when assembled) | | n/a | see faithful inputs | see faithful inputs | see faithful inputs |
-| `result/mm_markout/krx2025_markout.json` | `b2d169cf17d6` | `373f9a7` (head when assembled) | | n/a | see faithful inputs | see faithful inputs | see faithful inputs |
+| `result/mm_faithful_a/im2022_conservative.json` | `a6ebe71f60ad` | `8d46c56` | `8d46c56` | no | yes | yes | yes |
+| `result/mm_faithful_a/im2022_optimistic.json` | `e3964f2919c8` | `8d46c56` | `8d46c56` | no | yes | yes | yes |
+| `result/mm_faithful_a/krx2025_conservative.json` | `f45e3db0e269` | `8d46c56` | `8d46c56` | no | yes | yes | yes |
+| `result/mm_faithful_a/krx2025_optimistic.json` | `5ca99d11a3e9` | `8d46c56` | `8d46c56` | no | yes | yes | yes |
+| `result/mm_anchor/im2022.json` | `7fe2a2a98708` | `8d46c56` | `8d46c56` | no | yes | yes | yes |
+| `result/mm_anchor/krx2025.json` | `fef0c4f0f6b5` | `8d46c56` | `8d46c56` | no | yes | yes | yes |
+| `result/mm_ladder/im2022.json` | `677d7370abb8` | `8d46c56` | `8d46c56` | n/a | yes | yes | yes |
+| `result/mm_ladder/krx2025.json` | `02dccecd959c` | `8d46c56` | `8d46c56` | n/a | yes | yes | yes |
+| `result/mm_markout/im2022_first6_markout.json` | `6ab53ebbb3b8` | `8d46c56` (head when assembled) | | n/a | see faithful inputs | see faithful inputs | see faithful inputs |
+| `result/mm_markout/im2022_markout.json` | `680e4430f909` | `8d46c56` (head when assembled) | | n/a | see faithful inputs | see faithful inputs | see faithful inputs |
+| `result/mm_markout/krx2025_markout.json` | `b2d169cf17d6` | `8d46c56` (head when assembled) | | n/a | see faithful inputs | see faithful inputs | see faithful inputs |
 
-Engine fixes checked: `67f18fa` band-edge orders on book sessions decided from the book, not the daily bar; `dcaecb9` soft policy: market-order fills graded like a limit at the band edge (evidence label); `391e2e2` post-KRX margin modelled in QD 26's two layers (broker IM intraday, VSDC CCP after the close). "no" means the result predates the fix and the faithful numbers may move on a rerun. A ladder or markout row records the engine head when it was assembled; its faithful inputs carry their own commits (the `mm_faithful_a` rows). "includes" is judged on the commit at the end of the run.
+Engine fixes checked: `ba0d9f4` band-edge orders on book sessions decided from the book, not the daily bar; `6e6c104` soft policy: market-order fills graded like a limit at the band edge (evidence label); `4867d46` post-KRX margin modelled in QD 26's two layers (broker IM intraday, VSDC CCP after the close). "no" means the result predates the fix and the faithful numbers may move on a rerun. A ladder or markout row records the engine head when it was assembled; its faithful inputs carry their own commits (the `mm_faithful_a` rows). "includes" is judged on the commit at the end of the run.
 
 ## 10. Reproduce
 

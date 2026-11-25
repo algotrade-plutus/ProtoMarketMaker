@@ -19,11 +19,11 @@ F-con   Plutus, faithful-A, conservative queue (``mm_faithful_a``)
 N0-N3 run here (``naive_variants``; pure, no plutus). F-opt / F-con are read
 from ``result/mm_faithful_a/<window>_<queue>.json`` (sha256 recorded). Every
 rung runs over the **whole window** (40 sessions; ``rungs``). Since
-plutus-simulator ``391e2e2`` the post-KRX margin is modelled in both QD 26
+plutus-simulator ``4867d46`` the post-KRX margin is modelled in both QD 26
 layers, so krx2025's post-cutover sessions are no longer set apart as
 unmodelled. krx2025 also carries two sub-window ``views`` cut from the same
 runs: ``pre_cutover``, the 20 sessions before 2025-05-05 (the like-for-like
-view of the results committed before ``391e2e2``, which compared those
+view of the results committed before ``4867d46``, which compared those
 sessions only; the naive rungs' pre-cutover span is checked equal to a
 naive run on those sessions alone), and ``post_cutover``, the 20 sessions
 from it, returns measured from the equity at the last pre-cutover close. A
@@ -175,7 +175,7 @@ def faithful_span(fa: dict, days: List[str], base_day: Optional[str] = None) -> 
         "max_abs_deposit_drift_dong": max((abs(r["end_equity_dong"] - r["engine_deposit_dong"])
                                            for r in recs), default=None),
         "positions_match_engine_all_sessions": all(r["positions_match_engine"] for r in recs),
-        # post-KRX VSDC CCP layer (plutus-simulator 391e2e2): closes with a position
+        # post-KRX VSDC CCP layer (plutus-simulator 4867d46): closes with a position
         # after 2025-05-05, those it could not determine, why, and Dieu 13 states.
         "ccp_nights": _sum(recs, "ccp_nights"),
         "ccp_indeterminate_nights": _sum(recs, "ccp_indeterminate_nights"),
@@ -269,7 +269,7 @@ def run_ladder(window: str, log=print) -> dict:
         for name, span, base, label in (
                 ("pre_cutover", pre_days, None,
                  f"{len(pre_days)} pre-cutover sessions (like-for-like with the results committed "
-                 "before plutus-simulator 391e2e2, which compared these sessions only)"),
+                 "before plutus-simulator 4867d46, which compared these sessions only)"),
                 ("post_cutover", post_days, pre_days[-1],
                  f"{len(post_days)} post-cutover sessions from 2025-05-05 (QD 26 two-layer margin; "
                  f"returns from the {pre_days[-1]} close)")):

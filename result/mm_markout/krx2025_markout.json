@@ -2057,7 +2057,7 @@
  },
  "views": {
   "pre_cutover": {
-   "session_set": "20 pre-cutover sessions (like-for-like with the results committed before plutus-simulator 391e2e2)",
+   "session_set": "20 pre-cutover sessions (like-for-like with the results committed before plutus-simulator 4867d46)",
    "sessions": [
     "2025-04-01",
     "2025-04-02",
@@ -2897,18 +2897,18 @@
   },
   "F-opt": {
    "fills_file": "krx2025_fills_F-opt.json",
-   "fills_sha256": "de1ec888ae8e9c5f1fad55307888a8683093e8653cf0b521da24418382e507b0",
-   "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
+   "fills_sha256": "58a5e728118323ec395f7c70f118bda3255274595449941faa92068a7ded0902",
+   "plutus_simulator_commit": "8d46c56040451b9811e030b0c93a80a793aea8d6",
    "sessions": 40,
    "arm": "F-opt"
   },
   "F-con": {
    "fills_file": "krx2025_fills_F-con.json",
-   "fills_sha256": "ee6cf8bdd667e0d9fc923775edc84222c70e4fd476bcbd1077d2d0c0d763fce6",
-   "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
+   "fills_sha256": "9f7d2ae2bfd3a277c0ee0c9993ac2bf587e07841d7673ddd8db98ccec13a8309",
+   "plutus_simulator_commit": "8d46c56040451b9811e030b0c93a80a793aea8d6",
    "sessions": 40,
    "arm": "F-con"
   }
  },
- "plutus_simulator_head": "373f9a764215c5008248ead5a3502b18fec55e0c"
+ "plutus_simulator_head": "8d46c56040451b9811e030b0c93a80a793aea8d6"
 }

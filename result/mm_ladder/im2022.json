@@ -1513,10 +1513,10 @@
  "faithful_sources": {
   "F-opt": {
    "path": "result/mm_faithful_a/im2022_optimistic.json",
-   "sha256": "e3964f2919c8d32c2b6eab4595c4a17bb8d2d15344ff441137bbf5780c283db3",
-   "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
+   "sha256": "aadd415bc248d0992be7ed4c66897221ccd3aeb0b9e8e77a4536128c3aac99f3",
+   "plutus_simulator_commit": "8d46c56040451b9811e030b0c93a80a793aea8d6",
    "plutus_simulator_src_dirty": false,
-   "plutus_simulator_commit_at_end": "373f9a764215c5008248ead5a3502b18fec55e0c",
+   "plutus_simulator_commit_at_end": "8d46c56040451b9811e030b0c93a80a793aea8d6",
    "vm_settlements_whole_run": {
     "count": 38,
     "net_dong": -41464395.876986265,
@@ -1543,10 +1543,10 @@
   },
   "F-con": {
    "path": "result/mm_faithful_a/im2022_conservative.json",
-   "sha256": "a6ebe71f60adc2c3df8723b8d68efc501675ef7342e36ad2c322f0a4a3ac6154",
-   "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
+   "sha256": "95a1d553ad8478699d8399786213e9c370b7a8bc10bdf9d04809031b78826a04",
+   "plutus_simulator_commit": "8d46c56040451b9811e030b0c93a80a793aea8d6",
    "plutus_simulator_src_dirty": false,
-   "plutus_simulator_commit_at_end": "373f9a764215c5008248ead5a3502b18fec55e0c",
+   "plutus_simulator_commit_at_end": "8d46c56040451b9811e030b0c93a80a793aea8d6",
    "vm_settlements_whole_run": {
     "count": 40,
     "net_dong": -71216591.63059163,
@@ -1578,7 +1578,7 @@
   "n0_matches_mm_anchor_naive": true,
   "mm_anchor_faithful_conservative_hpr_flat_each_session": 0.02189912999999999,
   "mm_anchor_faithful_optimistic_hpr_flat_each_session": 0.02211576599999998,
-  "mm_anchor_plutus_simulator_commit": "fc94743640c9ce3706e3cd019217d1898d67b26f"
+  "mm_anchor_plutus_simulator_commit": "31e3405bd7efc47cdc9be2a1ca4640ff7c3a1e93"
  },
- "plutus_simulator_head_at_ladder_run": "373f9a764215c5008248ead5a3502b18fec55e0c"
+ "plutus_simulator_head_at_ladder_run": "8d46c56040451b9811e030b0c93a80a793aea8d6"
 }

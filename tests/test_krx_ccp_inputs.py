@@ -1,4 +1,4 @@
-"""krx2025 carries what the engine's post-KRX CCP layer reads (plutus-simulator 391e2e2)."""
+"""krx2025 carries what the engine's post-KRX CCP layer reads (plutus-simulator 4867d46)."""
 import csv
 import json
 from datetime import date

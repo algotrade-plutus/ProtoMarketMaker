@@ -7,7 +7,7 @@
 | F-opt | 40 | 575 | 50% | +1.20 | +0.06 | -0.68 | -1.67 | -60.1 | +45.3 | +0.0 | -105.4 |
 | F-con | 40 | 358 | 68% | +0.70 | -0.08 | -0.31 | -0.41 | -214.8 | -194.1 | +0.0 | -20.7 |
 
-#### view `pre_cutover`: 20 pre-cutover sessions (like-for-like with the results committed before plutus-simulator 391e2e2)
+#### view `pre_cutover`: 20 pre-cutover sessions (like-for-like with the results committed before plutus-simulator 4867d46)
 
 | arm | sessions | contracts | taker share | taker price impr. (median, pts) | markout 1 min | 5 min | close | P&L (M đ) | carry (M đ) | mark switch (M đ) | trading (M đ) |
 |---|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|

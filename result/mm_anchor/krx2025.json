@@ -47,7 +47,7 @@
   "2025-05-14"
  ],
  "step": "3.1",
- "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
+ "plutus_simulator_commit": "8d46c56040451b9811e030b0c93a80a793aea8d6",
  "plutus_simulator_src_dirty": false,
  "naive": {
   "hpr": 0.29567999999999994,

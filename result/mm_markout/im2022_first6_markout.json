@@ -522,11 +522,11 @@
   },
   "F-opt": {
    "fills_file": "im2022_fills_F-opt.json",
-   "fills_sha256": "771899659987ad1a08ed95241c91ef3e32e2d351a39ac61be37e24e870802593",
-   "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
+   "fills_sha256": "87a5a5006f91d14f56cc9b386bba05fee305d4cdb2ca6bcc6aee83a10d000b71",
+   "plutus_simulator_commit": "8d46c56040451b9811e030b0c93a80a793aea8d6",
    "sessions": 40,
    "arm": "F-opt"
   }
  },
- "plutus_simulator_head": "373f9a764215c5008248ead5a3502b18fec55e0c"
+ "plutus_simulator_head": "8d46c56040451b9811e030b0c93a80a793aea8d6"
 }

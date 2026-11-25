@@ -25,9 +25,9 @@ NAIVE = ("N0", "N1", "N2", "N3")
 # Engine fixes on plutus-simulator rivf26 that may change faithful numbers
 # (coordinator, 2026-11-25). The report checks which results include them.
 ENGINE_FIXES = {
-    "67f18fa": "band-edge orders on book sessions decided from the book, not the daily bar",
-    "dcaecb9": "soft policy: market-order fills graded like a limit at the band edge (evidence label)",
-    "391e2e2": "post-KRX margin modelled in QD 26's two layers (broker IM intraday, VSDC CCP after the close)",
+    "ba0d9f4": "band-edge orders on book sessions decided from the book, not the daily bar",
+    "6e6c104": "soft policy: market-order fills graded like a limit at the band edge (evidence label)",
+    "4867d46": "post-KRX margin modelled in QD 26's two layers (broker IM intraday, VSDC CCP after the close)",
 }
 RUNG_ADDS = {
     "N0": "the naive engine as-is: a quote fills when the last print crosses it and books at that print; "
@@ -365,12 +365,12 @@ def build(result: Path) -> str:
               "100,000 đ per index point), cross-checked against the engine deposit.", "",
           "Windows: `im2022`, 20 sessions either side of the 2022-12-15 VSD IM step (13% → 17%; book from the "
           "local archive), and `krx2025`, 20 sessions either side of the 2025-05-05 KRX cutover (book from the "
-          "Algotrade DB). Every rung runs over all 40 sessions of its window: since plutus-simulator `391e2e2` "
+          "Algotrade DB). Every rung runs over all 40 sessions of its window: since plutus-simulator `4867d46` "
           "the post-KRX margin is modelled in QD 26's two layers (broker IM on VSDC's published 0.17 "
           "intraday, no VM; the VSDC CCP requirement after each close on the VN30 index close, which the "
           "krx2025 slice carries), so the post-cutover sessions are no longer set apart as unmodelled. "
           "krx2025 also shows two views cut from the same runs: `pre_cutover`, the 20 sessions before "
-          "2025-05-05 (like for like with the results committed before `391e2e2`, which compared those "
+          "2025-05-05 (like for like with the results committed before `4867d46`, which compared those "
           "only), and `post_cutover`, the 20 from it. Slices and sha256: `data/<window>-MANIFEST.md`.", ""]
     o += ["## 3. Results: the ladder", ""]
     o += ["![MM ladder](paper_kit/mm_ladder.png)", "",
@@ -465,9 +465,9 @@ def build(result: Path) -> str:
         anchor_note = []
         for w, d in A.items():
             refused = d.get("faithful", {}).get("refused_sessions")
-            if refused and includes_fix(d.get("plutus_simulator_commit"), "391e2e2") != "yes":
+            if refused and includes_fix(d.get("plutus_simulator_commit"), "4867d46") != "yes":
                 anchor_note.append(
-                    f"The committed `{w}` anchor predates plutus-simulator `391e2e2`: its regime guard "
+                    f"The committed `{w}` anchor predates plutus-simulator `4867d46`: its regime guard "
                     f"refused {refused} post-cutover sessions as unsourced. The guard now accepts the sourced "
                     "`krx_two_layer` model and would quote them; the anchor has not been rerun.")
         o += ["## 8. Context: the earlier anchor (flat each session, regime guard on)", "",

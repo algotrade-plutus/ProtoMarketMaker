@@ -9,5 +9,5 @@
 
 - im2022 (all 40 sessions): faithful band -11.47% .. -2.52%; naive rungs outside it: N0, N1, N2, N3. Source `result/mm_ladder/im2022.json` (sha256 `677d7370abb8b70a…`).
 - krx2025 (all 40 sessions): faithful band -42.96% .. -12.02%; naive rungs outside it: N0, N3. Source `result/mm_ladder/krx2025.json` (sha256 `02dccecd959cca5c…`).
-- krx2025 pre-cutover (20 pre-cutover sessions (like-for-like with the results committed before plutus-simulator 391e2e2, which compared these sessions only)): faithful band -25.55% .. -7.58%; naive rungs outside it: N0. Source `result/mm_ladder/krx2025.json` (sha256 `02dccecd959cca5c…`).
+- krx2025 pre-cutover (20 pre-cutover sessions (like-for-like with the results committed before plutus-simulator 4867d46, which compared these sessions only)): faithful band -25.55% .. -7.58%; naive rungs outside it: N0. Source `result/mm_ladder/krx2025.json` (sha256 `02dccecd959cca5c…`).
 - krx2025 post-cutover (20 post-cutover sessions from 2025-05-05 (QD 26 two-layer margin; returns from the 2025-04-29 close)): faithful band -23.39% .. -4.81%; naive rungs outside it: N0, N1, N2, N3. Source `result/mm_ladder/krx2025.json` (sha256 `02dccecd959cca5c…`).

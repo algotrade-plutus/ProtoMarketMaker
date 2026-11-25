@@ -4,9 +4,9 @@
  "environment": "Plutus faithful-A",
  "queue": "optimistic",
  "sessions": 40,
- "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
+ "plutus_simulator_commit": "8d46c56040451b9811e030b0c93a80a793aea8d6",
  "plutus_simulator_src_dirty": false,
- "plutus_simulator_commit_at_end": "373f9a764215c5008248ead5a3502b18fec55e0c",
+ "plutus_simulator_commit_at_end": "8d46c56040451b9811e030b0c93a80a793aea8d6",
  "units": "prices in index points; equity in real \u0111\u1ed3ng",
  "fills": [
   {
@@ -3218,9 +3218,9 @@
   "step": "3.1",
   "sessions": 40,
   "rows": 214390,
-  "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
+  "plutus_simulator_commit": "8d46c56040451b9811e030b0c93a80a793aea8d6",
   "plutus_simulator_src_dirty": false,
-  "plutus_simulator_commit_at_end": "373f9a764215c5008248ead5a3502b18fec55e0c",
+  "plutus_simulator_commit_at_end": "8d46c56040451b9811e030b0c93a80a793aea8d6",
   "equity_dong": [
    500000000.0,
    499548518.0,

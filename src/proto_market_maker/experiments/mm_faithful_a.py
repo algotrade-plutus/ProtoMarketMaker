@@ -36,7 +36,7 @@ runs A exactly and lets only the environment differ. Compared with the
 
 No regime guard: A has none. From the 2025-05-05 KRX cutover the engine's
 dated ``margin_model()`` is ``'krx_two_layer'`` (QD 26, plutus-simulator
-``391e2e2``): intraday the broker layer charges IM on VSDC's published ratio
+``4867d46``): intraday the broker layer charges IM on VSDC's published ratio
 (0.17) with no VM term; after each close the VSDC CCP layer computes the binding
 requirement on the **underlying's** (VN30 index) close, which the krx2025 slice
 carries. A night it cannot compute (a missing input, or a calendar spread held

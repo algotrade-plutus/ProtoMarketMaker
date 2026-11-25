@@ -38,7 +38,7 @@ environment. This module asks *why* the environments disagree, fill by fill:
 Session set: the ladder's (``mm_ladder``): all 40 sessions of the window;
 ``--max-sessions K`` keeps the first K. krx2025 also reports ``views``:
 ``pre_cutover`` (the 20 sessions before 2025-05-05, like-for-like with the
-results committed before plutus-simulator ``391e2e2``, which covered those
+results committed before plutus-simulator ``4867d46``, which covered those
 only) and ``post_cutover`` (the 20 from it), cut from the whole-window run:
 markouts over the span's fills, P&L / carry / mark switch / trading summed
 over the span's sessions (so the first post-cutover session's carry is the
@@ -464,7 +464,7 @@ def run(window: str, files: Dict[str, Path], arms=ARMS, max_sessions=None,
         views = {}
         for name, span, label in (
                 ("pre_cutover", pre, f"{len(pre)} pre-cutover sessions (like-for-like with the results "
-                                     "committed before plutus-simulator 391e2e2)"),
+                                     "committed before plutus-simulator 4867d46)"),
                 ("post_cutover", post, f"{len(post)} post-cutover sessions from 2025-05-05")):
             views[name] = {"session_set": label, "sessions": [d.isoformat() for d in span],
                            "arms": {arm: view_of(a, span, path, closes) for arm, a in out_arms.items()}}

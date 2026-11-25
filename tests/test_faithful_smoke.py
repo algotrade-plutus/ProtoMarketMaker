@@ -23,7 +23,7 @@ def test_faithful_one_session_runs_and_closes_out(queue):
 
 
 def test_regime_guard_accepts_both_sourced_margin_models():
-    """plutus-simulator 391e2e2: the dated margin model is 'pre_margin' before the
+    """plutus-simulator 4867d46: the dated margin model is 'pre_margin' before the
     2025-05-05 KRX cutover and 'krx_two_layer' (QD 26) from it; the guard accepts
     exactly these known values."""
     from datetime import date

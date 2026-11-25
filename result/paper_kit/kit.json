@@ -3,7 +3,7 @@
  "ladder": {
   "im2022": {
    "source": "result/mm_ladder/im2022.json",
-   "sha256": "677d7370abb8b70ab233945c1002ec003135c6f84f6707e0eee0bf90ba251de2",
+   "sha256": "3cfa639a3eb512b09fe3392d9b2bf8c9b17eccaae187f06a7c5f41340926941c",
    "session_set": "all 40 sessions",
    "sessions": 40,
    "rungs": {
@@ -57,7 +57,7 @@
   },
   "krx2025": {
    "source": "result/mm_ladder/krx2025.json",
-   "sha256": "02dccecd959cca5ccce80ae99bbf9b40d4c2e607f2a80111fe58b788a7f08c76",
+   "sha256": "0d6ce0fb9df888b41a5dc7a2845cf7189c19f5d0aa68807465fe45322560be22",
    "session_set": "all 40 sessions",
    "sessions": 40,
    "rungs": {
@@ -109,8 +109,8 @@
   },
   "krx2025 pre-cutover": {
    "source": "result/mm_ladder/krx2025.json",
-   "sha256": "02dccecd959cca5ccce80ae99bbf9b40d4c2e607f2a80111fe58b788a7f08c76",
-   "session_set": "20 pre-cutover sessions (like-for-like with the results committed before plutus-simulator 391e2e2, which compared these sessions only)",
+   "sha256": "0d6ce0fb9df888b41a5dc7a2845cf7189c19f5d0aa68807465fe45322560be22",
+   "session_set": "20 pre-cutover sessions (like-for-like with the results committed before plutus-simulator 4867d46, which compared these sessions only)",
    "sessions": 20,
    "rungs": {
     "N0": {
@@ -160,7 +160,7 @@
   },
   "krx2025 post-cutover": {
    "source": "result/mm_ladder/krx2025.json",
-   "sha256": "02dccecd959cca5ccce80ae99bbf9b40d4c2e607f2a80111fe58b788a7f08c76",
+   "sha256": "0d6ce0fb9df888b41a5dc7a2845cf7189c19f5d0aa68807465fe45322560be22",
    "session_set": "20 post-cutover sessions from 2025-05-05 (QD 26 two-layer margin; returns from the 2025-04-29 close)",
    "sessions": 20,
    "rungs": {
@@ -216,7 +216,7 @@
  "markouts": [
   {
    "source": "result/mm_markout/im2022_markout.json",
-   "sha256": "680e4430f909d75b6460419d99baca8519aa1fd6d097e7332e0608e2e997e685",
+   "sha256": "2da7f245e3ddb32f0ecaa06622a77a6133c7c05a94064ed2c77042416ac01baf",
    "window": "im2022",
    "session_set": "all 40 sessions",
    "price_path": "tape",
@@ -285,7 +285,7 @@
   },
   {
    "source": "result/mm_markout/krx2025_markout.json",
-   "sha256": "b2d169cf17d6c98a607d4aeacd0492e973d813c5551a227c41febdcf527fb7a6",
+   "sha256": "32f6ad097cf95dea2bfe4992a02349037f2907816e2457899a39df9e1483fd29",
    "window": "krx2025",
    "session_set": "all 40 sessions",
    "price_path": "tape",

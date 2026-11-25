@@ -216,15 +216,15 @@ cannot be sourced. MM is an execution-fidelity demonstrator: Tier-1 counters are
   resolution, `BookSessionSource` = daily bands + L2 depth 1–3 + sized tape). Real đồng: a 500,000,000đ derivatives deposit and the
   real VN30F multiplier of 100,000đ/point. The dated VSD initial margin comes from `plutus.market.margin.vsd_initial_margin` (13%
   before 2022-12-15, 17% from it). Fills come from `book_walk` under the `conservative` queue (headline) and the `optimistic` queue
-  (bound). A third arm, `conservative_untaped`, replays the engine as it was before plutus-simulator `e528633`, when conservative
+  (bound). A third arm, `conservative_untaped`, replays the engine as it was before plutus-simulator `254aa1d`, when conservative
   taker sweeps had no prints and were always INDETERMINATE.
 - Cadence: requote on each print when 15 s have passed since the last timed requote, or right after a fill. Requotes are
   cancel-and-replace, one contract per side. Quoting runs 09:00–14:25. Each session is then closed out with a marketable LIMIT
   priced 1 point through the touch until 14:29:59. Anything left open is marked at that day's close by the harness and counted
   (`closeout_marked_contracts`). The next session opens flat with the previous session's equity as its deposit.
 - Regime guard (S6): before each session the strategy asks the dated rulebook for `margin_model()` and quotes only under a model it
-  knows (`pre_margin`, and `krx_two_layer` from the 2025-05-05 KRX cutover). Until plutus-simulator `391e2e2` the post-KRX model was
-  unsourced and the guard refused all 20 post-cutover sessions; since `391e2e2` the engine models QD 26's two layers (broker IM on
+  knows (`pre_margin`, and `krx_two_layer` from the 2025-05-05 KRX cutover). Until plutus-simulator `4867d46` the post-KRX model was
+  unsourced and the guard refused all 20 post-cutover sessions; since `4867d46` the engine models QD 26's two layers (broker IM on
   VSDC's published 0.17 intraday with no VM; VSDC's CCP requirement after each close on the VN30 index close, which the krx2025 slice
   now carries), so the guard refuses none. An unresolved or unknown model is still refused. A diagnostic with the guard off is kept
   in `post_cutover_unguarded_diagnostic`.
@@ -240,7 +240,7 @@ of one dated rule change, the floor of the handoff's 20–30.
 
 Details, sizes and sha256 are in `data/<window>-MANIFEST.md`.
 
-**Results** (`result/mm_anchor/<window>.json`, plutus-simulator `373f9a7`):
+**Results** (`result/mm_anchor/<window>.json`, plutus-simulator `8d46c56`):
 
 | window | naive fills | faithful fills: conservative / optimistic / untaped | f/n (cons.) | HPR naive → faithful (cons.) |
 |---|--:|--:|--:|--:|
@@ -248,7 +248,7 @@ Details, sizes and sha256 are in `data/<window>-MANIFEST.md`.
 | krx2025, the 20 pre-cutover sessions (like-for-like) | 228 | 116 / 160 / 21 | 50.9% | −5.22% → −6.03% |
 | im2022 | 129 | 70 / 98 / 6 | 54.3% | −12.93% → +2.19% |
 
-The queue spread (conservative vs optimistic) is 17.6% in krx2025 over all 40 sessions (27.5% before `391e2e2`, when only the
+The queue spread (conservative vs optimistic) is 17.6% in krx2025 over all 40 sessions (27.5% before `4867d46`, when only the
 pre-cutover sessions quoted) and 28.6% in im2022. The conservative arm's maker quotes rest about 3.1 points (31 ticks) away, beyond
 the three observed levels, so the queue ahead of them cannot be read. That leaves 99.8% (krx2025 pre-cutover), 99.2% (krx2025
 post-cutover) and 99.9% (im2022) of accepted orders INDETERMINATE at least once (`book_size`).
@@ -256,7 +256,7 @@ post-cutover) and 99.9% (im2022) of accepted orders INDETERMINATE at least once 
 Dated-IM capacity on the same 500,000,000đ deposit at 1,059 points is 36 contracts at 13% and 27 at 17%. In the run itself
 capacity was 36 on 2022-12-14 and 28 on 2022-12-15.
 
-Post-cutover, the strategy now quotes all 20 sessions (it refused 20 of 20 before plutus-simulator `391e2e2` sourced the post-KRX
+Post-cutover, the strategy now quotes all 20 sessions (it refused 20 of 20 before plutus-simulator `4867d46` sourced the post-KRX
 margin model). The pre-cutover and im2022 numbers are unchanged by the rerun.
 
 **Regenerate.**
@@ -265,7 +265,7 @@ margin model). The pre-cutover and im2022 numbers are unchanged by the rerun.
 # extraction (needs the plutus-simulator checkout + its venv + DB access; writes rivf26/data and data/)
 .venv/bin/python -m proto_market_maker.experiments.extract_slices krx2025
 .venv/bin/python -m proto_market_maker.experiments.extract_slices im2022
-# runs (shipped data only; a few minutes each at plutus-simulator 373f9a7; --log for per-session progress)
+# runs (shipped data only; a few minutes each at plutus-simulator 8d46c56; --log for per-session progress)
 .venv/bin/python -m proto_market_maker.experiments.mm_anchor krx2025 --log anchor_krx2025.log
 .venv/bin/python -m proto_market_maker.experiments.mm_anchor im2022 --log anchor_im2022.log
 .venv/bin/python -m pytest -q
@@ -300,13 +300,13 @@ changes one environment rule.
     after a roll.
   - See `data/<window>-MANIFEST.md`.
 - Every rung runs all 40 sessions of each window. krx2025 also has two views cut from the same runs: `pre_cutover`
-  (the 20 sessions before 2025-05-05; like for like with the results committed before plutus-simulator `391e2e2`, which
+  (the 20 sessions before 2025-05-05; like for like with the results committed before plutus-simulator `4867d46`, which
   compared those only) and `post_cutover` (the 20 from it, returns from the 2025-04-29 close). The CCP layer's nights,
   indeterminate nights (with the reason) and calendar-spread UNKNOWNs are counted per arm.
 
 The full tables (rungs, cross-check checkpoint, Tier-1 counters, CCP counters, views) are generated in
 `result/mm_ladder/<window>.md` and `result/REPORT.md`; regenerate rather than copy. Return (HPR) and fills, plutus-simulator
-`373f9a7`:
+`8d46c56`:
 
 | rung | im2022 (40) | krx2025 (40) | krx2025 pre-cutover (20) | krx2025 post-cutover (20) |
 |---|--:|--:|--:|--:|
@@ -324,15 +324,15 @@ Reading (report, don't tune):
 - **Own-price fills is the naive rung that matters** (−2.97 pp im2022, −8.88 pp krx2025 pre-cutover, −71.55 pp krx2025
   whole window). The dated IM changes nothing in N, because N's capacity never binds.
 - **The queue decides the faithful result:** the band is 8.9 pp wide in im2022 and 30.9 pp over the whole krx2025 window.
-- **Post-KRX margin (plutus-simulator `391e2e2`):** the CCP layer decided every post-cutover night with a position (F-opt
+- **Post-KRX margin (plutus-simulator `4867d46`):** the CCP layer decided every post-cutover night with a position (F-opt
   20/20, F-con 19/19; 0 indeterminate, 0 calendar-spread UNKNOWN). F-con was notified of a CCP shortfall at the 2025-05-20
   close, suspended at 09:30 on 05-21 and restored at that close (reported by the engine, not enforced).
-- **What the rerun moved:** nothing before the cutover and nothing in im2022 (`67f18fa` and `dcaecb9` change no MM
+- **What the rerun moved:** nothing before the cutover and nothing in im2022 (`ba0d9f4` and `6e6c104` change no MM
   number). Post-cutover F-con moved (fills 259 → 205, post HPR −17.30% → −23.39%, whole window −38.43% → −42.96%): from
   2025-05-14 the broker layer's IM-only intraday check (no VM) admits and closes positions on different sessions than the
   old pre-KRX IM+VM shape. F-opt is unchanged.
 
-Regenerate (each faithful-A run takes about 17–34 min at plutus-simulator `373f9a7`):
+Regenerate (each faithful-A run takes about 17–34 min at plutus-simulator `8d46c56`):
 
 ```bash
 .venv/bin/python -m proto_market_maker.experiments.extract_slices im2022   # needs DB + archive
