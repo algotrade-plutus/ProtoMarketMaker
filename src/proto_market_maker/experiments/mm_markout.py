@@ -35,8 +35,14 @@ environment. This module asks *why* the environments disagree, fill by fill:
   expiring F1's close on expiry day, then to the new F1: the basis in those
   revaluations is booked apart as ``mark_switch`` (see ``decompose``).
 
-Session set: the ladder's (``mm_ladder``): all 40 for im2022, the 20
-pre-cutover sessions for krx2025; ``--max-sessions K`` keeps the first K.
+Session set: the ladder's (``mm_ladder``): all 40 sessions of the window;
+``--max-sessions K`` keeps the first K. krx2025 also reports ``views``:
+``pre_cutover`` (the 20 sessions before 2025-05-05, like-for-like with the
+results committed before plutus-simulator ``391e2e2``, which covered those
+only) and ``post_cutover`` (the 20 from it), cut from the whole-window run:
+markouts over the span's fills, P&L / carry / mark switch / trading summed
+over the span's sessions (so the first post-cutover session's carry is the
+overnight position from the last pre-cutover close).
 
 Inputs per arm (``--fills ARM=PATH``; default: ``result/mm_markout/<window>_fills_<ARM>.json``
 when it exists, written by ``mm_fills_trace``). A fills file is either that
@@ -316,7 +322,7 @@ def rows_path(data) -> PricePath:
 def session_set(window: str, max_sessions: Optional[int] = None):
     from proto_market_maker.experiments import mm_anchor as A
     fcc, all_days = A.load_contract_map(window)
-    days = [d for d in all_days if d < A.KRX_CUTOVER] if window == "krx2025" else list(all_days)
+    days = list(all_days)
     if max_sessions:
         days = days[:max_sessions]
     return fcc, all_days, days
@@ -416,6 +422,19 @@ def analyse_arm(arm, fills, per_session, days, path, closes, cand) -> dict:
                 "per_session": dec["per_session"]})
     if span != list(days):
         out["sessions_missing"] = [d.isoformat() for d in days if d not in recs]
+    out["_fills"] = fills              # contract-assigned fills, for the views (not written)
+    return out
+
+
+def view_of(a: dict, span: Sequence[date], path: PricePath,
+            closes: Dict[Tuple[date, str], float]) -> dict:
+    """One arm over a sub-window, cut from its whole-window analysis."""
+    keep = set(span)
+    out = summarise([f for f in a["_fills"] if f.ts.date() in keep], path, closes)
+    rows = [r for r in a["per_session"] if date.fromisoformat(r["date"]) in keep]
+    out.update({"sessions": len(rows),
+                **{k: sum(r[k] for r in rows)
+                   for k in ("pnl_dong", "carry_dong", "mark_switch_dong", "trading_dong")}})
     return out
 
 
@@ -438,13 +457,26 @@ def run(window: str, files: Dict[str, Path], arms=ARMS, max_sessions=None,
         a = out_arms[arm]
         log(f"{arm}: contracts={a['contracts']} taker={a['taker_share']} "
             f"5m={a['markout_mean_points']['5m']} trading={a['trading_dong'] / 1e6:.1f}M")
+    views = None
+    pre = [d for d in days if d < A.KRX_CUTOVER]
+    post = [d for d in days if d >= A.KRX_CUTOVER]
+    if window == "krx2025" and pre and post:
+        views = {}
+        for name, span, label in (
+                ("pre_cutover", pre, f"{len(pre)} pre-cutover sessions (like-for-like with the results "
+                                     "committed before plutus-simulator 391e2e2)"),
+                ("post_cutover", post, f"{len(post)} post-cutover sessions from 2025-05-05")):
+            views[name] = {"session_set": label, "sessions": [d.isoformat() for d in span],
+                           "arms": {arm: view_of(a, span, path, closes) for arm, a in out_arms.items()}}
+    for a in out_arms.values():
+        a.pop("_fills", None)
     return {"window": window,
-            "session_set": ("20 pre-cutover sessions" if window == "krx2025" else "all 40 sessions")
+            "session_set": f"all {len(days)} sessions"
                            + (f", first {max_sessions}" if max_sessions else ""),
             "sessions": [d.isoformat() for d in days],
             "price_path": path_kind, "horizons": list(HORIZONS),
             "units": "markouts in index points per contract (+ = good for A); P&L in real đồng",
-            "arms": out_arms, "inputs": prov,
+            "arms": out_arms, "views": views, "inputs": prov,
             "plutus_simulator_head": A._engine_commit()}
 
 
@@ -452,12 +484,12 @@ def _f(x, fmt="{:+.2f}"):
     return "" if x is None else fmt.format(x)
 
 
-def markdown(out: dict) -> str:
-    lines = [f"### {out['window']}: markouts ({out['session_set']}; price path: {out['price_path']})", "",
+def _arms_table(title: str, arms: dict) -> List[str]:
+    lines = [title, "",
              "| arm | sessions | contracts | taker share | taker price impr. (median, pts) | "
              "markout 1 min | 5 min | close | P&L (M đ) | carry (M đ) | mark switch (M đ) | trading (M đ) |",
              "|---|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|"]
-    for arm, a in out["arms"].items():
+    for arm, a in arms.items():
         m = a["markout_mean_points"]
         ts = a["taker_share"]
         lines.append(
@@ -465,6 +497,14 @@ def markdown(out: dict) -> str:
             f"{_f(a['price_improvement_points']['median'])} | {_f(m['1m'])} | {_f(m['5m'])} | "
             f"{_f(m['close'])} | {a['pnl_dong'] / 1e6:+.1f} | {a['carry_dong'] / 1e6:+.1f} | "
             f"{a.get('mark_switch_dong', 0.0) / 1e6:+.1f} | {a['trading_dong'] / 1e6:+.1f} |")
+    return lines
+
+
+def markdown(out: dict) -> str:
+    lines = _arms_table(f"### {out['window']}: markouts ({out['session_set']}; price path: "
+                        f"{out['price_path']})", out["arms"])
+    for name, v in (out.get("views") or {}).items():
+        lines += [""] + _arms_table(f"#### view `{name}`: {v['session_set']}", v["arms"])
     notes = []
     for arm, a in out["arms"].items():
         if a["ticker_inferred"]:

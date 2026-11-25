@@ -47,7 +47,7 @@
   "2022-12-14"
  ],
  "step": "3.1",
- "plutus_simulator_commit": "fc94743640c9ce3706e3cd019217d1898d67b26f",
+ "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
  "plutus_simulator_src_dirty": false,
  "naive": {
   "hpr": -0.12932,
@@ -2792,5 +2792,5 @@
   "post_cutover_refused_sessions": 0
  },
  "fills_ratio_f_over_n": 0.5426356589147286,
- "wall_seconds": 2338.4
+ "wall_seconds": 98.2
 }

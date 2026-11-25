@@ -4,9 +4,9 @@
  "step": "3.1",
  "sessions": 40,
  "rows": 379002,
- "plutus_simulator_commit": "b52877e3b6bcefd50746761bd518f0c4b93ac40d",
+ "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
  "plutus_simulator_src_dirty": false,
- "plutus_simulator_commit_at_end": "af55e29e855d7f74b95c0b723a3f78b8b0b3405c",
+ "plutus_simulator_commit_at_end": "373f9a764215c5008248ead5a3502b18fec55e0c",
  "equity_dong": [
   500000000.0,
   500586317.0,
@@ -62,7 +62,7 @@
   "closing_fills": 283,
   "maker_fills": 286,
   "quote_expired": 298,
-  "margin_warning": 18,
+  "margin_warning": 16,
   "roll_triggers": 2,
   "roll_contracts": 20,
   "roll_submitted": 11,
@@ -72,6 +72,7 @@
   "margin_call_cleared": 8,
   "roll_unfilled_contracts": 0,
   "expiry_settled_contracts": 2,
+  "ccp_nights": 20,
   "roll_rejected": 2
  },
  "refusals": {
@@ -100,15 +101,7 @@
    "kind": "margin_call_cleared"
   },
   {
-   "ts": "2025-05-14T14:30:52.864477",
-   "kind": "margin_warning"
-  },
-  {
-   "ts": "2025-05-20T14:30:31.182716",
-   "kind": "margin_warning"
-  },
-  {
-   "ts": "2025-05-21T09:01:32.452639",
+   "ts": "2025-05-21T14:30:18.517768",
    "kind": "margin_warning"
   },
   {
@@ -224,16 +217,17 @@
    "kind": "margin_warning"
   }
  ],
+ "ccp_events": [],
+ "ccp_state_end": "compliant",
  "engine_ignorance": {
   "evaluations": 1163725,
-  "indeterminate": 67,
+  "indeterminate": 47,
   "silent_ignorance": {
    "fill.decided_without.high": 542,
    "fill.decided_without.low": 542,
    "fill.decided_without.open": 542,
    "fill.decided_without.volume": 542,
-   "rule.margin_model.unsourced": 269752,
-   "margin.overnight.uncomputed.margin_model_overnight.unstated": 20
+   "margin.overnight.assumed.minimum_margin_factor_derived": 20
   }
  },
  "final_engine_deposit_dong": 439905000.0,
@@ -259,7 +253,9 @@
    "charges_dong": 33683.0,
    "end_equity_dong": 500586317.0,
    "engine_deposit_dong": 500586317.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-02",
@@ -277,7 +273,9 @@
    "charges_dong": 0.0,
    "end_equity_dong": 500586317.0,
    "engine_deposit_dong": 500586317.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-03",
@@ -302,7 +300,19 @@
    "charges_dong": 82795.0,
    "end_equity_dong": 486973522.0,
    "engine_deposit_dong": 486973522.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-03",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 65055600.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-04",
@@ -327,7 +337,19 @@
    "charges_dong": 489305.0,
    "end_equity_dong": 462934217.0,
    "engine_deposit_dong": 462934217.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-04",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 86162800.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-08",
@@ -351,7 +373,19 @@
    "charges_dong": 326709.0,
    "end_equity_dong": 469217508.0,
    "engine_deposit_dong": 469217508.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-08",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 60103500.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-09",
@@ -375,7 +409,19 @@
    "charges_dong": 1534784.0,
    "end_equity_dong": 439342724.0,
    "engine_deposit_dong": 439342724.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-09",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 160208000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-10",
@@ -397,7 +443,19 @@
    "charges_dong": 127437.0,
    "end_equity_dong": 504655287.0,
    "engine_deposit_dong": 504655287.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-10",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 128560800.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-11",
@@ -422,7 +480,19 @@
    "charges_dong": 470057.0,
    "end_equity_dong": 521665230.0,
    "engine_deposit_dong": 521665230.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-11",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 244409000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-14",
@@ -439,7 +509,19 @@
    "charges_dong": 0.0,
    "end_equity_dong": 532665230.0,
    "engine_deposit_dong": 532665230.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-14",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 246279000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-15",
@@ -458,7 +540,19 @@
    "charges_dong": 0.0,
    "end_equity_dong": 522435230.0,
    "engine_deposit_dong": 522435230.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-15",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 244539900.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-16",
@@ -489,7 +583,19 @@
    "charges_dong": 359099.0,
    "end_equity_dong": 500456131.0,
    "engine_deposit_dong": 500456131.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-16",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 240930800.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-17",
@@ -514,7 +620,19 @@
    "charges_dong": 54483.0,
    "end_equity_dong": 515951648.0,
    "engine_deposit_dong": 515951648.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-17",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 243735800.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-18",
@@ -531,7 +649,19 @@
    "charges_dong": 0.0,
    "end_equity_dong": 501211648.0,
    "engine_deposit_dong": 501211648.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-18",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 241230000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-21",
@@ -550,7 +680,19 @@
    "charges_dong": 0.0,
    "end_equity_dong": 502311648.0,
    "engine_deposit_dong": 502311648.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-21",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 241417000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-22",
@@ -573,7 +715,19 @@
    "charges_dong": 555569.0,
    "end_equity_dong": 462746079.0,
    "engine_deposit_dong": 462746079.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-22",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 43928000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-23",
@@ -597,7 +751,19 @@
    "charges_dong": 32810.0,
    "end_equity_dong": 461243269.0,
    "engine_deposit_dong": 461243269.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-23",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 44234000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-24",
@@ -616,7 +782,19 @@
    "charges_dong": 0.0,
    "end_equity_dong": 460043269.0,
    "engine_deposit_dong": 460043269.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-24",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 44438000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-25",
@@ -639,7 +817,19 @@
    "charges_dong": 32824.0,
    "end_equity_dong": 459280445.0,
    "engine_deposit_dong": 459280445.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-25",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 89209200.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-28",
@@ -662,7 +852,19 @@
    "charges_dong": 16402.0,
    "end_equity_dong": 459224043.0,
    "engine_deposit_dong": 459224043.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-28",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 111520000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-04-29",
@@ -681,7 +883,19 @@
    "charges_dong": 0.0,
    "end_equity_dong": 462124043.0,
    "engine_deposit_dong": 462124043.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-04-29",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 111027000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-05",
@@ -690,6 +904,7 @@
    "quote_submitted": 1548,
    "cancel_refused": 6,
    "quote_expired": 8,
+   "ccp_nights": 1,
    "end_net": -5,
    "positions": {
     "VN30F2505": -5
@@ -698,7 +913,21 @@
    "charges_dong": 0.0,
    "end_equity_dong": 457024043.0,
    "engine_deposit_dong": 457024043.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-05",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 112234850.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-06",
@@ -707,6 +936,7 @@
    "quote_submitted": 1668,
    "cancel_refused": 6,
    "quote_expired": 8,
+   "ccp_nights": 1,
    "end_net": -5,
    "positions": {
     "VN30F2505": -5
@@ -715,7 +945,21 @@
    "charges_dong": 0.0,
    "end_equity_dong": 456474043.0,
    "engine_deposit_dong": 456474043.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-06",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 112171100.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-07",
@@ -724,6 +968,7 @@
    "quote_submitted": 1660,
    "cancel_refused": 4,
    "quote_expired": 6,
+   "ccp_nights": 1,
    "end_net": -5,
    "positions": {
     "VN30F2505": -5
@@ -732,7 +977,21 @@
    "charges_dong": 0.0,
    "end_equity_dong": 452724043.0,
    "engine_deposit_dong": 452724043.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-07",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 112608000.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-08",
@@ -744,6 +1003,7 @@
    "maker_fills": 1,
    "cancel_refused": 4,
    "quote_expired": 6,
+   "ccp_nights": 1,
    "end_net": -6,
    "positions": {
     "VN30F2505": -6
@@ -752,7 +1012,21 @@
    "charges_dong": 16723.0,
    "end_equity_dong": 437187320.0,
    "engine_deposit_dong": 437187320.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-08",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 137812200.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-09",
@@ -761,6 +1035,7 @@
    "quote_submitted": 1728,
    "cancel_refused": 6,
    "quote_expired": 8,
+   "ccp_nights": 1,
    "end_net": -6,
    "positions": {
     "VN30F2505": -6
@@ -769,7 +1044,21 @@
    "charges_dong": 0.0,
    "end_equity_dong": 439887320.0,
    "engine_deposit_dong": 439887320.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-09",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 137929500.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-12",
@@ -781,6 +1070,7 @@
    "maker_fills": 2,
    "cancel_refused": 6,
    "quote_expired": 8,
+   "ccp_nights": 1,
    "end_net": -8,
    "positions": {
     "VN30F2505": -8
@@ -789,7 +1079,21 @@
    "charges_dong": 33733.0,
    "end_equity_dong": 424283587.0,
    "engine_deposit_dong": 424283587.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-12",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 186597440.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-13",
@@ -802,6 +1106,7 @@
    "taker_fills": 3,
    "cancel_refused": 6,
    "quote_expired": 6,
+   "ccp_nights": 1,
    "end_net": -9,
    "positions": {
     "VN30F2505": -9
@@ -810,7 +1115,21 @@
    "charges_dong": 50876.0,
    "end_equity_dong": 420182711.0,
    "engine_deposit_dong": 420182711.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-13",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 211565340.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-14",
@@ -827,8 +1146,8 @@
    "roll_fills": 18,
    "taker_fills": 18,
    "cancel_refused": 8,
-   "margin_warning": 1,
    "quote_expired": 10,
+   "ccp_nights": 1,
    "roll_unfilled_contracts": 0,
    "end_net": -9,
    "positions": {
@@ -838,7 +1157,21 @@
    "charges_dong": 305401.0,
    "end_equity_dong": 400987310.0,
    "engine_deposit_dong": 400987310.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-14",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 213874110.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-15",
@@ -847,6 +1180,7 @@
    "quote_submitted": 1786,
    "cancel_refused": 6,
    "quote_expired": 8,
+   "ccp_nights": 1,
    "end_net": -9,
    "positions": {
     "VN30F2506": -9
@@ -855,7 +1189,21 @@
    "charges_dong": 0.0,
    "end_equity_dong": 404677310.0,
    "engine_deposit_dong": 404677310.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-15",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 214427970.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-16",
@@ -864,6 +1212,7 @@
    "quote_submitted": 1744,
    "cancel_refused": 6,
    "quote_expired": 8,
+   "ccp_nights": 1,
    "end_net": -9,
    "positions": {
     "VN30F2506": -9
@@ -872,7 +1221,21 @@
    "charges_dong": 0.0,
    "end_equity_dong": 415207310.0,
    "engine_deposit_dong": 415207310.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-16",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 211819320.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-19",
@@ -884,6 +1247,7 @@
    "maker_fills": 1,
    "cancel_refused": 6,
    "quote_expired": 8,
+   "ccp_nights": 1,
    "end_net": -10,
    "positions": {
     "VN30F2506": -10
@@ -892,7 +1256,21 @@
    "charges_dong": 17082.0,
    "end_equity_dong": 420070228.0,
    "engine_deposit_dong": 420070228.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-19",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 234557500.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-20",
@@ -905,8 +1283,8 @@
    "quote_fills": 2,
    "maker_fills": 2,
    "closing_fills": 1,
-   "margin_warning": 1,
    "quote_expired": 6,
+   "ccp_nights": 1,
    "end_net": -10,
    "positions": {
     "VN30F2506": -10
@@ -915,7 +1293,21 @@
    "charges_dong": 34341.0,
    "end_equity_dong": 392815887.0,
    "engine_deposit_dong": 392815887.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-20",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 239278400.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-21",
@@ -925,13 +1317,14 @@
    "fills": 4,
    "quote_fills": 4,
    "maker_fills": 3,
-   "margin_warning": 1,
    "closing_fills": 1,
    "taker_fills": 1,
    "cancel_refused": 6,
+   "margin_warning": 1,
    "margin_call": 1,
    "quote_expired": 8,
    "margin_call_cleared": 1,
+   "ccp_nights": 1,
    "end_net": -12,
    "positions": {
     "VN30F2506": -12
@@ -940,7 +1333,21 @@
    "charges_dong": 69068.0,
    "end_equity_dong": 386496819.0,
    "engine_deposit_dong": 386496819.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-21",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 289549440.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-22",
@@ -955,6 +1362,7 @@
    "cancel_refused": 6,
    "taker_fills": 4,
    "quote_expired": 4,
+   "ccp_nights": 1,
    "end_net": -7,
    "positions": {
     "VN30F2506": -7
@@ -963,7 +1371,21 @@
    "charges_dong": 85951.0,
    "end_equity_dong": 400030868.0,
    "engine_deposit_dong": 400030868.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-22",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 167737640.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-23",
@@ -972,6 +1394,7 @@
    "quote_submitted": 1730,
    "cancel_refused": 6,
    "quote_expired": 8,
+   "ccp_nights": 1,
    "end_net": -7,
    "positions": {
     "VN30F2506": -7
@@ -980,7 +1403,21 @@
    "charges_dong": 0.0,
    "end_equity_dong": 396880868.0,
    "engine_deposit_dong": 396880868.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-23",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 167718600.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-26",
@@ -1000,6 +1437,7 @@
    "margin_call_cleared": 6,
    "cancel_refused": 8,
    "quote_expired": 10,
+   "ccp_nights": 1,
    "end_net": 9,
    "positions": {
     "VN30F2506": 9
@@ -1008,7 +1446,21 @@
    "charges_dong": 4656645.0,
    "end_equity_dong": 437374223.0,
    "engine_deposit_dong": 437374223.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-26",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 217849050.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-27",
@@ -1021,6 +1473,7 @@
    "quote_fills": 2,
    "taker_fills": 2,
    "quote_expired": 6,
+   "ccp_nights": 1,
    "end_net": 7,
    "positions": {
     "VN30F2506": 7
@@ -1029,7 +1482,21 @@
    "charges_dong": 34562.0,
    "end_equity_dong": 436419661.0,
    "engine_deposit_dong": 436419661.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-27",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 169866550.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-28",
@@ -1042,6 +1509,7 @@
    "maker_fills": 1,
    "cancel_refused": 4,
    "quote_expired": 6,
+   "ccp_nights": 1,
    "end_net": 6,
    "positions": {
     "VN30F2506": 6
@@ -1050,7 +1518,21 @@
    "charges_dong": 17361.0,
    "end_equity_dong": 440752300.0,
    "engine_deposit_dong": 440752300.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-28",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 146083380.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-29",
@@ -1062,6 +1544,7 @@
    "maker_fills": 1,
    "cancel_refused": 6,
    "quote_expired": 8,
+   "ccp_nights": 1,
    "end_net": 7,
    "positions": {
     "VN30F2506": 7
@@ -1070,7 +1553,21 @@
    "charges_dong": 17300.0,
    "end_equity_dong": 442845000.0,
    "engine_deposit_dong": 442845000.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-29",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 170356830.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2025-05-30",
@@ -1079,6 +1576,7 @@
    "quote_submitted": 1658,
    "cancel_refused": 6,
    "quote_expired": 8,
+   "ccp_nights": 1,
    "end_net": 7,
    "positions": {
     "VN30F2506": 7
@@ -1087,8 +1585,22 @@
    "charges_dong": 0.0,
    "end_equity_dong": 439905000.0,
    "engine_deposit_dong": 439905000.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2025-05-30",
+     "model": "VSDC_CCP",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 169417920.0,
+     "gaps": [],
+     "assumptions": [
+      "minimum_margin_factor_derived"
+     ]
+    }
+   ],
+   "ccp_state": "compliant"
   }
  ],
- "wall_seconds": 2144.4
+ "wall_seconds": 1936.1
 }

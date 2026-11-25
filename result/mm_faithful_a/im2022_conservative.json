@@ -4,9 +4,9 @@
  "step": "3.1",
  "sessions": 40,
  "rows": 214390,
- "plutus_simulator_commit": "b52877e3b6bcefd50746761bd518f0c4b93ac40d",
+ "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
  "plutus_simulator_src_dirty": false,
- "plutus_simulator_commit_at_end": "af55e29e855d7f74b95c0b723a3f78b8b0b3405c",
+ "plutus_simulator_commit_at_end": "373f9a764215c5008248ead5a3502b18fec55e0c",
  "equity_dong": [
   500000000.0,
   499548518.0,
@@ -82,6 +82,8 @@
   "first": "2022-11-17T15:00:00"
  },
  "margin_events": [],
+ "ccp_events": [],
+ "ccp_state_end": "compliant",
  "engine_ignorance": {
   "evaluations": 686286,
   "indeterminate": 471306,
@@ -118,7 +120,19 @@
    "charges_dong": 11482.0,
    "end_equity_dong": 499548518.0,
    "engine_deposit_dong": 499548518.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-17",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 12520300.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-11-18",
@@ -143,7 +157,19 @@
    "charges_dong": 22913.0,
    "end_equity_dong": 497905605.0,
    "engine_deposit_dong": 497905605.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-18",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 37557000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-11-21",
@@ -169,7 +195,19 @@
    "charges_dong": 34295.0,
    "end_equity_dong": 503631310.0,
    "engine_deposit_dong": 503631310.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-21",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 24393200.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-11-22",
@@ -195,7 +233,19 @@
    "charges_dong": 138369.0,
    "end_equity_dong": 530562941.0,
    "engine_deposit_dong": 530562941.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-22",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 72228000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-11-23",
@@ -221,7 +271,19 @@
    "charges_dong": 34000.0,
    "end_equity_dong": 532238941.0,
    "engine_deposit_dong": 532238941.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-23",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 60066500.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-11-24",
@@ -245,7 +307,19 @@
    "charges_dong": 11320.0,
    "end_equity_dong": 524327621.0,
    "engine_deposit_dong": 524327621.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-24",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 73234200.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-11-25",
@@ -270,7 +344,19 @@
    "charges_dong": 11445.0,
    "end_equity_dong": 504666176.0,
    "engine_deposit_dong": 504666176.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-25",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 88179000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-11-28",
@@ -296,7 +382,19 @@
    "charges_dong": 35224.0,
    "end_equity_dong": 489380952.0,
    "engine_deposit_dong": 489380952.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-28",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 103344800.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-11-29",
@@ -321,7 +419,19 @@
    "charges_dong": 11705.0,
    "end_equity_dong": 469689247.0,
    "engine_deposit_dong": 469689247.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-29",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 118813500.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-11-30",
@@ -346,7 +456,19 @@
    "charges_dong": 11883.0,
    "end_equity_dong": 457777364.0,
    "engine_deposit_dong": 457777364.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-30",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 133627000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-01",
@@ -370,7 +492,19 @@
    "charges_dong": 12015.0,
    "end_equity_dong": 457845349.0,
    "engine_deposit_dong": 457845349.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-01",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 147147000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-02",
@@ -396,7 +530,19 @@
    "charges_dong": 48139.0,
    "end_equity_dong": 389227210.0,
    "engine_deposit_dong": 389227210.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-02",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 128817000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-05",
@@ -421,7 +567,19 @@
    "charges_dong": 74646.0,
    "end_equity_dong": 385672564.0,
    "engine_deposit_dong": 385672564.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-05",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 100464000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-06",
@@ -447,7 +605,19 @@
    "charges_dong": 49126.0,
    "end_equity_dong": 419913438.0,
    "engine_deposit_dong": 419913438.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-06",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 67990000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-07",
@@ -472,7 +642,19 @@
    "charges_dong": 48119.0,
    "end_equity_dong": 417095319.0,
    "engine_deposit_dong": 417095319.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-07",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 68464500.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-08",
@@ -497,7 +679,19 @@
    "charges_dong": 122695.0,
    "end_equity_dong": 422522624.0,
    "engine_deposit_dong": 422522624.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-08",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 41145000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-09",
@@ -524,7 +718,19 @@
    "charges_dong": 73220.0,
    "end_equity_dong": 420429404.0,
    "engine_deposit_dong": 420429404.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-09",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 41730000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-12",
@@ -550,7 +756,19 @@
    "charges_dong": 48724.0,
    "end_equity_dong": 430860680.0,
    "engine_deposit_dong": 430860680.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-12",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 40372800.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-13",
@@ -576,7 +794,19 @@
    "charges_dong": 60204.0,
    "end_equity_dong": 421510476.0,
    "engine_deposit_dong": 421510476.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-13",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 82524000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-14",
@@ -609,7 +839,19 @@
    "charges_dong": 182552.0,
    "end_equity_dong": 419567924.0,
    "engine_deposit_dong": 419567924.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-14",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 68835000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-15",
@@ -635,7 +877,19 @@
    "charges_dong": 28685.0,
    "end_equity_dong": 414459239.0,
    "engine_deposit_dong": 414459239.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-15",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 90992500.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-16",
@@ -661,7 +915,19 @@
    "charges_dong": 14290.0,
    "end_equity_dong": 419344949.0,
    "engine_deposit_dong": 419344949.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-16",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 72080000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-19",
@@ -682,7 +948,19 @@
    "charges_dong": 0.0,
    "end_equity_dong": 425344949.0,
    "engine_deposit_dong": 425344949.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-19",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 71060000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-20",
@@ -708,7 +986,19 @@
    "charges_dong": 55719.0,
    "end_equity_dong": 434269230.0,
    "engine_deposit_dong": 434269230.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-20",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 69836000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-21",
@@ -735,7 +1025,19 @@
    "charges_dong": 55745.0,
    "end_equity_dong": 434913485.0,
    "engine_deposit_dong": 434913485.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-21",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 35258000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-22",
@@ -761,7 +1063,19 @@
    "charges_dong": 56310.0,
    "end_equity_dong": 436607175.0,
    "engine_deposit_dong": 436607175.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-22",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 70563600.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-23",
@@ -782,7 +1096,19 @@
    "charges_dong": 0.0,
    "end_equity_dong": 437767175.0,
    "engine_deposit_dong": 437767175.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-23",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 70366400.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-26",
@@ -808,7 +1134,19 @@
    "charges_dong": 41399.0,
    "end_equity_dong": 457105776.0,
    "engine_deposit_dong": 457105776.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-26",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 50306400.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-27",
@@ -834,7 +1172,19 @@
    "charges_dong": 27423.0,
    "end_equity_dong": 453368353.0,
    "engine_deposit_dong": 453368353.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-27",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 51051000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-28",
@@ -855,7 +1205,19 @@
    "charges_dong": 0.0,
    "end_equity_dong": 451268353.0,
    "engine_deposit_dong": 451268353.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-28",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 51408000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-29",
@@ -880,7 +1242,19 @@
    "charges_dong": 13775.0,
    "end_equity_dong": 454764578.0,
    "engine_deposit_dong": 454764578.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-29",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 33762000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2022-12-30",
@@ -905,7 +1279,19 @@
    "charges_dong": 13723.0,
    "end_equity_dong": 453220855.0,
    "engine_deposit_dong": 453220855.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-30",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 17076500.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2023-01-03",
@@ -930,7 +1316,19 @@
    "charges_dong": 13910.0,
    "end_equity_dong": 446436945.0,
    "engine_deposit_dong": 446436945.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2023-01-03",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 35547000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2023-01-04",
@@ -956,7 +1354,19 @@
    "charges_dong": 14115.0,
    "end_equity_dong": 446962830.0,
    "engine_deposit_dong": 446962830.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2023-01-04",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 17725900.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2023-01-05",
@@ -981,7 +1391,19 @@
    "charges_dong": 14177.0,
    "end_equity_dong": 445478653.0,
    "engine_deposit_dong": 445478653.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2023-01-05",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 35829200.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2023-01-06",
@@ -1002,7 +1424,19 @@
    "charges_dong": 0.0,
    "end_equity_dong": 446038653.0,
    "engine_deposit_dong": 446038653.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2023-01-06",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 35734000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2023-01-09",
@@ -1028,7 +1462,19 @@
    "charges_dong": 28472.0,
    "end_equity_dong": 445750181.0,
    "engine_deposit_dong": 445750181.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2023-01-09",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 35822400.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2023-01-10",
@@ -1053,7 +1499,19 @@
    "charges_dong": 14202.0,
    "end_equity_dong": 444795979.0,
    "engine_deposit_dong": 444795979.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2023-01-10",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 53886600.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2023-01-11",
@@ -1074,7 +1532,19 @@
    "charges_dong": 0.0,
    "end_equity_dong": 442965979.0,
    "engine_deposit_dong": 442965979.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2023-01-11",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 54197700.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   },
   {
    "date": "2023-01-12",
@@ -1100,8 +1570,20 @@
    "charges_dong": 14264.0,
    "end_equity_dong": 442671715.0,
    "engine_deposit_dong": 442671715.0,
-   "engine_margin_status": "ok"
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2023-01-12",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 36216800.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
   }
  ],
- "wall_seconds": 1040.4
+ "wall_seconds": 1006.8
 }

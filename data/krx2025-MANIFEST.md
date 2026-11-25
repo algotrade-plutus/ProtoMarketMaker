@@ -8,7 +8,7 @@
 | file | rows (slice -> repo) | bytes | sha256 |
 |---|--:|--:|---|
 | data/band/krx2025/quote_ceil.parquet | 80 -> 80 | 1560 | `f3ff1f0a3a1ba1c0b06ed5eb24f4f5186447e7771e1339c6c9e4a5f562d409e0` |
-| data/band/krx2025/quote_close.parquet | 80 -> 80 | 1559 | `7df64b37bd54d518297c91b8f7a6ecda6752f6072d5d87b4871f179e90da635d` |
+| data/band/krx2025/quote_close.parquet | 120 -> 120 | 1792 | `d01f48cb6a912902ed48f7a26426db91da69cb47b6e4eeaf7632e3faaed125a9` |
 | data/band/krx2025/quote_floor.parquet | 80 -> 80 | 1568 | `c97fa97a9c16f083567b1f1d72c83615a9b20de7942571f1169dd0fe3d74198a` |
 | data/band/krx2025/quote_reference.parquet | 80 -> 80 | 1560 | `7ea9641a620a0aeee56521f2bda3ba2569cbdb4a39a81b23d7e147f21017c6f5` |
 | data/band/krx2025/quote_ticker.parquet | 4 -> 4 | 1879 | `722b3ed7b70c6a7b8eaecda358473cbe7729d6de59ea226abc01779c8fbabec3` |
@@ -20,11 +20,11 @@
 | data/l2/krx2025/local_quote_total.parquet | 571605 -> 571597 | 3062829 | `e8cbad842ddfe2a0f44acc7bd7dc06c7583789c1015a207957a0165a0ce07bb1` |
 | data/market/krx2025/futurecontractcode.csv | 80 | 2353 | `2f3d6c53cd0392800e465a40b8c0375856e427d14b526ee2249fad96ffc1ba71` |
 
-Total: 16348486 bytes (15.59 MiB).
+Total: 16348719 bytes (15.59 MiB).
 
 ## Why this window is minimal
 
-20 sessions either side of the 2025-05-05 KRX cutover, the low end of the handoff's 20-30: enough for the regime guard to act on every post-cutover session and for both arms to quote a non-trivial number of times on each side. MM has no look-back, so no warm-up. Only the contract the signal trades each day carries book and tape; VN30F2M otherwise contributes matched prices, closes and daily bands (bands for both contracts on every session, so a roll can close F1 and open F2). Depth 1-3 is all the DB holds and all the book walk reads.
+20 sessions either side of the 2025-05-05 KRX cutover, the low end of the handoff's 20-30: enough for A to quote and carry inventory under both dated margin regimes (pre_margin, then QD 26's two layers) a non-trivial number of times on each side. MM has no look-back, so no warm-up. Only the contract the signal trades each day carries book and tape; VN30F2M otherwise contributes matched prices, closes and daily bands (bands for both contracts on every session, so a roll can close F1 and open F2). Depth 1-3 is all the DB holds and all the book walk reads. The VN30 index close (one row per session in quote_close) is what the engine's post-KRX CCP margin layer reads (QD 26 Phu luc 2 margins on the underlying's close); without it every post-cutover night with a position is INDETERMINATE.
 
 ## Size flag
 

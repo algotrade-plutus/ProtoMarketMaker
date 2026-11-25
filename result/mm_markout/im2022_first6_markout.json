@@ -1,6 +1,6 @@
 {
  "window": "im2022",
- "session_set": "all 40 sessions, first 6",
+ "session_set": "all 6 sessions, first 6",
  "sessions": [
   "2022-11-17",
   "2022-11-18",
@@ -432,13 +432,13 @@
     "sum": 12.599999999999909
    },
    "by_role": {
-    "unknown": 39
+    "quote": 39
    },
    "close_from_last_print": 0,
    "arm": "F-opt",
    "sessions": 6,
    "sessions_with_fills": 6,
-   "ticker_inferred": 39,
+   "ticker_inferred": 0,
    "ticker_ambiguous": 0,
    "pnl_dong": 20202922.0,
    "hpr": 0.04040584399999991,
@@ -512,6 +512,7 @@
    ]
   }
  },
+ "views": null,
  "inputs": {
   "N0": {
    "traced_here": true
@@ -520,13 +521,12 @@
    "traced_here": true
   },
   "F-opt": {
-   "fills_file": "fills_opt6.json",
-   "fills_sha256": "7d953daec3f2b69fd19ff599e12847ff74a86a391fc590c3b176f4de4f5dd295",
-   "per_session_from": {
-    "path": "result/mm_faithful_a/im2022_optimistic.json",
-    "sha256": "d1e4c02f63552cf7b51082f3119a5ca9deb586e286ffc4e4d4978d27cbaa0839"
-   }
+   "fills_file": "im2022_fills_F-opt.json",
+   "fills_sha256": "771899659987ad1a08ed95241c91ef3e32e2d351a39ac61be37e24e870802593",
+   "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
+   "sessions": 40,
+   "arm": "F-opt"
   }
  },
- "plutus_simulator_head": "e4c5f87b5e7370f8b36ec7de1cdd2ef8c7ecd29e"
+ "plutus_simulator_head": "373f9a764215c5008248ead5a3502b18fec55e0c"
 }

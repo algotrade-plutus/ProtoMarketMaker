@@ -1186,6 +1186,11 @@
    "ledger_minus_engine_deposit_end_dong": 0.0,
    "max_abs_deposit_drift_dong": 0.0,
    "positions_match_engine_all_sessions": true,
+   "ccp_nights": 0,
+   "ccp_indeterminate_nights": 0,
+   "ccp_calendar_spread_unknown": 0,
+   "ccp_events_by_state": {},
+   "ccp_indeterminate_by_reason": {},
    "rung": "F-opt",
    "label": "Plutus faithful-A, optimistic queue",
    "source": "result/mm_faithful_a/im2022_optimistic.json",
@@ -1435,6 +1440,11 @@
    "ledger_minus_engine_deposit_end_dong": 0.0,
    "max_abs_deposit_drift_dong": 0.0,
    "positions_match_engine_all_sessions": true,
+   "ccp_nights": 0,
+   "ccp_indeterminate_nights": 0,
+   "ccp_calendar_spread_unknown": 0,
+   "ccp_events_by_state": {},
+   "ccp_indeterminate_by_reason": {},
    "rung": "F-con",
    "label": "Plutus faithful-A, conservative queue",
    "source": "result/mm_faithful_a/im2022_conservative.json",
@@ -1443,6 +1453,7 @@
    "delta_hpr": -0.08942104399999995
   }
  ],
+ "views": null,
  "clean_checkpoint": {
   "first_refused_roll_day": "2022-12-14",
   "basis": "first non-empty roll (every roll completed)",
@@ -1499,14 +1510,13 @@
    }
   ]
  },
- "post_cutover": null,
  "faithful_sources": {
   "F-opt": {
    "path": "result/mm_faithful_a/im2022_optimistic.json",
-   "sha256": "d1e4c02f63552cf7b51082f3119a5ca9deb586e286ffc4e4d4978d27cbaa0839",
-   "plutus_simulator_commit": "b52877e3b6bcefd50746761bd518f0c4b93ac40d",
+   "sha256": "e3964f2919c8d32c2b6eab4595c4a17bb8d2d15344ff441137bbf5780c283db3",
+   "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
    "plutus_simulator_src_dirty": false,
-   "plutus_simulator_commit_at_end": "af55e29e855d7f74b95c0b723a3f78b8b0b3405c",
+   "plutus_simulator_commit_at_end": "373f9a764215c5008248ead5a3502b18fec55e0c",
    "vm_settlements_whole_run": {
     "count": 38,
     "net_dong": -41464395.876986265,
@@ -1527,14 +1537,16 @@
     "quote:SESSION_SEMANTICS": 56,
     "quote:BAND_LIMIT": 2
    },
-   "wall_seconds": 1066.2
+   "ccp_events_whole_run": [],
+   "ccp_state_end": "compliant",
+   "wall_seconds": 995.3
   },
   "F-con": {
    "path": "result/mm_faithful_a/im2022_conservative.json",
-   "sha256": "dbd6104fc1d0ed2a12aa5c533b9a053e856c9c35c0fd8a2f0698814c2c425ebe",
-   "plutus_simulator_commit": "b52877e3b6bcefd50746761bd518f0c4b93ac40d",
+   "sha256": "a6ebe71f60adc2c3df8723b8d68efc501675ef7342e36ad2c322f0a4a3ac6154",
+   "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
    "plutus_simulator_src_dirty": false,
-   "plutus_simulator_commit_at_end": "af55e29e855d7f74b95c0b723a3f78b8b0b3405c",
+   "plutus_simulator_commit_at_end": "373f9a764215c5008248ead5a3502b18fec55e0c",
    "vm_settlements_whole_run": {
     "count": 40,
     "net_dong": -71216591.63059163,
@@ -1555,7 +1567,9 @@
     "quote:SESSION_SEMANTICS": 56,
     "quote:BAND_LIMIT": 2
    },
-   "wall_seconds": 1040.4
+   "ccp_events_whole_run": [],
+   "ccp_state_end": "compliant",
+   "wall_seconds": 1006.8
   }
  },
  "mm_anchor_crosscheck": {
@@ -1563,7 +1577,8 @@
   "naive_fills": 129,
   "n0_matches_mm_anchor_naive": true,
   "mm_anchor_faithful_conservative_hpr_flat_each_session": 0.02189912999999999,
-  "mm_anchor_faithful_optimistic_hpr_flat_each_session": 0.02211576599999998
+  "mm_anchor_faithful_optimistic_hpr_flat_each_session": 0.02211576599999998,
+  "mm_anchor_plutus_simulator_commit": "fc94743640c9ce3706e3cd019217d1898d67b26f"
  },
- "plutus_simulator_head_at_ladder_run": "af55e29e855d7f74b95c0b723a3f78b8b0b3405c"
+ "plutus_simulator_head_at_ladder_run": "373f9a764215c5008248ead5a3502b18fec55e0c"
 }

@@ -1,0 +1,3312 @@
+{
+ "window": "im2022",
+ "arm": "F-opt",
+ "environment": "Plutus faithful-A",
+ "queue": "optimistic",
+ "sessions": 40,
+ "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
+ "plutus_simulator_src_dirty": false,
+ "plutus_simulator_commit_at_end": "373f9a764215c5008248ead5a3502b18fec55e0c",
+ "units": "prices in index points; equity in real \u0111\u1ed3ng",
+ "fills": [
+  {
+   "ts": "2022-11-17 13:44:58.582302",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "958.7",
+   "qty": 1,
+   "maker": true,
+   "limit": "958.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-18 13:03:44.056232",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "944.800000",
+   "qty": 1,
+   "maker": false,
+   "limit": "944.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-18 13:47:45.066662",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "971.2",
+   "qty": 1,
+   "maker": true,
+   "limit": "971.2",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-18 14:03:33.785626",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "962.7",
+   "qty": 1,
+   "maker": true,
+   "limit": "962.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-18 14:07:14.816732",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "964.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "964.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-21 09:23:52.999614",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "962.600000",
+   "qty": 1,
+   "maker": false,
+   "limit": "962.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-21 09:23:58.987656",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "961.4",
+   "qty": 1,
+   "maker": true,
+   "limit": "961.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-21 11:16:08.351410",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "947.0",
+   "qty": 1,
+   "maker": true,
+   "limit": "947.0",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-21 13:01:34.223857",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "949.0",
+   "qty": 1,
+   "maker": true,
+   "limit": "949.0",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-21 14:04:05.209273",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "942.7",
+   "qty": 1,
+   "maker": true,
+   "limit": "942.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-21 14:44:59",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "943.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "944.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 09:19:28.738868",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "928.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "928.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 10:43:00.984010",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "957.600000",
+   "qty": 1,
+   "maker": false,
+   "limit": "957.3",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 10:45:49.289581",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "968.700000",
+   "qty": 1,
+   "maker": false,
+   "limit": "968.2",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 10:46:22.922369",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "971.9",
+   "qty": 1,
+   "maker": true,
+   "limit": "971.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 10:46:25.448946",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "974.800000",
+   "qty": 1,
+   "maker": false,
+   "limit": "974.3",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 10:46:26.376125",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "974.800000",
+   "qty": 1,
+   "maker": false,
+   "limit": "974.3",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 10:47:46.145481",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "978.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "978.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 10:48:05.377526",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "984.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "983.3",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 10:48:05.449546",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "984.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "983.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 10:48:19.163817",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "986.1",
+   "qty": 1,
+   "maker": true,
+   "limit": "986.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 10:48:58.115835",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "980.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "981.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 10:48:58.158227",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "980.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "981.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 10:49:32.933356",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "978.2",
+   "qty": 1,
+   "maker": true,
+   "limit": "978.2",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 10:52:06.122907",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "972.6",
+   "qty": 1,
+   "maker": true,
+   "limit": "972.6",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 11:18:19.934508",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "971.400000",
+   "qty": 1,
+   "maker": false,
+   "limit": "971.6",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 11:18:46.881937",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "966.6",
+   "qty": 1,
+   "maker": true,
+   "limit": "966.6",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 13:41:52.553496",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "949.300000",
+   "qty": 1,
+   "maker": false,
+   "limit": "949.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-22 14:14:08.832566",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "942.100000",
+   "qty": 1,
+   "maker": false,
+   "limit": "942.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-23 09:15:06.273265",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "937.7",
+   "qty": 1,
+   "maker": true,
+   "limit": "937.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-23 09:23:56.787504",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "944.600000",
+   "qty": 1,
+   "maker": false,
+   "limit": "944.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-23 11:10:17.029192",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "929.200000",
+   "qty": 1,
+   "maker": false,
+   "limit": "929.6",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-23 11:27:53.911093",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "940.0",
+   "qty": 1,
+   "maker": true,
+   "limit": "940.0",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-23 13:01:36.924135",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "933.800000",
+   "qty": 1,
+   "maker": false,
+   "limit": "933.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-23 14:21:27.456854",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "917.9",
+   "qty": 1,
+   "maker": true,
+   "limit": "917.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-23 14:44:59",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "916.300000",
+   "qty": 1,
+   "maker": false,
+   "limit": "916.6",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-24 14:07:28.134701",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "934.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "934.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-24 14:22:56.569582",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "932.8",
+   "qty": 1,
+   "maker": true,
+   "limit": "932.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-24 14:27:07.660250",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "933.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "933.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-25 09:00:10.232279",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "946.100000",
+   "qty": 1,
+   "maker": false,
+   "limit": "942.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-25 13:10:42.023718",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "953.100000",
+   "qty": 1,
+   "maker": false,
+   "limit": "953.0",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-28 10:06:36.871781",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "984.4",
+   "qty": 1,
+   "maker": true,
+   "limit": "984.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-28 13:00:32.941400",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "998.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "998.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-28 13:00:40.323141",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1003.5",
+   "qty": 1,
+   "maker": true,
+   "limit": "1003.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-28 13:01:38.468122",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1006.100000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1006.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-28 14:20:03.421572",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "991.7",
+   "qty": 1,
+   "maker": true,
+   "limit": "991.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-29 13:07:05.686283",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "993.2",
+   "qty": 1,
+   "maker": true,
+   "limit": "993.2",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-11-30 13:08:09.743269",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1020.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1020.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-01 09:00:05.482520",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1041.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1031.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-01 09:00:14.639058",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1040.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1031.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-01 09:00:21.799064",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1040.200000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1032.0",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-01 09:00:26.580164",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1040.200000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1032.0",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-02 09:00:03.975447",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1029.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1035.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-02 09:00:10.201661",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1029.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1035.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-02 09:00:11.329817",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1028.600000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1035.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-02 09:00:14.108567",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1028.600000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1035.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-02 13:10:00.685479",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1039.8",
+   "qty": 1,
+   "maker": true,
+   "limit": "1039.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-02 14:05:11.682842",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1078.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1082.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-02 14:05:20.865753",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1081.8",
+   "qty": 1,
+   "maker": true,
+   "limit": "1081.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-02 14:05:48.795340",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1074.9",
+   "qty": 1,
+   "maker": true,
+   "limit": "1074.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-05 10:51:41.333046",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1092.9",
+   "qty": 1,
+   "maker": true,
+   "limit": "1092.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-05 11:16:02.392783",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1097.700000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1097.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-05 13:26:01.026746",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1113.400000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1112.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-05 13:34:05.079614",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1115.600000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1115.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-05 13:54:40.187742",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1109.1",
+   "qty": 1,
+   "maker": true,
+   "limit": "1109.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-05 14:13:59.818380",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1111.700000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1112.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-05 14:17:22.862052",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1103.700000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1103.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-05 14:21:36.936964",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1095.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1096.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-05 14:21:40.185818",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1095.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1095.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-06 09:00:06.398169",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1102.400000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1099.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-06 09:00:12.284340",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1101.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1099.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-06 09:00:32.139541",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1101.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1099.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-06 09:00:35.411967",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1101.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1099.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-06 09:01:49.402590",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1098.200000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1098.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-06 13:01:25.336953",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1086.300000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1086.3",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-06 13:23:33.951621",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1079.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1079.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-06 14:09:35.136619",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1067.9",
+   "qty": 1,
+   "maker": true,
+   "limit": "1067.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-06 14:14:21.285529",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1076.6",
+   "qty": 1,
+   "maker": true,
+   "limit": "1076.6",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-06 14:19:03.645902",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1071.8",
+   "qty": 1,
+   "maker": true,
+   "limit": "1071.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-06 14:19:20.844337",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1073.8",
+   "qty": 1,
+   "maker": true,
+   "limit": "1073.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-06 14:23:54.462159",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1063.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1064.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-07 09:00:04.624200",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1041.100000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1048.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-07 09:00:19.431450",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1041.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1048.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-07 09:00:23.354348",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1041.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1048.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-07 09:00:57.747165",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1044.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1043.6",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-07 09:01:56.112434",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1046.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1046.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-07 10:34:13.149675",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1041.3",
+   "qty": 1,
+   "maker": true,
+   "limit": "1041.3",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-07 14:05:37.965493",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1040.200000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1040.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-08 10:43:43.148999",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1099.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1098.6",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-08 10:43:48.630003",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1101.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1100.0",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-08 10:43:49.753122",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1101.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1101.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-08 10:44:54.772712",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1094.600000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1095.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-08 11:16:26.212179",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1088.8",
+   "qty": 1,
+   "maker": true,
+   "limit": "1088.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-08 13:01:09.284605",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1088.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1087.3",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-08 13:22:12.611064",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1080.4",
+   "qty": 1,
+   "maker": true,
+   "limit": "1080.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-08 13:43:51.406131",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1077.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1078.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-08 14:02:53.622028",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1068.9",
+   "qty": 1,
+   "maker": true,
+   "limit": "1068.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-08 14:15:16.176623",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1060.400000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1060.6",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-08 14:19:03.861047",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1053.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1053.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-08 14:22:31.213946",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1056.200000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1056.6",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-09 10:09:41.537628",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1057.200000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1057.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-09 13:00:34.983037",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1071.100000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1070.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-09 13:01:28.852680",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1074.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1073.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-09 13:01:37.126946",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1076.5",
+   "qty": 1,
+   "maker": true,
+   "limit": "1076.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-09 13:27:05.644376",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1063.9",
+   "qty": 1,
+   "maker": true,
+   "limit": "1063.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-09 14:07:58.191166",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1066.5",
+   "qty": 1,
+   "maker": true,
+   "limit": "1066.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-12 09:00:23.238362",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1068.600000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1069.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-12 09:17:47.766209",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1062.4",
+   "qty": 1,
+   "maker": true,
+   "limit": "1062.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-12 10:06:50.075018",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1062.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1062.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-12 13:01:21.966596",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1070.5",
+   "qty": 1,
+   "maker": true,
+   "limit": "1070.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-12 13:15:33.935311",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1063.800000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1063.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-13 13:00:14.981784",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1045.200000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1044.3",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-13 13:00:30.785883",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1046.8",
+   "qty": 1,
+   "maker": true,
+   "limit": "1046.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-13 13:48:46.151354",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1037.7",
+   "qty": 1,
+   "maker": true,
+   "limit": "1037.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-13 14:21:05.153268",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1044.800000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1044.2",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-13 14:21:20.686842",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1048.6",
+   "qty": 1,
+   "maker": true,
+   "limit": "1048.6",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-14 09:00:13.215663",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1067.0",
+   "qty": 10,
+   "maker": true,
+   "limit": "1067.0",
+   "role": "roll"
+  },
+  {
+   "ts": "2022-12-14 09:00:18.158514",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1068.500000",
+   "qty": 10,
+   "maker": false,
+   "limit": "1069.5",
+   "role": "roll"
+  },
+  {
+   "ts": "2022-12-14 11:21:21.045817",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1053.200000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1053.2",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-14 13:07:13.799027",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1049.800000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1049.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-14 13:53:59.029162",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1056.6",
+   "qty": 1,
+   "maker": true,
+   "limit": "1056.6",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-15 13:40:53.860198",
+   "ticker": "VN30F2212",
+   "side": "SELL",
+   "price": "1073.2",
+   "qty": 1,
+   "maker": true,
+   "limit": "1073.2",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-15 14:14:04.835070",
+   "ticker": "VN30F2212",
+   "side": "BUY",
+   "price": "1066.4",
+   "qty": 1,
+   "maker": true,
+   "limit": "1066.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-16 13:29:35.762331",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1063.7",
+   "qty": 1,
+   "maker": true,
+   "limit": "1063.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-19 09:00:07.965514",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1055.5",
+   "qty": 1,
+   "maker": true,
+   "limit": "1055.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-19 14:30:51.240033",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1049.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1050.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-19 14:44:59",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1049.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1049.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-20 09:00:04.592395",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1045.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1045.0",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-20 11:17:16.449021",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1020.400000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1020.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-20 13:00:55.485822",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1018.3",
+   "qty": 1,
+   "maker": true,
+   "limit": "1018.3",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-20 13:06:15.254542",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1019.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1019.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-20 13:22:50.054545",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1013.4",
+   "qty": 1,
+   "maker": true,
+   "limit": "1013.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-21 13:33:41.087711",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1028.1",
+   "qty": 1,
+   "maker": true,
+   "limit": "1028.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-21 14:21:13.287008",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1014.800000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1015.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-21 14:21:17.227811",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1014.800000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1015.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-21 14:28:08.124863",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1026.8",
+   "qty": 1,
+   "maker": true,
+   "limit": "1026.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-22 09:00:11.395998",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1043.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1032.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-22 09:00:11.924284",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1043.800000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1032.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-22 09:00:13.903934",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1043.800000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1032.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-22 13:01:06.530523",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1029.9",
+   "qty": 1,
+   "maker": true,
+   "limit": "1029.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-22 13:23:33.333507",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1036.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1036.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-23 09:00:09.797245",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1031.200000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1036.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-23 09:00:14.592201",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1031.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1036.5",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-23 14:16:21.253500",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1034.9",
+   "qty": 1,
+   "maker": true,
+   "limit": "1034.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-26 09:00:06.934650",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1030.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1040.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-26 13:14:26.169218",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1015.600000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1015.6",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-26 13:32:39.053743",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1009.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1009.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-26 14:25:51.683468",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "992.800000",
+   "qty": 1,
+   "maker": false,
+   "limit": "992.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-27 13:04:51.572947",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "998.7",
+   "qty": 1,
+   "maker": true,
+   "limit": "998.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-27 13:29:21.532608",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "992.3",
+   "qty": 1,
+   "maker": true,
+   "limit": "992.3",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-27 14:30:44.746694",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1010.600000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1009.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-27 14:30:46.744578",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1010.600000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1010.2",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-27 14:30:53.270301",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1010.600000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1010.0",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-27 14:30:55.294480",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1010.600000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1010.3",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-27 14:44:59",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1010.600000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1010.6",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-28 14:44:59",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1009.400000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1009.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-29 09:00:00.946833",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1003.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1009.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-29 09:00:04.815965",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1003.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1009.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-29 09:00:04.824445",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1002.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1009.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-29 09:00:11.024881",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1003.000000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1009.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-29 09:00:25.600000",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1002.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1009.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-29 14:29:10.951865",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1002.8",
+   "qty": 1,
+   "maker": true,
+   "limit": "1002.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-30 09:00:06.714282",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "997.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "998.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-30 09:00:06.715710",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "997.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "998.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-30 09:00:07.570906",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "997.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "998.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2022-12-30 09:00:10.194303",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "997.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "998.0",
+   "role": "quote"
+  },
+  {
+   "ts": "2023-01-03 13:13:11.739720",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1018.3",
+   "qty": 1,
+   "maker": true,
+   "limit": "1018.3",
+   "role": "quote"
+  },
+  {
+   "ts": "2023-01-03 14:15:33.531985",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1025.3",
+   "qty": 1,
+   "maker": true,
+   "limit": "1025.3",
+   "role": "quote"
+  },
+  {
+   "ts": "2023-01-04 13:21:54.346170",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1042.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1042.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2023-01-05 13:28:35.219862",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1050.100000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1050.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2023-01-09 09:00:07.952627",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1058.800000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1053.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2023-01-09 09:00:10.611253",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1058.300000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1053.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2023-01-09 09:00:12.816083",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1058.300000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1053.8",
+   "role": "quote"
+  },
+  {
+   "ts": "2023-01-09 13:28:14.639652",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1056.4",
+   "qty": 1,
+   "maker": true,
+   "limit": "1056.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2023-01-10 13:11:34.202463",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1053.1",
+   "qty": 1,
+   "maker": true,
+   "limit": "1053.1",
+   "role": "quote"
+  },
+  {
+   "ts": "2023-01-12 09:00:12.375474",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1066.700000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1066.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2023-01-12 09:00:21.102848",
+   "ticker": "VN30F2301",
+   "side": "SELL",
+   "price": "1066.700000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1066.4",
+   "role": "quote"
+  },
+  {
+   "ts": "2023-01-12 13:11:24.968637",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1060.500000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1060.7",
+   "role": "quote"
+  },
+  {
+   "ts": "2023-01-12 14:30:35.273606",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1059.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1059.9",
+   "role": "quote"
+  },
+  {
+   "ts": "2023-01-12 14:30:53.816028",
+   "ticker": "VN30F2301",
+   "side": "BUY",
+   "price": "1059.900000",
+   "qty": 1,
+   "maker": false,
+   "limit": "1059.9",
+   "role": "quote"
+  }
+ ],
+ "per_session": [
+  {
+   "date": "2022-11-17",
+   "contract": "VN30F2212",
+   "rolled": true,
+   "roll_triggers": 1,
+   "quote_submitted": 1708,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "fills": 1,
+   "quote_fills": 1,
+   "maker_fills": 1,
+   "quote_expired": 7,
+   "end_net": -1,
+   "positions": {
+    "VN30F2212": -1
+   },
+   "positions_match_engine": true,
+   "charges_dong": 11482.0,
+   "end_equity_dong": 499548518.0,
+   "engine_deposit_dong": 499548518.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-17",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 12520300.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-11-18",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1694,
+   "indeterminate_evals": 1,
+   "indeterminate_orders": 1,
+   "cancel_refused": 8,
+   "quote_rejected": 2,
+   "fills": 4,
+   "quote_fills": 4,
+   "taker_fills": 2,
+   "maker_fills": 2,
+   "closing_fills": 1,
+   "quote_expired": 9,
+   "end_net": -3,
+   "positions": {
+    "VN30F2212": -3
+   },
+   "positions_match_engine": true,
+   "charges_dong": 45984.0,
+   "end_equity_dong": 498732534.0,
+   "engine_deposit_dong": 498732534.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-18",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 37557000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-11-21",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1726,
+   "indeterminate_evals": 2,
+   "indeterminate_orders": 1,
+   "closing_fills": 4,
+   "fills": 6,
+   "quote_fills": 6,
+   "taker_fills": 2,
+   "maker_fills": 4,
+   "cancel_refused": 8,
+   "quote_rejected": 2,
+   "quote_expired": 7,
+   "end_net": -1,
+   "positions": {
+    "VN30F2212": -1
+   },
+   "positions_match_engine": true,
+   "charges_dong": 68589.0,
+   "end_equity_dong": 502373945.0,
+   "engine_deposit_dong": 502373945.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-21",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 12196600.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-11-22",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1702,
+   "closing_fills": 8,
+   "fills": 18,
+   "quote_fills": 18,
+   "taker_fills": 13,
+   "maker_fills": 5,
+   "cancel_refused": 6,
+   "quote_expired": 8,
+   "end_net": -3,
+   "positions": {
+    "VN30F2212": -3
+   },
+   "positions_match_engine": true,
+   "charges_dong": 207939.0,
+   "end_equity_dong": 519336006.0,
+   "engine_deposit_dong": 519336006.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-22",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 36114000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-11-23",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1688,
+   "indeterminate_evals": 4,
+   "indeterminate_orders": 2,
+   "fills": 7,
+   "quote_fills": 7,
+   "maker_fills": 3,
+   "taker_fills": 4,
+   "closing_fills": 4,
+   "cancel_refused": 10,
+   "quote_rejected": 2,
+   "quote_expired": 10,
+   "end_net": -2,
+   "positions": {
+    "VN30F2212": -2
+   },
+   "positions_match_engine": true,
+   "charges_dong": 79127.0,
+   "end_equity_dong": 524746879.0,
+   "engine_deposit_dong": 524746879.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-23",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 24026600.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-11-24",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1672,
+   "fills": 3,
+   "quote_fills": 3,
+   "taker_fills": 2,
+   "maker_fills": 1,
+   "cancel_refused": 6,
+   "quote_expired": 8,
+   "end_net": -5,
+   "positions": {
+    "VN30F2212": -5
+   },
+   "positions_match_engine": true,
+   "charges_dong": 33957.0,
+   "end_equity_dong": 520202922.0,
+   "engine_deposit_dong": 520202922.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-24",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 61028500.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-11-25",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1660,
+   "fills": 2,
+   "quote_fills": 2,
+   "taker_fills": 2,
+   "indeterminate_evals": 1,
+   "indeterminate_orders": 1,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "quote_expired": 7,
+   "end_net": -7,
+   "positions": {
+    "VN30F2212": -7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 22845.0,
+   "end_equity_dong": 501250077.0,
+   "engine_deposit_dong": 501250077.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-25",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 88179000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-11-28",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1696,
+   "indeterminate_evals": 4,
+   "indeterminate_orders": 2,
+   "fills": 5,
+   "quote_fills": 5,
+   "maker_fills": 3,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "taker_fills": 2,
+   "closing_fills": 1,
+   "quote_expired": 6,
+   "end_net": -10,
+   "positions": {
+    "VN30F2212": -10
+   },
+   "positions_match_engine": true,
+   "charges_dong": 58651.0,
+   "end_equity_dong": 485911426.0,
+   "engine_deposit_dong": 485911426.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-28",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 129181000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-11-29",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1696,
+   "indeterminate_evals": 1,
+   "indeterminate_orders": 1,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "fills": 1,
+   "quote_fills": 1,
+   "maker_fills": 1,
+   "quote_expired": 7,
+   "end_net": -11,
+   "positions": {
+    "VN30F2212": -11
+   },
+   "positions_match_engine": true,
+   "charges_dong": 11706.0,
+   "end_equity_dong": 461869720.0,
+   "engine_deposit_dong": 461869720.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-29",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 145216500.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-11-30",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1664,
+   "indeterminate_evals": 2,
+   "indeterminate_orders": 1,
+   "cancel_refused": 8,
+   "quote_rejected": 2,
+   "fills": 1,
+   "quote_fills": 1,
+   "taker_fills": 1,
+   "quote_expired": 9,
+   "end_net": -12,
+   "positions": {
+    "VN30F2212": -12
+   },
+   "positions_match_engine": true,
+   "charges_dong": 11883.0,
+   "end_equity_dong": 447477837.0,
+   "engine_deposit_dong": 447477837.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-11-30",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 160352400.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-01",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1670,
+   "indeterminate_evals": 1,
+   "indeterminate_orders": 1,
+   "fills": 4,
+   "quote_fills": 4,
+   "taker_fills": 4,
+   "cancel_refused": 6,
+   "quote_expired": 8,
+   "end_net": -16,
+   "positions": {
+    "VN30F2212": -16
+   },
+   "positions_match_engine": true,
+   "charges_dong": 48055.0,
+   "end_equity_dong": 450739782.0,
+   "engine_deposit_dong": 450739782.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-01",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 214032000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-02",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1688,
+   "closing_fills": 6,
+   "fills": 8,
+   "quote_fills": 8,
+   "taker_fills": 5,
+   "cancel_refused": 5,
+   "quote_rejected": 4,
+   "maker_fills": 3,
+   "quote_expired": 5,
+   "end_net": -12,
+   "positions": {
+    "VN30F2212": -12
+   },
+   "positions_match_engine": true,
+   "charges_dong": 96535.0,
+   "end_equity_dong": 361193247.0,
+   "engine_deposit_dong": 361193247.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-02",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 171756000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-05",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1700,
+   "indeterminate_evals": 6,
+   "indeterminate_orders": 2,
+   "fills": 9,
+   "quote_fills": 9,
+   "maker_fills": 2,
+   "taker_fills": 7,
+   "closing_fills": 6,
+   "cancel_refused": 4,
+   "quote_expired": 6,
+   "end_net": -9,
+   "positions": {
+    "VN30F2212": -9
+   },
+   "positions_match_engine": true,
+   "charges_dong": 111832.0,
+   "end_equity_dong": 355891415.0,
+   "engine_deposit_dong": 355891415.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-05",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 129168000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-06",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1692,
+   "indeterminate_evals": 2,
+   "indeterminate_orders": 2,
+   "fills": 12,
+   "quote_fills": 12,
+   "taker_fills": 8,
+   "closing_fills": 5,
+   "cancel_refused": 8,
+   "quote_rejected": 2,
+   "maker_fills": 4,
+   "quote_expired": 8,
+   "end_net": -11,
+   "positions": {
+    "VN30F2212": -11
+   },
+   "positions_match_engine": true,
+   "charges_dong": 147662.0,
+   "end_equity_dong": 425063753.0,
+   "engine_deposit_dong": 425063753.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-06",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 149578000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-07",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1694,
+   "closing_fills": 5,
+   "fills": 7,
+   "quote_fills": 7,
+   "taker_fills": 6,
+   "maker_fills": 1,
+   "cancel_refused": 4,
+   "quote_expired": 6,
+   "end_net": -8,
+   "positions": {
+    "VN30F2212": -8
+   },
+   "positions_match_engine": true,
+   "charges_dong": 84174.0,
+   "end_equity_dong": 421429579.0,
+   "engine_deposit_dong": 421429579.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-07",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 109543200.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-08",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1696,
+   "indeterminate_evals": 1,
+   "indeterminate_orders": 1,
+   "fills": 12,
+   "quote_fills": 12,
+   "taker_fills": 9,
+   "closing_fills": 7,
+   "maker_fills": 3,
+   "cancel_refused": 2,
+   "quote_rejected": 2,
+   "quote_expired": 2,
+   "end_net": -6,
+   "positions": {
+    "VN30F2212": -6
+   },
+   "positions_match_engine": true,
+   "charges_dong": 147312.0,
+   "end_equity_dong": 429742267.0,
+   "engine_deposit_dong": 429742267.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-08",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 82290000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-09",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1698,
+   "indeterminate_evals": 2,
+   "indeterminate_orders": 2,
+   "closing_fills": 2,
+   "fills": 6,
+   "quote_fills": 6,
+   "taker_fills": 3,
+   "cancel_refused": 8,
+   "quote_rejected": 2,
+   "maker_fills": 3,
+   "quote_expired": 8,
+   "end_net": -8,
+   "positions": {
+    "VN30F2212": -8
+   },
+   "positions_match_engine": true,
+   "charges_dong": 73159.0,
+   "end_equity_dong": 423369108.0,
+   "engine_deposit_dong": 423369108.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-09",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 111280000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-12",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1706,
+   "closing_fills": 3,
+   "fills": 5,
+   "quote_fills": 5,
+   "taker_fills": 3,
+   "maker_fills": 2,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "quote_expired": 6,
+   "end_net": -7,
+   "positions": {
+    "VN30F2212": -7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 60881.0,
+   "end_equity_dong": 448488227.0,
+   "engine_deposit_dong": 448488227.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-12",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 94203200.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-13",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1686,
+   "cancel_refused": 10,
+   "quote_rejected": 2,
+   "fills": 5,
+   "quote_fills": 5,
+   "taker_fills": 2,
+   "maker_fills": 3,
+   "closing_fills": 1,
+   "quote_expired": 10,
+   "end_net": -10,
+   "positions": {
+    "VN30F2212": -10
+   },
+   "positions_match_engine": true,
+   "charges_dong": 60200.0,
+   "end_equity_dong": 429838027.0,
+   "engine_deposit_dong": 429838027.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-13",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 137540000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-14",
+   "contract": "VN30F2301",
+   "rolled": true,
+   "roll_triggers": 1,
+   "roll_contracts": 10,
+   "roll_submitted": 5,
+   "roll_retries": 3,
+   "quote_submitted": 1696,
+   "fills": 23,
+   "roll_fills": 20,
+   "maker_fills": 11,
+   "closing_fills": 12,
+   "taker_fills": 12,
+   "quote_fills": 3,
+   "cancel_refused": 8,
+   "quote_rejected": 2,
+   "quote_expired": 8,
+   "roll_unfilled_contracts": 0,
+   "end_net": -9,
+   "positions": {
+    "VN30F2301": -9
+   },
+   "positions_match_engine": true,
+   "charges_dong": 280096.0,
+   "end_equity_dong": 428317931.0,
+   "engine_deposit_dong": 428317931.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-14",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 123903000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-15",
+   "contract": "VN30F2212",
+   "rolled": false,
+   "quote_submitted": 1694,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "fills": 2,
+   "quote_fills": 2,
+   "maker_fills": 2,
+   "closing_fills": 1,
+   "quote_expired": 6,
+   "end_net": -9,
+   "positions": {
+    "VN30F2301": -9
+   },
+   "positions_match_engine": true,
+   "charges_dong": 28686.0,
+   "end_equity_dong": 418619245.0,
+   "engine_deposit_dong": 418619245.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-15",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 163786500.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-16",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1672,
+   "cancel_refused": 8,
+   "quote_rejected": 2,
+   "closing_fills": 1,
+   "fills": 1,
+   "quote_fills": 1,
+   "maker_fills": 1,
+   "quote_expired": 9,
+   "end_net": -8,
+   "positions": {
+    "VN30F2301": -8
+   },
+   "positions_match_engine": true,
+   "charges_dong": 14291.0,
+   "end_equity_dong": 427684954.0,
+   "engine_deposit_dong": 427684954.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-16",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 144160000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-19",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1676,
+   "indeterminate_evals": 2,
+   "indeterminate_orders": 2,
+   "closing_fills": 3,
+   "fills": 3,
+   "quote_fills": 3,
+   "maker_fills": 1,
+   "cancel_refused": 7,
+   "taker_fills": 2,
+   "quote_expired": 8,
+   "end_net": -5,
+   "positions": {
+    "VN30F2301": -5
+   },
+   "positions_match_engine": true,
+   "charges_dong": 42556.0,
+   "end_equity_dong": 437792398.0,
+   "engine_deposit_dong": 437792398.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-19",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 88825000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-20",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1674,
+   "indeterminate_evals": 1,
+   "indeterminate_orders": 1,
+   "fills": 5,
+   "quote_fills": 5,
+   "taker_fills": 3,
+   "closing_fills": 2,
+   "cancel_refused": 4,
+   "quote_rejected": 2,
+   "maker_fills": 2,
+   "quote_expired": 4,
+   "end_net": -6,
+   "positions": {
+    "VN30F2301": -6
+   },
+   "positions_match_engine": true,
+   "charges_dong": 69745.0,
+   "end_equity_dong": 448962653.0,
+   "engine_deposit_dong": 448962653.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-20",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 104754000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-21",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1700,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "closing_fills": 3,
+   "fills": 4,
+   "quote_fills": 4,
+   "maker_fills": 2,
+   "taker_fills": 2,
+   "quote_expired": 7,
+   "end_net": -4,
+   "positions": {
+    "VN30F2301": -4
+   },
+   "positions_match_engine": true,
+   "charges_dong": 55719.0,
+   "end_equity_dong": 447216934.0,
+   "engine_deposit_dong": 447216934.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-21",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 70516000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-22",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1684,
+   "fills": 5,
+   "quote_fills": 5,
+   "taker_fills": 4,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "closing_fills": 1,
+   "maker_fills": 1,
+   "quote_expired": 6,
+   "end_net": -7,
+   "positions": {
+    "VN30F2301": -7
+   },
+   "positions_match_engine": true,
+   "charges_dong": 70428.0,
+   "end_equity_dong": 449326506.0,
+   "engine_deposit_dong": 449326506.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-22",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 123486300.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-23",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1654,
+   "closing_fills": 2,
+   "fills": 3,
+   "quote_fills": 3,
+   "taker_fills": 2,
+   "indeterminate_evals": 2,
+   "indeterminate_orders": 1,
+   "maker_fills": 1,
+   "cancel_refused": 2,
+   "quote_expired": 4,
+   "end_net": -6,
+   "positions": {
+    "VN30F2301": -6
+   },
+   "positions_match_engine": true,
+   "charges_dong": 42083.0,
+   "end_equity_dong": 451974423.0,
+   "engine_deposit_dong": 451974423.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-23",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 105549600.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-26",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1678,
+   "indeterminate_evals": 1,
+   "indeterminate_orders": 1,
+   "closing_fills": 3,
+   "fills": 4,
+   "quote_fills": 4,
+   "taker_fills": 4,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "quote_expired": 6,
+   "end_net": -4,
+   "positions": {
+    "VN30F2301": -4
+   },
+   "positions_match_engine": true,
+   "charges_dong": 55408.0,
+   "end_equity_dong": 476569015.0,
+   "engine_deposit_dong": 476569015.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-26",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 67075200.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-27",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1682,
+   "cancel_refused": 8,
+   "quote_rejected": 2,
+   "fills": 7,
+   "quote_fills": 7,
+   "maker_fills": 2,
+   "closing_fills": 1,
+   "taker_fills": 5,
+   "quote_expired": 7,
+   "end_net": -9,
+   "positions": {
+    "VN30F2301": -9
+   },
+   "positions_match_engine": true,
+   "charges_dong": 96624.0,
+   "end_equity_dong": 476072391.0,
+   "engine_deposit_dong": 476072391.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-27",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 153153000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-28",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1672,
+   "indeterminate_evals": 1,
+   "indeterminate_orders": 1,
+   "cancel_refused": 8,
+   "closing_fills": 1,
+   "fills": 1,
+   "quote_fills": 1,
+   "taker_fills": 1,
+   "quote_expired": 9,
+   "end_net": -8,
+   "positions": {
+    "VN30F2301": -8
+   },
+   "positions_match_engine": true,
+   "charges_dong": 13830.0,
+   "end_equity_dong": 469618561.0,
+   "engine_deposit_dong": 469618561.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-28",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 137088000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-29",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1662,
+   "closing_fills": 6,
+   "fills": 6,
+   "quote_fills": 6,
+   "taker_fills": 5,
+   "indeterminate_evals": 5,
+   "indeterminate_orders": 2,
+   "maker_fills": 1,
+   "cancel_refused": 6,
+   "quote_expired": 8,
+   "end_net": -2,
+   "positions": {
+    "VN30F2301": -2
+   },
+   "positions_match_engine": true,
+   "charges_dong": 82652.0,
+   "end_equity_dong": 475575909.0,
+   "engine_deposit_dong": 475575909.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-29",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 33762000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2022-12-30",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1648,
+   "closing_fills": 2,
+   "fills": 4,
+   "quote_fills": 4,
+   "taker_fills": 4,
+   "cancel_refused": 6,
+   "quote_expired": 8,
+   "end_net": 2,
+   "positions": {
+    "VN30F2301": 2
+   },
+   "positions_match_engine": true,
+   "charges_dong": 54922.0,
+   "end_equity_dong": 475940987.0,
+   "engine_deposit_dong": 475940987.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2022-12-30",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 34153000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2023-01-03",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1680,
+   "cancel_refused": 2,
+   "quote_rejected": 2,
+   "closing_fills": 1,
+   "fills": 2,
+   "quote_fills": 2,
+   "maker_fills": 2,
+   "quote_expired": 3,
+   "end_net": 2,
+   "positions": {
+    "VN30F2301": 2
+   },
+   "positions_match_engine": true,
+   "charges_dong": 27871.0,
+   "end_equity_dong": 483413116.0,
+   "engine_deposit_dong": 483413116.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2023-01-03",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 35547000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2023-01-04",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1670,
+   "cancel_refused": 6,
+   "quote_rejected": 2,
+   "fills": 1,
+   "quote_fills": 1,
+   "taker_fills": 1,
+   "quote_expired": 7,
+   "end_net": 3,
+   "positions": {
+    "VN30F2301": 3
+   },
+   "positions_match_engine": true,
+   "charges_dong": 14115.0,
+   "end_equity_dong": 482819001.0,
+   "engine_deposit_dong": 482819001.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2023-01-04",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 53177700.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2023-01-05",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1670,
+   "indeterminate_evals": 2,
+   "indeterminate_orders": 2,
+   "cancel_refused": 8,
+   "quote_rejected": 2,
+   "closing_fills": 1,
+   "fills": 1,
+   "quote_fills": 1,
+   "taker_fills": 1,
+   "quote_expired": 9,
+   "end_net": 2,
+   "positions": {
+    "VN30F2301": 2
+   },
+   "positions_match_engine": true,
+   "charges_dong": 14176.0,
+   "end_equity_dong": 485764825.0,
+   "engine_deposit_dong": 485764825.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2023-01-05",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 35829200.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2023-01-06",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1666,
+   "indeterminate_evals": 1,
+   "indeterminate_orders": 1,
+   "cancel_refused": 8,
+   "quote_expired": 10,
+   "end_net": 2,
+   "positions": {
+    "VN30F2301": 2
+   },
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 485204825.0,
+   "engine_deposit_dong": 485204825.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2023-01-06",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 35734000.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2023-01-09",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1666,
+   "closing_fills": 3,
+   "fills": 4,
+   "quote_fills": 4,
+   "taker_fills": 3,
+   "cancel_refused": 10,
+   "quote_rejected": 2,
+   "maker_fills": 1,
+   "quote_expired": 11,
+   "end_net": 0,
+   "positions": {},
+   "positions_match_engine": true,
+   "charges_dong": 56971.0,
+   "end_equity_dong": 486847854.0,
+   "engine_deposit_dong": 486847854.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2023-01-09",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": true,
+     "determinate": true,
+     "amount_dong": 0.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2023-01-10",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1664,
+   "cancel_refused": 8,
+   "quote_rejected": 2,
+   "fills": 1,
+   "quote_fills": 1,
+   "maker_fills": 1,
+   "quote_expired": 9,
+   "end_net": -1,
+   "positions": {
+    "VN30F2301": -1
+   },
+   "positions_match_engine": true,
+   "charges_dong": 14201.0,
+   "end_equity_dong": 486483653.0,
+   "engine_deposit_dong": 486483653.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2023-01-10",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 17962200.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2023-01-11",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1654,
+   "indeterminate_evals": 1,
+   "indeterminate_orders": 1,
+   "cancel_refused": 6,
+   "quote_expired": 8,
+   "end_net": -1,
+   "positions": {
+    "VN30F2301": -1
+   },
+   "positions_match_engine": true,
+   "charges_dong": 0.0,
+   "end_equity_dong": 485873653.0,
+   "engine_deposit_dong": 485873653.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2023-01-11",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": false,
+     "determinate": true,
+     "amount_dong": 18065900.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  },
+  {
+   "date": "2023-01-12",
+   "contract": "VN30F2301",
+   "rolled": false,
+   "quote_submitted": 1650,
+   "fills": 5,
+   "quote_fills": 5,
+   "taker_fills": 5,
+   "cancel_refused": 10,
+   "quote_rejected": 2,
+   "closing_fills": 3,
+   "quote_expired": 11,
+   "end_net": 0,
+   "positions": {},
+   "positions_match_engine": true,
+   "charges_dong": 71416.0,
+   "end_equity_dong": 487382237.0,
+   "engine_deposit_dong": 487382237.0,
+   "engine_margin_status": "ok",
+   "ccp": [
+    {
+     "as_of": "2023-01-12",
+     "model": "PRE_KRX_CONTINUOUS",
+     "flat": true,
+     "determinate": true,
+     "amount_dong": 0.0,
+     "gaps": [],
+     "assumptions": []
+    }
+   ],
+   "ccp_state": "compliant"
+  }
+ ],
+ "run": {
+  "window": "im2022",
+  "queue": "optimistic",
+  "step": "3.1",
+  "sessions": 40,
+  "rows": 214390,
+  "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
+  "plutus_simulator_src_dirty": false,
+  "plutus_simulator_commit_at_end": "373f9a764215c5008248ead5a3502b18fec55e0c",
+  "equity_dong": [
+   500000000.0,
+   499548518.0,
+   498732534.0,
+   502373945.0,
+   519336006.0,
+   524746879.0,
+   520202922.0,
+   501250077.0,
+   485911426.0,
+   461869720.0,
+   447477837.0,
+   450739782.0,
+   361193247.0,
+   355891415.0,
+   425063753.0,
+   421429579.0,
+   429742267.0,
+   423369108.0,
+   448488227.0,
+   429838027.0,
+   428317931.0,
+   418619245.0,
+   427684954.0,
+   437792398.0,
+   448962653.0,
+   447216934.0,
+   449326506.0,
+   451974423.0,
+   476569015.0,
+   476072391.0,
+   469618561.0,
+   475575909.0,
+   475940987.0,
+   483413116.0,
+   482819001.0,
+   485764825.0,
+   485204825.0,
+   486847854.0,
+   486483653.0,
+   485873653.0,
+   487382237.0
+  ],
+  "totals": {
+   "roll_triggers": 2,
+   "quote_submitted": 67248,
+   "cancel_refused": 262,
+   "quote_rejected": 58,
+   "fills": 198,
+   "quote_fills": 178,
+   "maker_fills": 69,
+   "quote_expired": 295,
+   "indeterminate_evals": 43,
+   "indeterminate_orders": 29,
+   "taker_fills": 129,
+   "closing_fills": 99,
+   "roll_contracts": 10,
+   "roll_submitted": 5,
+   "roll_retries": 3,
+   "roll_fills": 20,
+   "roll_unfilled_contracts": 0
+  },
+  "refusals": {
+   "cancel:SESSION_SEMANTICS": 262,
+   "quote:SESSION_SEMANTICS": 56,
+   "quote:BAND_LIMIT": 2
+  },
+  "vm_settlements": {
+   "count": 38,
+   "net_dong": -41464395.876986265,
+   "first": "2022-11-17T15:00:00"
+  },
+  "margin_events": [],
+  "ccp_events": [],
+  "ccp_state_end": "compliant",
+  "engine_ignorance": {
+   "evaluations": 686675,
+   "indeterminate": 43,
+   "silent_ignorance": {
+    "fill.decided_without.high": 180,
+    "fill.decided_without.low": 180,
+    "fill.decided_without.open": 180,
+    "fill.decided_without.volume": 180
+   }
+  },
+  "final_engine_deposit_dong": 487382237.0,
+  "wall_seconds": 995.3
+ }
+}

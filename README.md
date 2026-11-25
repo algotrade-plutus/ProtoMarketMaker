@@ -222,9 +222,12 @@ cannot be sourced. MM is an execution-fidelity demonstrator: Tier-1 counters are
   cancel-and-replace, one contract per side. Quoting runs 09:00–14:25. Each session is then closed out with a marketable LIMIT
   priced 1 point through the touch until 14:29:59. Anything left open is marked at that day's close by the harness and counted
   (`closeout_marked_contracts`). The next session opens flat with the previous session's equity as its deposit.
-- Regime guard (S6): before each session the strategy asks the dated rulebook for `margin_model()`. From the 2025-05-05 KRX cutover
-  that call raises `UnresolvedRule`, because the post-trade COMS formula is unsourced, so the strategy refuses to quote rather than
-  invent a margin rule. A diagnostic with the guard off is kept in `post_cutover_unguarded_diagnostic`.
+- Regime guard (S6): before each session the strategy asks the dated rulebook for `margin_model()` and quotes only under a model it
+  knows (`pre_margin`, and `krx_two_layer` from the 2025-05-05 KRX cutover). Until plutus-simulator `391e2e2` the post-KRX model was
+  unsourced and the guard refused all 20 post-cutover sessions; since `391e2e2` the engine models QD 26's two layers (broker IM on
+  VSDC's published 0.17 intraday with no VM; VSDC's CCP requirement after each close on the VN30 index close, which the krx2025 slice
+  now carries), so the guard refuses none. An unresolved or unknown model is still refused. A diagnostic with the guard off is kept
+  in `post_cutover_unguarded_diagnostic`.
 - Contract per day: VN30F1M, or VN30F2M on the naive engine's roll session, mapped to the dated contract via `futurecontractcode`.
 - Prices are index points; 1 point = 100,000đ per contract.
 
@@ -237,22 +240,24 @@ of one dated rule change, the floor of the handoff's 20–30.
 
 Details, sizes and sha256 are in `data/<window>-MANIFEST.md`.
 
-**Results** (`result/mm_anchor/<window>.json`, plutus-simulator `fc94743`):
+**Results** (`result/mm_anchor/<window>.json`, plutus-simulator `373f9a7`):
 
 | window | naive fills | faithful fills: conservative / optimistic / untaped | f/n (cons.) | HPR naive → faithful (cons.) |
 |---|--:|--:|--:|--:|
-| krx2025, all 40 sessions | 693 | 116 / 160 / 21 | 16.7% | +29.57% → −6.03% |
+| krx2025, all 40 sessions | 693 | 366 / 444 / 133 | 52.8% | +29.57% → −0.73% |
 | krx2025, the 20 pre-cutover sessions (like-for-like) | 228 | 116 / 160 / 21 | 50.9% | −5.22% → −6.03% |
 | im2022 | 129 | 70 / 98 / 6 | 54.3% | −12.93% → +2.19% |
 
-The queue spread (conservative vs optimistic) is 27.5% in krx2025 and 28.6% in im2022. The conservative arm's maker quotes rest
-about 3.1 points (31 ticks) away, beyond the three observed levels, so the queue ahead of them cannot be read. That leaves 99.8%
-(krx2025) and 99.9% (im2022) of accepted orders INDETERMINATE at least once (`book_size`).
+The queue spread (conservative vs optimistic) is 17.6% in krx2025 over all 40 sessions (27.5% before `391e2e2`, when only the
+pre-cutover sessions quoted) and 28.6% in im2022. The conservative arm's maker quotes rest about 3.1 points (31 ticks) away, beyond
+the three observed levels, so the queue ahead of them cannot be read. That leaves 99.8% (krx2025 pre-cutover), 99.2% (krx2025
+post-cutover) and 99.9% (im2022) of accepted orders INDETERMINATE at least once (`book_size`).
 
 Dated-IM capacity on the same 500,000,000đ deposit at 1,059 points is 36 contracts at 13% and 27 at 17%. In the run itself
 capacity was 36 on 2022-12-14 and 28 on 2022-12-15.
 
-Post-cutover, the strategy refused all 20 of 20 sessions.
+Post-cutover, the strategy now quotes all 20 sessions (it refused 20 of 20 before plutus-simulator `391e2e2` sourced the post-KRX
+margin model). The pre-cutover and im2022 numbers are unchanged by the rerun.
 
 **Regenerate.**
 
@@ -260,9 +265,9 @@ Post-cutover, the strategy refused all 20 of 20 sessions.
 # extraction (needs the plutus-simulator checkout + its venv + DB access; writes rivf26/data and data/)
 .venv/bin/python -m proto_market_maker.experiments.extract_slices krx2025
 .venv/bin/python -m proto_market_maker.experiments.extract_slices im2022
-# runs (shipped data only; ~1 h each)
-.venv/bin/python -m proto_market_maker.experiments.mm_anchor krx2025
-.venv/bin/python -m proto_market_maker.experiments.mm_anchor im2022
+# runs (shipped data only; a few minutes each at plutus-simulator 373f9a7; --log for per-session progress)
+.venv/bin/python -m proto_market_maker.experiments.mm_anchor krx2025 --log anchor_krx2025.log
+.venv/bin/python -m proto_market_maker.experiments.mm_anchor im2022 --log anchor_im2022.log
 .venv/bin/python -m pytest -q
 ```
 
@@ -294,104 +299,47 @@ changes one environment rule.
   - Book (depth 1–3 with sizes) and sized tape: the traded contract, plus both contracts on roll days and on the session
     after a roll.
   - See `data/<window>-MANIFEST.md`.
-- krx2025 is compared on the 20 pre-cutover sessions. F runs all 40; A has no guard, so the post-cutover sessions are
-  reported separately.
+- Every rung runs all 40 sessions of each window. krx2025 also has two views cut from the same runs: `pre_cutover`
+  (the 20 sessions before 2025-05-05; like for like with the results committed before plutus-simulator `391e2e2`, which
+  compared those only) and `post_cutover` (the 20 from it, returns from the 2025-04-29 close). The CCP layer's nights,
+  indeterminate nights (with the reason) and calendar-spread UNKNOWNs are counted per arm.
 
-#### im2022 (all 40 sessions)
+The full tables (rungs, cross-check checkpoint, Tier-1 counters, CCP counters, views) are generated in
+`result/mm_ladder/<window>.md` and `result/REPORT.md`; regenerate rather than copy. Return (HPR) and fills, plutus-simulator
+`373f9a7`:
 
-| rung | environment | fills | Δ fills | round trips | HPR | Δ HPR | undecided orders |
-|---|---|--:|--:|--:|--:|--:|--:|
-| N0 | naive as-is | 129 |  | 64 | -12.93% |  |  |
-| N1 | + own-price fills | 129 | +0 | 64 | -15.90% | -2.97 pp |  |
-| N2 | + dated VSD IM (13% / 17%) | 129 | +0 | 64 | -15.90% | +0.00 pp |  |
-| N3 | + fee on every fill | 129 | +0 | 64 | -16.42% | -0.52 pp |  |
-| F-opt | Plutus faithful-A, optimistic queue | 198 | +69 | 99 | -2.52% | +13.90 pp | 0.04% |
-| F-con | Plutus faithful-A, conservative queue | 116 | -82 | 57 | -11.47% | -8.94 pp | 99.88% |
-
-Cross-check checkpoint: through 2022-12-13 (19 sessions), the last session before the first non-empty roll (every roll completed) (2022-12-14):
-
-| rung | fills | Δ fills | round trips | HPR | Δ HPR |
-|---|--:|--:|--:|--:|--:|
-| N0 | 104 |  | 50 | -17.98% |  |
-| N1 | 104 | +0 | 50 | -19.95% | -1.97 pp |
-| N2 | 104 | +0 | 50 | -19.95% | +0.00 pp |
-| N3 | 104 | +0 | 50 | -20.38% | -0.43 pp |
-| F-opt | 116 | +12 | 53 | -14.03% | +6.35 pp |
-| F-con | 72 | -44 | 33 | -15.70% | -1.67 pp |
-
-Faithful-A Tier-1 (same span):
-
-| | margin warnings | margin calls | forced liq. (executed) | VM settlement days | roll fills / roll legs | roll retries | roll unfilled | engine (forced) fills | max abs(ledger − engine deposit) |
-|---|--:|--:|--:|--:|--:|--:|--:|--:|--:|
-| F-opt | 0 | 0 | 0 (0) | 38 | 20 / 20 | 3 | 0 | 0 | 0đ |
-| F-con | 0 | 0 | 0 (0) | 40 | 12 / 12 | 5 | 0 | 0 | 0đ |
-
-F-opt: `result/mm_faithful_a/im2022_optimistic.json` sha256 `d1e4c02f63552cf7…`, plutus-simulator `b52877e` (checkout moved to `af55e29` before the run ended)
-F-con: `result/mm_faithful_a/im2022_conservative.json` sha256 `dbd6104fc1d0ed2a…`, plutus-simulator `b52877e` (checkout moved to `af55e29` before the run ended)
-
-#### krx2025 (20 pre-cutover sessions)
-
-| rung | environment | fills | Δ fills | round trips | HPR | Δ HPR | undecided orders |
-|---|---|--:|--:|--:|--:|--:|--:|
-| N0 | naive as-is | 228 |  | 112 | -5.22% |  |  |
-| N1 | + own-price fills | 228 | +0 | 112 | -14.09% | -8.88 pp |  |
-| N2 | + dated VSD IM (13% / 17%) | 228 | +0 | 112 | -14.09% | +0.00 pp |  |
-| N3 | + fee on every fill | 228 | +0 | 112 | -15.02% | -0.93 pp |  |
-| F-opt | Plutus faithful-A, optimistic queue | 261 | +33 | 127 | -7.58% | +7.45 pp | 0.08% |
-| F-con | Plutus faithful-A, conservative queue | 153 | -108 | 71 | -25.55% | -17.97 pp | 99.63% |
-
-Cross-check checkpoint: through 2025-04-15 (10 sessions), the last session before the first non-empty roll (every roll completed) (2025-04-16):
-
-| rung | fills | Δ fills | round trips | HPR | Δ HPR |
-|---|--:|--:|--:|--:|--:|
-| N0 | 179 |  | 88 | -7.15% |  |
-| N1 | 179 | +0 | 88 | -14.96% | -7.81 pp |
-| N2 | 179 | +0 | 88 | -14.96% | +0.00 pp |
-| N3 | 179 | +0 | 88 | -15.69% | -0.73 pp |
-| F-opt | 197 | +18 | 93 | +4.49% | +20.18 pp |
-| F-con | 113 | -84 | 53 | -26.25% | -30.73 pp |
-
-Faithful-A Tier-1 (same span):
-
-| | margin warnings | margin calls | forced liq. (executed) | VM settlement days | roll fills / roll legs | roll retries | roll unfilled | engine (forced) fills | max abs(ledger − engine deposit) |
-|---|--:|--:|--:|--:|--:|--:|--:|--:|--:|
-| F-opt | 1 | 1 | 0 (0) | 18 | 22 / 22 | 4 | 0 | 0 | 0đ |
-| F-con | 4 | 0 | 0 (0) | 18 | 14 / 14 | 6 | 0 | 0 | 0đ |
-
-krx2025 post-cutover (20 sessions, A unguarded):
-
-- F-opt: fills 314, margin calls 7, forced liquidations 0 (0 executed), HPR over the post sessions -4.81%, whole 40 sessions -12.02%
-- F-con: fills 259, margin calls 23, forced liquidations 18485 (3 executed), HPR over the post sessions -17.30%, whole 40 sessions -38.43%
-
-F-opt: `result/mm_faithful_a/krx2025_optimistic.json` sha256 `ba3d87b6cd379cad…`, plutus-simulator `b52877e` (checkout moved to `af55e29` before the run ended)
-F-con: `result/mm_faithful_a/krx2025_conservative.json` sha256 `d4466fcfd69d968b…`, plutus-simulator `b52877e` (checkout moved to `af55e29` before the run ended)
+| rung | im2022 (40) | krx2025 (40) | krx2025 pre-cutover (20) | krx2025 post-cutover (20) |
+|---|--:|--:|--:|--:|
+| N0 naive as-is | −12.93% (129) | +29.57% (693) | −5.22% (228) | +36.70% (465) |
+| N1 + own-price fills | −15.90% (129) | −41.99% (693) | −14.09% (228) | −32.47% (465) |
+| N2 + dated VSD IM | −15.90% (129) | −41.99% (693) | −14.09% (228) | −32.47% (465) |
+| N3 + fee on every fill | −16.42% (129) | −44.77% (693) | −15.02% (228) | −35.01% (465) |
+| F-opt | −2.52% (198) | −12.02% (575) | −7.58% (261) | −4.81% (314) |
+| F-con | −11.47% (116) | −42.96% (358) | −25.55% (153) | −23.39% (205) |
 
 Reading (report, don't tune):
-- **Does F < N hold on return for A?** Measured against naive as-is (N0):
-  - **im2022: no.** Both F arms lose less than N0: F-opt −2.52% and F-con −11.47%, against −12.93%. It holds at the
-    19-session checkpoint too (−14.03% and −15.70%, against −17.98%).
-  - **krx2025 (pre-cutover): yes.** F-opt −7.58% and F-con −25.55%, against −5.22%.
-  - **krx2025 at the 10-session checkpoint:** F-opt is +4.49% against −7.15%, the opposite direction to the full window.
-    F-con, at −26.25%, agrees with the full window.
-- **The im2022 reversal does not survive A with overnight carry.** The flat-each-session faithful arm made +2.2%; A in
-  F loses in both queues. F still loses less than N.
-- **The naive-side rungs:** own-price fills is the only one that moves anything (−2.97 pp im2022, −8.88 pp krx2025).
-  The dated IM changes nothing in N, because N's capacity never binds. It does bind in F: there are
-  `INSUFFICIENT_DEPOSIT` quote refusals in krx2025 (924 under conservative).
-- **N3 → F is the largest step, and it depends on the queue.** Optimistic vs conservative differs by 8.9 pp (im2022)
-  and 18 pp (krx2025; 31 pp at the checkpoint). The conservative queue leaves 99.6–99.9% of orders undecided. With carry,
-  which quotes fill decides which side the inventory sits on through the April 2025 gaps.
-- **Rolls now complete in every run:** 20/20, 12/12, 22/22 and 14/14 legs, after 3–6 retries.
-- **krx2025 post-cutover, F-con:** 18,485 forced-liquidation events; 3 had a close accepted and 21 contracts were
-  force-closed.
+- **Naive falls outside the faithful band, in either direction.** im2022: all four naive rungs below it. krx2025 whole
+  window: N0 above it, N3 below it (N1/N2 just inside). krx2025 pre-cutover: N0 above it. krx2025 post-cutover: N0 above
+  it, N1–N3 below it.
+- **Own-price fills is the naive rung that matters** (−2.97 pp im2022, −8.88 pp krx2025 pre-cutover, −71.55 pp krx2025
+  whole window). The dated IM changes nothing in N, because N's capacity never binds.
+- **The queue decides the faithful result:** the band is 8.9 pp wide in im2022 and 30.9 pp over the whole krx2025 window.
+- **Post-KRX margin (plutus-simulator `391e2e2`):** the CCP layer decided every post-cutover night with a position (F-opt
+  20/20, F-con 19/19; 0 indeterminate, 0 calendar-spread UNKNOWN). F-con was notified of a CCP shortfall at the 2025-05-20
+  close, suspended at 09:30 on 05-21 and restored at that close (reported by the engine, not enforced).
+- **What the rerun moved:** nothing before the cutover and nothing in im2022 (`67f18fa` and `dcaecb9` change no MM
+  number). Post-cutover F-con moved (fills 259 → 205, post HPR −17.30% → −23.39%, whole window −38.43% → −42.96%): from
+  2025-05-14 the broker layer's IM-only intraday check (no VM) admits and closes positions on different sessions than the
+  old pre-KRX IM+VM shape. F-opt is unchanged.
 
-Regenerate (each faithful-A run takes about 17–36 min at plutus-simulator `b52877e`):
+Regenerate (each faithful-A run takes about 17–34 min at plutus-simulator `373f9a7`):
 
 ```bash
 .venv/bin/python -m proto_market_maker.experiments.extract_slices im2022   # needs DB + archive
 .venv/bin/python -m proto_market_maker.experiments.extract_slices krx2025  # needs DB
 for w in im2022 krx2025; do for q in optimistic conservative; do
-  .venv/bin/python -m proto_market_maker.experiments.mm_faithful_a $w --queue $q; done; done
+  .venv/bin/python -m proto_market_maker.experiments.mm_faithful_a $w --queue $q --log faithful_${w}_${q}.log \
+    --trace-out result/mm_markout/${w}_fills_$([ $q = optimistic ] && echo F-opt || echo F-con).json; done; done
 .venv/bin/python -m proto_market_maker.experiments.mm_ladder im2022
 .venv/bin/python -m proto_market_maker.experiments.mm_ladder krx2025
 .venv/bin/python -m pytest -q tests/test_naive_variants.py tests/test_regression_baseline.py

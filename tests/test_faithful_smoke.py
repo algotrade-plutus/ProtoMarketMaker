@@ -22,8 +22,31 @@ def test_faithful_one_session_runs_and_closes_out(queue):
     assert "refused" not in s                     # pre-KRX: margin model resolves
 
 
-def test_regime_guard_refuses_post_krx():
+def test_regime_guard_accepts_both_sourced_margin_models():
+    """plutus-simulator 391e2e2: the dated margin model is 'pre_margin' before the
+    2025-05-05 KRX cutover and 'krx_two_layer' (QD 26) from it; the guard accepts
+    exactly these known values."""
     from datetime import date
-    from proto_market_maker.experiments.mm_anchor import _margin_model_ok
+    from proto_market_maker.experiments.mm_anchor import KNOWN_MARGIN_MODELS, _margin_model_ok
+    assert KNOWN_MARGIN_MODELS == frozenset({"pre_margin", "krx_two_layer"})
     assert _margin_model_ok(date(2025, 5, 2)) is True
-    assert _margin_model_ok(date(2025, 5, 5)) is False
+    assert _margin_model_ok(date(2025, 5, 5)) is True
+
+
+def test_regime_guard_refuses_an_unknown_or_unresolved_model(monkeypatch):
+    from datetime import date
+    from plutus.market.session import rulebook
+    from proto_market_maker.experiments.mm_anchor import _margin_model_ok
+
+    class _At:
+        def __init__(self, value):
+            self.value = value
+
+        def margin_model(self):
+            if self.value is None:
+                raise rulebook.UnresolvedRule.__new__(rulebook.UnresolvedRule)
+            return self.value
+
+    for value in ("some_future_model", None):
+        monkeypatch.setattr(rulebook.Rulebook, "at", lambda self, ts, v=value: _At(v))
+        assert _margin_model_ok(date(2025, 5, 5)) is False

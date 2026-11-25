@@ -3,7 +3,7 @@
  "ladder": {
   "im2022": {
    "source": "result/mm_ladder/im2022.json",
-   "sha256": "aa4c9551545099b8bc99cc550a722101260e95d142d21a738c3e2a9ed7c56ba5",
+   "sha256": "677d7370abb8b70ab233945c1002ec003135c6f84f6707e0eee0bf90ba251de2",
    "session_set": "all 40 sessions",
    "sessions": 40,
    "rungs": {
@@ -57,8 +57,60 @@
   },
   "krx2025": {
    "source": "result/mm_ladder/krx2025.json",
-   "sha256": "d8ae7770b1d5e78ebefacc4d80bcdd01041a2ea8fb61a7c0e5dedc86dbef7532",
-   "session_set": "20 pre-cutover sessions",
+   "sha256": "02dccecd959cca5ccce80ae99bbf9b40d4c2e607f2a80111fe58b788a7f08c76",
+   "session_set": "all 40 sessions",
+   "sessions": 40,
+   "rungs": {
+    "N0": {
+     "hpr": 0.29567999999999994,
+     "fills": 693,
+     "round_trips": 345,
+     "label": "naive as-is"
+    },
+    "N1": {
+     "hpr": -0.41986,
+     "fills": 693,
+     "round_trips": 345,
+     "label": "+ own-price fills"
+    },
+    "N2": {
+     "hpr": -0.41986,
+     "fills": 693,
+     "round_trips": 345,
+     "label": "+ dated VSD IM (13% / 17%)"
+    },
+    "N3": {
+     "hpr": -0.4477,
+     "fills": 693,
+     "round_trips": 345,
+     "label": "+ fee on every fill"
+    },
+    "F-opt": {
+     "hpr": -0.12019000000000002,
+     "fills": 575,
+     "round_trips": 283,
+     "label": "Plutus faithful-A, optimistic queue"
+    },
+    "F-con": {
+     "hpr": -0.42963595200000004,
+     "fills": 358,
+     "round_trips": 175,
+     "label": "Plutus faithful-A, conservative queue"
+    }
+   },
+   "band": {
+    "low": -0.42963595200000004,
+    "high": -0.12019000000000002
+   },
+   "naive_outside_band": [
+    "N0",
+    "N3"
+   ]
+  },
+  "krx2025 pre-cutover": {
+   "source": "result/mm_ladder/krx2025.json",
+   "sha256": "02dccecd959cca5ccce80ae99bbf9b40d4c2e607f2a80111fe58b788a7f08c76",
+   "session_set": "20 pre-cutover sessions (like-for-like with the results committed before plutus-simulator 391e2e2, which compared these sessions only)",
    "sessions": 20,
    "rungs": {
     "N0": {
@@ -105,12 +157,66 @@
    "naive_outside_band": [
     "N0"
    ]
+  },
+  "krx2025 post-cutover": {
+   "source": "result/mm_ladder/krx2025.json",
+   "sha256": "02dccecd959cca5ccce80ae99bbf9b40d4c2e607f2a80111fe58b788a7f08c76",
+   "session_set": "20 post-cutover sessions from 2025-05-05 (QD 26 two-layer margin; returns from the 2025-04-29 close)",
+   "sessions": 20,
+   "rungs": {
+    "N0": {
+     "hpr": 0.3670106138296301,
+     "fills": 465,
+     "round_trips": 233,
+     "label": "naive as-is"
+    },
+    "N1": {
+     "hpr": -0.32468046469396783,
+     "fills": 465,
+     "round_trips": 233,
+     "label": "+ own-price fills"
+    },
+    "N2": {
+     "hpr": -0.32468046469396783,
+     "fills": 465,
+     "round_trips": 233,
+     "label": "+ dated VSD IM (13% / 17%)"
+    },
+    "N3": {
+     "hpr": -0.35006707618442423,
+     "fills": 465,
+     "round_trips": 233,
+     "label": "+ fee on every fill"
+    },
+    "F-opt": {
+     "hpr": -0.048080257533798076,
+     "fills": 314,
+     "round_trips": 156,
+     "label": "Plutus faithful-A, optimistic queue"
+    },
+    "F-con": {
+     "hpr": -0.2338968067665811,
+     "fills": 205,
+     "round_trips": 104,
+     "label": "Plutus faithful-A, conservative queue"
+    }
+   },
+   "band": {
+    "low": -0.2338968067665811,
+    "high": -0.048080257533798076
+   },
+   "naive_outside_band": [
+    "N0",
+    "N1",
+    "N2",
+    "N3"
+   ]
   }
  },
  "markouts": [
   {
    "source": "result/mm_markout/im2022_markout.json",
-   "sha256": "445c24a3324fad612a2e2d6f2481093ce16c1bf13a83ef2c41ddc2b6f39e5d2e",
+   "sha256": "680e4430f909d75b6460419d99baca8519aa1fd6d097e7332e0608e2e997e685",
    "window": "im2022",
    "session_set": "all 40 sessions",
    "price_path": "tape",
@@ -174,6 +280,75 @@
      "carry_dong": -92069999.99999999,
      "mark_switch_dong": 0.0,
      "trading_dong": 34741714.999999955
+    }
+   }
+  },
+  {
+   "source": "result/mm_markout/krx2025_markout.json",
+   "sha256": "b2d169cf17d6c98a607d4aeacd0492e973d813c5551a227c41febdcf527fb7a6",
+   "window": "krx2025",
+   "session_set": "all 40 sessions",
+   "price_path": "tape",
+   "arms": {
+    "N0": {
+     "sessions": 40,
+     "contracts": 713,
+     "taker_share": 0.0,
+     "price_improvement_median": null,
+     "markout_mean_points": {
+      "1m": 3.109256661991586,
+      "5m": 2.79705469845723,
+      "close": 3.231136044880792
+     },
+     "pnl_dong": 147840000.0,
+     "carry_dong": -73350000.00000001,
+     "mark_switch_dong": 3740000.0000000303,
+     "trading_dong": 217450000.0
+    },
+    "N3": {
+     "sessions": 40,
+     "contracts": 713,
+     "taker_share": 0.0,
+     "price_improvement_median": null,
+     "markout_mean_points": {
+      "1m": -1.9085553997195135,
+      "5m": -2.220757363253869,
+      "close": -1.7866760168303069
+     },
+     "pnl_dong": -223850000.0,
+     "carry_dong": -73350000.00000001,
+     "mark_switch_dong": 3740000.0000000303,
+     "trading_dong": -154240000.0
+    },
+    "F-opt": {
+     "sessions": 40,
+     "contracts": 575,
+     "taker_share": 0.5026086956521739,
+     "price_improvement_median": 1.2000000000000455,
+     "markout_mean_points": {
+      "1m": 0.06347826086955731,
+      "5m": -0.6819130434782679,
+      "close": -1.6688695652173986
+     },
+     "pnl_dong": -60095000.0,
+     "carry_dong": 45319999.99999985,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -105414999.99999985
+    },
+    "F-con": {
+     "sessions": 40,
+     "contracts": 358,
+     "taker_share": 0.6787709497206704,
+     "price_improvement_median": 0.7000000000000455,
+     "markout_mean_points": {
+      "1m": -0.07821229050280981,
+      "5m": -0.3097765363128551,
+      "close": -0.4136871508379994
+     },
+     "pnl_dong": -214817976.0,
+     "carry_dong": -194109999.99999994,
+     "mark_switch_dong": 0.0,
+     "trading_dong": -20707976.000000045
     }
    }
   }

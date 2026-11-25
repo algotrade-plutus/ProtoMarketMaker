@@ -27,8 +27,18 @@ local_quote_total           contracts A touches (below)     faithful (tape)
 quote_close                 F1M and F2M, every session      naive (+ marks)
 quote_{ceil,floor,ref.}     F1M and F2M, every session      faithful (band)
 quote_ticker                F1M and F2M contracts           DataHubSource root check
+quote_close (``VN30``)      every session (krx2025 only)    faithful (CCP layer)
 futurecontractcode (CSV)    the window                      both (contract map)
 =========================  ==============================  =================
+
+The VN30 **index** close is read by the engine's post-KRX CCP layer
+(``overnight.vsdc_ccp_requirement``: QD 26 Phu luc 2 margins on the
+underlying's close, never the futures price), through
+``ExchangeSession._underlying_closes`` at every close with a position. Without
+it every post-cutover night with a position is INDETERMINATE
+(``underlying_close``). The pre-KRX model (``pre_margin``, the continuous IM+VM
+engine) does not use it, so a window that does not reach the cutover
+(``im2022``) does not carry it.
 
 The bands cover **both** continuous contracts on every session, not only the
 traded one: faithful-A (``mm_faithful_a``) carries inventory, so on a roll day
@@ -159,6 +169,16 @@ def touched(i: int, sessions: List[date], fcc, traded, rolls) -> set:
     return out & listed
 
 
+#: The KRX cutover from which the engine's CCP layer reads the underlying close.
+KRX_CUTOVER = date(2025, 5, 5)
+UNDERLYING = "VN30"
+
+
+def needs_underlying_close(sessions: List[date]) -> bool:
+    """A window reaching the KRX cutover needs the VN30 index close (CCP layer)."""
+    return bool(sessions) and sessions[-1] >= KRX_CUTOVER
+
+
 def build_request(sessions: List[date], fcc) -> dict:
     traded = traded_contracts(sessions, fcc)
     rolls = set(roll_days(sessions))
@@ -177,6 +197,9 @@ def build_request(sessions: List[date], fcc) -> dict:
         add("local_quote_matched.parquet", f2, d)
         add("quote_close.parquet", f1, d)
         add("quote_close.parquet", f2, d)
+        if needs_underlying_close(sessions):
+            # every session: the engine reads it at each close with a position
+            add("quote_close.parquet", UNDERLYING, d)
         for f in ("quote_ceil", "quote_floor", "quote_reference"):
             add(f + ".parquet", f1, d)      # both contracts: see the module doc
             add(f + ".parquet", f2, d)
@@ -223,13 +246,16 @@ def trim_copy(src: Path, dst: Path) -> Tuple[int, int]:
 WHY = {
     "krx2025": (
         "20 sessions either side of the 2025-05-05 KRX cutover, the low end of the "
-        "handoff's 20-30: enough for the regime guard to act on every post-cutover "
-        "session and for both arms to quote a non-trivial number of times on each "
-        "side. MM has no look-back, so no warm-up. Only the contract the signal "
+        "handoff's 20-30: enough for A to quote and carry inventory under both dated "
+        "margin regimes (pre_margin, then QD 26's two layers) a non-trivial number "
+        "of times on each side. MM has no look-back, so no warm-up. Only the contract the signal "
         "trades each day carries book and tape; VN30F2M otherwise contributes "
         "matched prices, closes and daily bands (bands for both contracts on every "
         "session, so a roll can close F1 and open F2). Depth "
-        "1-3 is all the DB holds and all the book walk reads."),
+        "1-3 is all the DB holds and all the book walk reads. The VN30 index close "
+        "(one row per session in quote_close) is what the engine's post-KRX CCP "
+        "margin layer reads (QD 26 Phu luc 2 margins on the underlying's close); "
+        "without it every post-cutover night with a position is INDETERMINATE."),
     "im2022": (
         "20 sessions either side of the 2022-12-15 VSD IM step 13% -> 17%, so one "
         "deposit is margined at both ratios inside one run. Book sizes from the "

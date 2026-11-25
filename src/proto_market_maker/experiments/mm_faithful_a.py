@@ -35,9 +35,18 @@ runs A exactly and lets only the environment differ. Compared with the
     A's inventory is the account's net contracts across all VN30F contracts.
 
 No regime guard: A has none. From the 2025-05-05 KRX cutover the engine's
-``margin_model()`` raises ``UnresolvedRule``; the engine still margins on the
-pre-KRX shape and counts ``margin_model_unsourced`` blindness. That is reported,
-not hidden (``post`` split for krx2025).
+dated ``margin_model()`` is ``'krx_two_layer'`` (QD 26, plutus-simulator
+``391e2e2``): intraday the broker layer charges IM on VSDC's published ratio
+(0.17) with no VM term; after each close the VSDC CCP layer computes the binding
+requirement on the **underlying's** (VN30 index) close, which the krx2025 slice
+carries. A night it cannot compute (a missing input, or a calendar spread held
+at the close, whose ``SMrate`` is unpublished) is INDETERMINATE, never guessed.
+Each session records the engine's overnight determinations (``ccp``) and the
+counters ``ccp_nights`` (post-KRX closes with a position),
+``ccp_indeterminate_nights``, ``ccp_gap:<reason>`` and
+``ccp_calendar_spread_unknown``; the run records QD 26 Dieu 13's CCP state
+transitions (``ccp_events``; reported, not enforced by the engine). Post-cutover
+sessions are reported apart as well as in the whole window (``mm_ladder``).
 
 P&L is the harness's own ledger, real dong: cash from every fill (quote, roll,
 engine forced close) and expiry settlement, net position marked at the day's
@@ -48,7 +57,10 @@ Run::
 
     .venv/bin/python -m proto_market_maker.experiments.mm_faithful_a im2022 --queue optimistic
 
-Writes ``result/mm_faithful_a/<window>_<queue>.json``.
+Writes ``result/mm_faithful_a/<window>_<queue>.json``. ``--log FILE`` appends
+one flushed line per session (date, contract, fills, equity, elapsed, ETA).
+``--trace-out FILE`` also writes this run's fill trace in ``mm_fills_trace``'s
+format (the same run, so the markouts need no second faithful pass).
 """
 from __future__ import annotations
 
@@ -313,6 +325,30 @@ def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[in
     t0 = _time.time()
     cols = data[["datetime", "date", "price", "f2_price", "tickersymbol", "f2-tickersymbol"]]
     charges_prev = Decimal(0)
+    ovn_seen = 0
+
+    def ccp_today() -> List[dict]:
+        """The engine's overnight determinations since the last call, counted."""
+        nonlocal ovn_seen
+        from plutus.market.session.overnight import VSDC_CCP_MODEL
+        ovs = sess.overnight_margins()
+        new, ovn_seen = ovs[ovn_seen:], len(ovs)
+        rows = []
+        for r in new:
+            rows.append({"as_of": r.as_of.isoformat(), "model": r.model, "flat": bool(r.flat),
+                         "determinate": bool(r.is_determinate),
+                         "amount_dong": None if r.amount is None else float(r.amount),
+                         "gaps": list(r.gaps), "assumptions": list(r.assumptions)})
+            if r.model == VSDC_CCP_MODEL and not r.flat:
+                s["ccp_nights"] += 1
+                if not r.is_determinate:
+                    s["ccp_indeterminate_nights"] += 1
+                    for g in sorted({g.split(":", 1)[0] for g in r.gaps}):
+                        s[f"ccp_gap:{g}"] += 1
+                    if any(g.startswith("basis_margin.calendar_spread") for g in r.gaps):
+                        s["ccp_calendar_spread_unknown"] += 1
+        return rows
+
     for i, (dt, d, p1, p2, tk1, tk2) in enumerate(cols.itertuples(index=False, name=None)):
         if d not in run_set:
             break
@@ -344,6 +380,7 @@ def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[in
             # day end: through the ATC to the close; settlement runs there
             absorb(backend.advance_to(datetime.combine(d, time(14, 44, 59))))
             absorb(backend.advance_to(datetime.combine(d, DAY_END)))
+            ccp_rows = ccp_today()
             live_quotes.clear()
             for leg in roll_legs:
                 s["roll_unfilled_contracts"] += max(leg["qty"], 0)
@@ -367,13 +404,18 @@ def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[in
                    "charges_dong": float(charges - charges_prev),
                    "end_equity_dong": float(eq),
                    "engine_deposit_dong": float(mv.deposit_balance),
-                   "engine_margin_status": getattr(mv.status, "value", str(mv.status))}
+                   "engine_margin_status": getattr(mv.status, "value", str(mv.status)),
+                   "ccp": ccp_rows,
+                   "ccp_state": getattr(sess.ccp_margin_state(), "value",
+                                        str(sess.ccp_margin_state()))}
             charges_prev = charges
             per_session.append(rec)
             tot.update(s)
             log(f"  [{queue}] {d} {ticker} fills={s['fills']} net={net()} eq={float(eq):,.0f} "
                 f"dep={float(mv.deposit_balance):,.0f} ind={s['indeterminate_orders']}/"
-                f"{s['quote_submitted']} calls={s['margin_call']} ({_time.time() - t0:.0f}s)")
+                f"{s['quote_submitted']} calls={s['margin_call']} "
+                f"ccp_ind={s['ccp_indeterminate_nights']}/{s['ccp_nights']} "
+                f"elapsed={_time.time() - t0:.0f}s")
             s = Counter()
             cur_index += 1
             moving_to_f2 = False
@@ -396,6 +438,17 @@ def run_faithful_a(window: str, queue: str, log=print, max_sessions: Optional[in
                            "net_dong": float(sum((e.amount for e in vm), Decimal(0))),
                            "first": vm[0].ts.isoformat() if vm else None},
         "margin_events": margin_events,
+        "ccp_events": [{"kind": getattr(e.kind, "value", str(e.kind)),
+                        "checkpoint": getattr(e.checkpoint, "value", str(e.checkpoint)),
+                        "on": e.on.isoformat(), "at": e.at.isoformat(),
+                        "previous_state": getattr(e.previous_state, "value", str(e.previous_state)),
+                        "state": getattr(e.state, "value", str(e.state)),
+                        "margin_assets_dong": float(e.margin_assets),
+                        "required_margin_dong": float(e.required_margin),
+                        "shortfall_dong": float(e.shortfall),
+                        "cure_by_date": None if e.cure_by_date is None else e.cure_by_date.isoformat()}
+                       for e in sess.ccp_margin_events()],
+        "ccp_state_end": getattr(sess.ccp_margin_state(), "value", str(sess.ccp_margin_state())),
         "engine_ignorance": {"evaluations": ign.evaluations,
                              "indeterminate": ign.indeterminate,
                              "silent_ignorance": dict(getattr(ign, "silent_ignorance", {}) or {})},
@@ -412,12 +465,30 @@ def main(argv=None) -> int:
     ap.add_argument("--queue", choices=("optimistic", "conservative"), required=True)
     ap.add_argument("--max-sessions", type=int, default=None)
     ap.add_argument("--out", type=Path, default=None)
+    ap.add_argument("--log", type=Path, default=None,
+                    help="progress log file: one flushed line per session, with ETA")
+    ap.add_argument("--trace-out", type=Path, default=None,
+                    help="also write this run's fill trace (mm_fills_trace format)")
     args = ap.parse_args(argv)
-    out = run_faithful_a(args.window, args.queue, max_sessions=args.max_sessions)
+    from proto_market_maker.experiments.mm_fills_trace import (ARM_OF, ProgressLog,
+                                                               faithful_trace_doc)
+    _, all_days = A.load_contract_map(args.window)
+    total = min(len(all_days), args.max_sessions or len(all_days))
+    plog = ProgressLog(args.log, total, f"faithful-A {args.window} {args.queue}")
+    plog.note(f"plutus-simulator commit at start: {A._engine_commit()}")
+    fills: list = []
+    out = run_faithful_a(args.window, args.queue, log=plog, max_sessions=args.max_sessions,
+                         on_fill=fills.append if args.trace_out else None)
     path = args.out or (A.REPO / "result" / "mm_faithful_a" / f"{args.window}_{args.queue}.json")
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(out, indent=1, default=str) + "\n")
-    print(f"wrote {path}")
+    plog.note(f"wrote {path}")
+    if args.trace_out:
+        doc = faithful_trace_doc(args.window, ARM_OF[args.queue], out, fills)
+        args.trace_out.parent.mkdir(parents=True, exist_ok=True)
+        args.trace_out.write_text(json.dumps(doc, indent=1, default=str) + "\n")
+        plog.note(f"wrote {args.trace_out} ({len(fills)} fill events)")
+    plog.close()
     return 0
 
 

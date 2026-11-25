@@ -9,12 +9,9 @@
 
 Markouts: mean per contract, index points, + = good for A (1 point = 100,000 đ per contract). Taker share: contracts filled as taker among those with a liquidity side. Carry = previous end positions x close-to-close move; mark switch = naive's revaluation across its F1/F2 stitch (the basis, naive only); trading = the rest.
 
-- F-opt: 180 fills had no contract and were assigned one (3 ambiguous).
-- F-con: 109 fills had no contract and were assigned one (1 ambiguous).
-
 Inputs:
 
 - N0: naive trace run by this module
 - N3: naive trace run by this module
-- F-opt: `fills_optimistic40.json` (sha256 `106887adb392315b…`); equity from `result/mm_faithful_a/im2022_optimistic.json`
-- F-con: `fills_conservative40.json` (sha256 `e99e702b773595ff…`); equity from `result/mm_faithful_a/im2022_conservative.json`
+- F-opt: `im2022_fills_F-opt.json` (sha256 `771899659987ad1a…`)
+- F-con: `im2022_fills_F-con.json` (sha256 `0bf446ce31b1fc0b…`)

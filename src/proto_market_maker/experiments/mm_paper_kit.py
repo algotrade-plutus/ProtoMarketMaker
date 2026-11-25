@@ -36,6 +36,7 @@ from typing import Dict, List
 
 REPO = Path(__file__).resolve().parents[3]
 WINDOW_ORDER = ("im2022", "krx2025")
+VIEW_SHORT = {"pre_cutover": "pre-cutover", "post_cutover": "post-cutover"}
 NAIVE = ("N0", "N1", "N2", "N3")
 ROW_LABEL = {"N0": "N0 naive", "N1": "N1 +own-price fill",
              "N2": "N2 +dated IM", "N3": "N3 +fee every fill",
@@ -59,17 +60,22 @@ def load_ladder(result: Path) -> Dict[str, dict]:
         if not p.exists():
             continue
         doc, sha = _read(p)
-        rungs = {r["rung"]: r for r in doc["rungs"]}
-        out[w] = {"source": str(p.relative_to(result.parent)), "sha256": sha,
-                  "session_set": doc["session_set"], "sessions": len(doc["sessions"]),
-                  "rungs": {k: {"hpr": rungs[k]["hpr"], "fills": rungs[k]["fills"],
-                                "round_trips": rungs[k]["round_trips"],
-                                "label": rungs[k]["label"]}
-                            for k in (*NAIVE, "F-opt", "F-con")}}
-        lo, hi = sorted((rungs["F-con"]["hpr"], rungs["F-opt"]["hpr"]))
-        out[w]["band"] = {"low": lo, "high": hi}
-        out[w]["naive_outside_band"] = [k for k in NAIVE
-                                        if not lo <= rungs[k]["hpr"] <= hi]
+        spans = [(w, doc["session_set"], doc["sessions"], doc["rungs"])]
+        # krx2025's pre/post-cutover views (mm_ladder ``views``), after the whole window
+        for name, v in (doc.get("views") or {}).items():
+            spans.append((f"{w} {VIEW_SHORT.get(name, name)}", v["session_set"], v["sessions"], v["rungs"]))
+        for key, session_set, sessions, rlist in spans:
+            rungs = {r["rung"]: r for r in rlist}
+            out[key] = {"source": str(p.relative_to(result.parent)), "sha256": sha,
+                        "session_set": session_set, "sessions": len(sessions),
+                        "rungs": {k: {"hpr": rungs[k]["hpr"], "fills": rungs[k]["fills"],
+                                      "round_trips": rungs[k]["round_trips"],
+                                      "label": rungs[k]["label"]}
+                                  for k in (*NAIVE, "F-opt", "F-con")}}
+            lo, hi = sorted((rungs["F-con"]["hpr"], rungs["F-opt"]["hpr"]))
+            out[key]["band"] = {"low": lo, "high": hi}
+            out[key]["naive_outside_band"] = [k for k in NAIVE
+                                              if not lo <= rungs[k]["hpr"] <= hi]
     return out
 
 
@@ -107,7 +113,7 @@ def figure(ladder: Dict[str, dict], out_stem: Path):
                          "pdf.fonttype": 42, "ps.fonttype": 42,
                          "font.family": "DejaVu Sans", "axes.edgecolor": MUTED,
                          "axes.linewidth": 0.6, "xtick.color": MUTED, "ytick.color": INK})
-    wins = [w for w in WINDOW_ORDER if w in ladder]
+    wins = list(ladder)
     vals = [100 * ladder[w]["rungs"][k]["hpr"] for w in wins for k in (*NAIVE, "F-opt", "F-con")]
     xmin, xmax = min(vals + [0.0]), max(vals + [0.0])
     span = xmax - xmin
@@ -128,9 +134,10 @@ def figure(ladder: Dict[str, dict], out_stem: Path):
             x = 100 * r[key]["hpr"]
             ax.plot([x], [y], marker="s", ms=3.6, color=C_FAITH, mec="white", mew=0.6, zorder=3)
             name = "con" if key == "F-con" else "opt"
-            ax.annotate(f"{name} {x:+.1f}%", (x, y), xytext=(0, -4),
-                        textcoords="offset points", va="top", ha="center",
-                        fontsize=6, color=INK)
+            # con to the left of its marker, opt to the right: a narrow band never overlaps
+            ax.annotate(f"{name} {x:+.1f}%", (x, y), xytext=(-2 if key == "F-con" else 2, -4),
+                        textcoords="offset points", va="top",
+                        ha="right" if key == "F-con" else "left", fontsize=6, color=INK)
         # naive rungs: dots joined in ladder order
         xs = [100 * r[k]["hpr"] for k in NAIVE]
         ax.plot(xs, [ys[k] for k in NAIVE], color=C_NAIVE, lw=0.8, zorder=2)
@@ -141,7 +148,7 @@ def figure(ladder: Dict[str, dict], out_stem: Path):
         ax.set_yticks([ys[k] for k in rows])
         ax.set_yticklabels([ROW_LABEL[k] for k in rows])
         ax.set_ylim(-1.0, len(rows) - 0.4)
-        ax.set_title(f"{w}: {L['session_set']}", loc="left", pad=3)
+        ax.set_title(f"{w}: {L['sessions']} sessions", loc="left", pad=3)
         ax.tick_params(axis="y", length=0)
         ax.tick_params(axis="x", length=2, width=0.5)
         for s in ("top", "right", "left"):
@@ -170,7 +177,7 @@ def _tpct(x):
 
 
 def ladder_md(ladder: Dict[str, dict]) -> str:
-    wins = [w for w in WINDOW_ORDER if w in ladder]
+    wins = list(ladder)
     head = "| rung | environment | " + " | ".join(
         f"{w} return | {w} fills" for w in wins) + " |"
     lines = [head, "|---|---|" + "--:|--:|" * len(wins)]
@@ -190,7 +197,7 @@ def ladder_md(ladder: Dict[str, dict]) -> str:
 
 
 def ladder_tex(ladder: Dict[str, dict]) -> str:
-    wins = [w for w in WINDOW_ORDER if w in ladder]
+    wins = list(ladder)
     tex_lab = {"N0": "naive as-is", "N1": "+ own-price fills", "N2": "+ dated VSD IM",
                "N3": "+ fee on every fill", "F-opt": "Plutus, optimistic queue",
                "F-con": "Plutus, conservative queue"}

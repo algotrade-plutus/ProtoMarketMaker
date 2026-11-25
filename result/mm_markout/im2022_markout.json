@@ -1132,14 +1132,15 @@
     "sum": 235.50000000000057
    },
    "by_role": {
-    "unknown": 198
+    "quote": 178,
+    "roll": 20
    },
    "close_from_last_print": 0,
    "arm": "F-opt",
    "sessions": 40,
    "sessions_with_fills": 38,
-   "ticker_inferred": 180,
-   "ticker_ambiguous": 3,
+   "ticker_inferred": 0,
+   "ticker_ambiguous": 0,
    "pnl_dong": -12617762.99999997,
    "hpr": -0.025235526000000008,
    "carry_dong": -85009999.9999999,
@@ -1634,14 +1635,15 @@
     "sum": 108.80000000000052
    },
    "by_role": {
-    "unknown": 116
+    "quote": 104,
+    "roll": 12
    },
    "close_from_last_print": 0,
    "arm": "F-con",
    "sessions": 40,
    "sessions_with_fills": 35,
-   "ticker_inferred": 109,
-   "ticker_ambiguous": 1,
+   "ticker_inferred": 0,
+   "ticker_ambiguous": 0,
    "pnl_dong": -57328285.00000003,
    "hpr": -0.11465656999999996,
    "carry_dong": -92069999.99999999,
@@ -2054,6 +2056,7 @@
    ]
   }
  },
+ "views": null,
  "inputs": {
   "N0": {
    "traced_here": true
@@ -2062,21 +2065,19 @@
    "traced_here": true
   },
   "F-opt": {
-   "fills_file": "fills_optimistic40.json",
-   "fills_sha256": "106887adb392315baee238a106c1fbd1c0bdf5b11d9e3a17d3836eed0e0068f8",
-   "per_session_from": {
-    "path": "result/mm_faithful_a/im2022_optimistic.json",
-    "sha256": "d1e4c02f63552cf7b51082f3119a5ca9deb586e286ffc4e4d4978d27cbaa0839"
-   }
+   "fills_file": "im2022_fills_F-opt.json",
+   "fills_sha256": "771899659987ad1a08ed95241c91ef3e32e2d351a39ac61be37e24e870802593",
+   "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
+   "sessions": 40,
+   "arm": "F-opt"
   },
   "F-con": {
-   "fills_file": "fills_conservative40.json",
-   "fills_sha256": "e99e702b773595ff46575573d4682d072ceefb5648c9795ed934ef728b30f502",
-   "per_session_from": {
-    "path": "result/mm_faithful_a/im2022_conservative.json",
-    "sha256": "dbd6104fc1d0ed2a12aa5c533b9a053e856c9c35c0fd8a2f0698814c2c425ebe"
-   }
+   "fills_file": "im2022_fills_F-con.json",
+   "fills_sha256": "0bf446ce31b1fc0b66fcdc56244dda30df1acf7510e551887f8de23b0f39b76b",
+   "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
+   "sessions": 40,
+   "arm": "F-con"
   }
  },
- "plutus_simulator_head": "e4c5f87b5e7370f8b36ec7de1cdd2ef8c7ecd29e"
+ "plutus_simulator_head": "373f9a764215c5008248ead5a3502b18fec55e0c"
 }

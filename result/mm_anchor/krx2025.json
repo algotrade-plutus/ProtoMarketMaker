@@ -47,7 +47,7 @@
   "2025-05-14"
  ],
  "step": "3.1",
- "plutus_simulator_commit": "fc94743640c9ce3706e3cd019217d1898d67b26f",
+ "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
  "plutus_simulator_src_dirty": false,
  "naive": {
   "hpr": 0.29567999999999994,
@@ -82,42 +82,43 @@
   "rows": 109290
  },
  "faithful": {
-  "hpr": -0.06025583599999995,
-  "sharpe": -3.6480304957212697,
-  "mdd": -0.062304786,
+  "hpr": -0.007291582000000019,
+  "sharpe": -0.4676387433246309,
+  "mdd": -0.06241047799999999,
   "start_equity_dong": 500000000.0,
-  "end_equity_dong": 469872082.0,
+  "end_equity_dong": 496354209.0,
   "queue": "conservative",
   "guard": true,
-  "fills": 116,
-  "maker_fills": 14,
-  "taker_fills": 102,
-  "closeout_fills": 12,
+  "fills": 366,
+  "maker_fills": 160,
+  "taker_fills": 206,
+  "closeout_fills": 25,
   "closeout_marked_contracts": 4,
-  "submitted": 29394,
-  "accepted": 29241,
+  "submitted": 62742,
+  "accepted": 62581,
   "refusals": {
-   "SESSION_SEMANTICS:rejected": 18,
-   "BAND_LIMIT:rejected": 135
+   "SESSION_SEMANTICS:rejected": 20,
+   "BAND_LIMIT:rejected": 140,
+   "INSUFFICIENT_DEPOSIT:rejected": 1
   },
-  "refused_sessions": 20,
+  "refused_sessions": 0,
   "indeterminate": {
-   "orders": 29171,
-   "order_rate": 0.9976061010225369,
-   "fill_events": 142835,
+   "orders": 62247,
+   "order_rate": 0.9946629168597497,
+   "fill_events": 591615,
    "by_arm": {
-    "maker": 142812,
-    "taker": 23
+    "maker": 591591,
+    "taker": 24
    },
    "by_field": {
-    "book_size": 142812,
-    "book": 23
+    "book_size": 591591,
+    "book": 24
    },
-   "engine_evaluations": 209461,
-   "engine_indeterminate": 142835,
-   "engine_rate": 0.6819169200949102
+   "engine_evaluations": 881419,
+   "engine_indeterminate": 591615,
+   "engine_rate": 0.671207450712998
   },
-  "margin_calls": 0,
+  "margin_calls": 3,
   "forced_liquidations": 0,
   "sessions": 40,
   "deposit_dong": 500000000,
@@ -293,115 +294,115 @@
    },
    {
     "date": "2025-05-09",
-    "deposit_dong": 469872082,
+    "deposit_dong": 469478601,
     "price": 1354.1,
     "rate": "0.17",
     "contracts": 20
    },
    {
     "date": "2025-05-12",
-    "deposit_dong": 469872082,
+    "deposit_dong": 469478601,
     "price": 1356.3,
     "rate": "0.17",
     "contracts": 20
    },
    {
     "date": "2025-05-13",
-    "deposit_dong": 469872082,
+    "deposit_dong": 468794761,
     "price": 1378.8,
     "rate": "0.17",
     "contracts": 20
    },
    {
     "date": "2025-05-14",
-    "deposit_dong": 469872082,
+    "deposit_dong": 469130897,
     "price": 1377.9,
     "rate": "0.17",
     "contracts": 20
    },
    {
     "date": "2025-05-15",
-    "deposit_dong": 469872082,
+    "deposit_dong": 469130897,
     "price": 1396.4,
     "rate": "0.17",
     "contracts": 19
    },
    {
     "date": "2025-05-16",
-    "deposit_dong": 469872082,
+    "deposit_dong": 469266571,
     "price": 1397.2,
     "rate": "0.17",
     "contracts": 19
    },
    {
     "date": "2025-05-19",
-    "deposit_dong": 469872082,
+    "deposit_dong": 469266571,
     "price": 1378.8,
     "rate": "0.17",
     "contracts": 20
    },
    {
     "date": "2025-05-20",
-    "deposit_dong": 469872082,
+    "deposit_dong": 470082481,
     "price": 1384.0,
     "rate": "0.17",
     "contracts": 19
    },
    {
     "date": "2025-05-21",
-    "deposit_dong": 469872082,
+    "deposit_dong": 470065285,
     "price": 1407.2,
     "rate": "0.17",
     "contracts": 19
    },
    {
     "date": "2025-05-22",
-    "deposit_dong": 469872082,
+    "deposit_dong": 470240767,
     "price": 1408.0,
     "rate": "0.17",
     "contracts": 19
    },
    {
     "date": "2025-05-23",
-    "deposit_dong": 469872082,
+    "deposit_dong": 470240767,
     "price": 1404.1,
     "rate": "0.17",
     "contracts": 19
    },
    {
     "date": "2025-05-26",
-    "deposit_dong": 469872082,
+    "deposit_dong": 470240767,
     "price": 1409.4,
     "rate": "0.17",
     "contracts": 19
    },
    {
     "date": "2025-05-27",
-    "deposit_dong": 469872082,
+    "deposit_dong": 496018841,
     "price": 1417.3,
     "rate": "0.17",
-    "contracts": 19
+    "contracts": 20
    },
    {
     "date": "2025-05-28",
-    "deposit_dong": 469872082,
+    "deposit_dong": 496018841,
     "price": 1420.9,
     "rate": "0.17",
-    "contracts": 19
+    "contracts": 20
    },
    {
     "date": "2025-05-29",
-    "deposit_dong": 469872082,
+    "deposit_dong": 496018841,
     "price": 1427.9,
     "rate": "0.17",
-    "contracts": 19
+    "contracts": 20
    },
    {
     "date": "2025-05-30",
-    "deposit_dong": 469872082,
+    "deposit_dong": 496354209,
     "price": 1420.2,
     "rate": "0.17",
-    "contracts": 19
+    "contracts": 20
    }
   ],
   "per_session": [
@@ -694,102 +695,277 @@
    {
     "date": "2025-05-05",
     "contract": "VN30F2505",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1454,
+    "indeterminate_evals": 10804,
+    "indeterminate_orders": 1454,
+    "evaluations": 16206,
+    "engine_indeterminate": 10804,
+    "pnl_dong": 0.0,
+    "charges_dong": 0.0,
+    "end_equity_dong": 469872082.0
    },
    {
     "date": "2025-05-06",
     "contract": "VN30F2505",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1610,
+    "indeterminate_evals": 20804,
+    "indeterminate_orders": 1610,
+    "evaluations": 31206,
+    "engine_indeterminate": 20804,
+    "pnl_dong": 0.0,
+    "charges_dong": 0.0,
+    "end_equity_dong": 469872082.0
    },
    {
     "date": "2025-05-07",
     "contract": "VN30F2505",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1594,
+    "indeterminate_evals": 18620,
+    "indeterminate_orders": 1594,
+    "evaluations": 27930,
+    "engine_indeterminate": 18620,
+    "pnl_dong": 0.0,
+    "charges_dong": 0.0,
+    "end_equity_dong": 469872082.0
    },
    {
     "date": "2025-05-08",
     "contract": "VN30F2505",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1600,
+    "indeterminate_evals": 21711,
+    "indeterminate_orders": 1600,
+    "fills": 2,
+    "taker_fills": 2,
+    "closeout_orders": 1,
+    "closeout_fills": 1,
+    "evaluations": 32571,
+    "engine_indeterminate": 21711,
+    "pnl_dong": -393481.0,
+    "charges_dong": 33481.0,
+    "end_equity_dong": 469478601.0
    },
    {
     "date": "2025-05-09",
     "contract": "VN30F2505",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1662,
+    "indeterminate_evals": 21752,
+    "indeterminate_orders": 1662,
+    "evaluations": 32628,
+    "engine_indeterminate": 21752,
+    "pnl_dong": 0.0,
+    "charges_dong": 0.0,
+    "end_equity_dong": 469478601.0
    },
    {
     "date": "2025-05-12",
     "contract": "VN30F2505",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1706,
+    "indeterminate_evals": 27367,
+    "indeterminate_orders": 1706,
+    "fills": 2,
+    "taker_fills": 2,
+    "closeout_orders": 1,
+    "closeout_fills": 1,
+    "evaluations": 41065,
+    "engine_indeterminate": 27367,
+    "pnl_dong": -683840.0,
+    "charges_dong": 33840.0,
+    "end_equity_dong": 468794761.0
    },
    {
     "date": "2025-05-13",
     "contract": "VN30F2505",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1636,
+    "indeterminate_evals": 19333,
+    "indeterminate_orders": 1636,
+    "fills": 2,
+    "taker_fills": 2,
+    "closeout_orders": 1,
+    "closeout_fills": 1,
+    "evaluations": 29012,
+    "engine_indeterminate": 19333,
+    "pnl_dong": 336136.0,
+    "charges_dong": 33864.0,
+    "end_equity_dong": 469130897.0
    },
    {
     "date": "2025-05-14",
     "contract": "VN30F2506",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1488,
+    "indeterminate_evals": 5426,
+    "indeterminate_orders": 1488,
+    "evaluations": 8139,
+    "engine_indeterminate": 5426,
+    "pnl_dong": 0.0,
+    "charges_dong": 0.0,
+    "end_equity_dong": 469130897.0
    },
    {
     "date": "2025-05-15",
     "contract": "VN30F2505",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1704,
+    "indeterminate_evals": 31105,
+    "indeterminate_orders": 1704,
+    "fills": 2,
+    "taker_fills": 2,
+    "closeout_orders": 2,
+    "closeout_fills": 1,
+    "evaluations": 46696,
+    "engine_indeterminate": 31105,
+    "pnl_dong": 135674.0,
+    "charges_dong": 34326.0,
+    "end_equity_dong": 469266571.0
    },
    {
     "date": "2025-05-16",
     "contract": "VN30F2506",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1678,
+    "indeterminate_evals": 25266,
+    "indeterminate_orders": 1678,
+    "evaluations": 37899,
+    "engine_indeterminate": 25266,
+    "pnl_dong": 0.0,
+    "charges_dong": 0.0,
+    "end_equity_dong": 469266571.0
    },
    {
     "date": "2025-05-19",
     "contract": "VN30F2506",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1674,
+    "indeterminate_evals": 24553,
+    "indeterminate_orders": 1674,
+    "fills": 2,
+    "taker_fills": 2,
+    "closeout_orders": 1,
+    "closeout_fills": 1,
+    "evaluations": 36838,
+    "engine_indeterminate": 24553,
+    "pnl_dong": 815910.0,
+    "charges_dong": 34090.0,
+    "end_equity_dong": 470082481.0
    },
    {
     "date": "2025-05-20",
     "contract": "VN30F2506",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1732,
+    "indeterminate_evals": 34938,
+    "indeterminate_orders": 1730,
+    "rejected": 2,
+    "evaluations": 49434,
+    "engine_indeterminate": 34938,
+    "pnl_dong": -17196.0,
+    "charges_dong": 17196.0,
+    "end_equity_dong": 470065285.0
    },
    {
     "date": "2025-05-21",
     "contract": "VN30F2506",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1686,
+    "indeterminate_evals": 25450,
+    "indeterminate_orders": 1683,
+    "fills": 2,
+    "maker_fills": 1,
+    "taker_fills": 1,
+    "evaluations": 38262,
+    "engine_indeterminate": 25450,
+    "pnl_dong": 175482.0,
+    "charges_dong": 34518.0,
+    "end_equity_dong": 470240767.0
    },
    {
     "date": "2025-05-22",
     "contract": "VN30F2506",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1702,
+    "indeterminate_evals": 26874,
+    "indeterminate_orders": 1702,
+    "evaluations": 40311,
+    "engine_indeterminate": 26874,
+    "pnl_dong": 0.0,
+    "charges_dong": 0.0,
+    "end_equity_dong": 470240767.0
    },
    {
     "date": "2025-05-23",
     "contract": "VN30F2506",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1670,
+    "indeterminate_evals": 20666,
+    "indeterminate_orders": 1670,
+    "evaluations": 30999,
+    "engine_indeterminate": 20666,
+    "pnl_dong": 0.0,
+    "charges_dong": 0.0,
+    "end_equity_dong": 470240767.0
    },
    {
     "date": "2025-05-26",
     "contract": "VN30F2506",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 2184,
+    "indeterminate_evals": 34670,
+    "indeterminate_orders": 1917,
+    "fills": 236,
+    "taker_fills": 91,
+    "maker_fills": 145,
+    "rejected": 6,
+    "margin_calls": 3,
+    "closeout_orders": 2,
+    "closeout_fills": 7,
+    "evaluations": 53592,
+    "engine_indeterminate": 34670,
+    "pnl_dong": 25778074.0,
+    "charges_dong": 4011926.0,
+    "end_equity_dong": 496018841.0
    },
    {
     "date": "2025-05-27",
     "contract": "VN30F2506",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1682,
+    "indeterminate_evals": 22430,
+    "indeterminate_orders": 1682,
+    "evaluations": 33645,
+    "engine_indeterminate": 22430,
+    "pnl_dong": 0.0,
+    "charges_dong": 0.0,
+    "end_equity_dong": 496018841.0
    },
    {
     "date": "2025-05-28",
     "contract": "VN30F2506",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1672,
+    "indeterminate_evals": 21962,
+    "indeterminate_orders": 1672,
+    "evaluations": 32943,
+    "engine_indeterminate": 21962,
+    "pnl_dong": 0.0,
+    "charges_dong": 0.0,
+    "end_equity_dong": 496018841.0
    },
    {
     "date": "2025-05-29",
     "contract": "VN30F2506",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1622,
+    "indeterminate_evals": 18713,
+    "indeterminate_orders": 1622,
+    "fills": 2,
+    "taker_fills": 2,
+    "closeout_orders": 1,
+    "closeout_fills": 1,
+    "evaluations": 28078,
+    "engine_indeterminate": 18713,
+    "pnl_dong": 335368.0,
+    "charges_dong": 34632.0,
+    "end_equity_dong": 496354209.0
    },
    {
     "date": "2025-05-30",
     "contract": "VN30F2506",
-    "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+    "submitted": 1592,
+    "indeterminate_evals": 16336,
+    "indeterminate_orders": 1592,
+    "evaluations": 24504,
+    "engine_indeterminate": 16336,
+    "pnl_dong": 0.0,
+    "charges_dong": 0.0,
+    "end_equity_dong": 496354209.0
    }
   ],
   "krx": {
@@ -806,53 +982,54 @@
    },
    "post": {
     "sessions": 20,
-    "refused_sessions": 20,
-    "fills": 0,
-    "submitted": 0,
-    "indeterminate_orders": 0,
-    "indeterminate_order_rate": null,
-    "evaluations": 0,
-    "engine_indeterminate": 0,
-    "indeterminate_eval_rate": null
+    "refused_sessions": 0,
+    "fills": 250,
+    "submitted": 33348,
+    "indeterminate_orders": 33076,
+    "indeterminate_order_rate": 0.9920815836832634,
+    "evaluations": 671958,
+    "engine_indeterminate": 448780,
+    "indeterminate_eval_rate": 0.6678691227725543
    }
   }
  },
  "faithful_by_queue": {
   "optimistic": {
-   "hpr": -0.13592448999999995,
-   "sharpe": -5.209725309444129,
+   "hpr": -0.03385785799999996,
+   "sharpe": -0.6211383998490712,
    "mdd": -0.13811531,
    "start_equity_dong": 500000000.0,
-   "end_equity_dong": 432037755.0,
+   "end_equity_dong": 483071071.0,
    "queue": "optimistic",
    "guard": true,
-   "fills": 160,
-   "maker_fills": 69,
-   "taker_fills": 91,
-   "closeout_fills": 17,
+   "fills": 444,
+   "maker_fills": 251,
+   "taker_fills": 193,
+   "closeout_fills": 37,
    "closeout_marked_contracts": 8,
-   "submitted": 29452,
-   "accepted": 29293,
+   "submitted": 62850,
+   "accepted": 62667,
    "refusals": {
-    "SESSION_SEMANTICS:rejected": 18,
-    "BAND_LIMIT:rejected": 141
+    "SESSION_SEMANTICS:rejected": 20,
+    "BAND_LIMIT:rejected": 146,
+    "INSUFFICIENT_DEPOSIT:rejected": 17
    },
-   "refused_sessions": 20,
+   "refused_sessions": 0,
    "indeterminate": {
-    "orders": 20,
-    "order_rate": 0.0006827569726555832,
-    "fill_events": 23,
+    "orders": 21,
+    "order_rate": 0.0003351046005074441,
+    "fill_events": 24,
     "by_arm": {
-     "taker": 23
+     "taker": 24
     },
     "by_field": {
-     "book": 23
+     "book": 24
     },
-    "engine_evaluations": 208262,
-    "engine_indeterminate": 23,
-    "engine_rate": 0.00011043781390748193
+    "engine_evaluations": 874999,
+    "engine_indeterminate": 24,
+    "engine_rate": 2.742860277554603e-05
    },
-   "margin_calls": 0,
+   "margin_calls": 4,
    "forced_liquidations": 0,
    "sessions": 40,
    "deposit_dong": 500000000,
@@ -1028,115 +1205,115 @@
     },
     {
      "date": "2025-05-09",
-     "deposit_dong": 432037755,
+     "deposit_dong": 431580766,
      "price": 1354.1,
      "rate": "0.17",
      "contracts": 18
     },
     {
      "date": "2025-05-12",
-     "deposit_dong": 432037755,
+     "deposit_dong": 431580766,
      "price": 1356.3,
      "rate": "0.17",
      "contracts": 18
     },
     {
      "date": "2025-05-13",
-     "deposit_dong": 432037755,
+     "deposit_dong": 431626988,
      "price": 1378.8,
      "rate": "0.17",
      "contracts": 18
     },
     {
      "date": "2025-05-14",
-     "deposit_dong": 432037755,
+     "deposit_dong": 431943126,
      "price": 1377.9,
      "rate": "0.17",
      "contracts": 18
     },
     {
      "date": "2025-05-15",
-     "deposit_dong": 432037755,
+     "deposit_dong": 431943126,
      "price": 1396.4,
      "rate": "0.17",
      "contracts": 18
     },
     {
      "date": "2025-05-16",
-     "deposit_dong": 432037755,
+     "deposit_dong": 432078800,
      "price": 1397.2,
      "rate": "0.17",
      "contracts": 18
     },
     {
      "date": "2025-05-19",
-     "deposit_dong": 432037755,
+     "deposit_dong": 432078800,
      "price": 1378.8,
      "rate": "0.17",
      "contracts": 18
     },
     {
      "date": "2025-05-20",
-     "deposit_dong": 432037755,
+     "deposit_dong": 432864712,
      "price": 1384.0,
      "rate": "0.17",
      "contracts": 18
     },
     {
      "date": "2025-05-21",
-     "deposit_dong": 432037755,
+     "deposit_dong": 432830374,
      "price": 1407.2,
      "rate": "0.17",
      "contracts": 18
     },
     {
      "date": "2025-05-22",
-     "deposit_dong": 432037755,
+     "deposit_dong": 432856780,
      "price": 1408.0,
      "rate": "0.17",
      "contracts": 18
     },
     {
      "date": "2025-05-23",
-     "deposit_dong": 432037755,
+     "deposit_dong": 432856780,
      "price": 1404.1,
      "rate": "0.17",
      "contracts": 18
     },
     {
      "date": "2025-05-26",
-     "deposit_dong": 432037755,
+     "deposit_dong": 432856780,
      "price": 1409.4,
      "rate": "0.17",
      "contracts": 18
     },
     {
      "date": "2025-05-27",
-     "deposit_dong": 432037755,
+     "deposit_dong": 482534918,
      "price": 1417.3,
      "rate": "0.17",
-     "contracts": 17
+     "contracts": 20
     },
     {
      "date": "2025-05-28",
-     "deposit_dong": 432037755,
+     "deposit_dong": 482460399,
      "price": 1420.9,
      "rate": "0.17",
-     "contracts": 17
+     "contracts": 19
     },
     {
      "date": "2025-05-29",
-     "deposit_dong": 432037755,
+     "deposit_dong": 482785704,
      "price": 1427.9,
      "rate": "0.17",
-     "contracts": 17
+     "contracts": 19
     },
     {
      "date": "2025-05-30",
-     "deposit_dong": 432037755,
+     "deposit_dong": 483071071,
      "price": 1420.2,
      "rate": "0.17",
-     "contracts": 17
+     "contracts": 20
     }
    ],
    "per_session": [
@@ -1417,102 +1594,253 @@
     {
      "date": "2025-05-05",
      "contract": "VN30F2505",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1454,
+     "evaluations": 16206,
+     "engine_indeterminate": 0,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 432037755.0
     },
     {
      "date": "2025-05-06",
      "contract": "VN30F2505",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1610,
+     "evaluations": 31206,
+     "engine_indeterminate": 0,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 432037755.0
     },
     {
      "date": "2025-05-07",
      "contract": "VN30F2505",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1594,
+     "evaluations": 27930,
+     "engine_indeterminate": 0,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 432037755.0
     },
     {
      "date": "2025-05-08",
      "contract": "VN30F2505",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1602,
+     "fills": 4,
+     "maker_fills": 2,
+     "closeout_orders": 1,
+     "closeout_fills": 2,
+     "taker_fills": 2,
+     "evaluations": 32569,
+     "engine_indeterminate": 0,
+     "pnl_dong": -456989.0,
+     "charges_dong": 66989.0,
+     "end_equity_dong": 431580766.0
     },
     {
      "date": "2025-05-09",
      "contract": "VN30F2505",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1662,
+     "evaluations": 32628,
+     "engine_indeterminate": 0,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 431580766.0
     },
     {
      "date": "2025-05-12",
      "contract": "VN30F2505",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1708,
+     "fills": 2,
+     "taker_fills": 1,
+     "maker_fills": 1,
+     "evaluations": 41052,
+     "engine_indeterminate": 0,
+     "pnl_dong": 46222.0,
+     "charges_dong": 33778.0,
+     "end_equity_dong": 431626988.0
     },
     {
      "date": "2025-05-13",
      "contract": "VN30F2505",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1636,
+     "fills": 2,
+     "taker_fills": 2,
+     "closeout_orders": 1,
+     "closeout_fills": 1,
+     "evaluations": 29002,
+     "engine_indeterminate": 0,
+     "pnl_dong": 316138.0,
+     "charges_dong": 33862.0,
+     "end_equity_dong": 431943126.0
     },
     {
      "date": "2025-05-14",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1488,
+     "evaluations": 8139,
+     "engine_indeterminate": 0,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 431943126.0
     },
     {
      "date": "2025-05-15",
      "contract": "VN30F2505",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1704,
+     "fills": 2,
+     "taker_fills": 2,
+     "closeout_orders": 1,
+     "closeout_fills": 1,
+     "evaluations": 46660,
+     "engine_indeterminate": 0,
+     "pnl_dong": 135674.0,
+     "charges_dong": 34326.0,
+     "end_equity_dong": 432078800.0
     },
     {
      "date": "2025-05-16",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1678,
+     "evaluations": 37899,
+     "engine_indeterminate": 0,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 432078800.0
     },
     {
      "date": "2025-05-19",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1674,
+     "fills": 2,
+     "maker_fills": 1,
+     "closeout_orders": 1,
+     "closeout_fills": 1,
+     "taker_fills": 1,
+     "evaluations": 36832,
+     "engine_indeterminate": 0,
+     "pnl_dong": 785912.0,
+     "charges_dong": 34088.0,
+     "end_equity_dong": 432864712.0
     },
     {
      "date": "2025-05-20",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1732,
+     "rejected": 2,
+     "evaluations": 44994,
+     "engine_indeterminate": 0,
+     "pnl_dong": -34338.0,
+     "charges_dong": 34338.0,
+     "end_equity_dong": 432830374.0
     },
     {
      "date": "2025-05-21",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1688,
+     "fills": 6,
+     "maker_fills": 3,
+     "taker_fills": 3,
+     "closeout_orders": 1,
+     "closeout_fills": 2,
+     "evaluations": 38263,
+     "engine_indeterminate": 0,
+     "pnl_dong": 26406.0,
+     "charges_dong": 103594.0,
+     "end_equity_dong": 432856780.0
     },
     {
      "date": "2025-05-22",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1702,
+     "evaluations": 40311,
+     "engine_indeterminate": 0,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 432856780.0
     },
     {
      "date": "2025-05-23",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1670,
+     "evaluations": 30999,
+     "engine_indeterminate": 0,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 432856780.0
     },
     {
      "date": "2025-05-26",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 2224,
+     "fills": 260,
+     "taker_fills": 88,
+     "maker_fills": 172,
+     "indeterminate_evals": 1,
+     "indeterminate_orders": 1,
+     "rejected": 22,
+     "margin_calls": 4,
+     "closeout_orders": 1,
+     "closeout_fills": 10,
+     "evaluations": 52881,
+     "engine_indeterminate": 1,
+     "pnl_dong": 49678138.0,
+     "charges_dong": 4421862.0,
+     "end_equity_dong": 482534918.0
     },
     {
      "date": "2025-05-27",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1684,
+     "fills": 2,
+     "maker_fills": 1,
+     "closeout_orders": 1,
+     "closeout_fills": 1,
+     "taker_fills": 1,
+     "evaluations": 33646,
+     "engine_indeterminate": 0,
+     "pnl_dong": -74519.0,
+     "charges_dong": 34519.0,
+     "end_equity_dong": 482460399.0
     },
     {
      "date": "2025-05-28",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1674,
+     "fills": 2,
+     "maker_fills": 1,
+     "closeout_orders": 1,
+     "closeout_fills": 1,
+     "taker_fills": 1,
+     "evaluations": 32944,
+     "engine_indeterminate": 0,
+     "pnl_dong": 325305.0,
+     "charges_dong": 34695.0,
+     "end_equity_dong": 482785704.0
     },
     {
      "date": "2025-05-29",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1622,
+     "fills": 2,
+     "maker_fills": 1,
+     "closeout_orders": 1,
+     "closeout_fills": 1,
+     "taker_fills": 1,
+     "evaluations": 28072,
+     "engine_indeterminate": 0,
+     "pnl_dong": 285367.0,
+     "charges_dong": 34633.0,
+     "end_equity_dong": 483071071.0
     },
     {
      "date": "2025-05-30",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1592,
+     "evaluations": 24504,
+     "engine_indeterminate": 0,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 483071071.0
     }
    ],
    "krx": {
@@ -1529,53 +1857,53 @@
     },
     "post": {
      "sessions": 20,
-     "refused_sessions": 20,
-     "fills": 0,
-     "submitted": 0,
-     "indeterminate_orders": 0,
-     "indeterminate_order_rate": null,
-     "evaluations": 0,
-     "engine_indeterminate": 0,
-     "indeterminate_eval_rate": null
+     "refused_sessions": 0,
+     "fills": 284,
+     "submitted": 33398,
+     "indeterminate_orders": 1,
+     "indeterminate_order_rate": 2.996344459759094e-05,
+     "evaluations": 666737,
+     "engine_indeterminate": 1,
+     "indeterminate_eval_rate": 1.4998417666936138e-06
     }
    }
   },
   "conservative_untaped": {
-   "hpr": 0.02548021399999989,
-   "sharpe": 1.1640336322428384,
-   "mdd": -0.017142673386280505,
+   "hpr": -0.168710782,
+   "sharpe": -2.2304302032528645,
+   "mdd": -0.19121079934799123,
    "start_equity_dong": 500000000.0,
-   "end_equity_dong": 512740107.0,
+   "end_equity_dong": 415644609.0,
    "queue": "conservative_untaped",
    "guard": true,
-   "fills": 21,
-   "maker_fills": 21,
+   "fills": 133,
+   "maker_fills": 133,
    "taker_fills": 0,
-   "closeout_fills": 4,
+   "closeout_fills": 18,
    "closeout_marked_contracts": 3,
-   "submitted": 29298,
-   "accepted": 29149,
+   "submitted": 62376,
+   "accepted": 62222,
    "refusals": {
-    "SESSION_SEMANTICS:rejected": 18,
-    "BAND_LIMIT:rejected": 131
+    "SESSION_SEMANTICS:rejected": 20,
+    "BAND_LIMIT:rejected": 134
    },
-   "refused_sessions": 20,
+   "refused_sessions": 0,
    "indeterminate": {
-    "orders": 29116,
-    "order_rate": 0.9988678856907612,
-    "fill_events": 150593,
+    "orders": 62093,
+    "order_rate": 0.9979267783099225,
+    "fill_events": 606031,
     "by_arm": {
-     "maker": 144785,
-     "taker": 5808
+     "maker": 597196,
+     "taker": 8835
     },
     "by_field": {
-     "book_size": 144785,
-     "book": 23,
-     "volume": 5785
+     "book_size": 597196,
+     "book": 24,
+     "volume": 8811
     },
-    "engine_evaluations": 217136,
-    "engine_indeterminate": 150593,
-    "engine_rate": 0.6935422960725075
+    "engine_evaluations": 895358,
+    "engine_indeterminate": 606031,
+    "engine_rate": 0.6768588653923905
    },
    "margin_calls": 0,
    "forced_liquidations": 0,
@@ -1816,52 +2144,52 @@
     },
     {
      "date": "2025-05-22",
-     "deposit_dong": 512740107,
+     "deposit_dong": 512905588,
      "price": 1408.0,
      "rate": "0.17",
      "contracts": 21
     },
     {
      "date": "2025-05-23",
-     "deposit_dong": 512740107,
+     "deposit_dong": 512905588,
      "price": 1404.1,
      "rate": "0.17",
      "contracts": 21
     },
     {
      "date": "2025-05-26",
-     "deposit_dong": 512740107,
+     "deposit_dong": 512905588,
      "price": 1409.4,
      "rate": "0.17",
      "contracts": 21
     },
     {
      "date": "2025-05-27",
-     "deposit_dong": 512740107,
+     "deposit_dong": 415644609,
      "price": 1417.3,
      "rate": "0.17",
-     "contracts": 21
+     "contracts": 17
     },
     {
      "date": "2025-05-28",
-     "deposit_dong": 512740107,
+     "deposit_dong": 415644609,
      "price": 1420.9,
      "rate": "0.17",
-     "contracts": 21
+     "contracts": 17
     },
     {
      "date": "2025-05-29",
-     "deposit_dong": 512740107,
+     "deposit_dong": 415644609,
      "price": 1427.9,
      "rate": "0.17",
-     "contracts": 21
+     "contracts": 17
     },
     {
      "date": "2025-05-30",
-     "deposit_dong": 512740107,
+     "deposit_dong": 415644609,
      "price": 1420.2,
      "rate": "0.17",
-     "contracts": 21
+     "contracts": 17
     }
    ],
    "per_session": [
@@ -2138,102 +2466,250 @@
     {
      "date": "2025-05-05",
      "contract": "VN30F2505",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1454,
+     "indeterminate_evals": 10804,
+     "indeterminate_orders": 1454,
+     "evaluations": 16206,
+     "engine_indeterminate": 10804,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 512740107.0
     },
     {
      "date": "2025-05-06",
      "contract": "VN30F2505",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1610,
+     "indeterminate_evals": 20804,
+     "indeterminate_orders": 1610,
+     "evaluations": 31206,
+     "engine_indeterminate": 20804,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 512740107.0
     },
     {
      "date": "2025-05-07",
      "contract": "VN30F2505",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1594,
+     "indeterminate_evals": 18620,
+     "indeterminate_orders": 1594,
+     "evaluations": 27930,
+     "engine_indeterminate": 18620,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 512740107.0
     },
     {
      "date": "2025-05-08",
      "contract": "VN30F2505",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1598,
+     "indeterminate_evals": 21712,
+     "indeterminate_orders": 1598,
+     "evaluations": 32568,
+     "engine_indeterminate": 21712,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 512740107.0
     },
     {
      "date": "2025-05-09",
      "contract": "VN30F2505",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1662,
+     "indeterminate_evals": 21752,
+     "indeterminate_orders": 1662,
+     "evaluations": 32628,
+     "engine_indeterminate": 21752,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 512740107.0
     },
     {
      "date": "2025-05-12",
      "contract": "VN30F2505",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1704,
+     "indeterminate_evals": 27368,
+     "indeterminate_orders": 1704,
+     "evaluations": 41052,
+     "engine_indeterminate": 27368,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 512740107.0
     },
     {
      "date": "2025-05-13",
      "contract": "VN30F2505",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1634,
+     "indeterminate_evals": 19334,
+     "indeterminate_orders": 1634,
+     "evaluations": 29001,
+     "engine_indeterminate": 19334,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 512740107.0
     },
     {
      "date": "2025-05-14",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1488,
+     "indeterminate_evals": 5426,
+     "indeterminate_orders": 1488,
+     "evaluations": 8139,
+     "engine_indeterminate": 5426,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 512740107.0
     },
     {
      "date": "2025-05-15",
      "contract": "VN30F2505",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1702,
+     "indeterminate_evals": 31106,
+     "indeterminate_orders": 1702,
+     "evaluations": 46659,
+     "engine_indeterminate": 31106,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 512740107.0
     },
     {
      "date": "2025-05-16",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1678,
+     "indeterminate_evals": 25266,
+     "indeterminate_orders": 1678,
+     "evaluations": 37899,
+     "engine_indeterminate": 25266,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 512740107.0
     },
     {
      "date": "2025-05-19",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1672,
+     "indeterminate_evals": 24554,
+     "indeterminate_orders": 1672,
+     "evaluations": 36831,
+     "engine_indeterminate": 24554,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 512740107.0
     },
     {
      "date": "2025-05-20",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1732,
+     "indeterminate_evals": 41040,
+     "indeterminate_orders": 1730,
+     "rejected": 2,
+     "evaluations": 55535,
+     "engine_indeterminate": 41040,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 512740107.0
     },
     {
      "date": "2025-05-21",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1686,
+     "indeterminate_evals": 25504,
+     "indeterminate_orders": 1685,
+     "fills": 2,
+     "maker_fills": 2,
+     "evaluations": 38262,
+     "engine_indeterminate": 25504,
+     "pnl_dong": 165481.0,
+     "charges_dong": 34519.0,
+     "end_equity_dong": 512905588.0
     },
     {
      "date": "2025-05-22",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1702,
+     "indeterminate_evals": 26874,
+     "indeterminate_orders": 1702,
+     "evaluations": 40311,
+     "engine_indeterminate": 26874,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 512905588.0
     },
     {
      "date": "2025-05-23",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1670,
+     "indeterminate_evals": 20666,
+     "indeterminate_orders": 1670,
+     "evaluations": 30999,
+     "engine_indeterminate": 20666,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 512905588.0
     },
     {
      "date": "2025-05-26",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1926,
+     "indeterminate_evals": 35166,
+     "indeterminate_orders": 1828,
+     "fills": 110,
+     "maker_fills": 110,
+     "rejected": 3,
+     "closeout_orders": 5,
+     "closeout_fills": 14,
+     "evaluations": 53833,
+     "engine_indeterminate": 35166,
+     "pnl_dong": -97260979.0,
+     "charges_dong": 1870979.0,
+     "end_equity_dong": 415644609.0
     },
     {
      "date": "2025-05-27",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1682,
+     "indeterminate_evals": 22430,
+     "indeterminate_orders": 1682,
+     "evaluations": 33645,
+     "engine_indeterminate": 22430,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 415644609.0
     },
     {
      "date": "2025-05-28",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1672,
+     "indeterminate_evals": 21962,
+     "indeterminate_orders": 1672,
+     "evaluations": 32943,
+     "engine_indeterminate": 21962,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 415644609.0
     },
     {
      "date": "2025-05-29",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1620,
+     "indeterminate_evals": 18714,
+     "indeterminate_orders": 1620,
+     "evaluations": 28071,
+     "engine_indeterminate": 18714,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 415644609.0
     },
     {
      "date": "2025-05-30",
      "contract": "VN30F2506",
-     "refused": "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+     "submitted": 1592,
+     "indeterminate_evals": 16336,
+     "indeterminate_orders": 1592,
+     "evaluations": 24504,
+     "engine_indeterminate": 16336,
+     "pnl_dong": 0.0,
+     "charges_dong": 0.0,
+     "end_equity_dong": 415644609.0
     }
    ],
    "krx": {
@@ -2250,14 +2726,14 @@
     },
     "post": {
      "sessions": 20,
-     "refused_sessions": 20,
-     "fills": 0,
-     "submitted": 0,
-     "indeterminate_orders": 0,
-     "indeterminate_order_rate": null,
-     "evaluations": 0,
-     "engine_indeterminate": 0,
-     "indeterminate_eval_rate": null
+     "refused_sessions": 0,
+     "fills": 112,
+     "submitted": 33078,
+     "indeterminate_orders": 32977,
+     "indeterminate_order_rate": 0.9970973301484595,
+     "evaluations": 678222,
+     "engine_indeterminate": 455438,
+     "indeterminate_eval_rate": 0.6715175856872824
     }
    }
   }
@@ -2681,39 +3157,39 @@
  },
  "tier1": {
   "queue_fill_spread": {
-   "conservative": 116,
-   "optimistic": 160,
-   "conservative_untaped": 21,
-   "conservative_vs_optimistic_pct": 27.500000000000004
+   "conservative": 366,
+   "optimistic": 444,
+   "conservative_untaped": 133,
+   "conservative_vs_optimistic_pct": 17.56756756756757
   },
   "indeterminate_rate_by_queue": {
    "conservative": {
-    "order_rate": 0.9976061010225369,
-    "engine_eval_rate": 0.6819169200949102,
-    "taker_fills": 102,
-    "maker_fills": 14,
+    "order_rate": 0.9946629168597497,
+    "engine_eval_rate": 0.671207450712998,
+    "taker_fills": 206,
+    "maker_fills": 160,
     "by_arm": {
-     "maker": 142812,
-     "taker": 23
+     "maker": 591591,
+     "taker": 24
     }
    },
    "optimistic": {
-    "order_rate": 0.0006827569726555832,
-    "engine_eval_rate": 0.00011043781390748193,
-    "taker_fills": 91,
-    "maker_fills": 69,
+    "order_rate": 0.0003351046005074441,
+    "engine_eval_rate": 2.742860277554603e-05,
+    "taker_fills": 193,
+    "maker_fills": 251,
     "by_arm": {
-     "taker": 23
+     "taker": 24
     }
    },
    "conservative_untaped": {
-    "order_rate": 0.9988678856907612,
-    "engine_eval_rate": 0.6935422960725075,
+    "order_rate": 0.9979267783099225,
+    "engine_eval_rate": 0.6768588653923905,
     "taker_fills": 0,
-    "maker_fills": 21,
+    "maker_fills": 133,
     "by_arm": {
-     "maker": 144785,
-     "taker": 5808
+     "maker": 597196,
+     "taker": 8835
     }
    }
   },
@@ -2732,15 +3208,15 @@
    },
    "cut_contracts": 7
   },
-  "margin_calls": 0,
+  "margin_calls": 3,
   "forced_liquidations": 0,
   "refusals": {
-   "SESSION_SEMANTICS:rejected": 18,
-   "BAND_LIMIT:rejected": 135
+   "SESSION_SEMANTICS:rejected": 20,
+   "BAND_LIMIT:rejected": 140,
+   "INSUFFICIENT_DEPOSIT:rejected": 1
   },
-  "post_cutover_refused_sessions": 20
+  "post_cutover_refused_sessions": 0
  },
- "fills_ratio_f_over_n": 0.1673881673881674,
- "wall_seconds": 3491.2,
- "note_naive_pre_cutover_only": "added after the main run by the same run_naive call the runner now makes (no faithful re-run)"
+ "fills_ratio_f_over_n": 0.5281385281385281,
+ "wall_seconds": 320.6
 }

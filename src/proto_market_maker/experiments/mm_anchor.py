@@ -40,11 +40,13 @@ Faithful arm (``plutus.execution.PlutusBackend`` over an ``ExchangeSession``)
       counted (``closeout_marked_contracts``). Every session opens flat with the
       previous session's ending equity as its deposit.
     * Regime guard (the S6 rule): before each session the strategy asks the
-      dated rulebook for the margin model; from the 2025-05-05 KRX cutover the
-      model is unsourced and ``margin_model()`` raises ``UnresolvedRule``, so the
-      strategy refuses to quote that session rather than invent a margin rule.
-      ``--unguarded`` runs the post-cutover sessions anyway, as a diagnostic of
-      what the engine itself does there.
+      dated rulebook for the margin model and quotes only under a model it
+      knows (``KNOWN_MARGIN_MODELS``: ``pre_margin``, and ``krx_two_layer`` from
+      the 2025-05-05 KRX cutover, sourced in plutus-simulator ``391e2e2``); an
+      unresolved or unknown model refuses the session rather than invent a
+      margin rule. Before ``391e2e2`` the post-KRX model was unsourced and the
+      guard refused all 20 post-cutover sessions; it no longer refuses any.
+      ``--unguarded`` skips the check.
 
 The contract traded each day is the naive engine's: VN30F1M, or VN30F2M on the
 session before the front month's expiry (``windows.traded_contracts``).
@@ -301,13 +303,20 @@ def _kind(e) -> str:
     return getattr(getattr(e, "kind", None), "value", getattr(e, "kind", ""))
 
 
+#: The dated margin models this strategy knows how to be margined under
+#: (plutus-simulator ``391e2e2``): ``pre_margin`` before the 2025-05-05 KRX
+#: cutover, ``krx_two_layer`` (QD 26: broker IM intraday, VSDC CCP after the
+#: close) from it. Anything else, or an unresolved rule, is refused.
+KNOWN_MARGIN_MODELS = frozenset({"pre_margin", "krx_two_layer"})
+
+
 def _margin_model_ok(day: date) -> bool:
     from plutus.market.session.rulebook import Rulebook, UnresolvedRule
     try:
-        Rulebook().at(datetime.combine(day, time(9, 0))).margin_model()
-        return True
+        model = Rulebook().at(datetime.combine(day, time(9, 0))).margin_model()
     except UnresolvedRule:
         return False
+    return model in KNOWN_MARGIN_MODELS
 
 
 def _capacity(deposit: float, price: float, day: date) -> dict:
@@ -355,7 +364,7 @@ def run_faithful(window: str, sessions: List[date], fcc, step: Decimal,
 
         if guard and not _margin_model_ok(day):
             tot["refused_sessions"] += 1
-            rec["refused"] = "margin_model UnresolvedRule (post-KRX COMS unsourced)"
+            rec["refused"] = "margin_model unresolved or not a known model"
             per_session.append(rec)
             equity.append(equity[-1]); eq_dates.append(day.isoformat())
             continue
@@ -492,7 +501,7 @@ def run_faithful(window: str, sessions: List[date], fcc, step: Decimal,
                     "end_equity_dong": equity[-1]})
         per_session.append(rec)
         tot.update(s)
-        log(f"  [{queue}] {day} {ticker} fills={s['fills']} ind_orders="
+        log(f"  [{queue}] {day} {ticker} fills={s['fills']} eq={equity[-1]:,.0f} ind_orders="
             f"{s['indeterminate_orders']}/{s['submitted']} marked={s['closeout_marked_contracts']}")
 
     def rate(a, b):
@@ -578,7 +587,8 @@ def run_mm_anchor(window: str, queues=QUEUES, unguarded_diag: bool = True,
     step = step_param()
     t0 = _time.time()
     naive = run_naive(window, sessions, fcc, step)
-    log(f"naive: fills={naive['fills']} round_trips={naive['round_trips']} hpr={naive['hpr']:.4f}")
+    getattr(log, "note", log)(f"naive: fills={naive['fills']} round_trips={naive['round_trips']} "
+                              f"hpr={naive['hpr']:.4f}")
     arms = {q: run_faithful(window, sessions, fcc, step, q, log=log) for q in queues}
     faithful = arms["conservative"]
     opt = arms.get("optimistic")
@@ -638,13 +648,23 @@ def main(argv=None) -> int:
     ap.add_argument("window", choices=sorted(WINDOWS))
     ap.add_argument("--queues", default=",".join(QUEUES))
     ap.add_argument("--no-diag", action="store_true")
+    ap.add_argument("--log", type=Path, default=None,
+                    help="progress log file: one flushed line per faithful session, with ETA")
     args = ap.parse_args(argv)
-    out = run_mm_anchor(args.window, tuple(args.queues.split(",")),
-                        unguarded_diag=not args.no_diag)
+    from proto_market_maker.experiments.mm_fills_trace import ProgressLog
+    queues = tuple(args.queues.split(","))
+    _, sessions = load_contract_map(args.window)
+    post = [d for d in sessions if d >= KRX_CUTOVER]
+    total = len(sessions) * len(queues) + (
+        2 * len(post) if args.window == "krx2025" and not args.no_diag else 0)
+    plog = ProgressLog(args.log, total, f"mm_anchor {args.window}")
+    plog.note(f"plutus-simulator commit at start: {_engine_commit()}")
+    out = run_mm_anchor(args.window, queues, unguarded_diag=not args.no_diag, log=plog)
     path = REPO / "result" / "mm_anchor" / f"{args.window}.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(out, indent=1, default=str) + "\n")
-    print(f"wrote {path}")
+    plog.note(f"wrote {path}")
+    plog.close()
     return 0
 
 

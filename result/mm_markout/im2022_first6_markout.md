@@ -1,4 +1,4 @@
-### im2022: markouts (all 40 sessions, first 6; price path: tape)
+### im2022: markouts (all 6 sessions, first 6; price path: tape)
 
 | arm | sessions | contracts | taker share | taker price impr. (median, pts) | markout 1 min | 5 min | close | P&L (M đ) | carry (M đ) | mark switch (M đ) | trading (M đ) |
 |---|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|
@@ -8,10 +8,8 @@
 
 Markouts: mean per contract, index points, + = good for A (1 point = 100,000 đ per contract). Taker share: contracts filled as taker among those with a liquidity side. Carry = previous end positions x close-to-close move; mark switch = naive's revaluation across its F1/F2 stitch (the basis, naive only); trading = the rest.
 
-- F-opt: 39 fills had no contract and were assigned one (0 ambiguous).
-
 Inputs:
 
 - N0: naive trace run by this module
 - N3: naive trace run by this module
-- F-opt: `fills_opt6.json` (sha256 `7d953daec3f2b69f…`); equity from `result/mm_faithful_a/im2022_optimistic.json`
+- F-opt: `im2022_fills_F-opt.json` (sha256 `771899659987ad1a…`)

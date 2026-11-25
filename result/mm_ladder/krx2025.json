@@ -20,23 +20,43 @@
   "2025-04-24",
   "2025-04-25",
   "2025-04-28",
-  "2025-04-29"
+  "2025-04-29",
+  "2025-05-05",
+  "2025-05-06",
+  "2025-05-07",
+  "2025-05-08",
+  "2025-05-09",
+  "2025-05-12",
+  "2025-05-13",
+  "2025-05-14",
+  "2025-05-15",
+  "2025-05-16",
+  "2025-05-19",
+  "2025-05-20",
+  "2025-05-21",
+  "2025-05-22",
+  "2025-05-23",
+  "2025-05-26",
+  "2025-05-27",
+  "2025-05-28",
+  "2025-05-29",
+  "2025-05-30"
  ],
- "session_set": "20 pre-cutover sessions",
+ "session_set": "all 40 sessions",
  "step": "3.1",
  "units": "real dong (naive thousand-dong x 1000)",
  "rungs": [
   {
-   "hpr": -0.052180000000000004,
-   "sharpe": -3.8901433531540084,
-   "mdd": -0.07709999999999995,
-   "end_equity_dong": 473910000.0,
-   "fills": 228,
-   "round_trips": 112,
+   "hpr": 0.29567999999999994,
+   "sharpe": 1.6082487716307658,
+   "mdd": -0.18772,
+   "end_equity_dong": 647840000.0,
+   "fills": 693,
+   "round_trips": 345,
    "forced_reductions": 0,
-   "quote_fill_fees_dong": 4480000.0,
-   "sessions": 20,
-   "end_inventory": -4,
+   "quote_fill_fees_dong": 13800000.0,
+   "sessions": 40,
+   "end_inventory": 3,
    "options": {
     "own_price_fills": false,
     "dated_im": false,
@@ -142,6 +162,106 @@
      "equity": 473910000.0,
      "fills": 228,
      "round_trips": 112
+    },
+    "2025-05-05": {
+     "equity": 469830000.0,
+     "fills": 228,
+     "round_trips": 112
+    },
+    "2025-05-06": {
+     "equity": 469390000.0,
+     "fills": 228,
+     "round_trips": 112
+    },
+    "2025-05-07": {
+     "equity": 466390000.0,
+     "fills": 228,
+     "round_trips": 112
+    },
+    "2025-05-08": {
+     "equity": 452660000.0,
+     "fills": 230,
+     "round_trips": 112
+    },
+    "2025-05-09": {
+     "equity": 455360000.0,
+     "fills": 230,
+     "round_trips": 112
+    },
+    "2025-05-12": {
+     "equity": 439850000.0,
+     "fills": 232,
+     "round_trips": 112
+    },
+    "2025-05-13": {
+     "equity": 435760000.0,
+     "fills": 233,
+     "round_trips": 113
+    },
+    "2025-05-14": {
+     "equity": 419000000.0,
+     "fills": 234,
+     "round_trips": 113
+    },
+    "2025-05-15": {
+     "equity": 418440000.0,
+     "fills": 234,
+     "round_trips": 113
+    },
+    "2025-05-16": {
+     "equity": 431640000.0,
+     "fills": 234,
+     "round_trips": 113
+    },
+    "2025-05-19": {
+     "equity": 436110000.0,
+     "fills": 235,
+     "round_trips": 113
+    },
+    "2025-05-20": {
+     "equity": 411000000.0,
+     "fills": 235,
+     "round_trips": 113
+    },
+    "2025-05-21": {
+     "equity": 406140000.0,
+     "fills": 241,
+     "round_trips": 116
+    },
+    "2025-05-22": {
+     "equity": 416130000.0,
+     "fills": 242,
+     "round_trips": 117
+    },
+    "2025-05-23": {
+     "equity": 412530000.0,
+     "fills": 242,
+     "round_trips": 117
+    },
+    "2025-05-26": {
+     "equity": 645910000.0,
+     "fills": 690,
+     "round_trips": 344
+    },
+    "2025-05-27": {
+     "equity": 645960000.0,
+     "fills": 691,
+     "round_trips": 344
+    },
+    "2025-05-28": {
+     "equity": 647990000.0,
+     "fills": 692,
+     "round_trips": 345
+    },
+    "2025-05-29": {
+     "equity": 649100000.0,
+     "fills": 693,
+     "round_trips": 345
+    },
+    "2025-05-30": {
+     "equity": 647840000.0,
+     "fills": 693,
+     "round_trips": 345
     }
    },
    "rung": "N0",
@@ -152,16 +272,16 @@
    "delta_hpr": null
   },
   {
-   "hpr": -0.14093999999999995,
-   "sharpe": -6.957450144184946,
-   "mdd": -0.1552,
-   "end_equity_dong": 429530000.0,
-   "fills": 228,
-   "round_trips": 112,
+   "hpr": -0.41986,
+   "sharpe": -5.2787523013656195,
+   "mdd": -0.42366000000000004,
+   "end_equity_dong": 290070000.0,
+   "fills": 693,
+   "round_trips": 345,
    "forced_reductions": 0,
-   "quote_fill_fees_dong": 4480000.0,
-   "sessions": 20,
-   "end_inventory": -4,
+   "quote_fill_fees_dong": 13800000.0,
+   "sessions": 40,
+   "end_inventory": 3,
    "options": {
     "own_price_fills": true,
     "dated_im": false,
@@ -267,6 +387,106 @@
      "equity": 429530000.0,
      "fills": 228,
      "round_trips": 112
+    },
+    "2025-05-05": {
+     "equity": 425450000.0,
+     "fills": 228,
+     "round_trips": 112
+    },
+    "2025-05-06": {
+     "equity": 425010000.0,
+     "fills": 228,
+     "round_trips": 112
+    },
+    "2025-05-07": {
+     "equity": 422010000.0,
+     "fills": 228,
+     "round_trips": 112
+    },
+    "2025-05-08": {
+     "equity": 408280000.0,
+     "fills": 230,
+     "round_trips": 112
+    },
+    "2025-05-09": {
+     "equity": 410980000.0,
+     "fills": 230,
+     "round_trips": 112
+    },
+    "2025-05-12": {
+     "equity": 395410000.0,
+     "fills": 232,
+     "round_trips": 112
+    },
+    "2025-05-13": {
+     "equity": 391310000.0,
+     "fills": 233,
+     "round_trips": 113
+    },
+    "2025-05-14": {
+     "equity": 374490000.0,
+     "fills": 234,
+     "round_trips": 113
+    },
+    "2025-05-15": {
+     "equity": 373930000.0,
+     "fills": 234,
+     "round_trips": 113
+    },
+    "2025-05-16": {
+     "equity": 387130000.0,
+     "fills": 234,
+     "round_trips": 113
+    },
+    "2025-05-19": {
+     "equity": 391590000.0,
+     "fills": 235,
+     "round_trips": 113
+    },
+    "2025-05-20": {
+     "equity": 366480000.0,
+     "fills": 235,
+     "round_trips": 113
+    },
+    "2025-05-21": {
+     "equity": 361310000.0,
+     "fills": 241,
+     "round_trips": 116
+    },
+    "2025-05-22": {
+     "equity": 371300000.0,
+     "fills": 242,
+     "round_trips": 117
+    },
+    "2025-05-23": {
+     "equity": 367700000.0,
+     "fills": 242,
+     "round_trips": 117
+    },
+    "2025-05-26": {
+     "equity": 288170000.0,
+     "fills": 690,
+     "round_trips": 344
+    },
+    "2025-05-27": {
+     "equity": 288220000.0,
+     "fills": 691,
+     "round_trips": 344
+    },
+    "2025-05-28": {
+     "equity": 290250000.0,
+     "fills": 692,
+     "round_trips": 345
+    },
+    "2025-05-29": {
+     "equity": 291330000.0,
+     "fills": 693,
+     "round_trips": 345
+    },
+    "2025-05-30": {
+     "equity": 290070000.0,
+     "fills": 693,
+     "round_trips": 345
     }
    },
    "rung": "N1",
@@ -274,19 +494,19 @@
    "source": "naive engine (this run)",
    "delta_fills": 0,
    "delta_round_trips": 0,
-   "delta_hpr": -0.08875999999999995
+   "delta_hpr": -0.71554
   },
   {
-   "hpr": -0.14093999999999995,
-   "sharpe": -6.957450144184946,
-   "mdd": -0.1552,
-   "end_equity_dong": 429530000.0,
-   "fills": 228,
-   "round_trips": 112,
+   "hpr": -0.41986,
+   "sharpe": -5.2787523013656195,
+   "mdd": -0.42366000000000004,
+   "end_equity_dong": 290070000.0,
+   "fills": 693,
+   "round_trips": 345,
    "forced_reductions": 0,
-   "quote_fill_fees_dong": 4480000.0,
-   "sessions": 20,
-   "end_inventory": -4,
+   "quote_fill_fees_dong": 13800000.0,
+   "sessions": 40,
+   "end_inventory": 3,
    "options": {
     "own_price_fills": true,
     "dated_im": true,
@@ -392,6 +612,106 @@
      "equity": 429530000.0,
      "fills": 228,
      "round_trips": 112
+    },
+    "2025-05-05": {
+     "equity": 425450000.0,
+     "fills": 228,
+     "round_trips": 112
+    },
+    "2025-05-06": {
+     "equity": 425010000.0,
+     "fills": 228,
+     "round_trips": 112
+    },
+    "2025-05-07": {
+     "equity": 422010000.0,
+     "fills": 228,
+     "round_trips": 112
+    },
+    "2025-05-08": {
+     "equity": 408280000.0,
+     "fills": 230,
+     "round_trips": 112
+    },
+    "2025-05-09": {
+     "equity": 410980000.0,
+     "fills": 230,
+     "round_trips": 112
+    },
+    "2025-05-12": {
+     "equity": 395410000.0,
+     "fills": 232,
+     "round_trips": 112
+    },
+    "2025-05-13": {
+     "equity": 391310000.0,
+     "fills": 233,
+     "round_trips": 113
+    },
+    "2025-05-14": {
+     "equity": 374490000.0,
+     "fills": 234,
+     "round_trips": 113
+    },
+    "2025-05-15": {
+     "equity": 373930000.0,
+     "fills": 234,
+     "round_trips": 113
+    },
+    "2025-05-16": {
+     "equity": 387130000.0,
+     "fills": 234,
+     "round_trips": 113
+    },
+    "2025-05-19": {
+     "equity": 391590000.0,
+     "fills": 235,
+     "round_trips": 113
+    },
+    "2025-05-20": {
+     "equity": 366480000.0,
+     "fills": 235,
+     "round_trips": 113
+    },
+    "2025-05-21": {
+     "equity": 361310000.0,
+     "fills": 241,
+     "round_trips": 116
+    },
+    "2025-05-22": {
+     "equity": 371300000.0,
+     "fills": 242,
+     "round_trips": 117
+    },
+    "2025-05-23": {
+     "equity": 367700000.0,
+     "fills": 242,
+     "round_trips": 117
+    },
+    "2025-05-26": {
+     "equity": 288170000.0,
+     "fills": 690,
+     "round_trips": 344
+    },
+    "2025-05-27": {
+     "equity": 288220000.0,
+     "fills": 691,
+     "round_trips": 344
+    },
+    "2025-05-28": {
+     "equity": 290250000.0,
+     "fills": 692,
+     "round_trips": 345
+    },
+    "2025-05-29": {
+     "equity": 291330000.0,
+     "fills": 693,
+     "round_trips": 345
+    },
+    "2025-05-30": {
+     "equity": 290070000.0,
+     "fills": 693,
+     "round_trips": 345
     }
    },
    "rung": "N2",
@@ -402,16 +722,16 @@
    "delta_hpr": 0.0
   },
   {
-   "hpr": -0.15022000000000002,
-   "sharpe": -7.1221853075520185,
-   "mdd": -0.16247999999999996,
-   "end_equity_dong": 424890000.0,
-   "fills": 228,
-   "round_trips": 112,
+   "hpr": -0.4477,
+   "sharpe": -5.1655103664986814,
+   "mdd": -0.45133999999999996,
+   "end_equity_dong": 276150000.0,
+   "fills": 693,
+   "round_trips": 345,
    "forced_reductions": 0,
-   "quote_fill_fees_dong": 9120000.0,
-   "sessions": 20,
-   "end_inventory": -4,
+   "quote_fill_fees_dong": 27720000.0,
+   "sessions": 40,
+   "end_inventory": 3,
    "options": {
     "own_price_fills": true,
     "dated_im": true,
@@ -517,6 +837,106 @@
      "equity": 424890000.0,
      "fills": 228,
      "round_trips": 112
+    },
+    "2025-05-05": {
+     "equity": 420810000.0,
+     "fills": 228,
+     "round_trips": 112
+    },
+    "2025-05-06": {
+     "equity": 420370000.0,
+     "fills": 228,
+     "round_trips": 112
+    },
+    "2025-05-07": {
+     "equity": 417370000.0,
+     "fills": 228,
+     "round_trips": 112
+    },
+    "2025-05-08": {
+     "equity": 403560000.0,
+     "fills": 230,
+     "round_trips": 112
+    },
+    "2025-05-09": {
+     "equity": 406260000.0,
+     "fills": 230,
+     "round_trips": 112
+    },
+    "2025-05-12": {
+     "equity": 390610000.0,
+     "fills": 232,
+     "round_trips": 112
+    },
+    "2025-05-13": {
+     "equity": 386510000.0,
+     "fills": 233,
+     "round_trips": 113
+    },
+    "2025-05-14": {
+     "equity": 369650000.0,
+     "fills": 234,
+     "round_trips": 113
+    },
+    "2025-05-15": {
+     "equity": 369090000.0,
+     "fills": 234,
+     "round_trips": 113
+    },
+    "2025-05-16": {
+     "equity": 382290000.0,
+     "fills": 234,
+     "round_trips": 113
+    },
+    "2025-05-19": {
+     "equity": 386710000.0,
+     "fills": 235,
+     "round_trips": 113
+    },
+    "2025-05-20": {
+     "equity": 361600000.0,
+     "fills": 235,
+     "round_trips": 113
+    },
+    "2025-05-21": {
+     "equity": 356310000.0,
+     "fills": 241,
+     "round_trips": 116
+    },
+    "2025-05-22": {
+     "equity": 366300000.0,
+     "fills": 242,
+     "round_trips": 117
+    },
+    "2025-05-23": {
+     "equity": 362700000.0,
+     "fills": 242,
+     "round_trips": 117
+    },
+    "2025-05-26": {
+     "equity": 274330000.0,
+     "fills": 690,
+     "round_trips": 344
+    },
+    "2025-05-27": {
+     "equity": 274340000.0,
+     "fills": 691,
+     "round_trips": 344
+    },
+    "2025-05-28": {
+     "equity": 276370000.0,
+     "fills": 692,
+     "round_trips": 345
+    },
+    "2025-05-29": {
+     "equity": 277410000.0,
+     "fills": 693,
+     "round_trips": 345
+    },
+    "2025-05-30": {
+     "equity": 276150000.0,
+     "fills": 693,
+     "round_trips": 345
     }
    },
    "rung": "N3",
@@ -524,13 +944,13 @@
    "source": "naive engine (this run)",
    "delta_fills": 0,
    "delta_round_trips": 0,
-   "delta_hpr": -0.009280000000000066
+   "delta_hpr": -0.027839999999999976
   },
   {
-   "hpr": -0.07575191400000003,
-   "sharpe": -1.077579569963325,
-   "mdd": -0.13787494070149842,
-   "end_equity_dong": 462124043.0,
+   "hpr": -0.12019000000000002,
+   "sharpe": -1.0456460795359135,
+   "mdd": -0.2744095217177964,
+   "end_equity_dong": 439905000.0,
    "_daily": {
     "2025-04-01": {
      "equity": 500586317.0,
@@ -631,55 +1051,160 @@
      "equity": 462124043.0,
      "fills": 261,
      "round_trips": 127
+    },
+    "2025-05-05": {
+     "equity": 457024043.0,
+     "fills": 261,
+     "round_trips": 127
+    },
+    "2025-05-06": {
+     "equity": 456474043.0,
+     "fills": 261,
+     "round_trips": 127
+    },
+    "2025-05-07": {
+     "equity": 452724043.0,
+     "fills": 261,
+     "round_trips": 127
+    },
+    "2025-05-08": {
+     "equity": 437187320.0,
+     "fills": 262,
+     "round_trips": 127
+    },
+    "2025-05-09": {
+     "equity": 439887320.0,
+     "fills": 262,
+     "round_trips": 127
+    },
+    "2025-05-12": {
+     "equity": 424283587.0,
+     "fills": 264,
+     "round_trips": 127
+    },
+    "2025-05-13": {
+     "equity": 420182711.0,
+     "fills": 267,
+     "round_trips": 128
+    },
+    "2025-05-14": {
+     "equity": 400987310.0,
+     "fills": 285,
+     "round_trips": 137
+    },
+    "2025-05-15": {
+     "equity": 404677310.0,
+     "fills": 285,
+     "round_trips": 137
+    },
+    "2025-05-16": {
+     "equity": 415207310.0,
+     "fills": 285,
+     "round_trips": 137
+    },
+    "2025-05-19": {
+     "equity": 420070228.0,
+     "fills": 286,
+     "round_trips": 137
+    },
+    "2025-05-20": {
+     "equity": 392815887.0,
+     "fills": 288,
+     "round_trips": 138
+    },
+    "2025-05-21": {
+     "equity": 386496819.0,
+     "fills": 292,
+     "round_trips": 139
+    },
+    "2025-05-22": {
+     "equity": 400030868.0,
+     "fills": 297,
+     "round_trips": 144
+    },
+    "2025-05-23": {
+     "equity": 396880868.0,
+     "fills": 297,
+     "round_trips": 144
+    },
+    "2025-05-26": {
+     "equity": 437374223.0,
+     "fills": 571,
+     "round_trips": 280
+    },
+    "2025-05-27": {
+     "equity": 436419661.0,
+     "fills": 573,
+     "round_trips": 282
+    },
+    "2025-05-28": {
+     "equity": 440752300.0,
+     "fills": 574,
+     "round_trips": 283
+    },
+    "2025-05-29": {
+     "equity": 442845000.0,
+     "fills": 575,
+     "round_trips": 283
+    },
+    "2025-05-30": {
+     "equity": 439905000.0,
+     "fills": 575,
+     "round_trips": 283
     }
    },
-   "fills": 261,
-   "round_trips": 127,
-   "quote_fills": 239,
-   "roll_fills": 22,
+   "fills": 575,
+   "round_trips": 283,
+   "quote_fills": 535,
+   "roll_fills": 40,
    "engine_fills": 0,
-   "maker_fills": 89,
-   "taker_fills": 172,
-   "sessions": 20,
-   "accepted_orders": 31996,
-   "undecided_orders": 27,
-   "undecided_order_rate": 0.000843855481935242,
+   "maker_fills": 286,
+   "taker_fills": 289,
+   "sessions": 40,
+   "accepted_orders": 66994,
+   "undecided_orders": 28,
+   "undecided_order_rate": 0.0004179478759291877,
    "undecided_quote_orders_in_atc": 0,
-   "margin_warnings": 1,
-   "margin_calls": 1,
-   "margin_calls_cleared": 1,
+   "margin_warnings": 16,
+   "margin_calls": 8,
+   "margin_calls_cleared": 8,
    "forced_liquidations": 0,
    "forced_liquidations_executed": 0,
-   "vm_settlement_days": 18,
-   "roll_triggers": 1,
-   "roll_contracts": 11,
-   "roll_retries": 4,
-   "roll_rejected": 0,
+   "vm_settlement_days": 38,
+   "roll_triggers": 2,
+   "roll_contracts": 20,
+   "roll_retries": 7,
+   "roll_rejected": 2,
    "roll_unfilled_contracts": 0,
    "expiry_settled_contracts": 2,
-   "cancel_refused": 125,
-   "quote_rejected": 178,
-   "charges_dong": 4115957.0,
-   "end_net_contracts": -5,
+   "cancel_refused": 243,
+   "quote_rejected": 199,
+   "charges_dong": 9455000.0,
+   "end_net_contracts": 7,
    "end_positions": {
-    "VN30F2505": -5
+    "VN30F2506": 7
    },
-   "engine_deposit_end_dong": 462124043.0,
+   "engine_deposit_end_dong": 439905000.0,
    "ledger_minus_engine_deposit_end_dong": 0.0,
    "max_abs_deposit_drift_dong": 0.0,
    "positions_match_engine_all_sessions": true,
+   "ccp_nights": 20,
+   "ccp_indeterminate_nights": 0,
+   "ccp_calendar_spread_unknown": 0,
+   "ccp_events_by_state": {},
+   "ccp_indeterminate_by_reason": {},
    "rung": "F-opt",
    "label": "Plutus faithful-A, optimistic queue",
    "source": "result/mm_faithful_a/krx2025_optimistic.json",
-   "delta_fills": 33,
-   "delta_round_trips": 15,
-   "delta_hpr": 0.07446808599999999
+   "delta_fills": -118,
+   "delta_round_trips": -62,
+   "delta_hpr": 0.32750999999999997
   },
   {
-   "hpr": -0.255499712,
-   "sharpe": -6.354191781130687,
-   "mdd": -0.2763700553797449,
-   "end_equity_dong": 372250144.0,
+   "hpr": -0.42963595200000004,
+   "sharpe": -5.264997086770834,
+   "mdd": -0.47532923351156686,
+   "end_equity_dong": 285182024.0,
    "_daily": {
     "2025-04-01": {
      "equity": 500606315.0,
@@ -780,51 +1305,1780 @@
      "equity": 372250144.0,
      "fills": 153,
      "round_trips": 71
+    },
+    "2025-05-05": {
+     "equity": 362050144.0,
+     "fills": 153,
+     "round_trips": 71
+    },
+    "2025-05-06": {
+     "equity": 360950144.0,
+     "fills": 153,
+     "round_trips": 71
+    },
+    "2025-05-07": {
+     "equity": 353450144.0,
+     "fills": 153,
+     "round_trips": 71
+    },
+    "2025-05-08": {
+     "equity": 323450144.0,
+     "fills": 153,
+     "round_trips": 71
+    },
+    "2025-05-09": {
+     "equity": 327950144.0,
+     "fills": 153,
+     "round_trips": 71
+    },
+    "2025-05-12": {
+     "equity": 303323309.0,
+     "fills": 154,
+     "round_trips": 71
+    },
+    "2025-05-13": {
+     "equity": 297439413.0,
+     "fills": 156,
+     "round_trips": 72
+    },
+    "2025-05-14": {
+     "equity": 274076133.0,
+     "fills": 178,
+     "round_trips": 83
+    },
+    "2025-05-15": {
+     "equity": 278586133.0,
+     "fills": 178,
+     "round_trips": 83
+    },
+    "2025-05-16": {
+     "equity": 291456133.0,
+     "fills": 178,
+     "round_trips": 83
+    },
+    "2025-05-19": {
+     "equity": 297159049.0,
+     "fills": 179,
+     "round_trips": 83
+    },
+    "2025-05-20": {
+     "equity": 263679049.0,
+     "fills": 179,
+     "round_trips": 83
+    },
+    "2025-05-21": {
+     "equity": 263947940.0,
+     "fills": 193,
+     "round_trips": 96
+    },
+    "2025-05-22": {
+     "equity": 262653499.0,
+     "fills": 195,
+     "round_trips": 96
+    },
+    "2025-05-23": {
+     "equity": 263553499.0,
+     "fills": 195,
+     "round_trips": 96
+    },
+    "2025-05-26": {
+     "equity": 282386684.0,
+     "fills": 356,
+     "round_trips": 174
+    },
+    "2025-05-27": {
+     "equity": 281686684.0,
+     "fills": 356,
+     "round_trips": 174
+    },
+    "2025-05-28": {
+     "equity": 286019323.0,
+     "fills": 357,
+     "round_trips": 175
+    },
+    "2025-05-29": {
+     "equity": 288122024.0,
+     "fills": 358,
+     "round_trips": 175
+    },
+    "2025-05-30": {
+     "equity": 285182024.0,
+     "fills": 358,
+     "round_trips": 175
     }
    },
-   "fills": 153,
-   "round_trips": 71,
-   "quote_fills": 139,
-   "roll_fills": 14,
-   "engine_fills": 0,
-   "maker_fills": 23,
-   "taker_fills": 130,
-   "sessions": 20,
-   "accepted_orders": 31844,
-   "undecided_orders": 31727,
-   "undecided_order_rate": 0.9963258384625047,
-   "undecided_quote_orders_in_atc": 84,
-   "margin_warnings": 4,
-   "margin_calls": 0,
-   "margin_calls_cleared": 0,
-   "forced_liquidations": 0,
-   "forced_liquidations_executed": 0,
-   "vm_settlement_days": 18,
-   "roll_triggers": 1,
-   "roll_contracts": 7,
-   "roll_retries": 6,
-   "roll_rejected": 0,
+   "fills": 358,
+   "round_trips": 175,
+   "quote_fills": 310,
+   "roll_fills": 36,
+   "engine_fills": 12,
+   "maker_fills": 115,
+   "taker_fills": 243,
+   "sessions": 40,
+   "accepted_orders": 62820,
+   "undecided_orders": 62529,
+   "undecided_order_rate": 0.9953677172874881,
+   "undecided_quote_orders_in_atc": 172,
+   "margin_warnings": 47,
+   "margin_calls": 31,
+   "margin_calls_cleared": 29,
+   "forced_liquidations": 30248,
+   "forced_liquidations_executed": 3,
+   "vm_settlement_days": 37,
+   "roll_triggers": 2,
+   "roll_contracts": 18,
+   "roll_retries": 9,
+   "roll_rejected": 2,
    "roll_unfilled_contracts": 0,
    "expiry_settled_contracts": 1,
-   "cancel_refused": 104,
-   "quote_rejected": 178,
-   "charges_dong": 2409856.0,
-   "end_net_contracts": -10,
+   "cancel_refused": 202,
+   "quote_rejected": 3987,
+   "charges_dong": 5897976.0,
+   "end_net_contracts": 7,
    "end_positions": {
-    "VN30F2505": -10
+    "VN30F2506": 7
    },
-   "engine_deposit_end_dong": 372250144.0,
+   "engine_deposit_end_dong": 285182024.0,
    "ledger_minus_engine_deposit_end_dong": 0.0,
    "max_abs_deposit_drift_dong": 0.0,
    "positions_match_engine_all_sessions": true,
+   "ccp_nights": 19,
+   "ccp_indeterminate_nights": 0,
+   "ccp_calendar_spread_unknown": 0,
+   "ccp_events_by_state": {
+    "notified": 1,
+    "suspended": 1,
+    "compliant": 1
+   },
+   "ccp_indeterminate_by_reason": {},
    "rung": "F-con",
    "label": "Plutus faithful-A, conservative queue",
    "source": "result/mm_faithful_a/krx2025_conservative.json",
-   "delta_fills": -108,
-   "delta_round_trips": -56,
-   "delta_hpr": -0.17974779799999996
+   "delta_fills": -217,
+   "delta_round_trips": -108,
+   "delta_hpr": -0.309445952
   }
  ],
+ "views": {
+  "pre_cutover": {
+   "session_set": "20 pre-cutover sessions (like-for-like with the results committed before plutus-simulator 391e2e2, which compared these sessions only)",
+   "sessions": [
+    "2025-04-01",
+    "2025-04-02",
+    "2025-04-03",
+    "2025-04-04",
+    "2025-04-08",
+    "2025-04-09",
+    "2025-04-10",
+    "2025-04-11",
+    "2025-04-14",
+    "2025-04-15",
+    "2025-04-16",
+    "2025-04-17",
+    "2025-04-18",
+    "2025-04-21",
+    "2025-04-22",
+    "2025-04-23",
+    "2025-04-24",
+    "2025-04-25",
+    "2025-04-28",
+    "2025-04-29"
+   ],
+   "base_day": null,
+   "rungs": [
+    {
+     "hpr": -0.052180000000000004,
+     "sharpe": -3.8901433531540084,
+     "mdd": -0.07709999999999995,
+     "end_equity_dong": 473910000.0,
+     "fills": 228,
+     "round_trips": 112,
+     "sessions": 20,
+     "_daily": {
+      "2025-04-01": {
+       "equity": 500000000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-04-02": {
+       "equity": 500000000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-04-03": {
+       "equity": 487900000.0,
+       "fills": 4,
+       "round_trips": 1
+      },
+      "2025-04-04": {
+       "equity": 486910000.0,
+       "fills": 32,
+       "round_trips": 16
+      },
+      "2025-04-08": {
+       "equity": 479870000.0,
+       "fills": 54,
+       "round_trips": 25
+      },
+      "2025-04-09": {
+       "equity": 464230000.0,
+       "fills": 156,
+       "round_trips": 78
+      },
+      "2025-04-10": {
+       "equity": 465660000.0,
+       "fills": 165,
+       "round_trips": 82
+      },
+      "2025-04-11": {
+       "equity": 463580000.0,
+       "fills": 178,
+       "round_trips": 88
+      },
+      "2025-04-14": {
+       "equity": 461450000.0,
+       "fills": 179,
+       "round_trips": 88
+      },
+      "2025-04-15": {
+       "equity": 464240000.0,
+       "fills": 179,
+       "round_trips": 88
+      },
+      "2025-04-16": {
+       "equity": 467980000.0,
+       "fills": 179,
+       "round_trips": 88
+      },
+      "2025-04-17": {
+       "equity": 465290000.0,
+       "fills": 180,
+       "round_trips": 88
+      },
+      "2025-04-18": {
+       "equity": 467690000.0,
+       "fills": 180,
+       "round_trips": 88
+      },
+      "2025-04-21": {
+       "equity": 467290000.0,
+       "fills": 180,
+       "round_trips": 88
+      },
+      "2025-04-22": {
+       "equity": 477830000.0,
+       "fills": 224,
+       "round_trips": 110
+      },
+      "2025-04-23": {
+       "equity": 474650000.0,
+       "fills": 227,
+       "round_trips": 112
+      },
+      "2025-04-24": {
+       "equity": 472850000.0,
+       "fills": 227,
+       "round_trips": 112
+      },
+      "2025-04-25": {
+       "equity": 471630000.0,
+       "fills": 228,
+       "round_trips": 112
+      },
+      "2025-04-28": {
+       "equity": 471590000.0,
+       "fills": 228,
+       "round_trips": 112
+      },
+      "2025-04-29": {
+       "equity": 473910000.0,
+       "fills": 228,
+       "round_trips": 112
+      }
+     },
+     "rung": "N0",
+     "label": "naive as-is",
+     "source": "naive engine (this run), cut from the whole window",
+     "delta_fills": null,
+     "delta_round_trips": null,
+     "delta_hpr": null
+    },
+    {
+     "hpr": -0.14093999999999995,
+     "sharpe": -6.957450144184946,
+     "mdd": -0.1552,
+     "end_equity_dong": 429530000.0,
+     "fills": 228,
+     "round_trips": 112,
+     "sessions": 20,
+     "_daily": {
+      "2025-04-01": {
+       "equity": 500000000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-04-02": {
+       "equity": 500000000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-04-03": {
+       "equity": 487260000.0,
+       "fills": 4,
+       "round_trips": 1
+      },
+      "2025-04-04": {
+       "equity": 479690000.0,
+       "fills": 32,
+       "round_trips": 16
+      },
+      "2025-04-08": {
+       "equity": 468590000.0,
+       "fills": 54,
+       "round_trips": 25
+      },
+      "2025-04-09": {
+       "equity": 438200000.0,
+       "fills": 156,
+       "round_trips": 78
+      },
+      "2025-04-10": {
+       "equity": 429460000.0,
+       "fills": 165,
+       "round_trips": 82
+      },
+      "2025-04-11": {
+       "equity": 424530000.0,
+       "fills": 178,
+       "round_trips": 88
+      },
+      "2025-04-14": {
+       "equity": 422400000.0,
+       "fills": 179,
+       "round_trips": 88
+      },
+      "2025-04-15": {
+       "equity": 425190000.0,
+       "fills": 179,
+       "round_trips": 88
+      },
+      "2025-04-16": {
+       "equity": 428930000.0,
+       "fills": 179,
+       "round_trips": 88
+      },
+      "2025-04-17": {
+       "equity": 426230000.0,
+       "fills": 180,
+       "round_trips": 88
+      },
+      "2025-04-18": {
+       "equity": 428630000.0,
+       "fills": 180,
+       "round_trips": 88
+      },
+      "2025-04-21": {
+       "equity": 428230000.0,
+       "fills": 180,
+       "round_trips": 88
+      },
+      "2025-04-22": {
+       "equity": 435460000.0,
+       "fills": 224,
+       "round_trips": 110
+      },
+      "2025-04-23": {
+       "equity": 430820000.0,
+       "fills": 227,
+       "round_trips": 112
+      },
+      "2025-04-24": {
+       "equity": 429020000.0,
+       "fills": 227,
+       "round_trips": 112
+      },
+      "2025-04-25": {
+       "equity": 427250000.0,
+       "fills": 228,
+       "round_trips": 112
+      },
+      "2025-04-28": {
+       "equity": 427210000.0,
+       "fills": 228,
+       "round_trips": 112
+      },
+      "2025-04-29": {
+       "equity": 429530000.0,
+       "fills": 228,
+       "round_trips": 112
+      }
+     },
+     "rung": "N1",
+     "label": "+ own-price fills",
+     "source": "naive engine (this run), cut from the whole window",
+     "delta_fills": 0,
+     "delta_round_trips": 0,
+     "delta_hpr": -0.08875999999999995
+    },
+    {
+     "hpr": -0.14093999999999995,
+     "sharpe": -6.957450144184946,
+     "mdd": -0.1552,
+     "end_equity_dong": 429530000.0,
+     "fills": 228,
+     "round_trips": 112,
+     "sessions": 20,
+     "_daily": {
+      "2025-04-01": {
+       "equity": 500000000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-04-02": {
+       "equity": 500000000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-04-03": {
+       "equity": 487260000.0,
+       "fills": 4,
+       "round_trips": 1
+      },
+      "2025-04-04": {
+       "equity": 479690000.0,
+       "fills": 32,
+       "round_trips": 16
+      },
+      "2025-04-08": {
+       "equity": 468590000.0,
+       "fills": 54,
+       "round_trips": 25
+      },
+      "2025-04-09": {
+       "equity": 438200000.0,
+       "fills": 156,
+       "round_trips": 78
+      },
+      "2025-04-10": {
+       "equity": 429460000.0,
+       "fills": 165,
+       "round_trips": 82
+      },
+      "2025-04-11": {
+       "equity": 424530000.0,
+       "fills": 178,
+       "round_trips": 88
+      },
+      "2025-04-14": {
+       "equity": 422400000.0,
+       "fills": 179,
+       "round_trips": 88
+      },
+      "2025-04-15": {
+       "equity": 425190000.0,
+       "fills": 179,
+       "round_trips": 88
+      },
+      "2025-04-16": {
+       "equity": 428930000.0,
+       "fills": 179,
+       "round_trips": 88
+      },
+      "2025-04-17": {
+       "equity": 426230000.0,
+       "fills": 180,
+       "round_trips": 88
+      },
+      "2025-04-18": {
+       "equity": 428630000.0,
+       "fills": 180,
+       "round_trips": 88
+      },
+      "2025-04-21": {
+       "equity": 428230000.0,
+       "fills": 180,
+       "round_trips": 88
+      },
+      "2025-04-22": {
+       "equity": 435460000.0,
+       "fills": 224,
+       "round_trips": 110
+      },
+      "2025-04-23": {
+       "equity": 430820000.0,
+       "fills": 227,
+       "round_trips": 112
+      },
+      "2025-04-24": {
+       "equity": 429020000.0,
+       "fills": 227,
+       "round_trips": 112
+      },
+      "2025-04-25": {
+       "equity": 427250000.0,
+       "fills": 228,
+       "round_trips": 112
+      },
+      "2025-04-28": {
+       "equity": 427210000.0,
+       "fills": 228,
+       "round_trips": 112
+      },
+      "2025-04-29": {
+       "equity": 429530000.0,
+       "fills": 228,
+       "round_trips": 112
+      }
+     },
+     "rung": "N2",
+     "label": "+ dated VSD IM (13% / 17%)",
+     "source": "naive engine (this run), cut from the whole window",
+     "delta_fills": 0,
+     "delta_round_trips": 0,
+     "delta_hpr": 0.0
+    },
+    {
+     "hpr": -0.15022000000000002,
+     "sharpe": -7.1221853075520185,
+     "mdd": -0.16247999999999996,
+     "end_equity_dong": 424890000.0,
+     "fills": 228,
+     "round_trips": 112,
+     "sessions": 20,
+     "_daily": {
+      "2025-04-01": {
+       "equity": 500000000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-04-02": {
+       "equity": 500000000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-04-03": {
+       "equity": 487140000.0,
+       "fills": 4,
+       "round_trips": 1
+      },
+      "2025-04-04": {
+       "equity": 479050000.0,
+       "fills": 32,
+       "round_trips": 16
+      },
+      "2025-04-08": {
+       "equity": 467430000.0,
+       "fills": 54,
+       "round_trips": 25
+      },
+      "2025-04-09": {
+       "equity": 435080000.0,
+       "fills": 156,
+       "round_trips": 78
+      },
+      "2025-04-10": {
+       "equity": 426140000.0,
+       "fills": 165,
+       "round_trips": 82
+      },
+      "2025-04-11": {
+       "equity": 420930000.0,
+       "fills": 178,
+       "round_trips": 88
+      },
+      "2025-04-14": {
+       "equity": 418760000.0,
+       "fills": 179,
+       "round_trips": 88
+      },
+      "2025-04-15": {
+       "equity": 421550000.0,
+       "fills": 179,
+       "round_trips": 88
+      },
+      "2025-04-16": {
+       "equity": 425290000.0,
+       "fills": 179,
+       "round_trips": 88
+      },
+      "2025-04-17": {
+       "equity": 422550000.0,
+       "fills": 180,
+       "round_trips": 88
+      },
+      "2025-04-18": {
+       "equity": 424950000.0,
+       "fills": 180,
+       "round_trips": 88
+      },
+      "2025-04-21": {
+       "equity": 424550000.0,
+       "fills": 180,
+       "round_trips": 88
+      },
+      "2025-04-22": {
+       "equity": 430900000.0,
+       "fills": 224,
+       "round_trips": 110
+      },
+      "2025-04-23": {
+       "equity": 426220000.0,
+       "fills": 227,
+       "round_trips": 112
+      },
+      "2025-04-24": {
+       "equity": 424420000.0,
+       "fills": 227,
+       "round_trips": 112
+      },
+      "2025-04-25": {
+       "equity": 422610000.0,
+       "fills": 228,
+       "round_trips": 112
+      },
+      "2025-04-28": {
+       "equity": 422570000.0,
+       "fills": 228,
+       "round_trips": 112
+      },
+      "2025-04-29": {
+       "equity": 424890000.0,
+       "fills": 228,
+       "round_trips": 112
+      }
+     },
+     "rung": "N3",
+     "label": "+ fee on every fill",
+     "source": "naive engine (this run), cut from the whole window",
+     "delta_fills": 0,
+     "delta_round_trips": 0,
+     "delta_hpr": -0.009280000000000066
+    },
+    {
+     "hpr": -0.07575191400000003,
+     "sharpe": -1.077579569963325,
+     "mdd": -0.13787494070149842,
+     "end_equity_dong": 462124043.0,
+     "_daily": {
+      "2025-04-01": {
+       "equity": 500586317.0,
+       "fills": 2,
+       "round_trips": 1
+      },
+      "2025-04-02": {
+       "equity": 500586317.0,
+       "fills": 2,
+       "round_trips": 1
+      },
+      "2025-04-03": {
+       "equity": 486973522.0,
+       "fills": 7,
+       "round_trips": 2
+      },
+      "2025-04-04": {
+       "equity": 462934217.0,
+       "fills": 38,
+       "round_trips": 17
+      },
+      "2025-04-08": {
+       "equity": 469217508.0,
+       "fills": 59,
+       "round_trips": 28
+      },
+      "2025-04-09": {
+       "equity": 439342724.0,
+       "fills": 160,
+       "round_trips": 76
+      },
+      "2025-04-10": {
+       "equity": 504655287.0,
+       "fills": 168,
+       "round_trips": 81
+      },
+      "2025-04-11": {
+       "equity": 521665230.0,
+       "fills": 197,
+       "round_trips": 93
+      },
+      "2025-04-14": {
+       "equity": 532665230.0,
+       "fills": 197,
+       "round_trips": 93
+      },
+      "2025-04-15": {
+       "equity": 522435230.0,
+       "fills": 197,
+       "round_trips": 93
+      },
+      "2025-04-16": {
+       "equity": 500456131.0,
+       "fills": 219,
+       "round_trips": 104
+      },
+      "2025-04-17": {
+       "equity": 515951648.0,
+       "fills": 221,
+       "round_trips": 104
+      },
+      "2025-04-18": {
+       "equity": 501211648.0,
+       "fills": 221,
+       "round_trips": 104
+      },
+      "2025-04-21": {
+       "equity": 502311648.0,
+       "fills": 221,
+       "round_trips": 104
+      },
+      "2025-04-22": {
+       "equity": 462746079.0,
+       "fills": 256,
+       "round_trips": 126
+      },
+      "2025-04-23": {
+       "equity": 461243269.0,
+       "fills": 258,
+       "round_trips": 127
+      },
+      "2025-04-24": {
+       "equity": 460043269.0,
+       "fills": 258,
+       "round_trips": 127
+      },
+      "2025-04-25": {
+       "equity": 459280445.0,
+       "fills": 260,
+       "round_trips": 127
+      },
+      "2025-04-28": {
+       "equity": 459224043.0,
+       "fills": 261,
+       "round_trips": 127
+      },
+      "2025-04-29": {
+       "equity": 462124043.0,
+       "fills": 261,
+       "round_trips": 127
+      }
+     },
+     "fills": 261,
+     "round_trips": 127,
+     "quote_fills": 239,
+     "roll_fills": 22,
+     "engine_fills": 0,
+     "maker_fills": 89,
+     "taker_fills": 172,
+     "sessions": 20,
+     "accepted_orders": 31996,
+     "undecided_orders": 27,
+     "undecided_order_rate": 0.000843855481935242,
+     "undecided_quote_orders_in_atc": 0,
+     "margin_warnings": 1,
+     "margin_calls": 1,
+     "margin_calls_cleared": 1,
+     "forced_liquidations": 0,
+     "forced_liquidations_executed": 0,
+     "vm_settlement_days": 18,
+     "roll_triggers": 1,
+     "roll_contracts": 11,
+     "roll_retries": 4,
+     "roll_rejected": 0,
+     "roll_unfilled_contracts": 0,
+     "expiry_settled_contracts": 2,
+     "cancel_refused": 125,
+     "quote_rejected": 178,
+     "charges_dong": 4115957.0,
+     "end_net_contracts": -5,
+     "end_positions": {
+      "VN30F2505": -5
+     },
+     "engine_deposit_end_dong": 462124043.0,
+     "ledger_minus_engine_deposit_end_dong": 0.0,
+     "max_abs_deposit_drift_dong": 0.0,
+     "positions_match_engine_all_sessions": true,
+     "ccp_nights": 0,
+     "ccp_indeterminate_nights": 0,
+     "ccp_calendar_spread_unknown": 0,
+     "ccp_events_by_state": {},
+     "ccp_indeterminate_by_reason": {},
+     "rung": "F-opt",
+     "label": "Plutus faithful-A, optimistic queue",
+     "source": "result/mm_faithful_a/krx2025_optimistic.json",
+     "delta_fills": 33,
+     "delta_round_trips": 15,
+     "delta_hpr": 0.07446808599999999
+    },
+    {
+     "hpr": -0.255499712,
+     "sharpe": -6.354191781130687,
+     "mdd": -0.2763700553797449,
+     "end_equity_dong": 372250144.0,
+     "_daily": {
+      "2025-04-01": {
+       "equity": 500606315.0,
+       "fills": 2,
+       "round_trips": 1
+      },
+      "2025-04-02": {
+       "equity": 500606315.0,
+       "fills": 2,
+       "round_trips": 1
+      },
+      "2025-04-03": {
+       "equity": 486906876.0,
+       "fills": 5,
+       "round_trips": 1
+      },
+      "2025-04-04": {
+       "equity": 470148065.0,
+       "fills": 29,
+       "round_trips": 14
+      },
+      "2025-04-08": {
+       "equity": 467958454.0,
+       "fills": 38,
+       "round_trips": 18
+      },
+      "2025-04-09": {
+       "equity": 451940080.0,
+       "fills": 97,
+       "round_trips": 45
+      },
+      "2025-04-10": {
+       "equity": 395054440.0,
+       "fills": 103,
+       "round_trips": 48
+      },
+      "2025-04-11": {
+       "equity": 369253720.0,
+       "fills": 113,
+       "round_trips": 53
+      },
+      "2025-04-14": {
+       "equity": 362253720.0,
+       "fills": 113,
+       "round_trips": 53
+      },
+      "2025-04-15": {
+       "equity": 368763720.0,
+       "fills": 113,
+       "round_trips": 53
+      },
+      "2025-04-16": {
+       "equity": 381255110.0,
+       "fills": 127,
+       "round_trips": 60
+      },
+      "2025-04-17": {
+       "equity": 370227870.0,
+       "fills": 128,
+       "round_trips": 60
+      },
+      "2025-04-18": {
+       "equity": 379607870.0,
+       "fills": 128,
+       "round_trips": 60
+      },
+      "2025-04-21": {
+       "equity": 378907870.0,
+       "fills": 128,
+       "round_trips": 60
+      },
+      "2025-04-22": {
+       "equity": 384406551.0,
+       "fills": 152,
+       "round_trips": 71
+      },
+      "2025-04-23": {
+       "equity": 376306551.0,
+       "fills": 152,
+       "round_trips": 71
+      },
+      "2025-04-24": {
+       "equity": 370906551.0,
+       "fills": 152,
+       "round_trips": 71
+      },
+      "2025-04-25": {
+       "equity": 366550144.0,
+       "fills": 153,
+       "round_trips": 71
+      },
+      "2025-04-28": {
+       "equity": 366450144.0,
+       "fills": 153,
+       "round_trips": 71
+      },
+      "2025-04-29": {
+       "equity": 372250144.0,
+       "fills": 153,
+       "round_trips": 71
+      }
+     },
+     "fills": 153,
+     "round_trips": 71,
+     "quote_fills": 139,
+     "roll_fills": 14,
+     "engine_fills": 0,
+     "maker_fills": 23,
+     "taker_fills": 130,
+     "sessions": 20,
+     "accepted_orders": 31844,
+     "undecided_orders": 31727,
+     "undecided_order_rate": 0.9963258384625047,
+     "undecided_quote_orders_in_atc": 84,
+     "margin_warnings": 4,
+     "margin_calls": 0,
+     "margin_calls_cleared": 0,
+     "forced_liquidations": 0,
+     "forced_liquidations_executed": 0,
+     "vm_settlement_days": 18,
+     "roll_triggers": 1,
+     "roll_contracts": 7,
+     "roll_retries": 6,
+     "roll_rejected": 0,
+     "roll_unfilled_contracts": 0,
+     "expiry_settled_contracts": 1,
+     "cancel_refused": 104,
+     "quote_rejected": 178,
+     "charges_dong": 2409856.0,
+     "end_net_contracts": -10,
+     "end_positions": {
+      "VN30F2505": -10
+     },
+     "engine_deposit_end_dong": 372250144.0,
+     "ledger_minus_engine_deposit_end_dong": 0.0,
+     "max_abs_deposit_drift_dong": 0.0,
+     "positions_match_engine_all_sessions": true,
+     "ccp_nights": 0,
+     "ccp_indeterminate_nights": 0,
+     "ccp_calendar_spread_unknown": 0,
+     "ccp_events_by_state": {},
+     "ccp_indeterminate_by_reason": {},
+     "rung": "F-con",
+     "label": "Plutus faithful-A, conservative queue",
+     "source": "result/mm_faithful_a/krx2025_conservative.json",
+     "delta_fills": -108,
+     "delta_round_trips": -56,
+     "delta_hpr": -0.17974779799999996
+    }
+   ],
+   "naive_cut_equals_pre_only_run": {
+    "N0": true,
+    "N1": true,
+    "N2": true,
+    "N3": true
+   }
+  },
+  "post_cutover": {
+   "session_set": "20 post-cutover sessions from 2025-05-05 (QD 26 two-layer margin; returns from the 2025-04-29 close)",
+   "sessions": [
+    "2025-05-05",
+    "2025-05-06",
+    "2025-05-07",
+    "2025-05-08",
+    "2025-05-09",
+    "2025-05-12",
+    "2025-05-13",
+    "2025-05-14",
+    "2025-05-15",
+    "2025-05-16",
+    "2025-05-19",
+    "2025-05-20",
+    "2025-05-21",
+    "2025-05-22",
+    "2025-05-23",
+    "2025-05-26",
+    "2025-05-27",
+    "2025-05-28",
+    "2025-05-29",
+    "2025-05-30"
+   ],
+   "base_day": "2025-04-29",
+   "rungs": [
+    {
+     "hpr": 0.3670106138296301,
+     "sharpe": 2.6210553287610434,
+     "mdd": -0.14300183579160597,
+     "end_equity_dong": 647840000.0,
+     "fills": 465,
+     "round_trips": 233,
+     "sessions": 20,
+     "_daily": {
+      "2025-05-05": {
+       "equity": 469830000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-06": {
+       "equity": 469390000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-07": {
+       "equity": 466390000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-08": {
+       "equity": 452660000.0,
+       "fills": 2,
+       "round_trips": 0
+      },
+      "2025-05-09": {
+       "equity": 455360000.0,
+       "fills": 2,
+       "round_trips": 0
+      },
+      "2025-05-12": {
+       "equity": 439850000.0,
+       "fills": 4,
+       "round_trips": 0
+      },
+      "2025-05-13": {
+       "equity": 435760000.0,
+       "fills": 5,
+       "round_trips": 1
+      },
+      "2025-05-14": {
+       "equity": 419000000.0,
+       "fills": 6,
+       "round_trips": 1
+      },
+      "2025-05-15": {
+       "equity": 418440000.0,
+       "fills": 6,
+       "round_trips": 1
+      },
+      "2025-05-16": {
+       "equity": 431640000.0,
+       "fills": 6,
+       "round_trips": 1
+      },
+      "2025-05-19": {
+       "equity": 436110000.0,
+       "fills": 7,
+       "round_trips": 1
+      },
+      "2025-05-20": {
+       "equity": 411000000.0,
+       "fills": 7,
+       "round_trips": 1
+      },
+      "2025-05-21": {
+       "equity": 406140000.0,
+       "fills": 13,
+       "round_trips": 4
+      },
+      "2025-05-22": {
+       "equity": 416130000.0,
+       "fills": 14,
+       "round_trips": 5
+      },
+      "2025-05-23": {
+       "equity": 412530000.0,
+       "fills": 14,
+       "round_trips": 5
+      },
+      "2025-05-26": {
+       "equity": 645910000.0,
+       "fills": 462,
+       "round_trips": 232
+      },
+      "2025-05-27": {
+       "equity": 645960000.0,
+       "fills": 463,
+       "round_trips": 232
+      },
+      "2025-05-28": {
+       "equity": 647990000.0,
+       "fills": 464,
+       "round_trips": 233
+      },
+      "2025-05-29": {
+       "equity": 649100000.0,
+       "fills": 465,
+       "round_trips": 233
+      },
+      "2025-05-30": {
+       "equity": 647840000.0,
+       "fills": 465,
+       "round_trips": 233
+      }
+     },
+     "rung": "N0",
+     "label": "naive as-is",
+     "source": "naive engine (this run), cut from the whole window",
+     "delta_fills": null,
+     "delta_round_trips": null,
+     "delta_hpr": null
+    },
+    {
+     "hpr": -0.32468046469396783,
+     "sharpe": -5.522173470204558,
+     "mdd": -0.32910390426745517,
+     "end_equity_dong": 290070000.0,
+     "fills": 465,
+     "round_trips": 233,
+     "sessions": 20,
+     "_daily": {
+      "2025-05-05": {
+       "equity": 425450000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-06": {
+       "equity": 425010000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-07": {
+       "equity": 422010000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-08": {
+       "equity": 408280000.0,
+       "fills": 2,
+       "round_trips": 0
+      },
+      "2025-05-09": {
+       "equity": 410980000.0,
+       "fills": 2,
+       "round_trips": 0
+      },
+      "2025-05-12": {
+       "equity": 395410000.0,
+       "fills": 4,
+       "round_trips": 0
+      },
+      "2025-05-13": {
+       "equity": 391310000.0,
+       "fills": 5,
+       "round_trips": 1
+      },
+      "2025-05-14": {
+       "equity": 374490000.0,
+       "fills": 6,
+       "round_trips": 1
+      },
+      "2025-05-15": {
+       "equity": 373930000.0,
+       "fills": 6,
+       "round_trips": 1
+      },
+      "2025-05-16": {
+       "equity": 387130000.0,
+       "fills": 6,
+       "round_trips": 1
+      },
+      "2025-05-19": {
+       "equity": 391590000.0,
+       "fills": 7,
+       "round_trips": 1
+      },
+      "2025-05-20": {
+       "equity": 366480000.0,
+       "fills": 7,
+       "round_trips": 1
+      },
+      "2025-05-21": {
+       "equity": 361310000.0,
+       "fills": 13,
+       "round_trips": 4
+      },
+      "2025-05-22": {
+       "equity": 371300000.0,
+       "fills": 14,
+       "round_trips": 5
+      },
+      "2025-05-23": {
+       "equity": 367700000.0,
+       "fills": 14,
+       "round_trips": 5
+      },
+      "2025-05-26": {
+       "equity": 288170000.0,
+       "fills": 462,
+       "round_trips": 232
+      },
+      "2025-05-27": {
+       "equity": 288220000.0,
+       "fills": 463,
+       "round_trips": 232
+      },
+      "2025-05-28": {
+       "equity": 290250000.0,
+       "fills": 464,
+       "round_trips": 233
+      },
+      "2025-05-29": {
+       "equity": 291330000.0,
+       "fills": 465,
+       "round_trips": 233
+      },
+      "2025-05-30": {
+       "equity": 290070000.0,
+       "fills": 465,
+       "round_trips": 233
+      }
+     },
+     "rung": "N1",
+     "label": "+ own-price fills",
+     "source": "naive engine (this run), cut from the whole window",
+     "delta_fills": 0,
+     "delta_round_trips": 0,
+     "delta_hpr": -0.6916910785235979
+    },
+    {
+     "hpr": -0.32468046469396783,
+     "sharpe": -5.522173470204558,
+     "mdd": -0.32910390426745517,
+     "end_equity_dong": 290070000.0,
+     "fills": 465,
+     "round_trips": 233,
+     "sessions": 20,
+     "_daily": {
+      "2025-05-05": {
+       "equity": 425450000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-06": {
+       "equity": 425010000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-07": {
+       "equity": 422010000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-08": {
+       "equity": 408280000.0,
+       "fills": 2,
+       "round_trips": 0
+      },
+      "2025-05-09": {
+       "equity": 410980000.0,
+       "fills": 2,
+       "round_trips": 0
+      },
+      "2025-05-12": {
+       "equity": 395410000.0,
+       "fills": 4,
+       "round_trips": 0
+      },
+      "2025-05-13": {
+       "equity": 391310000.0,
+       "fills": 5,
+       "round_trips": 1
+      },
+      "2025-05-14": {
+       "equity": 374490000.0,
+       "fills": 6,
+       "round_trips": 1
+      },
+      "2025-05-15": {
+       "equity": 373930000.0,
+       "fills": 6,
+       "round_trips": 1
+      },
+      "2025-05-16": {
+       "equity": 387130000.0,
+       "fills": 6,
+       "round_trips": 1
+      },
+      "2025-05-19": {
+       "equity": 391590000.0,
+       "fills": 7,
+       "round_trips": 1
+      },
+      "2025-05-20": {
+       "equity": 366480000.0,
+       "fills": 7,
+       "round_trips": 1
+      },
+      "2025-05-21": {
+       "equity": 361310000.0,
+       "fills": 13,
+       "round_trips": 4
+      },
+      "2025-05-22": {
+       "equity": 371300000.0,
+       "fills": 14,
+       "round_trips": 5
+      },
+      "2025-05-23": {
+       "equity": 367700000.0,
+       "fills": 14,
+       "round_trips": 5
+      },
+      "2025-05-26": {
+       "equity": 288170000.0,
+       "fills": 462,
+       "round_trips": 232
+      },
+      "2025-05-27": {
+       "equity": 288220000.0,
+       "fills": 463,
+       "round_trips": 232
+      },
+      "2025-05-28": {
+       "equity": 290250000.0,
+       "fills": 464,
+       "round_trips": 233
+      },
+      "2025-05-29": {
+       "equity": 291330000.0,
+       "fills": 465,
+       "round_trips": 233
+      },
+      "2025-05-30": {
+       "equity": 290070000.0,
+       "fills": 465,
+       "round_trips": 233
+      }
+     },
+     "rung": "N2",
+     "label": "+ dated VSD IM (13% / 17%)",
+     "source": "naive engine (this run), cut from the whole window",
+     "delta_fills": 0,
+     "delta_round_trips": 0,
+     "delta_hpr": 0.0
+    },
+    {
+     "hpr": -0.35006707618442423,
+     "sharpe": -5.392362533983968,
+     "mdd": -0.3543505377862506,
+     "end_equity_dong": 276150000.0,
+     "fills": 465,
+     "round_trips": 233,
+     "sessions": 20,
+     "_daily": {
+      "2025-05-05": {
+       "equity": 420810000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-06": {
+       "equity": 420370000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-07": {
+       "equity": 417370000.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-08": {
+       "equity": 403560000.0,
+       "fills": 2,
+       "round_trips": 0
+      },
+      "2025-05-09": {
+       "equity": 406260000.0,
+       "fills": 2,
+       "round_trips": 0
+      },
+      "2025-05-12": {
+       "equity": 390610000.0,
+       "fills": 4,
+       "round_trips": 0
+      },
+      "2025-05-13": {
+       "equity": 386510000.0,
+       "fills": 5,
+       "round_trips": 1
+      },
+      "2025-05-14": {
+       "equity": 369650000.0,
+       "fills": 6,
+       "round_trips": 1
+      },
+      "2025-05-15": {
+       "equity": 369090000.0,
+       "fills": 6,
+       "round_trips": 1
+      },
+      "2025-05-16": {
+       "equity": 382290000.0,
+       "fills": 6,
+       "round_trips": 1
+      },
+      "2025-05-19": {
+       "equity": 386710000.0,
+       "fills": 7,
+       "round_trips": 1
+      },
+      "2025-05-20": {
+       "equity": 361600000.0,
+       "fills": 7,
+       "round_trips": 1
+      },
+      "2025-05-21": {
+       "equity": 356310000.0,
+       "fills": 13,
+       "round_trips": 4
+      },
+      "2025-05-22": {
+       "equity": 366300000.0,
+       "fills": 14,
+       "round_trips": 5
+      },
+      "2025-05-23": {
+       "equity": 362700000.0,
+       "fills": 14,
+       "round_trips": 5
+      },
+      "2025-05-26": {
+       "equity": 274330000.0,
+       "fills": 462,
+       "round_trips": 232
+      },
+      "2025-05-27": {
+       "equity": 274340000.0,
+       "fills": 463,
+       "round_trips": 232
+      },
+      "2025-05-28": {
+       "equity": 276370000.0,
+       "fills": 464,
+       "round_trips": 233
+      },
+      "2025-05-29": {
+       "equity": 277410000.0,
+       "fills": 465,
+       "round_trips": 233
+      },
+      "2025-05-30": {
+       "equity": 276150000.0,
+       "fills": 465,
+       "round_trips": 233
+      }
+     },
+     "rung": "N3",
+     "label": "+ fee on every fill",
+     "source": "naive engine (this run), cut from the whole window",
+     "delta_fills": 0,
+     "delta_round_trips": 0,
+     "delta_hpr": -0.0253866114904564
+    },
+    {
+     "hpr": -0.048080257533798076,
+     "sharpe": -0.9994210371129351,
+     "mdd": -0.1636513510724219,
+     "end_equity_dong": 439905000.0,
+     "_daily": {
+      "2025-05-05": {
+       "equity": 457024043.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-06": {
+       "equity": 456474043.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-07": {
+       "equity": 452724043.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-08": {
+       "equity": 437187320.0,
+       "fills": 1,
+       "round_trips": 0
+      },
+      "2025-05-09": {
+       "equity": 439887320.0,
+       "fills": 1,
+       "round_trips": 0
+      },
+      "2025-05-12": {
+       "equity": 424283587.0,
+       "fills": 3,
+       "round_trips": 0
+      },
+      "2025-05-13": {
+       "equity": 420182711.0,
+       "fills": 6,
+       "round_trips": 1
+      },
+      "2025-05-14": {
+       "equity": 400987310.0,
+       "fills": 24,
+       "round_trips": 10
+      },
+      "2025-05-15": {
+       "equity": 404677310.0,
+       "fills": 24,
+       "round_trips": 10
+      },
+      "2025-05-16": {
+       "equity": 415207310.0,
+       "fills": 24,
+       "round_trips": 10
+      },
+      "2025-05-19": {
+       "equity": 420070228.0,
+       "fills": 25,
+       "round_trips": 10
+      },
+      "2025-05-20": {
+       "equity": 392815887.0,
+       "fills": 27,
+       "round_trips": 11
+      },
+      "2025-05-21": {
+       "equity": 386496819.0,
+       "fills": 31,
+       "round_trips": 12
+      },
+      "2025-05-22": {
+       "equity": 400030868.0,
+       "fills": 36,
+       "round_trips": 17
+      },
+      "2025-05-23": {
+       "equity": 396880868.0,
+       "fills": 36,
+       "round_trips": 17
+      },
+      "2025-05-26": {
+       "equity": 437374223.0,
+       "fills": 310,
+       "round_trips": 153
+      },
+      "2025-05-27": {
+       "equity": 436419661.0,
+       "fills": 312,
+       "round_trips": 155
+      },
+      "2025-05-28": {
+       "equity": 440752300.0,
+       "fills": 313,
+       "round_trips": 156
+      },
+      "2025-05-29": {
+       "equity": 442845000.0,
+       "fills": 314,
+       "round_trips": 156
+      },
+      "2025-05-30": {
+       "equity": 439905000.0,
+       "fills": 314,
+       "round_trips": 156
+      }
+     },
+     "fills": 314,
+     "round_trips": 156,
+     "quote_fills": 296,
+     "roll_fills": 18,
+     "engine_fills": 0,
+     "maker_fills": 197,
+     "taker_fills": 117,
+     "sessions": 20,
+     "accepted_orders": 34998,
+     "undecided_orders": 1,
+     "undecided_order_rate": 2.8573061317789587e-05,
+     "undecided_quote_orders_in_atc": 0,
+     "margin_warnings": 15,
+     "margin_calls": 7,
+     "margin_calls_cleared": 7,
+     "forced_liquidations": 0,
+     "forced_liquidations_executed": 0,
+     "vm_settlement_days": 20,
+     "roll_triggers": 1,
+     "roll_contracts": 9,
+     "roll_retries": 3,
+     "roll_rejected": 2,
+     "roll_unfilled_contracts": 0,
+     "expiry_settled_contracts": 0,
+     "cancel_refused": 118,
+     "quote_rejected": 21,
+     "charges_dong": 5339043.0,
+     "end_net_contracts": 7,
+     "end_positions": {
+      "VN30F2506": 7
+     },
+     "engine_deposit_end_dong": 439905000.0,
+     "ledger_minus_engine_deposit_end_dong": 0.0,
+     "max_abs_deposit_drift_dong": 0.0,
+     "positions_match_engine_all_sessions": true,
+     "ccp_nights": 20,
+     "ccp_indeterminate_nights": 0,
+     "ccp_calendar_spread_unknown": 0,
+     "ccp_events_by_state": {},
+     "ccp_indeterminate_by_reason": {},
+     "rung": "F-opt",
+     "label": "Plutus faithful-A, optimistic queue",
+     "source": "result/mm_faithful_a/krx2025_optimistic.json",
+     "delta_fills": -151,
+     "delta_round_trips": -77,
+     "delta_hpr": 0.30198681865062615
+    },
+    {
+     "hpr": -0.2338968067665811,
+     "sharpe": -4.359473091326033,
+     "mdd": -0.2944166624687726,
+     "end_equity_dong": 285182024.0,
+     "_daily": {
+      "2025-05-05": {
+       "equity": 362050144.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-06": {
+       "equity": 360950144.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-07": {
+       "equity": 353450144.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-08": {
+       "equity": 323450144.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-09": {
+       "equity": 327950144.0,
+       "fills": 0,
+       "round_trips": 0
+      },
+      "2025-05-12": {
+       "equity": 303323309.0,
+       "fills": 1,
+       "round_trips": 0
+      },
+      "2025-05-13": {
+       "equity": 297439413.0,
+       "fills": 3,
+       "round_trips": 1
+      },
+      "2025-05-14": {
+       "equity": 274076133.0,
+       "fills": 25,
+       "round_trips": 12
+      },
+      "2025-05-15": {
+       "equity": 278586133.0,
+       "fills": 25,
+       "round_trips": 12
+      },
+      "2025-05-16": {
+       "equity": 291456133.0,
+       "fills": 25,
+       "round_trips": 12
+      },
+      "2025-05-19": {
+       "equity": 297159049.0,
+       "fills": 26,
+       "round_trips": 12
+      },
+      "2025-05-20": {
+       "equity": 263679049.0,
+       "fills": 26,
+       "round_trips": 12
+      },
+      "2025-05-21": {
+       "equity": 263947940.0,
+       "fills": 40,
+       "round_trips": 25
+      },
+      "2025-05-22": {
+       "equity": 262653499.0,
+       "fills": 42,
+       "round_trips": 25
+      },
+      "2025-05-23": {
+       "equity": 263553499.0,
+       "fills": 42,
+       "round_trips": 25
+      },
+      "2025-05-26": {
+       "equity": 282386684.0,
+       "fills": 203,
+       "round_trips": 103
+      },
+      "2025-05-27": {
+       "equity": 281686684.0,
+       "fills": 203,
+       "round_trips": 103
+      },
+      "2025-05-28": {
+       "equity": 286019323.0,
+       "fills": 204,
+       "round_trips": 104
+      },
+      "2025-05-29": {
+       "equity": 288122024.0,
+       "fills": 205,
+       "round_trips": 104
+      },
+      "2025-05-30": {
+       "equity": 285182024.0,
+       "fills": 205,
+       "round_trips": 104
+      }
+     },
+     "fills": 205,
+     "round_trips": 104,
+     "quote_fills": 171,
+     "roll_fills": 22,
+     "engine_fills": 12,
+     "maker_fills": 92,
+     "taker_fills": 113,
+     "sessions": 20,
+     "accepted_orders": 30976,
+     "undecided_orders": 30802,
+     "undecided_order_rate": 0.9943827479338843,
+     "undecided_quote_orders_in_atc": 88,
+     "margin_warnings": 43,
+     "margin_calls": 31,
+     "margin_calls_cleared": 29,
+     "forced_liquidations": 30248,
+     "forced_liquidations_executed": 3,
+     "vm_settlement_days": 19,
+     "roll_triggers": 1,
+     "roll_contracts": 11,
+     "roll_retries": 3,
+     "roll_rejected": 2,
+     "roll_unfilled_contracts": 0,
+     "expiry_settled_contracts": 0,
+     "cancel_refused": 98,
+     "quote_rejected": 3809,
+     "charges_dong": 3488120.0,
+     "end_net_contracts": 7,
+     "end_positions": {
+      "VN30F2506": 7
+     },
+     "engine_deposit_end_dong": 285182024.0,
+     "ledger_minus_engine_deposit_end_dong": 0.0,
+     "max_abs_deposit_drift_dong": 0.0,
+     "positions_match_engine_all_sessions": true,
+     "ccp_nights": 19,
+     "ccp_indeterminate_nights": 0,
+     "ccp_calendar_spread_unknown": 0,
+     "ccp_events_by_state": {
+      "notified": 1,
+      "suspended": 1,
+      "compliant": 1
+     },
+     "ccp_indeterminate_by_reason": {},
+     "rung": "F-con",
+     "label": "Plutus faithful-A, conservative queue",
+     "source": "result/mm_faithful_a/krx2025_conservative.json",
+     "delta_fills": -109,
+     "delta_round_trips": -52,
+     "delta_hpr": -0.185816549232783
+    }
+   ]
+  }
+ },
  "clean_checkpoint": {
   "first_refused_roll_day": "2025-04-16",
   "basis": "first non-empty roll (every roll completed)",
@@ -881,51 +3135,13 @@
    }
   ]
  },
- "post_cutover": {
-  "F-opt": {
-   "sessions": 20,
-   "fills": 314,
-   "round_trips": 156,
-   "margin_warnings": 17,
-   "margin_calls": 7,
-   "margin_calls_cleared": 7,
-   "forced_liquidations": 0,
-   "forced_liquidations_executed": 0,
-   "undecided_order_rate": 2.8573061317789587e-05,
-   "end_positions": {
-    "VN30F2506": 7
-   },
-   "ledger_minus_engine_deposit_end_dong": 0.0,
-   "hpr_over_post_sessions": -0.048080257533798076,
-   "hpr_whole_40_sessions": -0.12019000000000002,
-   "note": "A has no regime guard; the engine admits orders after the 2025-05-05 cutover although margin_model() raises UnresolvedRule, margins them on the pre-KRX IM+VM shape and counts margin_model_unsourced blindness (see faithful_sources.*.engine_ignorance_whole_run)."
-  },
-  "F-con": {
-   "sessions": 20,
-   "fills": 259,
-   "round_trips": 131,
-   "margin_warnings": 38,
-   "margin_calls": 23,
-   "margin_calls_cleared": 20,
-   "forced_liquidations": 18485,
-   "forced_liquidations_executed": 3,
-   "undecided_order_rate": 0.9931056833917681,
-   "end_positions": {
-    "VN30F2506": 7
-   },
-   "ledger_minus_engine_deposit_end_dong": 0.0,
-   "hpr_over_post_sessions": -0.17303732728710508,
-   "hpr_whole_40_sessions": -0.38432605200000003,
-   "note": "A has no regime guard; the engine admits orders after the 2025-05-05 cutover although margin_model() raises UnresolvedRule, margins them on the pre-KRX IM+VM shape and counts margin_model_unsourced blindness (see faithful_sources.*.engine_ignorance_whole_run)."
-  }
- },
  "faithful_sources": {
   "F-opt": {
    "path": "result/mm_faithful_a/krx2025_optimistic.json",
-   "sha256": "ba3d87b6cd379cad8b2127bf8979e84ea79c735d33fc91336bd0ed4817ff6280",
-   "plutus_simulator_commit": "b52877e3b6bcefd50746761bd518f0c4b93ac40d",
+   "sha256": "5ca99d11a3e9af34d5e36a199c33cc505e292776369b86f1e4800c32bbd09c99",
+   "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
    "plutus_simulator_src_dirty": false,
-   "plutus_simulator_commit_at_end": "af55e29e855d7f74b95c0b723a3f78b8b0b3405c",
+   "plutus_simulator_commit_at_end": "373f9a764215c5008248ead5a3502b18fec55e0c",
    "vm_settlements_whole_run": {
     "count": 38,
     "net_dong": -24188404.04684092,
@@ -933,14 +3149,13 @@
    },
    "engine_ignorance_whole_run": {
     "evaluations": 1163725,
-    "indeterminate": 67,
+    "indeterminate": 47,
     "silent_ignorance": {
      "fill.decided_without.high": 542,
      "fill.decided_without.low": 542,
      "fill.decided_without.open": 542,
      "fill.decided_without.volume": 542,
-     "rule.margin_model.unsourced": 269752,
-     "margin.overnight.uncomputed.margin_model_overnight.unstated": 20
+     "margin.overnight.assumed.minimum_margin_factor_derived": 20
     }
    },
    "refusals_whole_run": {
@@ -950,47 +3165,89 @@
     "quote:INSUFFICIENT_DEPOSIT": 12,
     "roll:INSUFFICIENT_DEPOSIT": 2
    },
-   "wall_seconds": 2144.4
+   "ccp_events_whole_run": [],
+   "ccp_state_end": "compliant",
+   "wall_seconds": 1936.1
   },
   "F-con": {
    "path": "result/mm_faithful_a/krx2025_conservative.json",
-   "sha256": "d4466fcfd69d968b8895c23d689c11debd37ca1383b5e805e9a21158fc24d087",
-   "plutus_simulator_commit": "b52877e3b6bcefd50746761bd518f0c4b93ac40d",
+   "sha256": "f45e3db0e26939114fbc53e753275f5296e38fad882cf011ed991e48c18f72ad",
+   "plutus_simulator_commit": "373f9a764215c5008248ead5a3502b18fec55e0c",
    "plutus_simulator_src_dirty": false,
-   "plutus_simulator_commit_at_end": "af55e29e855d7f74b95c0b723a3f78b8b0b3405c",
+   "plutus_simulator_commit_at_end": "373f9a764215c5008248ead5a3502b18fec55e0c",
    "vm_settlements_whole_run": {
-    "count": 34,
-    "net_dong": -183382250.73184198,
+    "count": 37,
+    "net_dong": -191323901.93897516,
     "first": "2025-04-03T15:00:00"
    },
    "engine_ignorance_whole_run": {
-    "evaluations": 1151926,
-    "indeterminate": 771067,
+    "evaluations": 1091705,
+    "indeterminate": 710922,
     "silent_ignorance": {
-     "fill.decided_without.high": 372,
-     "fill.decided_without.low": 372,
-     "fill.decided_without.open": 372,
-     "fill.decided_without.volume": 372,
-     "rule.margin_model.unsourced": 269733,
-     "margin.overnight.uncomputed.margin_model_overnight.unstated": 20
+     "fill.decided_without.high": 324,
+     "fill.decided_without.low": 324,
+     "fill.decided_without.open": 324,
+     "fill.decided_without.volume": 324,
+     "margin.overnight.assumed.minimum_margin_factor_derived": 19
     }
    },
    "refusals_whole_run": {
-    "cancel:SESSION_SEMANTICS": 215,
+    "cancel:SESSION_SEMANTICS": 202,
     "quote:SESSION_SEMANTICS": 24,
     "quote:BAND_LIMIT": 162,
-    "quote:INSUFFICIENT_DEPOSIT": 924,
+    "quote:INSUFFICIENT_DEPOSIT": 3801,
     "roll:INSUFFICIENT_DEPOSIT": 2
    },
-   "wall_seconds": 2179.0
+   "ccp_events_whole_run": [
+    {
+     "kind": "shortfall_notified",
+     "checkpoint": "close_1630",
+     "on": "2025-05-20",
+     "at": "16:30:00",
+     "previous_state": "compliant",
+     "state": "notified",
+     "margin_assets_dong": 263679049.0,
+     "required_margin_dong": 287134080.0,
+     "shortfall_dong": 23455031.0,
+     "cure_by_date": "2025-05-21"
+    },
+    {
+     "kind": "suspended",
+     "checkpoint": "open_0930",
+     "on": "2025-05-21",
+     "at": "09:30:00",
+     "previous_state": "notified",
+     "state": "suspended",
+     "margin_assets_dong": 263947940.0,
+     "required_margin_dong": 287134080.0,
+     "shortfall_dong": 23186140.0,
+     "cure_by_date": "2025-05-22"
+    },
+    {
+     "kind": "restored",
+     "checkpoint": "close_1630",
+     "on": "2025-05-21",
+     "at": "16:30:00",
+     "previous_state": "suspended",
+     "state": "compliant",
+     "margin_assets_dong": 263947940.0,
+     "required_margin_dong": 0.0,
+     "shortfall_dong": 0.0,
+     "cure_by_date": "2025-05-22"
+    }
+   ],
+   "ccp_state_end": "compliant",
+   "wall_seconds": 1988.3
   }
  },
  "mm_anchor_crosscheck": {
-  "naive_hpr": -0.052180000000000004,
-  "naive_fills": 228,
+  "naive_hpr": 0.29567999999999994,
+  "naive_fills": 693,
   "n0_matches_mm_anchor_naive": true,
   "mm_anchor_faithful_conservative_hpr_flat_each_session": -0.06025583599999995,
-  "mm_anchor_faithful_optimistic_hpr_flat_each_session": -0.13592448999999995
+  "mm_anchor_faithful_optimistic_hpr_flat_each_session": -0.13592448999999995,
+  "mm_anchor_plutus_simulator_commit": "fc94743640c9ce3706e3cd019217d1898d67b26f",
+  "pre_cutover_n0_matches_mm_anchor_naive_pre_cutover_only": true
  },
- "plutus_simulator_head_at_ladder_run": "af55e29e855d7f74b95c0b723a3f78b8b0b3405c"
+ "plutus_simulator_head_at_ladder_run": "373f9a764215c5008248ead5a3502b18fec55e0c"
 }

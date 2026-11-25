@@ -8,8 +8,8 @@ Arms (A fixed, environment varied, as in ``mm_ladder``):
   by a print), ``limit`` the quote. The roll (``move_f1_to_f2``: close F1 at
   the F1 print, open F2 at the F2 print) and forced reductions
   (``handle_force_sell``) are recorded with role ``roll`` / ``forced`` and no
-  liquidity side. Session set: the ladder's (krx2025: the 20 pre-cutover
-  sessions).
+  liquidity side. Session set: the ladder's (every session of the window;
+  krx2025's pre/post-cutover views are cut from it by ``mm_markout``).
 * ``F-opt`` / ``F-con``: Plutus faithful-A (``mm_faithful_a.run_faithful_a``)
   with the optimistic / conservative queue, all window sessions; every fill
   event as the engine reports it (``maker`` from the fill detail), with the
@@ -42,6 +42,7 @@ from typing import Optional
 
 ARMS = ("N0", "N1", "N2", "N3", "F-opt", "F-con")
 QUEUE_OF = {"F-opt": "optimistic", "F-con": "conservative"}
+ARM_OF = {q: a for a, q in QUEUE_OF.items()}
 
 
 class ProgressLog:
@@ -68,8 +69,8 @@ class ProgressLog:
         el = _time.time() - self.t0
         rate = el / self.k
         eta = rate * max(self.total - self.k, 0)
-        self.note(f"{msg.strip()} | session {self.k}/{self.total}, {rate:.0f}s/session, "
-                  f"ETA {eta / 60:.1f} min")
+        self.note(f"{msg.strip()} | session {self.k}/{self.total}, elapsed {el:.0f}s, "
+                  f"{rate:.0f}s/session, ETA {eta / 60:.1f} min")
 
     def close(self):
         self.note(f"done {self.label}: {self.k} sessions in {_time.time() - self.t0:.0f}s")
@@ -157,7 +158,7 @@ def trace_naive(window: str, rung: int, max_sessions: Optional[int] = None, log=
     from proto_market_maker.experiments.mm_faithful_a import naive_rows
     from proto_market_maker.naive_variants import NaiveOptions
     fcc, all_days = A.load_contract_map(window)
-    days = [d for d in all_days if d < A.KRX_CUTOVER] if window == "krx2025" else list(all_days)
+    days = list(all_days)
     if max_sessions:
         days = days[:max_sessions]
     data = naive_rows(window, days, fcc)
@@ -168,7 +169,7 @@ def trace_naive(window: str, rung: int, max_sessions: Optional[int] = None, log=
     return {"window": window, "arm": f"N{rung}", "environment": "naive engine",
             "options": NaiveOptions.rung(rung).__dict__,
             "sessions": len(bt.per_session),
-            "session_set": ("20 pre-cutover sessions" if window == "krx2025" else "all 40 sessions")
+            "session_set": f"all {len(bt.per_session)} sessions"
                            + (f", first {max_sessions}" if max_sessions else ""),
             "fills_counted_by_engine": bt.fills, "forced_reductions": bt.forced_reductions,
             "units": "prices in index points; equity in real đồng",
@@ -181,6 +182,12 @@ def trace_faithful(window: str, arm: str, max_sessions: Optional[int] = None, lo
     fills = []
     out = FA.run_faithful_a(window, QUEUE_OF[arm], log=log, max_sessions=max_sessions,
                             on_fill=fills.append)
+    return faithful_trace_doc(window, arm, out, fills)
+
+
+def faithful_trace_doc(window: str, arm: str, out: dict, fills: list) -> dict:
+    """The trace document for one faithful-A run's result and its fill events
+    (shared with ``mm_faithful_a --trace-out``, which records them in its own run)."""
     run = {k: v for k, v in out.items() if k not in ("per_session",)}
     return {"window": window, "arm": arm, "environment": "Plutus faithful-A",
             "queue": QUEUE_OF[arm], "sessions": out["sessions"],
@@ -203,8 +210,6 @@ def main(argv=None) -> int:
     ap.add_argument("--out", type=Path, default=None)
     args = ap.parse_args(argv)
     _, all_days = A.load_contract_map(args.window)
-    if args.arm.startswith("N") and args.window == "krx2025":
-        all_days = [d for d in all_days if d < A.KRX_CUTOVER]
     total = min(len(all_days), args.max_sessions or len(all_days))
     plog = ProgressLog(args.log, total, f"{args.window} {args.arm}")
     if args.arm.startswith("N"):
