@@ -253,8 +253,7 @@ pre-cutover sessions quoted) and 28.6% in im2022. The conservative arm's maker q
 the three observed levels, so the queue ahead of them cannot be read. That leaves 99.8% (krx2025 pre-cutover), 99.2% (krx2025
 post-cutover) and 99.9% (im2022) of accepted orders INDETERMINATE at least once (`book_size`).
 
-Dated-IM capacity on the same 500,000,000đ deposit at 1,059 points is 36 contracts at 13% and 27 at 17%. In the run itself
-capacity was 36 on 2022-12-14 and 28 on 2022-12-15.
+Dated-IM capacity on the same 500,000,000đ deposit is 36 contracts on 2022-12-14 (13%) and 28 on 2022-12-15 (17%).
 
 Post-cutover, the strategy now quotes all 20 sessions (it refused 20 of 20 before plutus-simulator `4867d46` sourced the post-KRX
 margin model). The pre-cutover and im2022 numbers are unchanged by the rerun.
